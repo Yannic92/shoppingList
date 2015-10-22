@@ -38,6 +38,22 @@ public class SLUserValidationService {
         validateUsername(slUser.getUsername());
         validateEmail(slUser.getEmail());
         validatePassword(slUser.getPassword());
+        validateFirstName(slUser.getFirstName());
+        validateLastName(slUser.getLastName());
+    }
+
+    
+
+    private void validateFirstName(String firstName) {
+        if (isNullOrEmpty(firstName)) {
+            throw new EntityInvalidException("First name must not be null or emtpy");
+        }
+    }
+    
+    private void validateLastName(String lastName) {
+        if (isNullOrEmpty(lastName)) {
+            throw new EntityInvalidException("Last name must not be null or emtpy");
+        }
     }
 
 

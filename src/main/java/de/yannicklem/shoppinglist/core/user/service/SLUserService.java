@@ -188,6 +188,10 @@ public class SLUserService implements UserDetailsService {
 
         SLUser user = slUserRepository.findOne(username);
 
+        if(user == null){
+            user = slUserRepository.findByEmail(username);
+        }
+        
         if (user == null) {
             throw new UsernameNotFoundException(String.format("Username '%s' not found", username));
         }
