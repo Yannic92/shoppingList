@@ -2,11 +2,21 @@
 <html ng-app="shoppingList">
 <head lang="de">
     <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1" />
     <link rel="stylesheet" href="style/css/app-compact.css" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,200,300,400,500,600,700,800,900" rel="stylesheet" type="text/css">
-    <meta name="viewport" content="initial-scale=1" />
+    <link rel="SHORTCUT ICON" href="img/fav.ico" type="image/x-icon">
+
+    <!--Android-->
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="manifest" href="manifest.json">
+
+    <!--iOS-->
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+    <link rel="apple-touch-icon" sizes="180x180" href="img/fav.ico">
+    
     <title>Einkaufsliste</title>
-    <style type="text/css"></style>
 </head>
 <body ng-controller="navigation">
     <a id="top"></a>
