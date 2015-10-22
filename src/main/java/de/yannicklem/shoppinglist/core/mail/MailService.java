@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.mail.MailAuthenticationException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 
@@ -39,7 +40,7 @@ public class MailService {
         try {
             mailSender.send(initMimeMessage(message, mailTo));
             LOGGER.info("Sent mail to " + mailTo);
-        } catch (MessagingException e) {
+        } catch (MessagingException | MailAuthenticationException e) {
             LOGGER.warn("Sending confirmation code email failed", e);
         }
     }
