@@ -11,7 +11,8 @@ shoppingList.controller('login',[ '$rootScope', '$scope', '$location', 'authServ
             authService.authenticate($scope.credentials)
                 .then(function (username) {
                     $rootScope.user = username;
-                    $location.path("/lists");
+                    $location.replace();
+                    $location.path('/lists')
                 }, function(error){
                     $rootScope.error = true;
                     if(error.status == 401){
@@ -37,7 +38,8 @@ shoppingList.controller('login',[ '$rootScope', '$scope', '$location', 'authServ
             authService.isAuthenticated()
                 .then(function (username) {
                     $rootScope.user = username;
-                    $location.path("/lists");
+                    $location.replace();
+                    $location.path('/lists')
                 }).finally(function(){
                    $scope.loggingIn = false;
                 });

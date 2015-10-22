@@ -10,7 +10,7 @@
     </group>
     <group name="app-compact">
         <js>file:${project.basedir}/src/main/resources/public/app/**.js</js>
-        <css>file:${project.basedir}/src/main/resources/public/style/css/bootstrap.min.css</css>
+        <css>file:${project.basedir}/src/main/resources/public/style/css/angular-material.min.css</css>
         <css>file:${project.basedir}/src/main/resources/public/style/css/common.css</css>
     </group>
 </groups>
