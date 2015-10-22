@@ -1,33 +1,33 @@
-<div class="content">
-    <form name="registerForm">
-        <md-input-container>
-            <label for="firstName">Vorname</label>
-            <input id="firstName" name="firstName" ng-model="user.firstName" type="text" required>
-        </md-input-container>
-        <md-input-container>
-            <label for="lastName">Nachname</label>
-            <input id="lastName" name="lastName" type="text" ng-model="user.lastName" required>
-        </md-input-container>
-        <md-input-container>
-            <label for="username">Benutzername</label>
-            <input id="username" name="username" type="text" ng-model="user.username" required>
-        </md-input-container>
-        <md-input-container>
-            <label for="email">E-Mail</label>
-            <input id="email" name="email" type="email" ng-model="user.email" required>
-        </md-input-container>
-        <md-input-container>
-            <label for="password">Passwort</label>
-            <input id="password" name="password" type="password" ng-model="user.password" minlength="8" required>
-        </md-input-container>
-        <md-input-container>
-            <label for="passwordRepeat">Passwort wiederholen</label>
-            <input id="passwordRepeat" name="passwordRepeat" type="password" ng-model="passwordRepeat" compare-to="user.password"required>
-        </md-input-container>
-        <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
-            <md-button class="md-primary" ng-disabled="!registerForm.$valid" ng-click="register()">
-                Registrieren
-            </md-button>
-        </section>
-    </form>
-</div>
+<form name="registerForm">
+    <md-input-container>
+        <label for="firstName">Vorname</label>
+        <input id="firstName" name="firstName" ng-model="user.firstName" type="text" required>
+    </md-input-container>
+    <md-input-container>
+        <label for="lastName">Nachname</label>
+        <input id="lastName" name="lastName" type="text" ng-model="user.lastName" required>
+    </md-input-container>
+    <md-input-container>
+        <label for="username">Benutzername</label>
+        <input id="username" name="username" type="text" ng-model="user.username" required>
+    </md-input-container>
+    <md-input-container>
+        <label for="email">E-Mail</label>
+        <input id="email" name="email" type="email" ng-model="user.email" required>
+    </md-input-container>
+    <md-input-container>
+        <label for="password">Passwort</label>
+        <input id="password" name="password" type="password" ng-model="user.password" minlength="8" required>
+    </md-input-container>
+    <md-input-container>
+        <label for="passwordRepeat">Passwort wiederholen</label>
+        <input id="passwordRepeat" name="passwordRepeat" type="password" ng-model="passwordRepeat"
+               compare-to="user.password" required>
+    </md-input-container>
+    <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
+        <md-button class="md-primary" ng-disabled="!registerForm.$valid" ng-click="register()">
+            Registrieren
+        </md-button>
+    </section>
+</form>
+

@@ -70,8 +70,7 @@ public class SLUserRepositoryRestController {
 
     @RequestMapping(method = RequestMethod.GET, value = SLUserEndpoints.SLUSER_CURRENT_ENDPOINT)
     @ResponseBody
-    public PersistentEntityResource getSLUsers(PersistentEntityResourceAssembler resourceAssembler,
-        Principal principal) {
+    public PersistentEntityResource getCurrentUser(PersistentEntityResourceAssembler resourceAssembler) {
 
         return resourceAssembler.toResource(currentUserService.getCurrentUser());
     }

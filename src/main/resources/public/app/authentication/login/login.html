@@ -1,20 +1,18 @@
-<div class="content" layout-fill layout-align="center center">
-    <form id="loginForm" name="loginForm" role="form" ng-submit="login()">
-        <md-input-container>
-            <label for="username">Benutzername</label>
-            <input id="username" name="username" ng-model="credentials.username" type="text" required>
-        </md-input-container>
-        <md-input-container>
-            <label for="password">Passwort</label>
-            <input id="password" name="password" type="password" ng-model="credentials.password" required>
-        </md-input-container>
-        <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
-            <md-button class="md-primary" ng-disabled="loggingIn || !loginForm.$valid" type="submit">
-                Login
-            </md-button>
-            <md-button class="md-primary" ng-disabled="loggingIn" ng-href="#/register">
-                Registrieren
-            </md-button>
-        </section>
-    </form>
-</div>
+<form id="loginForm" name="loginForm" role="form" ng-submit="login()">
+    <md-input-container>
+        <label for="username">Benutzername</label>
+        <input id="username" name="username" ng-model="credentials.username" type="text" required>
+    </md-input-container>
+    <md-input-container>
+        <label for="password">Passwort</label>
+        <input id="password" name="password" type="password" ng-model="credentials.password" required>
+    </md-input-container>
+    <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
+        <md-button class="md-primary" ng-disabled="loggingIn || !loginForm.$valid" type="submit">
+            Login
+        </md-button>
+        <md-button class="md-primary" ng-disabled="loggingIn" ng-href="#/register">
+            Registrieren
+        </md-button>
+    </section>
+</form>

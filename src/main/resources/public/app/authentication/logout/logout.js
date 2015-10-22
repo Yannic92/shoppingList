@@ -1,12 +1,10 @@
 var shoppingList = shoppingList || angular.module('shoppingList', []);
 
-shoppingList.controller('logout',['$scope', 'authService', '$location',
-    function($scope, authService, $location) {
+shoppingList.controller('logout',['$scope', 'authService', '$rootScope',
+    function($scope, authService, $rootScope) {
         authService.logout();
-
-        $scope.goToLogin = function(){
-            $location.path('/login');
-        };
+        
+        $rootScope.title = "Logout";
     }
 ]);
 
