@@ -1,0 +1,21 @@
+
+body {
+    font-family: 'Roboto', sans-serif !important;
+    
+    height:100%;
+}
+.white{
+    background-color: white;
+}
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+    display: none !important;
+}
+
+.content{
+    margin-top: 10px;
+}
+
+.info{
+    color: #3F51B5;
+}

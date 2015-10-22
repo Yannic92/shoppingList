@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html ng-app="shoppingList">
+<head lang="de">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0-rc1/angular-material.min.css" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,200,300,400,500,600,700,800,900" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="style/css/common.css">
+    <meta name="viewport" content="initial-scale=1" />
+    <title>Einkaufsliste</title>
+    <style type="text/css"></style>
+</head>
+<body ng-controller="navigation">
+    <a id="top"></a>
+    <md-content ng-cloak>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h1>
+                    <span md-flex>{{title}}</span>
+                </h1>
+            </div>
+        </md-toolbar>
+        <md-toolbar class="md-tall md-warn" ng-if="error" >
+            <div style="height: 128px;line-height: 128px;text-align: center;">
+                <span style="display: inline-block;vertical-align: middle;line-height: normal;">
+                    {{errorMessage}}
+                </span>
+            </div>
+        </md-toolbar>
+    </md-content>
+    <div ng-view layout-fill layout-align="center center" flex-offset-gt-lg="35" flex-gt-lg="30" flex-offset-lg="30" flex-lg="40" flex-offset-md="25" dflex-md="50"></div>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.7/angular.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.7/angular-resource.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.7/angular-route.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.7/angular-animate.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.7/angular-aria.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.7/angular-messages.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0-rc1/angular-material.min.js"></script>
+
+    <script type="text/javascript" src="app/app.js"></script>
+    <script type="text/javascript" src="app/directives/compareTo.js"></script>
+    <script type="text/javascript" src="app/services/HALResource.js"></script>
+    <script type="text/javascript" src="app/authentication/userService.js"></script>
+    <script type="text/javascript" src="app/authentication/HttpInterceptor.js"></script>
+    <script type="text/javascript" src="app/authentication/authService.js"></script>
+    <script type="text/javascript" src="app/navigation/navigation.js"></script>
+    <script type="text/javascript" src="app/authentication/login/login.js"></script>
+    <script type="text/javascript" src="app/authentication/logout/logout.js"></script>
+    <script type="text/javascript" src="app/authentication/register/register.js"></script>
+    <script type="text/javascript" src="app/authentication/register/confirmation/confirmation.js"></script>
+    <script type="text/javascript" src="app/lists/lists.js"></script>
+    
+</body>
+</html>

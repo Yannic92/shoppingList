@@ -1,0 +1,19 @@
+<div class="content">
+    <h2 class="md-display-3" style="text-align: center;">Fast geschafft!</h2>
+    <p class=".md-body-2 info" style="text-align: center;">
+        Dir wurde ein Bestätigungscode per E-Mail zugesandt. 
+        Trage diesen bitte hier ein, um die Registrierung abzuschließen.
+    </p>
+
+    <form name="confirmationForm" ng-submit="confirm()">
+        <md-input-container>
+            <label for="confirmationCode">Bestätigungscode</label>
+            <input id="confirmationCode" name="confirmationCode" ng-model="confirmation.code" type="text" required>
+        </md-input-container>
+        <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
+            <md-button class="md-primary" ng-disabled="!confirmationForm.$valid" type="submit">
+                Registrierung bestätigen
+            </md-button>
+        </section>
+    </form>
+</div>
