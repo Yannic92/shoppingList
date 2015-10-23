@@ -2,27 +2,71 @@
     <md-input-container>
         <label for="firstName">Vorname</label>
         <input id="firstName" name="firstName" ng-model="user.firstName" type="text" required>
+        <div ng-messages="registerForm.firstName.$error" ng-if='registerForm.firstName.$touched'>
+            <div ng-message="required">
+                Bitte geben Sie Ihren Vorname an. Sowohl Ihr Vorname als auch Ihr Nachname, dient lediglich dazu,
+                dass Ihre Freunde Sie später leichter finden können, um Einkaufslisten zu teilen
+            </div>
+        </div>
     </md-input-container>
     <md-input-container>
         <label for="lastName">Nachname</label>
         <input id="lastName" name="lastName" type="text" ng-model="user.lastName" required>
+        <div ng-messages="registerForm.lastName.$error" ng-if='registerForm.lastName.$touched'>
+            <div ng-message="required">
+                Bitte geben Sie Ihren Nachnamen an. Sowohl Ihr Vorname als auch Ihr Nachname, dient lediglich dazu, 
+                dass Ihre Freunde Sie später leichter finden können, um Einkaufslisten zu teilen
+            </div>
+        </div>
     </md-input-container>
     <md-input-container>
         <label for="username">Benutzername</label>
-        <input id="username" name="username" type="text" ng-model="user.username" required>
+        <input id="username" name="username" type="text" pattern="[a-zA-Z0-9]*" ng-model="user.username" required>
+        <div ng-messages="registerForm.username.$error" ng-if='registerForm.username.$touched'>
+            <div ng-message="pattern">
+                Der Benutzername ist keine alphanumerische Zeichenfolge. Es sind ausschließlich die Zeichen a-z, a-Z und 0-9 erlaubt.
+            </div>
+            <div ng-message="required">
+                Bitte geben Sie einen Benutzernamen an.
+            </div>
+        </div>
     </md-input-container>
     <md-input-container>
         <label for="email">E-Mail</label>
         <input id="email" name="email" type="email" ng-model="user.email" required>
+        <div ng-messages="registerForm.email.$error" ng-if='registerForm.email.$touched'>
+            <div ng-message="email">
+                Das ist keine gültige E-Mailadresse.
+            </div>
+            <div ng-message="required">
+                Bitte geben Sie eine E-Mailadresse an. Sie erhalten im Anschluss einen Bestätigungscode per E-Mail um die Registrierung abzuschließen.
+            </div>
+        </div>
     </md-input-container>
     <md-input-container>
         <label for="password">Passwort</label>
         <input id="password" name="password" type="password" ng-model="user.password" minlength="8" required>
+        <div ng-messages="registerForm.password.$error" ng-if='registerForm.password.$touched'>
+            <div ng-message="minlength">
+                Das Passwort muss mindestens 8 Zeichen lang sein.
+            </div>
+            <div ng-message="required">
+                Bitte legen Sie ein Passwort fest.
+            </div>
+        </div>
     </md-input-container>
     <md-input-container>
         <label for="passwordRepeat">Passwort wiederholen</label>
         <input id="passwordRepeat" name="passwordRepeat" type="password" ng-model="passwordRepeat"
                compare-to="user.password" required>
+        <div ng-messages="registerForm.passwordRepeat.$error" ng-if='registerForm.passwordRepeat.$touched'>
+            <div ng-message="required">
+                Bitte bestätigen Sie Ihr Passwort.
+            </div>
+            <div ng-message="compareTo">
+                Das Passwort entspricht nicht Ihrem angegebenen Passwort.
+            </div>
+        </div>
     </md-input-container>
     <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
         <md-button class="md-primary" ng-disabled="!registerForm.$valid" ng-click="register()">
