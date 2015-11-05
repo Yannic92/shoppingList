@@ -10,17 +10,14 @@
         <input id="lastName" name="lastName" type="text" ng-model="user.lastName">
     </md-input-container>
     <md-input-container class="md-icon-float md-block">
-        <label for="username">Benutzername</label>
+        <label for="username">
+            Benutzername
+            <md-tooltip md-direction="top">
+                Der Benutzername kann nicht geändert werden
+            </md-tooltip>
+        </label>
         <md-icon md-font-set="material-icons">person</md-icon>
-        <input id="username" name="username" type="text" pattern="[a-zA-Z0-9]*" ng-model="user.username" required>
-        <div ng-messages="updateUserDataForm.username.$error" ng-if="updateUserDataForm.username.$touched">
-            <div ng-message="pattern">
-                Der Benutzername ist keine alphanumerische Zeichenfolge. Es sind ausschließlich die Zeichen a-z, a-Z und 0-9 erlaubt.
-            </div>
-            <div ng-message="required">
-                Bitte geben Sie einen Benutzernamen an.
-            </div>
-        </div>
+        <input id="username" name="username" type="text" pattern="[a-zA-Z0-9]*" ng-model="user.username" ng-disabled="true" required>
     </md-input-container>
     <md-input-container  class="md-icon-float md-block">
         <label for="email">E-Mail</label>
