@@ -1,7 +1,20 @@
-shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'authService', '$route',
-    function ($rootScope, $scope, $location, authService, $route) {
+shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'authService', '$route', '$mdMedia', '$mdDialog',
+    function ($rootScope, $scope, $location, authService, $route, $mdMedia, $mdDialog) {
         $scope.lastPath = "";
         $scope.navCollapsed = true;
+
+        $scope.openMenu = function($mdOpenMenu, ev) {
+            originatorEv = ev;
+            $mdOpenMenu(ev);
+        };
+        
+        $scope.screenIsTooSmall = function () {
+            if($rootScope.authenticated){
+                return !$mdMedia('gt-sm');
+            }
+            
+            return false;
+        };
 
         $scope.isSubRouteOf = function (viewLocation) {
             viewLocation = viewLocation.split('/');
@@ -50,8 +63,8 @@ shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'aut
 
         var redirectToLoginIfAuthenticationRequired = function(newUrl) {
             authService.isAuthenticated()
-                .then(function (username) {
-                    $rootScope.user = username;
+                .then(function (user) {
+                    $rootScope.user = user;
                     if (!$rootScope.authenticated) {
                         redirectToLoginIfNotFreeRotue(newUrl);
                     }else{

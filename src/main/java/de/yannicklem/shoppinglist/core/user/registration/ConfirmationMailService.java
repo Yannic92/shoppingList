@@ -32,7 +32,9 @@ public class ConfirmationMailService {
                 + "Solltest du deinen Browser in der Zwischenzeit geschlossen haben, ist hier noch einmal\n"
                 + "der Link zur Bestätigung deiner Registrierung: \n\n%s\n\n"
                 + "Solltest du dich nicht registriert haben, ignoriere diese E-Mail einfach.\n\n"
-                + "Viel Erfolg mit deiner Einkaufsliste", slUser.getFirstName(), slUser.getConfirmation().getCode(),
+                + "Viel Erfolg mit deiner Einkaufsliste", 
+                slUser.getFirstName() != null ? slUser.getFirstName() : slUser.getUsername(),
+                slUser.getConfirmation().getCode(),
                 confirmationUri.replace("{username}", slUser.getUsername()));
 
         mailService.sendMail(slUser.getEmail(), confirmationMessage);

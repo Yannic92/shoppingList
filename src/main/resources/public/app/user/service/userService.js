@@ -16,6 +16,12 @@ shoppingList.factory('userService',['$resource', 'HALResource',
                         return HALResource.getContent(response);
                     })
             },
+            update : function(user){
+                return USERS.update({username: user.username}, user).$promise
+                    .then(function(updatedUser){
+                        return HALResource.getContent(updatedUser);
+                    });
+            },
             confirmRegistrationFor : function(username, confirmation){
                 return USER_CONFIRMATION.update({username: username}, confirmation).$promise;
             }

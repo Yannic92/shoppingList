@@ -1,0 +1,48 @@
+<md-content ng-cloak>
+    <md-toolbar>
+        <div layout="row" class="md-toolbar-tools" style="overflow:hidden;">
+            <div layout="row" layout-align="start center" style="width: 100%;">
+                <md-button ng-if="authenticated" class="md-icon-button">
+                    <md-icon md-font-set="material-icons">menu</md-icon>
+                </md-button>
+                <h1 ng-hide="screenIsTooSmall()">
+                    <span md-flex>{{title}}</span>
+                </h1>
+            </div>
+            <div ng-if="authenticated" layout="row" layout-align="end center">
+                {{user.username}}
+                <md-menu md-offset="0 60">
+                    <md-button aria-label="Open phone interactions menu" class="md-icon-button" ng-click="openMenu($mdOpenMenu, $event)">
+                        <md-icon md-menu-origin  md-font-set="material-icons">more_vert</md-icon>
+                    </md-button>
+                    <md-menu-content>
+                        <md-menu-item>
+                            <md-button class="md-primary" ng-href="#/userData">
+                                <md-icon md-menu-origin  md-font-set="material-icons"  md-menu-align-target>
+                                    settings
+                                </md-icon>
+                                Benutzerdaten
+                            </md-button>
+                        </md-menu-item>
+                        <md-menu-divider></md-menu-divider>
+                        <md-menu-item>
+                            <md-button class="md-primary" ng-href="#/logout">
+                                <md-icon md-menu-origin  md-font-set="material-icons">lock_outline</md-icon>
+                                Logout
+                            </md-button>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+
+            </div>
+        </div>
+    </md-toolbar>
+    <md-toolbar class="md-tall md-warn" ng-if="error" >
+        <div style="height: 128px;line-height: 128px;text-align: center;">
+                <span style="display: inline-block;vertical-align: middle;line-height: normal;">
+                    {{errorMessage}}
+                </span>
+        </div>
+    </md-toolbar>
+</md-content>
+

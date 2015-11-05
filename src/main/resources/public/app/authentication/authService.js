@@ -1,8 +1,8 @@
 shoppingList.factory('authService',['$http', '$rootScope', function($http, $rootScope){
     var USER_ENDPOINT = 'api/sLUsers/current';
+    
     var authService = {
         authenticate : function (credentials) {
-
             var headers = authService.getAuthenticationHeader(credentials);
 
             return $http.get(USER_ENDPOINT, {
@@ -11,13 +11,12 @@ shoppingList.factory('authService',['$http', '$rootScope', function($http, $root
                 return authService.isAuthenticated();
             });
         },
-
         isAuthenticated : function(){
             return $http.get(USER_ENDPOINT)
                 .then(function(response){
                     if(response.data.username){
                         $rootScope.authenticated = true;
-                        return response.data.username;
+                        return response.data;
                     }else{
                         $rootScope.authenticated = false;
                     }
@@ -25,7 +24,6 @@ shoppingList.factory('authService',['$http', '$rootScope', function($http, $root
                     $rootScope.authenticated = false;
                 });
         },
-
         getAuthenticationHeader : function(credentials){
             return credentials ? {
                 authorization: "Basic "
@@ -35,7 +33,7 @@ shoppingList.factory('authService',['$http', '$rootScope', function($http, $root
         },
 
         logout : function() {
-            $http.post('/logout', {}).success(function () {
+            return $http.post('/logout', {}).success(function () {
                 $rootScope.authenticated = false;
                 $rootScope.headers = {};
                 $rootScope.user = '';

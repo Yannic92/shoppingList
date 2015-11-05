@@ -12,6 +12,9 @@ public interface SLUserProjection {
 
     String getEmail();
 
+    String getFirstName();
+    
+    String getLastName();
 
     Set<SLAuthority> getAuthorities();
 }

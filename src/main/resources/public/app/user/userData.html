@@ -1,4 +1,4 @@
-<form name="registerForm">
+<form  id="updateUserDataForm" role="form" name="updateUserDataForm" ng-submit="updateUserData()">
     <md-input-container class="md-icon-float md-block">
         <label for="firstName">Vorname *</label>
         <md-icon md-font-set="material-icons">person</md-icon>
@@ -13,7 +13,7 @@
         <label for="username">Benutzername</label>
         <md-icon md-font-set="material-icons">person</md-icon>
         <input id="username" name="username" type="text" pattern="[a-zA-Z0-9]*" ng-model="user.username" required>
-        <div ng-messages="registerForm.username.$error" ng-if="registerForm.username.$touched">
+        <div ng-messages="updateUserDataForm.username.$error" ng-if="updateUserDataForm.username.$touched">
             <div ng-message="pattern">
                 Der Benutzername ist keine alphanumerische Zeichenfolge. Es sind ausschließlich die Zeichen a-z, a-Z und 0-9 erlaubt.
             </div>
@@ -22,11 +22,11 @@
             </div>
         </div>
     </md-input-container>
-    <md-input-container class="md-icon-float md-block">
+    <md-input-container  class="md-icon-float md-block">
         <label for="email">E-Mail</label>
         <md-icon md-font-set="material-icons">email</md-icon>
         <input id="email" name="email" type="email" ng-model="user.email" required>
-        <div ng-messages="registerForm.email.$error" ng-if="registerForm.email.$touched">
+        <div ng-messages="updateUserDataForm.email.$error" ng-if="updateUserDataForm.email.$touched">
             <div ng-message="email">
                 Das ist keine gültige E-Mailadresse.
             </div>
@@ -36,24 +36,24 @@
         </div>
     </md-input-container>
     <md-input-container class="md-icon-float md-block">
-        <label for="password">Passwort</label>
+        <label for="password">(Neues) Passwort</label>
         <md-icon md-font-set="material-icons">vpn_key</md-icon>
         <input id="password" name="password" type="password" ng-model="user.password" minlength="8" required>
-        <div ng-messages="registerForm.password.$error" ng-if="registerForm.password.$touched">
+        <div ng-messages="updateUserDataForm.password.$error" ng-if="updateUserDataForm.password.$touched">
             <div ng-message="minlength">
                 Das Passwort muss mindestens 8 Zeichen lang sein.
             </div>
             <div ng-message="required">
-                Bitte legen Sie ein Passwort fest.
+                Bitte legen Sie ein neues Passwort fest oder bestätigen Sie die Änderung durch ihr aktuelles Passwort.
             </div>
         </div>
     </md-input-container>
     <md-input-container class="md-icon-float md-block">
-        <label for="passwordRepeat">Passwort wiederholen</label>
+        <label for="passwordRepeat">(Neues) Passwort wiederholen</label>
         <md-icon md-font-set="material-icons">vpn_key</md-icon>
         <input id="passwordRepeat" name="passwordRepeat" type="password" ng-model="passwordRepeat"
                compare-to="user.password" required>
-        <div ng-messages="registerForm.passwordRepeat.$error" ng-if="registerForm.passwordRepeat.$touched">
+        <div ng-messages="updateUserDataForm.passwordRepeat.$error" ng-if="updateUserDataForm.passwordRepeat.$touched">
             <div ng-message="required">
                 Bitte bestätigen Sie Ihr Passwort.
             </div>
@@ -67,8 +67,8 @@
         lediglich dazu, dass Ihre Freunde Sie später leichter finden können, um Einkaufslisten zu teilen
     </span>
     <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
-        <md-button class="md-primary" ng-disabled="!registerForm.$valid" ng-click="register()">
-            Registrieren
+        <md-button class="md-primary" ng-disabled="!updateUserDataForm.$valid || updateUserDataForm.$pristine" type="submit">
+            Aktualisieren
         </md-button>
     </section>
 </form>

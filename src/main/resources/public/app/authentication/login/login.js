@@ -36,8 +36,8 @@ shoppingList.controller('login',[ '$rootScope', '$scope', '$location', 'authServ
         var redirectIfLoggedIn = function (){
             $scope.loggingIn = true;
             authService.isAuthenticated()
-                .then(function (username) {
-                    $rootScope.user = username;
+                .then(function (user) {
+                    $rootScope.user = user;
                     $location.replace();
                     $location.path('/lists')
                 }).finally(function(){
