@@ -44,6 +44,10 @@ shoppingList.controller('login',[ '$rootScope', '$scope', '$location', 'authServ
                    $scope.loggingIn = false;
                 });
         };
+        
+        $scope.loginDisabled = function () {
+            return $scope.loggingIn || !$scope.loginForm.$valid;
+        };
 
         redirectIfLoggedIn();
         

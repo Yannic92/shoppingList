@@ -14,6 +14,9 @@
             <md-button class="md-primary" ng-disabled="!confirmationForm.$valid" type="submit">
                 Registrierung bestätigen
             </md-button>
+            <md-tooltip ng-if="!confirmationForm.$valid">
+                Bitten geben Sie zunächst Ihren Bestätigungscode ein
+            </md-tooltip>
         </section>
     </form>
 </div>

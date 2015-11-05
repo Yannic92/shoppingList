@@ -10,9 +10,14 @@
         <input id="password" name="password" type="password" ng-model="credentials.password" required>
     </md-input-container>
     <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
-        <md-button class="md-primary" ng-disabled="loggingIn || !loginForm.$valid" type="submit">
-            Login
-        </md-button>
+        <div>
+            <md-button class="md-primary" ng-disabled="loginDisabled()" type="submit">
+                Login
+            </md-button>
+            <md-tooltip ng-if="loginDisabled()">
+                Bitten geben Sie zunächst Ihre Zugangsdaten ein
+            </md-tooltip>
+        </div>
         <md-button class="md-primary" ng-disabled="loggingIn" ng-href="#/register">
             Registrieren
         </md-button>
