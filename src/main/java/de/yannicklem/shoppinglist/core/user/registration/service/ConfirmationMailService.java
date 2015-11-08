@@ -1,7 +1,7 @@
-package de.yannicklem.shoppinglist.core.user.registration;
+package de.yannicklem.shoppinglist.core.user.registration.service;
 
 import de.yannicklem.shoppinglist.core.mail.MailService;
-import de.yannicklem.shoppinglist.core.user.SLUser;
+import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

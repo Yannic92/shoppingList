@@ -1,6 +1,7 @@
-package de.yannicklem.shoppinglist.core.user;
+package de.yannicklem.shoppinglist.core.user.service;
 
-import de.yannicklem.shoppinglist.core.user.restapi.SLUserProjection;
+import de.yannicklem.shoppinglist.core.user.entity.SLUser;
+import de.yannicklem.shoppinglist.core.user.entity.SLUserProjection;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;

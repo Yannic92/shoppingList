@@ -1,7 +1,7 @@
 package de.yannicklem.shoppinglist;
 
-import de.yannicklem.shoppinglist.core.user.SLAuthority;
-import de.yannicklem.shoppinglist.core.user.SLUser;
+import de.yannicklem.shoppinglist.core.user.entity.SLAuthority;
+import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 
 import org.springframework.context.annotation.Configuration;
 

@@ -1,4 +1,4 @@
-package de.yannicklem.shoppinglist.security.config;
+package de.yannicklem.shoppinglist.core.user.security.config;
 
 import org.springframework.security.web.csrf.CsrfToken;
 

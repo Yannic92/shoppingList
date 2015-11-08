@@ -1,4 +1,4 @@
-package de.yannicklem.shoppinglist.core.user;
+package de.yannicklem.shoppinglist.core.user.entity;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

@@ -1,9 +1,9 @@
-package de.yannicklem.shoppinglist.core.user;
+package de.yannicklem.shoppinglist.core.user.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-import de.yannicklem.shoppinglist.core.user.registration.Confirmation;
+import de.yannicklem.shoppinglist.core.user.registration.entity.Confirmation;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

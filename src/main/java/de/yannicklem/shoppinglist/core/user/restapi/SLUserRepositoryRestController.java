@@ -1,8 +1,8 @@
 package de.yannicklem.shoppinglist.core.user.restapi;
 
-import de.yannicklem.shoppinglist.core.user.SLUser;
-import de.yannicklem.shoppinglist.core.user.registration.Confirmation;
-import de.yannicklem.shoppinglist.core.user.security.CurrentUserService;
+import de.yannicklem.shoppinglist.core.user.entity.SLUser;
+import de.yannicklem.shoppinglist.core.user.registration.entity.Confirmation;
+import de.yannicklem.shoppinglist.core.user.security.service.CurrentUserService;
 import de.yannicklem.shoppinglist.core.user.service.SLUserService;
 import de.yannicklem.shoppinglist.exception.NotFoundException;
 
@@ -23,8 +23,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.security.Principal;
 
 import java.util.List;
 import java.util.stream.Collectors;

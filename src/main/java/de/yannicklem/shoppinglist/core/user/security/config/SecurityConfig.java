@@ -1,9 +1,9 @@
-package de.yannicklem.shoppinglist.security.config;
+package de.yannicklem.shoppinglist.core.user.security.config;
 
-import de.yannicklem.shoppinglist.core.user.SLAuthority;
-import de.yannicklem.shoppinglist.core.user.SLUser;
+import de.yannicklem.shoppinglist.core.user.entity.SLAuthority;
+import de.yannicklem.shoppinglist.core.user.entity.SLUser;
+import de.yannicklem.shoppinglist.core.user.security.service.PasswordGenerator;
 import de.yannicklem.shoppinglist.core.user.service.SLUserService;
-import de.yannicklem.shoppinglist.security.PasswordGenerator;
 
 import org.apache.log4j.Logger;
 
@@ -100,7 +100,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         authorities.add(new SLAuthority(SLAuthority.ADMIN));
         authorities.add(new SLAuthority(SLAuthority.USER));
 
-        String password = "";
+        String password;
 
         if (this.password != null && !this.password.equals("")) {
             password = this.password;

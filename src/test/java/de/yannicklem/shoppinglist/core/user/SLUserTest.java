@@ -1,8 +1,10 @@
 package de.yannicklem.shoppinglist.core.user;
 
 import de.yannicklem.shoppinglist.TestUtils;
-import de.yannicklem.shoppinglist.core.user.registration.Confirmation;
+import de.yannicklem.shoppinglist.core.user.entity.SLUser;
+import de.yannicklem.shoppinglist.core.user.registration.entity.Confirmation;
 
+import de.yannicklem.shoppinglist.core.user.entity.SLAuthority;
 import org.junit.Before;
 import org.junit.Test;
 

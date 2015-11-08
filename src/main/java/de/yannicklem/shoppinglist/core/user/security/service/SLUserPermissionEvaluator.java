@@ -1,7 +1,8 @@
-package de.yannicklem.shoppinglist.core.user.security;
+package de.yannicklem.shoppinglist.core.user.security.service;
 
-import de.yannicklem.shoppinglist.core.user.SLUser;
+import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 
+import de.yannicklem.shoppinglist.core.user.security.service.CurrentUserService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 

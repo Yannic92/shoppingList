@@ -3,8 +3,11 @@ package de.yannicklem.shoppinglist.core.user;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.yannicklem.shoppinglist.TestUtils;
+import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.WebShoppingListApplication;
 
+import de.yannicklem.shoppinglist.core.user.service.SLUserRepository;
+import de.yannicklem.shoppinglist.core.user.entity.SLAuthority;
 import org.hamcrest.Matchers;
 
 import org.junit.Before;

@@ -1,4 +1,4 @@
-package de.yannicklem.shoppinglist.core.user.registration;
+package de.yannicklem.shoppinglist.core.user.registration.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;

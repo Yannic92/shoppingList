@@ -1,6 +1,4 @@
-package de.yannicklem.shoppinglist.core.user.restapi;
-
-import de.yannicklem.shoppinglist.core.user.SLAuthority;
+package de.yannicklem.shoppinglist.core.user.entity;
 
 import java.util.Set;
 

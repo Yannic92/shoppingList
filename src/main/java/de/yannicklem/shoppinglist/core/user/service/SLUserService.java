@@ -1,16 +1,15 @@
 package de.yannicklem.shoppinglist.core.user.service;
 
-import de.yannicklem.shoppinglist.core.user.SLUser;
-import de.yannicklem.shoppinglist.core.user.SLUserRepository;
-import de.yannicklem.shoppinglist.core.user.registration.Confirmation;
-import de.yannicklem.shoppinglist.core.user.registration.ConfirmationMailService;
-import de.yannicklem.shoppinglist.core.user.security.CurrentUserService;
-import de.yannicklem.shoppinglist.core.user.security.SLUserPermissionEvaluator;
+import de.yannicklem.shoppinglist.core.user.entity.SLUser;
+import de.yannicklem.shoppinglist.core.user.registration.entity.Confirmation;
+import de.yannicklem.shoppinglist.core.user.registration.service.ConfirmationMailService;
+import de.yannicklem.shoppinglist.core.user.security.service.CurrentUserService;
+import de.yannicklem.shoppinglist.core.user.security.service.SLUserPermissionEvaluator;
 import de.yannicklem.shoppinglist.exception.AlreadyExistsException;
 import de.yannicklem.shoppinglist.exception.EntityInvalidException;
 import de.yannicklem.shoppinglist.exception.NotFoundException;
 import de.yannicklem.shoppinglist.exception.PermissionDeniedException;
-import de.yannicklem.shoppinglist.security.PasswordGenerator;
+import de.yannicklem.shoppinglist.core.user.security.service.PasswordGenerator;
 
 import lombok.RequiredArgsConstructor;
 
@@ -61,7 +60,7 @@ public class SLUserService implements UserDetailsService {
 
         return created;
     }
-
+    
 
     @HandleBeforeCreate(SLUser.class)
     public void handleBeforeCreateSLUser(SLUser slUser) {
