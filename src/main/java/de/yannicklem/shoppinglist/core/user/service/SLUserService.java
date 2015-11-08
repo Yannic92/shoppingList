@@ -4,12 +4,12 @@ import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.core.user.registration.entity.Confirmation;
 import de.yannicklem.shoppinglist.core.user.registration.service.ConfirmationMailService;
 import de.yannicklem.shoppinglist.core.user.security.service.CurrentUserService;
+import de.yannicklem.shoppinglist.core.user.security.service.PasswordGenerator;
 import de.yannicklem.shoppinglist.core.user.security.service.SLUserPermissionEvaluator;
 import de.yannicklem.shoppinglist.exception.AlreadyExistsException;
 import de.yannicklem.shoppinglist.exception.EntityInvalidException;
 import de.yannicklem.shoppinglist.exception.NotFoundException;
 import de.yannicklem.shoppinglist.exception.PermissionDeniedException;
-import de.yannicklem.shoppinglist.core.user.security.service.PasswordGenerator;
 
 import lombok.RequiredArgsConstructor;
 
@@ -41,7 +41,7 @@ import javax.servlet.http.HttpSession;
 
 @Service
 @RepositoryEventHandler(SLUser.class)
-@RequiredArgsConstructor(onConstructor = @_(@Autowired ))
+@RequiredArgsConstructor(onConstructor = @__(@Autowired ))
 public class SLUserService implements UserDetailsService {
 
     private final SLUserRepository slUserRepository;
@@ -60,7 +60,7 @@ public class SLUserService implements UserDetailsService {
 
         return created;
     }
-    
+
 
     @HandleBeforeCreate(SLUser.class)
     public void handleBeforeCreateSLUser(SLUser slUser) {
@@ -187,10 +187,10 @@ public class SLUserService implements UserDetailsService {
 
         SLUser user = slUserRepository.findOne(username);
 
-        if(user == null){
+        if (user == null) {
             user = slUserRepository.findByEmail(username);
         }
-        
+
         if (user == null) {
             throw new UsernameNotFoundException(String.format("Username '%s' not found", username));
         }

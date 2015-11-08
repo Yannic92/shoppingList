@@ -9,9 +9,13 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 
 
 @Entity
@@ -24,16 +28,16 @@ public class Article {
     @Id
     @GeneratedValue
     private Long id;
-    
+
     private String name;
     private double priceInEuro;
 
     @JsonIgnore
     @ManyToMany
     private final Set<SLUser> owners;
-    
+
     public Article(String name, double priceInEuro, Set<SLUser> owners) {
-        
+
         this();
         this.name = name;
         this.priceInEuro = priceInEuro;
@@ -48,12 +52,11 @@ public class Article {
         this.owners = new HashSet<>();
     }
 
-
-    public void setOwners(Set<SLUser> owners){
+    public void setOwners(Set<SLUser> owners) {
 
         this.owners.clear();
 
-        if(owners != null){
+        if (owners != null) {
             this.owners.addAll(owners);
         }
     }

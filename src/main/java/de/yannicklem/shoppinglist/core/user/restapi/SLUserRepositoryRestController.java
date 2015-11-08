@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 
 @RepositoryRestController
 @ExposesResourceFor(SLUser.class)
-@RequiredArgsConstructor(onConstructor = @_(@Autowired ))
+@RequiredArgsConstructor(onConstructor = @__(@Autowired ))
 public class SLUserRepositoryRestController {
 
     @NonNull

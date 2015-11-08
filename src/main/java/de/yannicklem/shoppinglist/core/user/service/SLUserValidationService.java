@@ -28,7 +28,7 @@ public class SLUserValidationService {
         this.minPasswordLength = minPasswordLength;
     }
 
-    public void validate(SLUser slUser) throws EntityInvalidException{
+    public void validate(SLUser slUser) throws EntityInvalidException {
 
         if (slUser == null) {
             throw new EntityInvalidException("User is null");
@@ -39,7 +39,7 @@ public class SLUserValidationService {
         validateEmail(slUser.getEmail());
         validatePassword(slUser.getPassword());
     }
-    
+
 
     private void validateAuthorities(Collection<? extends GrantedAuthority> authorities) {
 

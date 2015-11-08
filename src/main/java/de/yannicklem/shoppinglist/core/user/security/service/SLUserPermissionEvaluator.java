@@ -2,7 +2,6 @@ package de.yannicklem.shoppinglist.core.user.security.service;
 
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 
-import de.yannicklem.shoppinglist.core.user.security.service.CurrentUserService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
@@ -12,12 +11,12 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-@RequiredArgsConstructor(onConstructor = @_(@Autowired ))
+@RequiredArgsConstructor(onConstructor = @__(@Autowired ))
 public class SLUserPermissionEvaluator {
 
     @NonNull
     private final CurrentUserService currentUserService;
-    
+
     public boolean currentUserIsAllowedToReadUser(SLUser userToRead) {
 
         if (currentUserService.currentUserIsAdminOrSystemUser()) {

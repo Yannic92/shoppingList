@@ -100,34 +100,43 @@ public class SLUser implements UserDetails {
         setAuthorities(authorities);
     }
 
+    @Override
     @JsonIgnore
-    public String getPassword(){
-        
+    public String getPassword() {
+
         return this.password;
     }
-    
+
+
     @JsonProperty
-    public void setPassword(String password){
-        
+    public void setPassword(String password) {
+
         this.password = password;
     }
-    
+
+
+    @Override
     @JsonIgnore
-    public Set<GrantedAuthority> getAuthorities(){
+    public Set<GrantedAuthority> getAuthorities() {
+
         return this.authorities;
     }
-    
+
+
     @JsonIgnore
-    public String getEmail(){
+    public String getEmail() {
+
         return this.email;
     }
-    
+
+
     @JsonProperty
-    public void setEmail(String email){
-        
+    public void setEmail(String email) {
+
         this.email = email;
     }
-    
+
+
     @JsonIgnore
     public boolean isAdmin() {
 
