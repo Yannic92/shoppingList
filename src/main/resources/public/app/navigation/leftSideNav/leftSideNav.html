@@ -1,0 +1,26 @@
+<md-sidenav ng-if="authenticated" class="md-sidenav-left md-whiteframe-z2" md-component-id="leftNav" md-is-locked-open="$mdMedia('gt-md')">
+    <md-toolbar>
+        <div class="md-toolbar-tools" layout="row" layout-align="start center">
+            <md-button style="text-align: left;" ng-href="#/lists" flex>
+                <span layout-padding>Einkaufslisten</span>
+            </md-button>
+
+            <md-button ng-if="authenticated" class="md-icon-button" ng-click="openNav()" hide-gt-md>
+                <md-icon md-font-set="material-icons">keyboard_arrow_left</md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+    <md-content layout="column" layout-align="center start" layout-padding>
+        <md-button class="md-primary" ng-href="#/newList">
+            <md-icon md-font-set="material-icons">add_shopping_cart</md-icon>
+            Neue Einkaufsliste
+        </md-button>
+        <div ng-repeat="list in lists" class="md-toolbar-tools" layout="row" layout-align="start center">
+            <md-button class="md-primary" ng-href="#/lists/{{list.id}}" flex style="text-align: left;">
+                <md-icon md-font-set="material-icons">list</md-icon>
+                {{list.name}}
+            </md-button>
+            <div ng-controller="listMenu" ng-include="'app/navigation/leftSideNav/listMenu/listMenu.html'"></div>
+        </div>
+    </md-content>
+</md-sidenav>

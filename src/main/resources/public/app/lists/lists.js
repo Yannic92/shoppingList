@@ -5,8 +5,7 @@ shoppingList.config(['$routeProvider', function ($routeProvider) {
     };
     $routeProvider
         .when('/lists', routeConfig)
-        .when('/lists/:listId', routeConfig)
-        .when('/lists/:listId/:status', routeConfig);
+        .when('/lists/:listId', routeConfig);
 }]);
 
 shoppingList.controller('lists', ['$scope', '$rootScope',
@@ -14,6 +13,5 @@ shoppingList.controller('lists', ['$scope', '$rootScope',
         'use strict';
         
         $rootScope.title = "Einkaufslisten";
-        
     }
 ]);

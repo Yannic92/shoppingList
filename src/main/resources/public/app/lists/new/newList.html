@@ -1,0 +1,15 @@
+<form  id="createShoppingListForm" role="form" name="createShoppingListForm" ng-submit="createList()">
+    <md-input-container class="md-icon-float md-block">
+        <label for="name">Name der Liste</label>
+        <md-icon md-font-set="material-icons">person</md-icon>
+        <input id="name" name="name" ng-model="list.name" type="text">
+    </md-input-container>
+    <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
+        <md-button class="md-primary" ng-disabled="!createShoppingListForm.$valid || createShoppingListForm.$pristine" type="submit">
+            Erstellen
+        </md-button>
+    </section>
+</form>
+
+
+

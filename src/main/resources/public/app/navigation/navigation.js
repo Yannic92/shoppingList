@@ -1,35 +1,11 @@
-shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'authService', '$route', '$mdMedia', '$mdDialog', '$timeout', '$mdSidenav',
-    function ($rootScope, $scope, $location, authService, $route, $mdMedia, $mdDialog, $timeout, $mdSidenav) {
+shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'authService', '$route', '$mdSidenav',
+    function ($rootScope, $scope, $location, authService, $route, $mdSidenav) {
         $scope.lastPath = "";
-        $scope.navCollapsed = true;
+
         $scope.openNav = function(){
             $mdSidenav('leftNav').toggle();
         };
         
-        $scope.openMenu = function($mdOpenMenu, ev) {
-            originatorEv = ev;
-            $mdOpenMenu(ev);
-        };
-
-        $scope.isSubRouteOf = function (viewLocation) {
-            viewLocation = viewLocation.split('/');
-            var location = $location.path().split('/');
-            for(var i = 0; i < viewLocation.length; i++){
-                if(viewLocation[i] != location[i]){
-                    return false;
-                }
-            }
-            return true;
-        };
-
-        $scope.isActive = function (viewLocation) {
-            return viewLocation == $location.path();
-        };
-
-        $scope.toggleNavCollapsed = function (){
-            $scope.navCollapsed = ! $scope.navCollapsed;
-        };
-
         var urlIsDefined = function(url){
             return url && url.$$route;
         };
