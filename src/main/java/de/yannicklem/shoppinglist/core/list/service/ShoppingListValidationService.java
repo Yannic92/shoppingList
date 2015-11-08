@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.Set;
 
 @Service
-@RequiredArgsConstructor(onConstructor = @__(@Autowired ))
+@RequiredArgsConstructor(onConstructor = @_(@Autowired ))
 public class ShoppingListValidationService {
     
     private final ItemValidationService itemValidationService;
