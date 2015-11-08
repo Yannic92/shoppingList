@@ -22,7 +22,7 @@ public class Item{
 
     @Id
     @GeneratedValue
-    private Integer id;
+    private Long id;
 
     @JsonIgnore
     @ManyToMany
@@ -30,14 +30,14 @@ public class Item{
     
     private Integer count;
     
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private Article article;
 
     public Item() {
         this.owners = new HashSet<>();
     }
 
-    private void setOwners(Set<SLUser> owners){
+    public void setOwners(Set<SLUser> owners){
 
         this.owners.clear();
 

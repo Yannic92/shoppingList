@@ -1,24 +1,35 @@
-<md-content ng-cloak>
+<div style="height: 100%;" layout="column">
     <md-toolbar>
         <div layout="row" class="md-toolbar-tools" style="overflow:hidden;">
             <div layout="row" layout-align="start center" style="width: 100%;">
-                <md-button ng-if="authenticated" class="md-icon-button">
+                <md-button ng-if="authenticated" class="md-icon-button" ng-click="openNav()" hide-gt-md>
                     <md-icon md-font-set="material-icons">menu</md-icon>
                 </md-button>
-                <h1 ng-hide="screenIsTooSmall()">
+                <h1>
                     <span md-flex>{{title}}</span>
                 </h1>
             </div>
             <div ng-if="authenticated" layout="row" layout-align="end center">
-                {{user.username}}
+                <span hide-sm>
+                    {{user.username}}
+                </span>
                 <md-menu md-offset="0 60">
                     <md-button aria-label="Open phone interactions menu" class="md-icon-button" ng-click="openMenu($mdOpenMenu, $event)">
                         <md-icon md-menu-origin  md-font-set="material-icons">more_vert</md-icon>
                     </md-button>
                     <md-menu-content>
                         <md-menu-item>
+                            <div layout="row">
+                                <md-icon class=".md-button" md-menu-origin  md-font-set="material-icons" md-menu-align-target style="margin:auto 16px auto 0;">
+                                    person
+                                </md-icon>
+                                <span class=".md-button">{{user.username}}</span>
+                            </div>
+                        </md-menu-item>
+                        <md-menu-divider></md-menu-divider>
+                        <md-menu-item>
                             <md-button class="md-primary" ng-href="#/userData">
-                                <md-icon md-menu-origin  md-font-set="material-icons" md-menu-align-target>
+                                <md-icon md-menu-origin  md-font-set="material-icons">
                                     settings
                                 </md-icon>
                                 Benutzerdaten
@@ -56,3 +67,23 @@
     </md-toolbar>
 </md-content>
 
+<section layout="row" style="height: 100%;">
+    <md-sidenav ng-if="authenticated" class="md-sidenav-left md-whiteframe-z2" md-component-id="leftNav" md-is-locked-open="$mdMedia('gt-md')" flex-gt-md="25">
+        <md-toolbar>
+            <div class="md-toolbar-tools" layout="row" layout-align="start center">
+                <span flex>Einkaufslisten</span>
+            
+                <md-button ng-if="authenticated" class="md-icon-button" ng-click="openNav()" hide-gt-md>
+                    <md-icon md-font-set="material-icons">keyboard_arrow_left</md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-content layout-padding>
+            
+        </md-content>
+    </md-sidenav>
+    <md-content flex layout-padding>
+        <div ng-view class="content" layout-padding ></div>
+    </md-content>
+</section>
+</div>

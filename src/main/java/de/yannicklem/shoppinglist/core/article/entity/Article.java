@@ -23,7 +23,7 @@ public class Article {
 
     @Id
     @GeneratedValue
-    private Integer id;
+    private Long id;
     
     private String name;
     private double priceInEuro;
@@ -47,9 +47,9 @@ public class Article {
         this.priceInEuro = 0;
         this.owners = new HashSet<>();
     }
-    
 
-    private void setOwners(Set<SLUser> owners){
+
+    public void setOwners(Set<SLUser> owners){
 
         this.owners.clear();
 

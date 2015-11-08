@@ -1,6 +1,7 @@
 package de.yannicklem.shoppinglist.core.user.restapi;
 
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
+import de.yannicklem.shoppinglist.core.user.entity.SLUserDetailed;
 import de.yannicklem.shoppinglist.core.user.registration.entity.Confirmation;
 import de.yannicklem.shoppinglist.core.user.security.service.CurrentUserService;
 import de.yannicklem.shoppinglist.core.user.service.SLUserService;
@@ -68,9 +69,9 @@ public class SLUserRepositoryRestController {
 
     @RequestMapping(method = RequestMethod.GET, value = SLUserEndpoints.SLUSER_CURRENT_ENDPOINT)
     @ResponseBody
-    public PersistentEntityResource getCurrentUser(PersistentEntityResourceAssembler resourceAssembler) {
+    public SLUserDetailed getCurrentUser(PersistentEntityResourceAssembler resourceAssembler) {
 
-        return resourceAssembler.toResource(currentUserService.getCurrentUser());
+        return new SLUserDetailed(currentUserService.getCurrentUser());
     }
 
 

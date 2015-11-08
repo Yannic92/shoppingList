@@ -1,6 +1,7 @@
 package de.yannicklem.shoppinglist.core.user.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import de.yannicklem.shoppinglist.core.user.registration.entity.Confirmation;
@@ -46,6 +47,7 @@ public class SLUser implements UserDetails {
     private String lastName;
 
     @Column(nullable = false)
+    @JsonIgnore
     private String password;
 
     @ManyToMany(
@@ -67,6 +69,7 @@ public class SLUser implements UserDetails {
 
     @Email(message = "Keine gueltige E-Mail-Adresse")
     @Column(unique = true, nullable = false)
+    @JsonIgnore
     private String email;
 
     @OneToOne(optional = false, cascade = CascadeType.ALL)
@@ -97,6 +100,35 @@ public class SLUser implements UserDetails {
         setAuthorities(authorities);
     }
 
+    @JsonIgnore
+    public String getPassword(){
+        
+        return this.password;
+    }
+    
+    @JsonProperty
+    public void setPassword(String password){
+        
+        this.password = password;
+    }
+    
+    @JsonIgnore
+    public Set<GrantedAuthority> getAuthorities(){
+        return this.authorities;
+    }
+    
+    @JsonIgnore
+    public String getEmail(){
+        return this.email;
+    }
+    
+    @JsonProperty
+    public void setEmail(String email){
+        
+        this.email = email;
+    }
+    
+    @JsonIgnore
     public boolean isAdmin() {
 
         return authorities.contains(new SLAuthority(SLAuthority.ADMIN));

@@ -1,13 +1,17 @@
 package de.yannicklem.shoppinglist.core.user;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import de.yannicklem.shoppinglist.SLUserTestEntity;
 import de.yannicklem.shoppinglist.TestUtils;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.WebShoppingListApplication;
 
+import de.yannicklem.shoppinglist.core.user.entity.SLUserDetailed;
 import de.yannicklem.shoppinglist.core.user.service.SLUserRepository;
 import de.yannicklem.shoppinglist.core.user.entity.SLAuthority;
+import org.hamcrest.CoreMatchers;
 import org.hamcrest.Matchers;
 
 import org.junit.Before;
@@ -106,10 +110,10 @@ public class SLUserSecurityIntegrationTest {
             .andExpect(content().contentType(MediaTypes.HAL_JSON))
             .andExpect(jsonPath("_embedded.sLUsers", hasSize(1)))
             .andExpect(jsonPath("_embedded.sLUsers[0].username", is(slUserTest.getUsername())))
-            .andExpect(jsonPath("_embedded.sLUsers[0].email", is(slUserTest.getEmail())))
-            .andExpect(jsonPath("_embedded.sLUsers[0].authorities",
-                        Matchers.hasSize(slUserTest.getAuthorities().size())))
-            .andExpect(jsonPath("_embedded.sLUsers[0].authorities[0].authority", is(SLAuthority.USER)))
+            .andExpect(jsonPath("_embedded.sLUsers[0].firstName", is(slUserTest.getFirstName())))
+            .andExpect(jsonPath("_embedded.sLUsers[0].lastName", is(slUserTest.getLastName())))
+            .andExpect(jsonPath("_embedded.sLUsers[0].email", is(CoreMatchers.nullValue())))
+            .andExpect(jsonPath("_embedded.sLUsers[0].authorities", is(nullValue())))
             .andExpect(jsonPath("_embedded.sLUsers[0].password", is(nullValue())));
     }
 
@@ -139,9 +143,10 @@ public class SLUserSecurityIntegrationTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaTypes.HAL_JSON))
             .andExpect(jsonPath("username", is(slUserTest.getUsername())))
-            .andExpect(jsonPath("email", is(slUserTest.getEmail())))
-            .andExpect(jsonPath("authorities", Matchers.hasSize(slUserTest.getAuthorities().size())))
-            .andExpect(jsonPath("authorities[0].authority", is(SLAuthority.USER)))
+            .andExpect(jsonPath("firstName", is(slUserTest.getFirstName())))
+            .andExpect(jsonPath("lastName", is(slUserTest.getLastName())))
+            .andExpect(jsonPath("email", is(nullValue())))
+            .andExpect(jsonPath("authorities", is(nullValue())))
             .andExpect(jsonPath("password", is(nullValue())));
     }
 
@@ -150,7 +155,7 @@ public class SLUserSecurityIntegrationTest {
     public void createAnAdminUserWithoutAuthenticationAndWithoutCSRFViaPostReturnsForbidden() throws Exception {
 
         SLUser sLUserTest3 = TestUtils.completelyInitializedTestAdmin("Test3");
-        byte[] sLUserTest3JsonBytes = new ObjectMapper().writeValueAsBytes(sLUserTest3);
+        byte[] sLUserTest3JsonBytes = getJsonBytes(new SLUserTestEntity(sLUserTest3));
         mockMvc.perform(post(sLUsersEndpoint).content(sLUserTest3JsonBytes).contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isForbidden());
 
@@ -162,7 +167,7 @@ public class SLUserSecurityIntegrationTest {
     public void createAnAdminUserWithoutAuthenticationAndWithoutCSRFViaPutReturnsForbidden() throws Exception {
 
         SLUser sLUserTest3 = TestUtils.completelyInitializedTestAdmin("Test3");
-        byte[] sLUserTest3JsonBytes = new ObjectMapper().writeValueAsBytes(sLUserTest3);
+        byte[] sLUserTest3JsonBytes = getJsonBytes(new SLUserTestEntity(sLUserTest3));
         mockMvc.perform(put(sLUsersEndpoint + "/" + sLUserTest3.getUsername()).content(sLUserTest3JsonBytes)
                 .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isForbidden());
@@ -175,7 +180,7 @@ public class SLUserSecurityIntegrationTest {
     public void createAnAdminUserWithoutAuthenticationViaPostReturnsForbidden() throws Exception {
 
         SLUser sLUserTest3 = TestUtils.completelyInitializedTestAdmin("Test3");
-        byte[] sLUserTest3JsonBytes = new ObjectMapper().writeValueAsBytes(sLUserTest3);
+        byte[] sLUserTest3JsonBytes = getJsonBytes(new SLUserTestEntity(sLUserTest3));
         mockMvc.perform(post(sLUsersEndpoint).content(sLUserTest3JsonBytes)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(csrf()))
@@ -189,7 +194,7 @@ public class SLUserSecurityIntegrationTest {
     public void createAnAdminUserWithoutAuthenticationViaPutReturnsForbidden() throws Exception {
 
         SLUser sLUserTest3 = TestUtils.completelyInitializedTestAdmin("Test3");
-        byte[] sLUserTest3JsonBytes = new ObjectMapper().writeValueAsBytes(sLUserTest3);
+        byte[] sLUserTest3JsonBytes = getJsonBytes(new SLUserTestEntity(sLUserTest3));
         mockMvc.perform(put(sLUsersEndpoint + "/" + sLUserTest3.getUsername()).content(sLUserTest3JsonBytes)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(csrf()))
@@ -203,7 +208,7 @@ public class SLUserSecurityIntegrationTest {
     public void createAnAdminUserAsUserViaPostReturnsForbidden() throws Exception {
 
         SLUser sLUserTest3 = TestUtils.completelyInitializedTestAdmin("Test3");
-        byte[] sLUserTest3JsonBytes = new ObjectMapper().writeValueAsBytes(sLUserTest3);
+        byte[] sLUserTest3JsonBytes = getJsonBytes(new SLUserTestEntity(sLUserTest3));
         mockMvc.perform(post(sLUsersEndpoint).content(sLUserTest3JsonBytes)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(csrf())
@@ -218,7 +223,7 @@ public class SLUserSecurityIntegrationTest {
     public void createAnAdminUserAsUserViaPutReturnsForbidden() throws Exception {
 
         SLUser sLUserTest3 = TestUtils.completelyInitializedTestAdmin("Test3");
-        byte[] sLUserTest3JsonBytes = new ObjectMapper().writeValueAsBytes(sLUserTest3);
+        byte[] sLUserTest3JsonBytes = getJsonBytes(new SLUserTestEntity(sLUserTest3));
         mockMvc.perform(put(sLUsersEndpoint + "/" + sLUserTest3.getUsername()).content(sLUserTest3JsonBytes)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(csrf())
@@ -233,18 +238,19 @@ public class SLUserSecurityIntegrationTest {
     public void createAUserWithoutAuthenticationViaPostCreatesAUserAndReturnsCreatedUser() throws Exception {
 
         SLUser sLUserTest3 = TestUtils.completelyInitializedTestUser("Test3");
-        byte[] sLUserTest3JsonBytes = new ObjectMapper().writeValueAsBytes(sLUserTest3);
+        byte[] sLUserTest3JsonBytes = getJsonBytes(new SLUserTestEntity(sLUserTest3));
         mockMvc.perform(post(sLUsersEndpoint).content(sLUserTest3JsonBytes)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(csrf()))
             .andExpect(status().isCreated())
             .andExpect(content().contentType(MediaTypes.HAL_JSON))
             .andExpect(jsonPath("username", is(sLUserTest3.getUsername())))
-            .andExpect(jsonPath("email", is(sLUserTest3.getEmail())))
-            .andExpect(jsonPath("authorities", Matchers.hasSize(sLUserTest3.getAuthorities().size())))
-            .andExpect(jsonPath("authorities[0].authority", is(SLAuthority.USER)))
-            .andExpect(jsonPath("password", is(not(nullValue()))));
-        ;
+            .andExpect(jsonPath("firstName", is(sLUserTest3.getFirstName())))
+            .andExpect(jsonPath("lastName", is(sLUserTest3.getLastName())))
+            .andExpect(jsonPath("email", is(nullValue())))
+            .andExpect(jsonPath("authorities", is(nullValue())))
+            .andExpect(jsonPath("password", is(nullValue())));
+        
 
         assertThat(sLUserRepository.exists(sLUserTest3.getUsername()), is(true));
     }
@@ -254,18 +260,18 @@ public class SLUserSecurityIntegrationTest {
     public void createAUserWithoutAuthenticationViaPutCreatesAUserAndReturnsCreatedUser() throws Exception {
 
         SLUser sLUserTest3 = TestUtils.completelyInitializedTestUser("Test3");
-        byte[] sLUserTest3JsonBytes = new ObjectMapper().writeValueAsBytes(sLUserTest3);
+        byte[] sLUserTest3JsonBytes = getJsonBytes(new SLUserTestEntity(sLUserTest3));
         mockMvc.perform(put(sLUsersEndpoint + "/" + sLUserTest3.getUsername()).content(sLUserTest3JsonBytes)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(csrf()))
             .andExpect(status().isCreated())
             .andExpect(content().contentType(MediaTypes.HAL_JSON))
             .andExpect(jsonPath("username", is(sLUserTest3.getUsername())))
-            .andExpect(jsonPath("email", is(sLUserTest3.getEmail())))
-            .andExpect(jsonPath("authorities", Matchers.hasSize(sLUserTest3.getAuthorities().size())))
-            .andExpect(jsonPath("authorities[0].authority", is(SLAuthority.USER)))
-            .andExpect(jsonPath("password", is(not(nullValue()))));
-        ;
+            .andExpect(jsonPath("firstName", is(sLUserTest3.getFirstName())))
+            .andExpect(jsonPath("lastName", is(sLUserTest3.getLastName())))
+            .andExpect(jsonPath("email", is(nullValue())))
+            .andExpect(jsonPath("authorities", is(nullValue())))
+            .andExpect(jsonPath("password", is(nullValue())));
 
         assertThat(sLUserRepository.exists(sLUserTest3.getUsername()), is(true));
     }
@@ -275,7 +281,7 @@ public class SLUserSecurityIntegrationTest {
     public void createAUserAsUserCreatesViaPostTheNewUserAndReturnsCreatedUser() throws Exception {
 
         SLUser sLUserTest3 = TestUtils.completelyInitializedTestUser("Test3");
-        byte[] sLUserTest3JsonBytes = new ObjectMapper().writeValueAsBytes(sLUserTest3);
+        byte[] sLUserTest3JsonBytes = getJsonBytes(new SLUserTestEntity(sLUserTest3));
         mockMvc.perform(post(sLUsersEndpoint).content(sLUserTest3JsonBytes)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(csrf())
@@ -283,11 +289,12 @@ public class SLUserSecurityIntegrationTest {
             .andExpect(status().isCreated())
             .andExpect(content().contentType(MediaTypes.HAL_JSON))
             .andExpect(jsonPath("username", is(sLUserTest3.getUsername())))
-            .andExpect(jsonPath("email", is(sLUserTest3.getEmail())))
-            .andExpect(jsonPath("authorities", Matchers.hasSize(sLUserTest3.getAuthorities().size())))
-            .andExpect(jsonPath("authorities[0].authority", is(SLAuthority.USER)))
-            .andExpect(jsonPath("password", is(not(nullValue()))));
-
+            .andExpect(jsonPath("firstName", is(sLUserTest3.getFirstName())))
+            .andExpect(jsonPath("lastName", is(sLUserTest3.getLastName())))
+            .andExpect(jsonPath("email", is(nullValue())))
+            .andExpect(jsonPath("authorities", is(nullValue())))
+            .andExpect(jsonPath("password", is(nullValue())));
+        
         assertThat(sLUserRepository.exists(sLUserTest3.getUsername()), is(true));
     }
 
@@ -296,7 +303,7 @@ public class SLUserSecurityIntegrationTest {
     public void createAUserAsUserCreatesViaPutTheNewUserAndReturnsCreatedUser() throws Exception {
 
         SLUser sLUserTest3 = TestUtils.completelyInitializedTestUser("Test3");
-        byte[] sLUserTest3JsonBytes = new ObjectMapper().writeValueAsBytes(sLUserTest3);
+        byte[] sLUserTest3JsonBytes = getJsonBytes(new SLUserTestEntity(sLUserTest3));
         mockMvc.perform(put(sLUsersEndpoint + "/" + sLUserTest3.getUsername()).content(sLUserTest3JsonBytes)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(csrf())
@@ -304,11 +311,12 @@ public class SLUserSecurityIntegrationTest {
             .andExpect(status().isCreated())
             .andExpect(content().contentType(MediaTypes.HAL_JSON))
             .andExpect(jsonPath("username", is(sLUserTest3.getUsername())))
-            .andExpect(jsonPath("email", is(sLUserTest3.getEmail())))
-            .andExpect(jsonPath("authorities", Matchers.hasSize(sLUserTest3.getAuthorities().size())))
-            .andExpect(jsonPath("authorities[0].authority", is(SLAuthority.USER)))
-            .andExpect(jsonPath("password", is(not(nullValue()))));
-
+            .andExpect(jsonPath("firstName", is(sLUserTest3.getFirstName())))
+            .andExpect(jsonPath("lastName", is(sLUserTest3.getLastName())))
+            .andExpect(jsonPath("email", is(nullValue())))
+            .andExpect(jsonPath("authorities", is(nullValue())))
+            .andExpect(jsonPath("password", is(nullValue())));
+        
         assertThat(sLUserRepository.exists(sLUserTest3.getUsername()), is(true));
     }
 
@@ -317,7 +325,7 @@ public class SLUserSecurityIntegrationTest {
     public void createAUserAsAdminViaPostCreatesTheNewUserAndReturnsCreatedUser() throws Exception {
 
         SLUser sLUserTest3 = TestUtils.completelyInitializedTestUser("Test3");
-        byte[] sLUserTest3JsonBytes = new ObjectMapper().writeValueAsBytes(sLUserTest3);
+        byte[] sLUserTest3JsonBytes = getJsonBytes(new SLUserTestEntity(sLUserTest3));
         mockMvc.perform(post(sLUsersEndpoint).content(sLUserTest3JsonBytes)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(csrf())
@@ -325,11 +333,11 @@ public class SLUserSecurityIntegrationTest {
             .andExpect(status().isCreated())
             .andExpect(content().contentType(MediaTypes.HAL_JSON))
             .andExpect(jsonPath("username", is(sLUserTest3.getUsername())))
-            .andExpect(jsonPath("email", is(sLUserTest3.getEmail())))
-            .andExpect(jsonPath("authorities", Matchers.hasSize(sLUserTest3.getAuthorities().size())))
-            .andExpect(jsonPath("authorities[0].authority", is(SLAuthority.USER)))
-            .andExpect(jsonPath("password", is(not(nullValue()))));
-
+            .andExpect(jsonPath("firstName", is(sLUserTest3.getFirstName())))
+            .andExpect(jsonPath("lastName", is(sLUserTest3.getLastName())))
+            .andExpect(jsonPath("email", is(nullValue())))
+            .andExpect(jsonPath("authorities", is(nullValue())))
+            .andExpect(jsonPath("password", is(nullValue())));
         assertThat(sLUserRepository.exists(sLUserTest3.getUsername()), is(true));
     }
 
@@ -338,18 +346,20 @@ public class SLUserSecurityIntegrationTest {
     public void createAUserAsAdminViaPutCreatesTheNewUserAndReturnsCreatedUser() throws Exception {
 
         SLUser sLUserTest3 = TestUtils.completelyInitializedTestUser("Test3");
-        byte[] sLUserTest3JsonBytes = new ObjectMapper().writeValueAsBytes(sLUserTest3);
+        byte[] sLUserTest3JsonBytes = getJsonBytes(new SLUserTestEntity(sLUserTest3));
         mockMvc.perform(put(sLUsersEndpoint + "/" + sLUserTest3.getUsername()).content(sLUserTest3JsonBytes)
                 .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("UTF-8")
                 .with(csrf())
                 .with(user(slUserAdmin)))
             .andExpect(status().isCreated())
             .andExpect(content().contentType(MediaTypes.HAL_JSON))
             .andExpect(jsonPath("username", is(sLUserTest3.getUsername())))
-            .andExpect(jsonPath("email", is(sLUserTest3.getEmail())))
-            .andExpect(jsonPath("authorities", Matchers.hasSize(sLUserTest3.getAuthorities().size())))
-            .andExpect(jsonPath("authorities[0].authority", is(SLAuthority.USER)))
-            .andExpect(jsonPath("password", is(not(nullValue()))));
+            .andExpect(jsonPath("firstName", is(sLUserTest3.getFirstName())))
+            .andExpect(jsonPath("lastName", is(sLUserTest3.getLastName())))    
+            .andExpect(jsonPath("email", is(nullValue())))
+            .andExpect(jsonPath("authorities", is(nullValue())))
+            .andExpect(jsonPath("password", is(nullValue())));
 
         assertThat(sLUserRepository.exists(sLUserTest3.getUsername()), is(true));
     }
@@ -359,7 +369,7 @@ public class SLUserSecurityIntegrationTest {
     public void createAnAdminUserAsAdminViaPostCreatesTheNewUserAndReturnsCreatedUser() throws Exception {
 
         SLUser sLUserTest3 = TestUtils.completelyInitializedTestAdmin("Test3");
-        byte[] sLUserTest3JsonBytes = new ObjectMapper().writeValueAsBytes(sLUserTest3);
+        byte[] sLUserTest3JsonBytes = getJsonBytes(new SLUserTestEntity(sLUserTest3));
         mockMvc.perform(post(sLUsersEndpoint).content(sLUserTest3JsonBytes)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(csrf())
@@ -367,10 +377,11 @@ public class SLUserSecurityIntegrationTest {
             .andExpect(status().isCreated())
             .andExpect(content().contentType(MediaTypes.HAL_JSON))
             .andExpect(jsonPath("username", is(sLUserTest3.getUsername())))
-            .andExpect(jsonPath("email", is(sLUserTest3.getEmail())))
-            .andExpect(jsonPath("authorities", Matchers.hasSize(sLUserTest3.getAuthorities().size())))
-            .andExpect(jsonPath("authorities[1].authority", is(SLAuthority.ADMIN)))
-            .andExpect(jsonPath("password", is(not(nullValue()))));
+            .andExpect(jsonPath("firstName", is(sLUserTest3.getFirstName())))
+            .andExpect(jsonPath("lastName", is(sLUserTest3.getLastName())))
+            .andExpect(jsonPath("email", is(nullValue())))
+            .andExpect(jsonPath("authorities", is(nullValue())))
+            .andExpect(jsonPath("password", is(nullValue())));
 
         assertThat(sLUserRepository.exists(sLUserTest3.getUsername()), is(true));
     }
@@ -380,7 +391,7 @@ public class SLUserSecurityIntegrationTest {
     public void createAnAdminUserAsAdminViaPutCreatesTheNewUserAndReturnsCreatedUser() throws Exception {
 
         SLUser sLUserTest3 = TestUtils.completelyInitializedTestAdmin("Test3");
-        byte[] sLUserTest3JsonBytes = new ObjectMapper().writeValueAsBytes(sLUserTest3);
+        byte[] sLUserTest3JsonBytes = getJsonBytes(new SLUserTestEntity(sLUserTest3));
         mockMvc.perform(put(sLUsersEndpoint + "/" + sLUserTest3.getUsername()).content(sLUserTest3JsonBytes)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(csrf())
@@ -388,10 +399,11 @@ public class SLUserSecurityIntegrationTest {
             .andExpect(status().isCreated())
             .andExpect(content().contentType(MediaTypes.HAL_JSON))
             .andExpect(jsonPath("username", is(sLUserTest3.getUsername())))
-            .andExpect(jsonPath("email", is(sLUserTest3.getEmail())))
-            .andExpect(jsonPath("authorities", Matchers.hasSize(sLUserTest3.getAuthorities().size())))
-            .andExpect(jsonPath("authorities[1].authority", is(SLAuthority.ADMIN)))
-            .andExpect(jsonPath("password", is(not(nullValue()))));
+            .andExpect(jsonPath("firstName", is(sLUserTest3.getFirstName())))
+            .andExpect(jsonPath("lastName", is(sLUserTest3.getLastName())))
+            .andExpect(jsonPath("email", is(nullValue())))
+            .andExpect(jsonPath("authorities", is(nullValue())))
+            .andExpect(jsonPath("password", is(nullValue())));
 
         assertThat(sLUserRepository.exists(sLUserTest3.getUsername()), is(true));
     }
@@ -400,7 +412,7 @@ public class SLUserSecurityIntegrationTest {
     @Test
     public void createAUserThatAlreadyExistsAsUserRetrunsBadReqeuest() throws Exception {
 
-        byte[] sLUserTest2JsonBytes = new ObjectMapper().writeValueAsBytes(slUserTest2);
+        byte[] sLUserTest2JsonBytes = getJsonBytes(new SLUserTestEntity(slUserTest2));
         mockMvc.perform(post(sLUsersEndpoint).content(sLUserTest2JsonBytes)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(csrf())
@@ -414,7 +426,7 @@ public class SLUserSecurityIntegrationTest {
     @Test
     public void createAUserThatAlreadyExistsAsAdminReturnsBadRequest() throws Exception {
 
-        byte[] sLUserTest2JsonBytes = new ObjectMapper().writeValueAsBytes(slUserTest2);
+        byte[] sLUserTest2JsonBytes = getJsonBytes(new SLUserTestEntity(slUserTest2));
         mockMvc.perform(post(sLUsersEndpoint).content(sLUserTest2JsonBytes)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(csrf())
@@ -428,7 +440,7 @@ public class SLUserSecurityIntegrationTest {
     @Test
     public void createAnAdminThatAlreadyExistsAsUserReturnsForbidden() throws Exception {
 
-        byte[] sLUserTest2JsonBytes = new ObjectMapper().writeValueAsBytes(slUserAdmin);
+        byte[] sLUserTest2JsonBytes =getJsonBytes(new SLUserTestEntity(slUserAdmin));
         mockMvc.perform(post(sLUsersEndpoint).content(sLUserTest2JsonBytes)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(csrf())
@@ -445,7 +457,7 @@ public class SLUserSecurityIntegrationTest {
         SLUser slUserInvalid = TestUtils.completelyInitializedTestUser("Invalid");
         slUserInvalid.setEmail(null);
 
-        byte[] sLUserTest2JsonBytes = new ObjectMapper().writeValueAsBytes(slUserInvalid);
+        byte[] sLUserTest2JsonBytes = getJsonBytes(new SLUserTestEntity(slUserInvalid));
         mockMvc.perform(post(sLUsersEndpoint).content(sLUserTest2JsonBytes)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(csrf()))
@@ -461,7 +473,7 @@ public class SLUserSecurityIntegrationTest {
         SLUser slUserInvalid = TestUtils.completelyInitializedTestUser("Invalid");
         slUserInvalid.setEmail(null);
 
-        byte[] sLUserTest2JsonBytes = new ObjectMapper().writeValueAsBytes(slUserInvalid);
+        byte[] sLUserTest2JsonBytes = getJsonBytes(new SLUserTestEntity(slUserInvalid));
         mockMvc.perform(put(sLUsersEndpoint + "/" + slUserInvalid.getUsername()).content(sLUserTest2JsonBytes)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(csrf()))
@@ -477,7 +489,7 @@ public class SLUserSecurityIntegrationTest {
         SLUser slUserInvalid = TestUtils.completelyInitializedTestUser("Invalid");
         slUserInvalid.setEmail(null);
 
-        byte[] sLUserTest2JsonBytes = new ObjectMapper().writeValueAsBytes(slUserInvalid);
+        byte[] sLUserTest2JsonBytes = getJsonBytes(new SLUserTestEntity(slUserInvalid));
         mockMvc.perform(post(sLUsersEndpoint).content(sLUserTest2JsonBytes)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(csrf())
@@ -494,7 +506,7 @@ public class SLUserSecurityIntegrationTest {
         SLUser slUserInvalid = TestUtils.completelyInitializedTestUser("Invalid");
         slUserInvalid.setEmail(null);
 
-        byte[] sLUserTest2JsonBytes = new ObjectMapper().writeValueAsBytes(slUserInvalid);
+        byte[] sLUserTest2JsonBytes = getJsonBytes(new SLUserTestEntity(slUserInvalid));
         mockMvc.perform(put(sLUsersEndpoint + "/" + slUserInvalid.getUsername()).content(sLUserTest2JsonBytes)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(csrf())
@@ -511,7 +523,7 @@ public class SLUserSecurityIntegrationTest {
         SLUser slUserInvalid = TestUtils.completelyInitializedTestUser("Invalid");
         slUserInvalid.setEmail(null);
 
-        byte[] sLUserTest2JsonBytes = new ObjectMapper().writeValueAsBytes(slUserInvalid);
+        byte[] sLUserTest2JsonBytes = getJsonBytes(new SLUserTestEntity(slUserInvalid));
         mockMvc.perform(post(sLUsersEndpoint).content(sLUserTest2JsonBytes)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(csrf())
@@ -528,7 +540,7 @@ public class SLUserSecurityIntegrationTest {
         SLUser slUserInvalid = TestUtils.completelyInitializedTestUser("Invalid");
         slUserInvalid.setEmail(null);
 
-        byte[] sLUserTest2JsonBytes = new ObjectMapper().writeValueAsBytes(slUserInvalid);
+        byte[] sLUserTest2JsonBytes = getJsonBytes(new SLUserTestEntity(slUserInvalid));
         mockMvc.perform(put(sLUsersEndpoint + "/" + slUserInvalid.getUsername()).content(sLUserTest2JsonBytes)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(csrf())
@@ -542,9 +554,10 @@ public class SLUserSecurityIntegrationTest {
     @Test
     public void updateUserAsAnonymousUserReturnsForbidden() throws Exception {
 
-        slUserTest.setEmail("changed@hska.de");
+        SLUserTestEntity slUserTestEntity = new SLUserTestEntity(slUserTest);
+        slUserTestEntity.setEmail("changed@hska.de");
 
-        byte[] sLUserTest2JsonBytes = new ObjectMapper().writeValueAsBytes(slUserTest);
+        byte[] sLUserTest2JsonBytes = getJsonBytes(slUserTestEntity);
         mockMvc.perform(put(sLUsersEndpoint + "/" + slUserTest.getUsername()).content(sLUserTest2JsonBytes)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(csrf()))
@@ -557,12 +570,10 @@ public class SLUserSecurityIntegrationTest {
     @Test
     public void updateUserAsSameUserToAdminReturnsForbidden() throws Exception {
 
-        SLUser slUserTestUpdated = new SLUser(slUserTest.getUsername(), slUserTest.getFirstName(),
-                slUserTest.getLastName(), slUserTest.getPassword(), slUserTest.getEmail(), slUserTest.isEnabled(),
-                slUserTest.getConfirmation(), slUserTest.getAuthorities());
-        slUserTestUpdated.getAuthorities().add(new SLAuthority(SLAuthority.ADMIN));
+        SLUserTestEntity slUserTestEntity = new SLUserTestEntity(slUserTest);
+        slUserTestEntity.getAuthorities().add(new SLAuthority(SLAuthority.ADMIN));
 
-        byte[] sLUserTest2JsonBytes = new ObjectMapper().writeValueAsBytes(slUserTestUpdated);
+        byte[] sLUserTest2JsonBytes = getJsonBytes(slUserTestEntity);
         mockMvc.perform(put(sLUsersEndpoint + "/" + slUserTest.getUsername()).content(sLUserTest2JsonBytes)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(csrf())
@@ -576,9 +587,10 @@ public class SLUserSecurityIntegrationTest {
     @Test
     public void updateUserAsAnotherUserReturnsForbidden() throws Exception {
 
-        slUserTest.setEmail("changed@hska.de");
-
-        byte[] sLUserTest2JsonBytes = new ObjectMapper().writeValueAsBytes(slUserTest);
+        SLUserTestEntity slUserTestEntity = new SLUserTestEntity(slUserTest);
+        slUserTestEntity.setEmail("changed@hska.de");
+        
+        byte[] sLUserTest2JsonBytes = getJsonBytes(slUserTestEntity);
         mockMvc.perform(put(sLUsersEndpoint + "/" + slUserTest.getUsername()).content(sLUserTest2JsonBytes)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(csrf())
@@ -594,7 +606,7 @@ public class SLUserSecurityIntegrationTest {
 
         slUserTest.setEmail("changed@hska.de");
 
-        byte[] sLUserTest2JsonBytes = new ObjectMapper().writeValueAsBytes(slUserTest);
+        byte[] sLUserTest2JsonBytes = getJsonBytes(new SLUserTestEntity(slUserTest));
         mockMvc.perform(put(sLUsersEndpoint + "/" + slUserTest.getUsername()).content(sLUserTest2JsonBytes)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(csrf())
@@ -602,11 +614,12 @@ public class SLUserSecurityIntegrationTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaTypes.HAL_JSON))
             .andExpect(jsonPath("username", is(slUserTest.getUsername())))
-            .andExpect(jsonPath("email", is(slUserTest.getEmail())))
-            .andExpect(jsonPath("authorities", Matchers.hasSize(slUserTest.getAuthorities().size())))
-            .andExpect(jsonPath("authorities[0].authority", is(SLAuthority.USER)))
-            .andExpect(jsonPath("password", is(not(nullValue()))));
-
+            .andExpect(jsonPath("firstName", is(slUserTest.getFirstName())))
+            .andExpect(jsonPath("lastName", is(slUserTest.getLastName())))
+            .andExpect(jsonPath("email", is(nullValue())))
+            .andExpect(jsonPath("authorities", is(nullValue())))
+            .andExpect(jsonPath("password", is(nullValue())));
+        
         assertThat(sLUserRepository.findOne(slUserTest.getUsername()).getEmail(), is("changed@hska.de"));
     }
 
@@ -616,7 +629,7 @@ public class SLUserSecurityIntegrationTest {
 
         slUserTest.setEmail("changed@hska.de");
 
-        byte[] sLUserTest2JsonBytes = new ObjectMapper().writeValueAsBytes(slUserTest);
+        byte[] sLUserTest2JsonBytes = getJsonBytes(new SLUserTestEntity(slUserTest));
         mockMvc.perform(put(sLUsersEndpoint + "/" + slUserTest.getUsername()).content(sLUserTest2JsonBytes)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(csrf())
@@ -624,10 +637,11 @@ public class SLUserSecurityIntegrationTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaTypes.HAL_JSON))
             .andExpect(jsonPath("username", is(slUserTest.getUsername())))
-            .andExpect(jsonPath("email", is(slUserTest.getEmail())))
-            .andExpect(jsonPath("authorities", Matchers.hasSize(slUserTest.getAuthorities().size())))
-            .andExpect(jsonPath("authorities[0].authority", is(SLAuthority.USER)))
-            .andExpect(jsonPath("password", is(not(nullValue()))));
+            .andExpect(jsonPath("firstName", is(slUserTest.getFirstName())))
+            .andExpect(jsonPath("lastName", is(slUserTest.getLastName())))
+            .andExpect(jsonPath("email", is(nullValue())))
+            .andExpect(jsonPath("authorities", is(nullValue())))
+            .andExpect(jsonPath("password", is(nullValue())));
 
         assertThat(sLUserRepository.findOne(slUserTest.getUsername()).getEmail(), is("changed@hska.de"));
     }
@@ -636,9 +650,9 @@ public class SLUserSecurityIntegrationTest {
     @Test
     public void deleteUserAsAnonymousUserReturnsUnauthorized() throws Exception {
 
-        byte[] sLUserTest2JsonBytes = new ObjectMapper().writeValueAsBytes(slUserTest);
+        byte[] sLUserTest2JsonBytes = getJsonBytes(new SLUserTestEntity(slUserTest));
         mockMvc.perform(delete(sLUsersEndpoint + "/" + slUserTest.getUsername()).contentType(
-                        MediaType.APPLICATION_JSON).with(csrf()))
+                MediaType.APPLICATION_JSON).with(csrf()))
             .andExpect(status().isUnauthorized());
 
         assertThat(sLUserRepository.exists(slUserTest.getUsername()), is(true));
@@ -648,9 +662,8 @@ public class SLUserSecurityIntegrationTest {
     @Test
     public void deleteUserAsAnotherUserReturnsForbidden() throws Exception {
 
-        byte[] sLUserTest2JsonBytes = new ObjectMapper().writeValueAsBytes(slUserTest);
         mockMvc.perform(delete(sLUsersEndpoint + "/" + slUserTest.getUsername()).contentType(
-                        MediaType.APPLICATION_JSON).with(csrf()).with(user(slUserTest2)))
+                MediaType.APPLICATION_JSON).with(csrf()).with(user(slUserTest2)))
             .andExpect(status().isForbidden());
 
         assertThat(sLUserRepository.exists(slUserTest.getUsername()), is(true));
@@ -660,7 +673,6 @@ public class SLUserSecurityIntegrationTest {
     @Test
     public void deleteUserAsAdminDeletesUser() throws Exception {
 
-        byte[] sLUserTest2JsonBytes = new ObjectMapper().writeValueAsBytes(slUserTest);
         mockMvc.perform(delete(sLUsersEndpoint + "/" + slUserTest.getUsername()).contentType(
                         MediaType.APPLICATION_JSON).with(csrf()).with(user(slUserAdmin)))
             .andExpect(status().isNoContent());
@@ -700,5 +712,10 @@ public class SLUserSecurityIntegrationTest {
             .andExpect(status().isUnauthorized());
 
         assertThat(sLUserRepository.exists("nonExistent"), is(false));
+    }
+    
+    private byte[] getJsonBytes(SLUserTestEntity slUser) throws JsonProcessingException {
+        
+        return new ObjectMapper().writeValueAsBytes(slUser);
     }
 }

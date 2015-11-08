@@ -1,12 +1,14 @@
 package de.yannicklem.shoppinglist.core.list.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import de.yannicklem.shoppinglist.core.item.entity.Item;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.data.rest.core.annotation.RestResource;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -21,24 +23,23 @@ public class ShoppingList {
 
     @Id
     @GeneratedValue
-    private Integer id;
-
-    @JsonIgnore
+    private Long id;
+    
     @ManyToMany
     private final Set<SLUser> owners;
 
     
     private String name;
     
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private final Set<Item> items;
 
     public ShoppingList() {
         this.owners = new HashSet<>();
         this.items = new HashSet<>();
     }
-    
-    private void setOwners(Set<SLUser> owners){
+
+    public void setOwners(Set<SLUser> owners){
         
         this.owners.clear();
         
@@ -47,7 +48,12 @@ public class ShoppingList {
         }
     }
     
-    private void setItems(Set<Item> items){
+    public Set<SLUser> getOwners(){
+        
+        return owners;
+    }
+
+    public void setItems(Set<Item> items){
         
         this.items.clear();
         

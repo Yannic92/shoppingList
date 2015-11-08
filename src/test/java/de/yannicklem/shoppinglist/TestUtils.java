@@ -17,7 +17,7 @@ public class TestUtils {
         Set<GrantedAuthority> authorities = new HashSet<>();
         authorities.add(new SLAuthority(SLAuthority.USER));
 
-        return new SLUser(name, "Test", "Müller", "trollinger", name + "@test.de", true,
+        return new SLUser(name, "Test", "Mustermann", "trollinger", name + "@test.de", true,
                 completelyInitializedConfirmation(), authorities);
     }
 
@@ -34,7 +34,7 @@ public class TestUtils {
         authorities.add(new SLAuthority(SLAuthority.USER));
         authorities.add(new SLAuthority(SLAuthority.ADMIN));
 
-        return new SLUser(name, "Test", "Müller", "trollinger", name + "@test.de", true,
+        return new SLUser(name, "Test", "Mustermann", "trollinger", name + "@test.de", true,
                 completelyInitializedConfirmation(), authorities);
     }
 }

@@ -1,19 +1,14 @@
-shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'authService', '$route', '$mdMedia', '$mdDialog',
-    function ($rootScope, $scope, $location, authService, $route, $mdMedia, $mdDialog) {
+shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'authService', '$route', '$mdMedia', '$mdDialog', '$timeout', '$mdSidenav',
+    function ($rootScope, $scope, $location, authService, $route, $mdMedia, $mdDialog, $timeout, $mdSidenav) {
         $scope.lastPath = "";
         $scope.navCollapsed = true;
-
+        $scope.openNav = function(){
+            $mdSidenav('leftNav').toggle();
+        };
+        
         $scope.openMenu = function($mdOpenMenu, ev) {
             originatorEv = ev;
             $mdOpenMenu(ev);
-        };
-        
-        $scope.screenIsTooSmall = function () {
-            if($rootScope.authenticated){
-                return !$mdMedia('gt-sm');
-            }
-            
-            return false;
         };
 
         $scope.isSubRouteOf = function (viewLocation) {

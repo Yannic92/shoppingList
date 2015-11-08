@@ -5,5 +5,5 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 @RepositoryRestResource
-public interface ShoppingListRepository extends CrudRepository<ShoppingList, Integer>{
+public interface ShoppingListRepository extends CrudRepository<ShoppingList, Long>{
 }

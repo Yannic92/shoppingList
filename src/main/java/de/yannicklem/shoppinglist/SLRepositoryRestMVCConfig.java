@@ -1,5 +1,8 @@
 package de.yannicklem.shoppinglist;
 
+import de.yannicklem.shoppinglist.core.article.entity.Article;
+import de.yannicklem.shoppinglist.core.item.entity.Item;
+import de.yannicklem.shoppinglist.core.list.entity.ShoppingList;
 import de.yannicklem.shoppinglist.core.user.entity.SLAuthority;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 
@@ -19,7 +22,7 @@ public class SLRepositoryRestMVCConfig extends RepositoryRestMvcConfiguration {
 
         config.setReturnBodyOnUpdate(true);
         config.setReturnBodyOnCreate(true);
-        config.exposeIdsFor(SLUser.class, SLAuthority.class);
+        config.exposeIdsFor(SLUser.class, SLAuthority.class, ShoppingList.class, Item.class, Article.class);
         config.setBaseUri("/api");
     }
 }
