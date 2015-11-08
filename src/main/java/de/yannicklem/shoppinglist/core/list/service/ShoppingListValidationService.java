@@ -13,16 +13,11 @@ import org.springframework.stereotype.Service;
 import java.util.Set;
 
 @Service
+@RequiredArgsConstructor(onConstructor = @_(@Autowired ))
 public class ShoppingListValidationService {
     
     private final ItemValidationService itemValidationService;
     private final SLUserValidationService slUserValidationService;
-
-    @Autowired
-    public ShoppingListValidationService(ItemValidationService itemValidationService, SLUserValidationService slUserValidationService) {
-        this.itemValidationService = itemValidationService;
-        this.slUserValidationService = slUserValidationService;
-    }
 
     public void validate(ShoppingList shoppingList) throws EntityInvalidException{
         

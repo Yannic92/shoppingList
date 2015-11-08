@@ -12,16 +12,12 @@ import org.springframework.stereotype.Service;
 
 
 @Service
+@RequiredArgsConstructor(onConstructor = @_(@Autowired ))
 public class SLUserPermissionEvaluator {
 
     @NonNull
     private final CurrentUserService currentUserService;
-
-    @Autowired
-    public SLUserPermissionEvaluator(CurrentUserService currentUserService) {
-        this.currentUserService = currentUserService;
-    }
-
+    
     public boolean currentUserIsAllowedToReadUser(SLUser userToRead) {
 
         if (currentUserService.currentUserIsAdminOrSystemUser()) {

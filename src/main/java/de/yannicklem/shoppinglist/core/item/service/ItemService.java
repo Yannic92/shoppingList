@@ -12,16 +12,11 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RepositoryEventHandler(Item.class)
+@RequiredArgsConstructor(onConstructor = @_(@Autowired ))
 public class ItemService {
 
     private final CurrentUserService currentUserService;
     private final ItemValidationService itemValidationService;
-
-    @Autowired
-    public ItemService(CurrentUserService currentUserService, ItemValidationService itemValidationService) {
-        this.currentUserService = currentUserService;
-        this.itemValidationService = itemValidationService;
-    }
 
     @HandleBeforeCreate(Item.class)
     public void handleBeforeCreate(Item item){
