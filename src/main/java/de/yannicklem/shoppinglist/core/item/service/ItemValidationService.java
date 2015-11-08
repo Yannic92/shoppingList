@@ -9,11 +9,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor(onConstructor = @_(@Autowired ))
 public class ItemValidationService {
     
     private final ArticleValidationService articleValidationService;
-    
+
+    @Autowired
+    public ItemValidationService(ArticleValidationService articleValidationService) {
+        this.articleValidationService = articleValidationService;
+    }
+
     public void validate(Item item) throws EntityInvalidException{
         
     }
