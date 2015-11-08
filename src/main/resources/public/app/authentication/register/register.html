@@ -70,7 +70,7 @@
         <md-button class="md-primary" ng-disabled="!registerForm.$valid" ng-click="register()">
             Registrieren
         </md-button>
-        <md-tooltip md-show="!registerForm.$valid">
+        <md-tooltip ng-show="!registerForm.$valid">
             Bitten füllen Sie zunächst alle erfolderlichen Felder aus
         </md-tooltip>
     </section>
