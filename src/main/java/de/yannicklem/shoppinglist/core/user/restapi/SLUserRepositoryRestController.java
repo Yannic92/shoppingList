@@ -31,7 +31,6 @@ import java.util.stream.Collectors;
 
 @RepositoryRestController
 @ExposesResourceFor(SLUser.class)
-@RequiredArgsConstructor(onConstructor = @__(@Autowired ))
 public class SLUserRepositoryRestController {
 
     @NonNull
@@ -39,6 +38,12 @@ public class SLUserRepositoryRestController {
 
     @NonNull
     private final CurrentUserService currentUserService;
+
+    @Autowired
+    public SLUserRepositoryRestController(SLUserService slUserService, CurrentUserService currentUserService) {
+        this.slUserService = slUserService;
+        this.currentUserService = currentUserService;
+    }
 
     @RequestMapping(method = RequestMethod.GET, value = SLUserEndpoints.SLUSER_ENDPOINT)
     @ResponseBody

@@ -41,7 +41,6 @@ import javax.servlet.http.HttpSession;
 
 @Service
 @RepositoryEventHandler(SLUser.class)
-@RequiredArgsConstructor(onConstructor = @__(@Autowired ))
 public class SLUserService implements UserDetailsService {
 
     private final SLUserRepository slUserRepository;
@@ -49,6 +48,15 @@ public class SLUserService implements UserDetailsService {
     private final SLUserPermissionEvaluator slUserPermissionEvaluator;
     private final CurrentUserService currentUserService;
     private final ConfirmationMailService confirmationMailService;
+
+    @Autowired
+    public SLUserService(SLUserRepository slUserRepository, SLUserValidationService slUserValidationService, SLUserPermissionEvaluator slUserPermissionEvaluator, CurrentUserService currentUserService, ConfirmationMailService confirmationMailService) {
+        this.slUserRepository = slUserRepository;
+        this.slUserValidationService = slUserValidationService;
+        this.slUserPermissionEvaluator = slUserPermissionEvaluator;
+        this.currentUserService = currentUserService;
+        this.confirmationMailService = confirmationMailService;
+    }
 
     public SLUser create(SLUser slUser) {
 

@@ -11,13 +11,18 @@ import org.springframework.data.rest.core.annotation.RepositoryEventHandler;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor(onConstructor = @__(@Autowired ))
 @RepositoryEventHandler(Article.class)
 public class ArticleService {
 
     private final CurrentUserService currentUserService;
     private final ArticleValidationService articleValidationService;
-    
+
+    @Autowired
+    public ArticleService(CurrentUserService currentUserService, ArticleValidationService articleValidationService) {
+        this.currentUserService = currentUserService;
+        this.articleValidationService = articleValidationService;
+    }
+
     @HandleBeforeCreate(Article.class)
     public void handleBeforeCreate(Article article){
         
