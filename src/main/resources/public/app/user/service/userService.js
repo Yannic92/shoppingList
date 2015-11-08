@@ -22,6 +22,9 @@ shoppingList.factory('userService',['$resource', 'HALResource',
                         return HALResource.getContent(updatedUser);
                     });
             },
+            delete: function (user) {
+                return USERS.delete({username: user.username}).$promise;
+            },
             confirmRegistrationFor : function(username, confirmation){
                 return USER_CONFIRMATION.update({username: username}, confirmation).$promise;
             }

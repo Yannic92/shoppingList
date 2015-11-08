@@ -6,7 +6,7 @@ shoppingList.controller('userDataSuccess', ['$rootScope',
 
 shoppingList.config(['$routeProvider', function ($routeProvider) {
     $routeProvider.when('/userDataSuccess', {
-        templateUrl: '/app/user/success/userDataSuccess.html',
+        templateUrl: '/app/user/edit/success/userDataSuccess.html',
         controller: 'userDataSuccess'
     });
 }]);

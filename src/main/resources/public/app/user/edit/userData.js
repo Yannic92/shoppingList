@@ -26,7 +26,7 @@ shoppingList.controller('userData', ['$rootScope', '$scope', 'userService', 'aut
 
 shoppingList.config(['$routeProvider', function ($routeProvider) {
     $routeProvider.when('/userData', {
-        templateUrl: '/app/user/userData.html',
+        templateUrl: '/app/user/edit/userData.html',
         controller: 'userData'
     });
 }]);
