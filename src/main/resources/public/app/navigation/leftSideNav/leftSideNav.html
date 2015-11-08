@@ -11,12 +11,12 @@
         </div>
     </md-toolbar>
     <md-content layout="column" layout-align="center start" layout-padding>
-        <md-button class="md-primary" ng-href="#/newList">
+        <md-button class="md-primary" ng-href="#/newList" ng-click="openNav()">
             <md-icon md-font-set="material-icons">add_shopping_cart</md-icon>
             Neue Einkaufsliste
         </md-button>
         <div ng-repeat="list in lists" class="md-toolbar-tools" layout="row" layout-align="start center">
-            <md-button class="md-primary" ng-href="#/lists/{{list.id}}" flex style="text-align: left;">
+            <md-button class="md-primary" ng-href="#/lists/{{list.id}}" ng-click="openNav()" flex style="text-align: left;">
                 <md-icon md-font-set="material-icons">list</md-icon>
                 {{list.name}}
             </md-button>

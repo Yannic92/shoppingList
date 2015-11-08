@@ -6,7 +6,6 @@ shoppingList.controller('listMenu', ['$scope','$mdDialog','listService',
         };
 
         $scope.deleteList = function(ev) {
-            // Appending dialog to document.body to cover sidenav in docs app
             var confirm = $mdDialog.confirm()
                 .title("Möchtest du die Liste '" + $scope.$parent.list.name+ "' wirklich löschen?")
                 .content('Die Liste kann nicht wiederhergestellt werden.')
