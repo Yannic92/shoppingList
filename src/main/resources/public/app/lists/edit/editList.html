@@ -1,4 +1,5 @@
-<form  id="updateShoppingListForm" role="form" name="updateShoppingListForm" ng-submit="updateList()">
+<loading-cycle ng-if="updating"></loading-cycle>
+<form ng-if="!updating" id="updateShoppingListForm" role="form" name="updateShoppingListForm" ng-submit="updateList()">
     <md-input-container class="md-icon-float md-block">
         <label for="name">Name der Liste</label>
         <md-icon md-font-set="material-icons">person</md-icon>

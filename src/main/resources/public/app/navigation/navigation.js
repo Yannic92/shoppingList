@@ -1,9 +1,15 @@
-shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'authService', '$route', '$mdSidenav',
-    function ($rootScope, $scope, $location, authService, $route, $mdSidenav) {
+shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'authService', '$route', '$mdSidenav','$mdMedia',
+    function ($rootScope, $scope, $location, authService, $route, $mdSidenav,$mdMedia) {
         $scope.lastPath = "";
 
         $scope.openNav = function(){
-            $mdSidenav('leftNav').toggle();
+            $mdSidenav('leftNav').open();
+        };
+        
+        $scope.closeNav = function(){
+            if(!$mdMedia('gt-md')) {
+                $mdSidenav('leftNav').close();
+            }
         };
         
         var urlIsDefined = function(url){

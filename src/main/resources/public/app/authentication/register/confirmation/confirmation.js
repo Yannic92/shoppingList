@@ -1,6 +1,8 @@
 shoppingList.controller('confirmation',[ '$scope', '$rootScope', 'userService', '$routeParams','$location',
     function ($scope, $rootScope, userService, $routeParams, $location) {
+        
         $rootScope.title="Registrierung bestätigen";
+        $scope.loading = false;
         var username = $routeParams.username;
         
         $scope.confirmation = {
@@ -8,7 +10,7 @@ shoppingList.controller('confirmation',[ '$scope', '$rootScope', 'userService', 
         };
 
         $scope.confirm = function () {
-            
+            $scope.loading = true;
             userService.confirmRegistrationFor(username, $scope.confirmation)
                 .then(function(){
                     $location.path("/login");
@@ -16,8 +18,9 @@ shoppingList.controller('confirmation',[ '$scope', '$rootScope', 'userService', 
                     $rootScope.error = true;
                     $rootScope.errorMessage = error.data.message;
                     $rootScope.goToTop();
-                }
-            );
+                }).finally(function () {
+                    $scope.loading = false;
+                });
         }
     }
 ]);

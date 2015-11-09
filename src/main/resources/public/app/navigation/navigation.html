@@ -1,15 +1,15 @@
 <div style="height: 100%;" layout="column">
     <md-toolbar>
-        <div layout="row" class="md-toolbar-tools" style="overflow:hidden;">
-            <div layout="row" layout-align="start center" style="width: 100%;">
+        <div layout="row" layout-align="start center">
+            <div layout="row" layout-align="start center" flex>
                 <md-button ng-if="authenticated" class="md-icon-button" ng-click="openNav()" hide-gt-md>
                     <md-icon md-font-set="material-icons">menu</md-icon>
                 </md-button>
-                <h1>
+                <h1 class="md-toolbar-tools">
                     <span md-flex>{{title}}</span>
                 </h1>
             </div>
-            <div ng-if="authenticated" layout="row" layout-align="end center">
+            <div ng-if="authenticated">
                 <div ng-controller="userMenu" ng-include="'app/navigation/userMenu/userMenu.html'"></div>
             </div>
         </div>
@@ -25,6 +25,6 @@
 
 <div layout="row" flex>
     <div ng-controller="leftSideNav" ng-include="'app/navigation/leftSideNav/leftSideNav.html'" layout></div>
-    <div ng-view class="content" layout-padding flex></div>
+    <div ng-view class="content" flex></div>
 </div>
 </div>
