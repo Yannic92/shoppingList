@@ -1,5 +1,5 @@
-shoppingList.controller('login',[ '$rootScope', '$scope', '$location', 'authService',
-    function ($rootScope, $scope, $location, authService) {
+shoppingList.controller('login',[ '$rootScope', '$scope', '$location', 'authService','$mdToast',
+    function ($rootScope, $scope, $location, authService, $mdToast) {
         
         
         $scope.credentials = {};
@@ -9,8 +9,9 @@ shoppingList.controller('login',[ '$rootScope', '$scope', '$location', 'authServ
         $scope.login = function () {
             $scope.loggingIn = true;
             authService.authenticate($scope.credentials)
-                .then(function (username) {
-                    $rootScope.user = username;
+                .then(function (user) {
+                    $rootScope.user = user;
+                    showWelcomeToast();
                     $location.replace();
                     $location.path('/lists')
                 }, function(error){
@@ -45,8 +46,19 @@ shoppingList.controller('login',[ '$rootScope', '$scope', '$location', 'authServ
                 });
         };
         
+        var showWelcomeToast = function () {
+            var name = $rootScope.user.firstName ? $rootScope.user.firstName : $rootScope.user.username;
+            var message = "Hallo " + name;
+            $mdToast.show(
+                $mdToast.simple()
+                    .content(message)
+                    .position("bottom right")
+                    .hideDelay(3000)
+            );
+        };
+        
         $scope.loginDisabled = function () {
-            return $scope.loggingIn || !$scope.loginForm.$valid;
+            return $scope.loggingIn || ($scope.loginForm && !$scope.loginForm.$valid);
         };
 
         redirectIfLoggedIn();

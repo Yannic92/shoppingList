@@ -1,4 +1,5 @@
-<form  id="updateUserDataForm" role="form" name="updateUserDataForm" ng-submit="updateUserData()">
+<loading-cycle ng-if="updating"></loading-cycle>
+<form ng-if="!updating" id="updateUserDataForm" role="form" name="updateUserDataForm" ng-submit="updateUserData()">
     <md-input-container class="md-icon-float md-block">
         <label for="firstName">Vorname *</label>
         <md-icon md-font-set="material-icons">person</md-icon>

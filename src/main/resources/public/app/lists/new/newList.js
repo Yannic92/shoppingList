@@ -1,12 +1,28 @@
-shoppingList.controller('newList', ['$scope','$rootScope','listService',
-    function ($scope, $rootScope, listService) {
+shoppingList.controller('newList', ['$scope','$rootScope','listService','$mdToast','$location',
+    function ($scope, $rootScope, listService,$mdToast,$location) {
+        
         $rootScope.title = "Neue Einkaufsliste";
+        $scope.loading = false;
+        
         $scope.list = {
             name: ""
         };
         
         $scope.createList = function () {
-            listService.create($scope.list);
+            $scope.loading = true;
+            listService.create($scope.list)
+                .then(function (createdList) {
+                    $mdToast.show(
+                        $mdToast.simple()
+                            .content('Neue Liste erstellt')
+                            .position("bottom right")
+                            .hideDelay(3000)
+                    );
+                    $location.path("/lists/" + createdList.id);
+                })
+                .finally(function () {
+                    $scope.loading = false;
+                });
         }
         
     }

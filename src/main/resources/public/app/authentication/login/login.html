@@ -1,4 +1,5 @@
-<form id="loginForm" name="loginForm" role="form" ng-submit="login()">
+<loading-cycle ng-if="loggingIn"></loading-cycle>
+<form ng-if="!loggingIn" id="loginForm" name="loginForm" role="form" ng-submit="login()">
     <md-input-container class="md-icon-float md-block">
         <label for="username">Benutzername/E-Mail</label>
         <md-icon md-font-set="material-icons">person</md-icon>

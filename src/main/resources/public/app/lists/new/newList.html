@@ -1,4 +1,5 @@
-<form  id="createShoppingListForm" role="form" name="createShoppingListForm" ng-submit="createList()">
+<loading-cycle ng-if="loading"></loading-cycle>
+<form ng-if="!loading" id="createShoppingListForm" role="form" name="createShoppingListForm" ng-submit="createList()">
     <md-input-container class="md-icon-float md-block">
         <label for="name">Name der Liste</label>
         <md-icon md-font-set="material-icons">person</md-icon>
