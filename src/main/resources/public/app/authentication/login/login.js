@@ -7,7 +7,7 @@ shoppingList.controller('login',[ '$rootScope', '$scope', '$location', 'authServ
         $rootScope.title="Login";
 
         $scope.login = function () {
-            $scope.loggingIn = true;
+            loggingIn();
             authService.authenticate($scope.credentials)
                 .then(function (user) {
                     $rootScope.user = user;
@@ -22,7 +22,7 @@ shoppingList.controller('login',[ '$rootScope', '$scope', '$location', 'authServ
                         $rootScope.errorMessage = "Dienst nicht erreichbar";
                     }
                 }).finally(function(){
-                    $scope.loggingIn = false;
+                    logginInFinished();
                 });
         };
 
@@ -35,14 +35,14 @@ shoppingList.controller('login',[ '$rootScope', '$scope', '$location', 'authServ
         };
 
         var redirectIfLoggedIn = function (){
-            $scope.loggingIn = true;
+            loggingIn();
             authService.isAuthenticated()
                 .then(function (user) {
                     $rootScope.user = user;
                     $location.replace();
                     $location.path('/lists')
                 }).finally(function(){
-                   $scope.loggingIn = false;
+                   logginInFinished();
                 });
         };
         
@@ -55,6 +55,21 @@ shoppingList.controller('login',[ '$rootScope', '$scope', '$location', 'authServ
                     .position("bottom right")
                     .hideDelay(3000)
             );
+        };
+        
+        var loggingIn = function(){
+            $scope.loggingIn = true;
+            $mdToast.show(
+                $mdToast.simple()
+                    .content("Prüfe Authentifizierung...")
+                    .position("bottom right")
+                    .hideDelay(0)
+            );
+        };
+        
+        var logginInFinished = function () {
+            $scope.loggingIn = false;
+            $mdToast.hide();
         };
         
         $scope.loginDisabled = function () {

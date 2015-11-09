@@ -23,8 +23,8 @@
     </md-toolbar>
 </md-content>
 
-<div layout="row" style="height: 100%;">
-    <div ng-controller="leftSideNav" ng-include="'app/navigation/leftSideNav/leftSideNav.html'"></div>
+<div layout="row" flex>
+    <div ng-controller="leftSideNav" ng-include="'app/navigation/leftSideNav/leftSideNav.html'" layout></div>
     <div ng-view class="content" layout-padding flex></div>
 </div>
 </div>
