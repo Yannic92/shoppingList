@@ -1,19 +1,22 @@
-<md-toolbar class="md-menu-toolbar">
-    <div class="md-whiteframe-1dp" layout="row">
-        <md-toolbar-filler layout layout-align="center center">
-            <md-button class="md-icon-button">
-                <md-icon md-menu-origin  md-font-set="material-icons" ng-click="update()" ng-disabled="updating">
-                    sync
-                </md-icon>
-                <md-tooltip md-direction="right">
-                    Aktualisieren
-                </md-tooltip>
-            </md-button>
-        </md-toolbar-filler>
-        <div layout="row" layout-align="end end" flex>
-            <h2 class="md-toolbar-tools">{{list.name}}</h2>
-            <div ng-controller="listMenu" ng-include="'app/navigation/leftSideNav/listMenu/listMenu.html'"></div>
+<loading-cycle ng-if="updating"></loading-cycle>
+<div ng-if="!updating">
+    <md-toolbar class="md-menu-toolbar">
+        <div class="md-whiteframe-1dp" layout="row">
+            <md-toolbar-filler layout layout-align="center center">
+                <md-button class="md-icon-button">
+                    <md-icon md-menu-origin  md-font-set="material-icons" ng-click="update()" ng-disabled="updating">
+                        sync
+                    </md-icon>
+                    <md-tooltip md-direction="right">
+                        Aktualisieren
+                    </md-tooltip>
+                </md-button>
+            </md-toolbar-filler>
+            <div layout="row" layout-align="end end" flex>
+                <h2 class="md-toolbar-tools">{{list.name}}</h2>
+                <div ng-controller="listMenu" ng-include="'app/navigation/leftSideNav/listMenu/listMenu.html'"></div>
+            </div>
         </div>
-    </div>
-</md-toolbar>
-<h2 class="md-display-3" style="text-align: center;">Hier wird noch gearbeitet!</h2>
+    </md-toolbar>
+    <h2 class="md-display-3" style="text-align: center;">Hier wird noch gearbeitet!</h2>
+</div>
