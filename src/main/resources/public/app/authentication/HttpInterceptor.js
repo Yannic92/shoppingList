@@ -11,7 +11,7 @@ shoppingList.service('MyHttpInterceptor',['$location', '$q', '$injector', '$root
                                 .parent(angular.element(document.querySelector('#popupContainer')))
                                 .clickOutsideToClose(true)
                                 .title('Sitzung abgelaufen')
-                                .content('Ihre Sitzung ist abgelaufen. Bitte melden Sie sich erneut an')
+                                .content('Ihre Sitzung ist abgelaufen. Bitte melden Sie sich erneut an.')
                                 .ariaLabel('Sitzung abgelaufen')
                                 .ok('OK')
                         ).then(function(){

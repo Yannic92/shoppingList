@@ -9,8 +9,8 @@ shoppingList.controller('editList', ['$scope','$rootScope','listService','$filte
         
         lists.promise
             .then(function () {
+                $scope.list = angular.copy($filter('filter')(lists, {id: $routeParams.id})[0]);
                 $scope.updating = false;
-                $scope.list = angular.copy($filter('filter')(lists, {id: $routeParams.id})[0]);         
             });
         
         $scope.updateList = function () {
