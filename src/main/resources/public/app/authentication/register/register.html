@@ -1,17 +1,17 @@
 <loading-cycle ng-if="loading"></loading-cycle>
 <form ng-if="!loading" name="registerForm">
     <md-input-container class="md-icon-float md-block">
-        <label for="firstName">Vorname *</label>
+        <label for="firstName">Vorname</label>
         <md-icon md-font-set="material-icons">person</md-icon>
         <input id="firstName" name="firstName" ng-model="user.firstName" type="text">
     </md-input-container>
     <md-input-container class="md-icon-float md-block">
-        <label for="lastName">Nachname *</label>
+        <label for="lastName">Nachname</label>
         <md-icon md-font-set="material-icons">person</md-icon>
         <input id="lastName" name="lastName" type="text" ng-model="user.lastName">
     </md-input-container>
     <md-input-container class="md-icon-float md-block">
-        <label for="username">Benutzername</label>
+        <label for="username">Benutzername *</label>
         <md-icon md-font-set="material-icons">person</md-icon>
         <input id="username" name="username" type="text" pattern="[a-zA-Z0-9]*" ng-model="user.username" required>
         <div ng-messages="registerForm.username.$error" ng-if="registerForm.username.$touched">
@@ -24,7 +24,7 @@
         </div>
     </md-input-container>
     <md-input-container class="md-icon-float md-block">
-        <label for="email">E-Mail</label>
+        <label for="email">E-Mail *</label>
         <md-icon md-font-set="material-icons">email</md-icon>
         <input id="email" name="email" type="email" ng-model="user.email" required>
         <div ng-messages="registerForm.email.$error" ng-if="registerForm.email.$touched">
@@ -37,7 +37,7 @@
         </div>
     </md-input-container>
     <md-input-container class="md-icon-float md-block">
-        <label for="password">Passwort</label>
+        <label for="password">Passwort *</label>
         <md-icon md-font-set="material-icons">vpn_key</md-icon>
         <input id="password" name="password" type="password" ng-model="user.password" minlength="8" required>
         <div ng-messages="registerForm.password.$error" ng-if="registerForm.password.$touched">
@@ -50,7 +50,7 @@
         </div>
     </md-input-container>
     <md-input-container class="md-icon-float md-block">
-        <label for="passwordRepeat">Passwort wiederholen</label>
+        <label for="passwordRepeat">Passwort wiederholen *</label>
         <md-icon md-font-set="material-icons">vpn_key</md-icon>
         <input id="passwordRepeat" name="passwordRepeat" type="password" ng-model="passwordRepeat"
                compare-to="user.password" required>
@@ -64,7 +64,7 @@
         </div>
     </md-input-container>
     <span class="md-caption">
-        * Die Angabe Ihres Vor- und Nachnamens ist optional. Sowohl Ihr Vorname als auch Ihr Nachname, dienen 
+        * Alle mit einem Stern gekennzeichneten Felder sind Pflichtfelder. Die Angabe Ihres Vor- und Nachnamens ist optional. Sowohl Ihr Vorname als auch Ihr Nachname, dienen 
         lediglich dazu, dass Ihre Freunde Sie später leichter finden können, um Einkaufslisten zu teilen
     </span>
     <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>

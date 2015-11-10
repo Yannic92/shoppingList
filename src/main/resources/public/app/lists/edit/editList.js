@@ -45,7 +45,7 @@ shoppingList.controller('editList', ['$scope','$rootScope','listService','$filte
                 $mdDialog.show(
                     $mdDialog.confirm()
                         .title("Warnung!")
-                        .content('Wenn du dich selbst aus der Liste der berechtigten Personen entfernst, kannst du dich nach dem Speichern nicht selbst wieder hinzufügen. Dennoch fortfahren?')
+                        .content('Wenn du dich selbst aus der Liste der berechtigten Personen entfernst, kannst du dich nach dem Aktualisieren nicht selbst wieder hinzufügen. Dennoch fortfahren?')
                         .ok('Ja')
                         .cancel('Nein')
                 ).then(function(){
