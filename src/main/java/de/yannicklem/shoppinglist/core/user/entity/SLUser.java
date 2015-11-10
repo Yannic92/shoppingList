@@ -156,6 +156,7 @@ public class SLUser implements UserDetails,Identifiable<String>{
     }
 
     @Override
+    @JsonIgnore
     public String getId() {
         return username;
     }
