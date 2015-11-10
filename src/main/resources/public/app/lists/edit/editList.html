@@ -2,11 +2,38 @@
 <form ng-if="!updating" id="updateShoppingListForm" role="form" name="updateShoppingListForm" ng-submit="updateList()">
     <md-input-container class="md-icon-float md-block">
         <label for="name">Name der Liste</label>
-        <md-icon md-font-set="material-icons">person</md-icon>
+        <md-icon md-font-set="material-icons">list</md-icon>
         <input id="name" name="name" ng-model="list.name" type="text">
     </md-input-container>
+    <md-autocomplete
+            md-selected-item="selectedUser"
+            md-selected-item-change="addUserToOwners(selectedUser, $mdAutocompleteCtrl)"
+            md-search-text="ctrl.userSearchText"
+            md-items="user in users | filter: hasProperty | filter: notContained | limitTo: 5"
+            md-item-text="user.username"
+            md-min-length="1"
+            placeholder="Nutzer finden">
+        <md-item-template>
+            <span md-highlight-text="userSearchText" md-highlight-flags="^i">{{user.username}}</span>
+        </md-item-template>
+        <md-not-found>
+            Es konnte kein Nutzer gefunden werden, der deiner Suchanfrage entspricht.
+        </md-not-found>
+    </md-autocomplete>
+    <md-list>
+        <md-list-item class="md-2-line" ng-repeat="owner in list.owners track by $index">
+            <md-icon class="md-avatar-icon" md-font-set="material-icons">person</md-icon>
+            <div class="md-list-item-text">
+                <h3>{{owner.username}}</h3>
+                <h4>{{owner.firstName ? owner.firstName : '?'}} {{owner.lastName ? owner.lastName : '?'}}</h4>
+            </div>
+            <md-button class="md-icon-button md-secondary" ng-click="removeUserFromOwners($index, owner)" type="button">
+                <md-icon md-font-set="material-icons">delete</md-icon>
+            </md-button>
+        </md-list-item>
+    </md-list>
     <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
-        <md-button class="md-primary" ng-disabled="!updateShoppingListForm.$valid || updateShoppingListForm.$pristine" type="submit">
+        <md-button class="md-primary" ng-disabled="disableUpdateButton(updateShoppingListForm)" type="submit">
             Aktualisieren
         </md-button>
     </section>

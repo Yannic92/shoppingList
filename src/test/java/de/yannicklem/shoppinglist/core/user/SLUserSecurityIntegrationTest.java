@@ -103,18 +103,12 @@ public class SLUserSecurityIntegrationTest {
 
 
     @Test
-    public void getUsersAsUserReturnsOnlyOwnUserInformation() throws Exception {
+    public void getUsersAsUserReturnsAllUsers() throws Exception {
 
         mockMvc.perform(get(sLUsersEndpoint).with(user(slUserTest)))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaTypes.HAL_JSON))
-            .andExpect(jsonPath("_embedded.sLUsers", hasSize(1)))
-            .andExpect(jsonPath("_embedded.sLUsers[0].username", is(slUserTest.getUsername())))
-            .andExpect(jsonPath("_embedded.sLUsers[0].firstName", is(slUserTest.getFirstName())))
-            .andExpect(jsonPath("_embedded.sLUsers[0].lastName", is(slUserTest.getLastName())))
-            .andExpect(jsonPath("_embedded.sLUsers[0].email", is(CoreMatchers.nullValue())))
-            .andExpect(jsonPath("_embedded.sLUsers[0].authorities", is(nullValue())))
-            .andExpect(jsonPath("_embedded.sLUsers[0].password", is(nullValue())));
+            .andExpect(jsonPath("_embedded.sLUsers", hasSize(3)));
     }
 
 
@@ -129,10 +123,17 @@ public class SLUserSecurityIntegrationTest {
 
 
     @Test
-    public void getAnotherUsersInformationAsUserReturnsForbidden() throws Exception {
+    public void getAnotherUsersInformationAsUserReturnsTheInformation() throws Exception {
 
         mockMvc.perform(get(sLUsersEndpoint + "/" + slUserTest.getUsername()).with(user(slUserTest2)))
-            .andExpect(status().isForbidden());
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaTypes.HAL_JSON))
+                .andExpect(jsonPath("username", is(slUserTest.getUsername())))
+                .andExpect(jsonPath("firstName", is(slUserTest.getFirstName())))
+                .andExpect(jsonPath("lastName", is(slUserTest.getLastName())))
+                .andExpect(jsonPath("email", is(nullValue())))
+                .andExpect(jsonPath("authorities", is(nullValue())))
+                .andExpect(jsonPath("password", is(nullValue())));
     }
 
 

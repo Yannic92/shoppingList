@@ -16,17 +16,8 @@ public class SLUserPermissionEvaluator {
 
     @NonNull
     private final CurrentUserService currentUserService;
-
-    public boolean currentUserIsAllowedToReadUser(SLUser userToRead) {
-
-        if (currentUserService.currentUserIsAdminOrSystemUser()) {
-            return true;
-        }
-
-        return userToRead != null && userToRead.equals(currentUserService.getCurrentUser());
-    }
-
-
+    
+    
     public boolean currentUserIsAllowedToUpdateUser(SLUser userToUpdate) {
 
         if (currentUserService.currentUserIsAdminOrSystemUser()) {

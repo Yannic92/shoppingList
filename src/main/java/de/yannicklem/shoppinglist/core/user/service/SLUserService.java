@@ -200,40 +200,14 @@ public class SLUserService implements UserDetailsService {
 
 
     public List<SLUser> findAll() {
-
-        List<SLUser> all = slUserRepository.findAll();
-
-        if (all != null && !all.isEmpty()) {
-            all = filterAfterRead(all);
-        }
-
-        return all;
-    }
-
-
-    private List<SLUser> filterAfterRead(List<SLUser> slUsers) {
-
-        List<SLUser> filtered = new ArrayList<>();
-
-        for (SLUser slUser : slUsers) {
-            if (slUserPermissionEvaluator.currentUserIsAllowedToReadUser(slUser)) {
-                filtered.add(slUser);
-            }
-        }
-
-        return filtered;
+        
+        return slUserRepository.findAll();
     }
 
 
     public SLUser findByName(String name) {
 
-        SLUser slUser = slUserRepository.findOne(name);
-
-        if (slUserPermissionEvaluator.currentUserIsAllowedToReadUser(slUser)) {
-            return slUser;
-        }
-
-        throw new PermissionDeniedException("Access denied");
+        return slUserRepository.findOne(name);
     }
 
 

@@ -1,5 +1,5 @@
-shoppingList.factory('listService',['$resource', 'HALResource','$filter',
-    function($resource, HALResource,$filter){
+shoppingList.factory('listService',['$resource', 'HALResource','$filter','$q',
+    function($resource, HALResource,$filter,$q){
 
         var listsEndpoint = 'api/shoppingLists/:id';
         var methods = {
@@ -11,10 +11,51 @@ shoppingList.factory('listService',['$resource', 'HALResource','$filter',
         var toResource = function (entity) {
             var resource = {};
             resource._links = entity._links;
+            resource.id = entity.id;
             resource.name = entity.name;
-            resource.owners = entity.owners;
+            resource.owners = [];
+            
+            for(var i = 0; i < entity.owners.length ; i++){
+                resource.owners.push(entity.owners[i]._links.self.href);
+            }
             
             return resource;
+        };
+        
+        var toEntity = function (resource){
+            var entity = {};
+            entity.id = resource.id;
+            entity._links = resource._links;
+            entity.name = resource.name;
+            entity.owners = [];
+            
+            entity.promise = $resource(resource._links.owners.href).get().$promise
+                .then(function(response){
+                    entity.owners.push.apply(entity.owners, HALResource.getContent(response));
+                    return entity;
+                });
+            
+            return entity;
+        };
+        
+        var toEntities = function(resources){
+            
+            var entities = [];
+            if(!resources || !resources.length){
+                return entities;
+            }
+            
+            var promises = [];
+            
+            for(var i = 0 ; i < resources.length; i++){
+                var entity = toEntity(resources[i]);
+                entities.push(entity);
+                promises.push(entity.promise);
+            }
+            
+            entities.promise = $q.all(promises);
+            
+            return entities;
         };
         
         var replaceExisting = function (list) {
@@ -32,30 +73,34 @@ shoppingList.factory('listService',['$resource', 'HALResource','$filter',
             getUpdated: function(list) {
                 return Lists.get({id: list.id}).$promise
                     .then(function (response) {
-                        replaceExisting(response);
-                        return response;
+                        var responseEntity = toEntity(response);
+                        replaceExisting(responseEntity);
+                        return responseEntity.promise;
                     });
             },
             create: function(list){
-                return Lists.save(list).$promise
+                return Lists.save(toResource(list)).$promise
                     .then(function(response){
-                        persistedLists.push(response);
-                        return response;
+                        var responseEntity = toEntity(response);
+                        persistedLists.push(responseEntity);
+                        return responseEntity.promise;
                     })
             },
             update: function (list) {
-                return Lists.update({id: list.id}, list).$promise
+                return Lists.update({id: list.id}, toResource(list)).$promise
                     .then(function (response) {
-                        replaceExisting(response);
-                        return response;
+                        var responseEntity = toEntity(response);
+                        replaceExisting(responseEntity);
+                        return responseEntity.promise;
                     })
             },
             fetch: function () {
                 persistedLists.promise = Lists.get().$promise
                     .then(function(response){
+                        var entities = toEntities(HALResource.getContent(response));
                         persistedLists.splice(0, persistedLists.length);
-                        persistedLists.push.apply(persistedLists, HALResource.getContent(response));
-                        return persistedLists;
+                        persistedLists.push.apply(persistedLists, entities);
+                        return entities.promise;
                     });
                 
                 return persistedLists.promise;

@@ -13,6 +13,7 @@ import lombok.ToString;
 
 import org.hibernate.validator.constraints.Email;
 
+import org.springframework.hateoas.Identifiable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -36,7 +37,7 @@ import javax.persistence.Table;
 @Table(name = "USERS")
 @ToString(exclude = "password")
 @EqualsAndHashCode(of = { "username" })
-public class SLUser implements UserDetails {
+public class SLUser implements UserDetails,Identifiable<String>{
 
     @Id
     @Column(unique = true, nullable = false)
@@ -152,5 +153,10 @@ public class SLUser implements UserDetails {
         if (authorities != null) {
             this.authorities.addAll(authorities);
         }
+    }
+
+    @Override
+    public String getId() {
+        return username;
     }
 }

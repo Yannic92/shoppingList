@@ -16,7 +16,9 @@ import org.springframework.data.rest.webmvc.PersistentEntityResource;
 import org.springframework.data.rest.webmvc.PersistentEntityResourceAssembler;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 
+import org.springframework.hateoas.EntityLinks;
 import org.springframework.hateoas.ExposesResourceFor;
+import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
 
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,39 +41,20 @@ public class SLUserRepositoryRestController {
 
     @NonNull
     private final CurrentUserService currentUserService;
-
-    @RequestMapping(method = RequestMethod.GET, value = SLUserEndpoints.SLUSER_ENDPOINT)
-    @ResponseBody
-    public Resources<PersistentEntityResource> getSLUsers(PersistentEntityResourceAssembler resourceAssembler) {
-
-        List<SLUser> slUsers = slUserService.findAll();
-        List<PersistentEntityResource> resources;
-        resources = slUsers.stream().map(resourceAssembler::toResource).collect(Collectors.toList());
-
-        return new Resources<>(resources);
-    }
-
-
-    @RequestMapping(method = RequestMethod.GET, value = SLUserEndpoints.SLUSER_SPECIFIC_ENDPOINT)
-    @ResponseBody
-    public PersistentEntityResource getSLUsers(@PathVariable String name,
-        PersistentEntityResourceAssembler resourceAssembler) {
-
-        SLUser slUser = slUserService.findByName(name);
-
-        if (slUser == null) {
-            throw new NotFoundException(String.format("User '%s' not found", name));
-        }
-
-        return resourceAssembler.toResource(slUser);
-    }
-
-
+    
+    private final EntityLinks entityLinks;
+    
+    
     @RequestMapping(method = RequestMethod.GET, value = SLUserEndpoints.SLUSER_CURRENT_ENDPOINT)
     @ResponseBody
-    public SLUserDetailed getCurrentUser(PersistentEntityResourceAssembler resourceAssembler) {
+    public Resource<SLUserDetailed> getCurrentUser(PersistentEntityResourceAssembler resourceAssembler) {
 
-        return new SLUserDetailed(currentUserService.getCurrentUser());
+        SLUser currentUser = currentUserService.getCurrentUser();
+        currentUser = slUserService.findByName(currentUser.getUsername());
+        Resource<SLUserDetailed> currentUserResource = new Resource<>(new SLUserDetailed(currentUser));
+        currentUserResource.add(entityLinks.linkToSingleResource(currentUser).withSelfRel());
+        
+        return currentUserResource;
     }
 
 
