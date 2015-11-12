@@ -34,7 +34,7 @@ public class ConfirmationMailService {
                 + "Solltest du dich nicht registriert haben, ignoriere diese E-Mail einfach.\n\n"
                 + "Viel Erfolg mit deiner Einkaufsliste",
                 slUser.getFirstName() != null ? slUser.getFirstName() : slUser.getUsername(),
-                slUser.getConfirmation().getCode(), confirmationUri.replace("{username}", slUser.getUsername()));
+                slUser.getConfirmation().getCode(), confirmationUri.replace("{username}", slUser.getUsername()).replace("{code}", slUser.getConfirmation().getCode()));
 
         mailService.sendMail(slUser.getEmail(), confirmationMessage);
     }

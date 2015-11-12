@@ -4,9 +4,9 @@ shoppingList.controller('confirmation',[ '$scope', '$rootScope', 'userService', 
         $rootScope.title="Registrierung bestätigen";
         $scope.loading = false;
         var username = $routeParams.username;
-        
+                
         $scope.confirmation = {
-            code: ''
+            code: $routeParams.code ? $routeParams.code : ''
         };
 
         $scope.confirm = function () {
