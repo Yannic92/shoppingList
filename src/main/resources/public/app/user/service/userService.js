@@ -9,17 +9,25 @@ shoppingList.factory('userService',['$resource', 'HALResource',
         var USERS = $resource(userendpoint, null, methods);
         var USER_CONFIRMATION = $resource(userendpoint + "/confirmation", null, methods);
         var usersList = [];
+        var fetched = false;
+        var fetching = false;
         
         var userService = {
             get: function(){
+                if(!fetched && !fetching){
+                    userService.fetch();
+                }
                 return usersList;
             },
             fetch: function(){
+                fetching = true;
                 usersList.promise = USERS.get().$promise
                     .then(function (response) {
                         usersList.splice(0, usersList.length);
                         usersList.push.apply(usersList, HALResource.getContent(response));
                         usersList.loaded = true;
+                        fetched = true;
+                        fetching = false;
                         return usersList;
                     });
                 
@@ -44,8 +52,6 @@ shoppingList.factory('userService',['$resource', 'HALResource',
                 return USER_CONFIRMATION.update({username: username}, confirmation).$promise;
             }
         };
-        
-        userService.fetch();
         
         return userService;
 }]);
