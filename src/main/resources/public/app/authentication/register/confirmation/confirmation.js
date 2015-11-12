@@ -26,8 +26,11 @@ shoppingList.controller('confirmation',[ '$scope', '$rootScope', 'userService', 
 ]);
 
 shoppingList.config(['$routeProvider', function ($routeProvider) {
-    $routeProvider.when('/register/confirmation/:username', {
+    var routeConfig = {
         templateUrl: '/app/authentication/register/confirmation/confirmation.html',
         controller: 'confirmation'
-    });
+    };
+    
+    $routeProvider.when('/register/confirmation/:username', routeConfig)
+        .when('/register/confirmation/:username/:code', routeConfig);
 }]);
