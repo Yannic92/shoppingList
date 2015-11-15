@@ -1,5 +1,7 @@
 package de.yannicklem.shoppinglist.core.list.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import de.yannicklem.shoppinglist.core.item.entity.Item;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 
@@ -17,6 +19,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.Version;
 
 
 @Entity
@@ -29,6 +32,10 @@ public class ShoppingList {
     @Id
     @GeneratedValue
     private Long id;
+
+    @Version
+    @JsonIgnore
+    private long version;
 
     @ManyToMany
     private final Set<SLUser> owners;
@@ -51,12 +58,6 @@ public class ShoppingList {
         if (owners != null) {
             this.owners.addAll(owners);
         }
-    }
-
-
-    public Set<SLUser> getOwners() {
-
-        return owners;
     }
 
 
