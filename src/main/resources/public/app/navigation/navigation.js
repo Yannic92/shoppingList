@@ -1,5 +1,5 @@
-shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'authService', '$route', '$mdSidenav','$mdMedia',
-    function ($rootScope, $scope, $location, authService, $route, $mdSidenav,$mdMedia) {
+shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'authService', '$route', '$mdSidenav','$mdMedia','$window',
+    function ($rootScope, $scope, $location, authService, $route, $mdSidenav,$mdMedia, $window) {
         $scope.lastPath = "";
 
         $scope.openNav = function(){
@@ -66,6 +66,14 @@ shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'aut
             $rootScope.error = false;
             $rootScope.goToTop();
         });
+        
+        $scope.logout = function () {
+            authService.logout()
+                .then(function () {
+                    $location.path("/login");
+                    $window.location.reload();
+                });
+        }
     }
 ]);
 
