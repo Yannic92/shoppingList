@@ -14,9 +14,11 @@ import lombok.ToString;
 import org.hibernate.validator.constraints.Email;
 
 import org.springframework.hateoas.Identifiable;
+import org.springframework.hateoas.ResourceSupport;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -37,7 +39,7 @@ import javax.persistence.Table;
 @Table(name = "USERS")
 @ToString(exclude = "password")
 @EqualsAndHashCode(of = { "username" })
-public class SLUser implements UserDetails,Identifiable<String>{
+public class SLUser implements UserDetails {
 
     @Id
     @Column(unique = true, nullable = false)
@@ -85,8 +87,7 @@ public class SLUser implements UserDetails,Identifiable<String>{
         this.accountNonLocked = true;
         this.credentialsNonExpired = true;
     }
-
-
+    
     public SLUser(String username, String firstName, String lastName, String password, String email, boolean enabled,
         Confirmation confirmation, Collection<? extends GrantedAuthority> authorities) {
 
@@ -153,11 +154,5 @@ public class SLUser implements UserDetails,Identifiable<String>{
         if (authorities != null) {
             this.authorities.addAll(authorities);
         }
-    }
-
-    @Override
-    @JsonIgnore
-    public String getId() {
-        return username;
     }
 }

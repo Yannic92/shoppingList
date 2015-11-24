@@ -16,7 +16,7 @@ shoppingList.factory('listService',['$resource', 'HALResource','$filter','$q',
             resource.owners = [];
             
             for(var i = 0; i < entity.owners.length ; i++){
-                resource.owners.push(entity.owners[i]._links.self.href);
+                resource.owners.push({username: entity.owners[i].username});
             }
             
             return resource;

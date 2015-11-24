@@ -16,10 +16,7 @@ import org.springframework.data.rest.webmvc.PersistentEntityResource;
 import org.springframework.data.rest.webmvc.PersistentEntityResourceAssembler;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 
-import org.springframework.hateoas.EntityLinks;
-import org.springframework.hateoas.ExposesResourceFor;
-import org.springframework.hateoas.Resource;
-import org.springframework.hateoas.Resources;
+import org.springframework.hateoas.*;
 
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -51,8 +48,10 @@ public class SLUserRepositoryRestController {
 
         SLUser currentUser = currentUserService.getCurrentUser();
         currentUser = slUserService.findByName(currentUser.getUsername());
+        
         Resource<SLUserDetailed> currentUserResource = new Resource<>(new SLUserDetailed(currentUser));
-        currentUserResource.add(entityLinks.linkToSingleResource(currentUser).withSelfRel());
+        Link selfLink = resourceAssembler.toResource(currentUser).getLink("self");
+        currentUserResource.add(selfLink);
         
         return currentUserResource;
     }

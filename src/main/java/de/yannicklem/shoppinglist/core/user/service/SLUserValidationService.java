@@ -4,8 +4,7 @@ import de.yannicklem.shoppinglist.core.user.entity.SLAuthority;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.exception.EntityInvalidException;
 
-import org.hibernate.validator.internal.constraintvalidators.EmailValidator;
-
+import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -86,7 +85,7 @@ public class SLUserValidationService {
         if (isNullOrEmpty(email)) {
             throw new EntityInvalidException("Email must not be null or empty");
         }
-
+        
         EmailValidator emailValidator = new EmailValidator();
 
         if (!emailValidator.isValid(email, null)) {
