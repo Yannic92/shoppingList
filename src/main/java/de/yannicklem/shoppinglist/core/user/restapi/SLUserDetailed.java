@@ -1,15 +1,12 @@
 package de.yannicklem.shoppinglist.core.user.restapi;
 
-import de.yannicklem.shoppinglist.core.user.entity.SLUser;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import lombok.Getter;
-import lombok.Setter;
+import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 
 import org.springframework.hateoas.core.Relation;
 
 
-@Getter
-@Setter
 @Relation(collectionRelation = "sLUsers")
 public class SLUserDetailed extends SLUser {
 
@@ -27,5 +24,36 @@ public class SLUserDetailed extends SLUser {
         this.firstName = slUser.getFirstName();
         this.lastName = slUser.getLastName();
         this.email = slUser.getEmail();
+    }
+
+    @Override
+    @JsonIgnore(false)
+    public String getUsername() {
+
+        return username;
+    }
+
+
+    @Override
+    @JsonIgnore(false)
+    public String getFirstName() {
+
+        return firstName;
+    }
+
+
+    @Override
+    @JsonIgnore(false)
+    public String getLastName() {
+
+        return lastName;
+    }
+
+
+    @Override
+    @JsonIgnore(false)
+    public String getEmail() {
+
+        return email;
     }
 }

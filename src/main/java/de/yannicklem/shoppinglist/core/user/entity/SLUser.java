@@ -160,6 +160,7 @@ public class SLUser implements UserDetails, RestEntity<String> {
 
 
     @Override
+    @JsonIgnore
     public String getId() {
 
         return getUsername();
@@ -167,6 +168,7 @@ public class SLUser implements UserDetails, RestEntity<String> {
 
 
     @Override
+    @JsonIgnore
     public void setId(String s) {
 
         setUsername(s);

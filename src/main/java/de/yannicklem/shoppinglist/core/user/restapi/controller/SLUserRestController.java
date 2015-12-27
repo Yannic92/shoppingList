@@ -2,7 +2,6 @@ package de.yannicklem.shoppinglist.core.user.restapi.controller;
 
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.core.user.registration.entity.Confirmation;
-import de.yannicklem.shoppinglist.core.user.restapi.SLUserDetailed;
 import de.yannicklem.shoppinglist.core.user.service.SLUserService;
 import de.yannicklem.shoppinglist.restutils.controller.MyRestController;
 import de.yannicklem.shoppinglist.restutils.service.EntityService;
@@ -35,17 +34,17 @@ import java.security.Principal;
 )
 @RestController
 @ExposesResourceFor(SLUser.class)
-public class SLUserRepositoryRestController extends MyRestController<SLUser, String> {
+public class SLUserRestController extends MyRestController<SLUser, String> {
 
     @Autowired
-    public SLUserRepositoryRestController(SLUserService slUserService, EntityService<SLUser, String> entityService,
+    public SLUserRestController(SLUserService slUserService, EntityService<SLUser, String> entityService,
         RequestHandler<SLUser> requestHandler, MyResourceProcessor<SLUser> resourceProcessor, EntityLinks entityLinks) {
 
         super(slUserService, entityService, requestHandler, resourceProcessor, entityLinks);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = SLUserEndpoints.SLUSER_CURRENT_ENDPOINT)
-    public Resource<SLUser> getCurrentUser(Principal principal) {
+    public Resource<? extends SLUser> getCurrentUser(Principal principal) {
 
         SLUser currentUser = principal == null ? null : slUserService.findById(principal.getName());
 
@@ -53,10 +52,7 @@ public class SLUserRepositoryRestController extends MyRestController<SLUser, Str
             return null;
         }
 
-        Resource<SLUser> slUserResource = new Resource<>(new SLUserDetailed(currentUser));
-        slUserResource.add(entityLinks.linkToSingleResource(SLUser.class, currentUser));
-
-        return slUserResource;
+        return getResource(currentUser, currentUser);
     }
 
 

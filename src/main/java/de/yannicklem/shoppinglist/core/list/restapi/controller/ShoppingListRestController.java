@@ -1,6 +1,8 @@
-package de.yannicklem.shoppinglist.core.list.restapi;
+package de.yannicklem.shoppinglist.core.list.restapi.controller;
 
 import de.yannicklem.shoppinglist.core.list.entity.ShoppingList;
+import de.yannicklem.shoppinglist.core.list.restapi.ShoppingListEndpoints;
+import de.yannicklem.shoppinglist.core.list.restapi.ShoppingListResource;
 import de.yannicklem.shoppinglist.core.list.service.ShoppingListService;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.core.user.security.service.CurrentUserService;
@@ -30,7 +32,7 @@ import java.util.Set;
 @RestController
 @ExposesResourceFor(ShoppingList.class)
 @RequiredArgsConstructor(onConstructor = @__(@Autowired ))
-public class ShoppingListRepositoryRestController {
+public class ShoppingListRestController {
 
     private final ShoppingListService shoppingListService;
 
