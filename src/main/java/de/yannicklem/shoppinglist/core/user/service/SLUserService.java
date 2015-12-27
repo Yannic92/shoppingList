@@ -3,13 +3,13 @@ package de.yannicklem.shoppinglist.core.user.service;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.core.user.registration.entity.Confirmation;
 import de.yannicklem.shoppinglist.core.user.registration.service.ConfirmationMailService;
-import de.yannicklem.shoppinglist.core.user.restapi.SLUserPermissionEvaluator;
+import de.yannicklem.shoppinglist.core.user.restapi.service.SLUserPermissionEvaluator;
 import de.yannicklem.shoppinglist.core.user.security.service.CurrentUserService;
 import de.yannicklem.shoppinglist.core.user.security.service.PasswordGenerator;
 import de.yannicklem.shoppinglist.exception.AlreadyExistsException;
 import de.yannicklem.shoppinglist.exception.EntityInvalidException;
 import de.yannicklem.shoppinglist.exception.NotFoundException;
-import de.yannicklem.shoppinglist.restutils.EntityService;
+import de.yannicklem.shoppinglist.restutils.service.EntityService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -197,7 +197,7 @@ public class SLUserService implements UserDetailsService, EntityService<SLUser, 
     @Override
     public boolean exists(String username) {
 
-        return slUserRepository.exists(username);
+        return usernameExists(username);
     }
 
 

@@ -1,6 +1,9 @@
 package de.yannicklem.shoppinglist.restutils;
 
-public interface RestEntity<ID> {
+import java.io.Serializable;
+
+
+public interface RestEntity<ID extends Serializable> {
 
     ID getId();
 

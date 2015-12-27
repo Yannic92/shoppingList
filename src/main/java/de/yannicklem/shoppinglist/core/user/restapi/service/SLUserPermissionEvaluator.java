@@ -1,7 +1,7 @@
-package de.yannicklem.shoppinglist.core.user.restapi;
+package de.yannicklem.shoppinglist.core.user.restapi.service;
 
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
-import de.yannicklem.shoppinglist.restutils.PermissionEvaluator;
+import de.yannicklem.shoppinglist.restutils.service.PermissionEvaluator;
 
 import org.springframework.stereotype.Service;
 

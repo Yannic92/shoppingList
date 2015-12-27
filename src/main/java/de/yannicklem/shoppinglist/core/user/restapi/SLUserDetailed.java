@@ -5,9 +5,12 @@ import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import lombok.Getter;
 import lombok.Setter;
 
+import org.springframework.hateoas.core.Relation;
+
 
 @Getter
 @Setter
+@Relation(collectionRelation = "sLUsers")
 public class SLUserDetailed extends SLUser {
 
     private String username;

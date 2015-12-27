@@ -1,7 +1,13 @@
-package de.yannicklem.shoppinglist.restutils;
+package de.yannicklem.shoppinglist.restutils.controller;
 
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.core.user.service.SLUserService;
+import de.yannicklem.shoppinglist.restutils.RestEntity;
+import de.yannicklem.shoppinglist.restutils.service.EntityService;
+import de.yannicklem.shoppinglist.restutils.service.MyResourceProcessor;
+import de.yannicklem.shoppinglist.restutils.service.RequestHandler;
+
+import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -20,13 +26,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import java.io.Serializable;
+
 import java.security.Principal;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public abstract class MyRestController<Type extends RestEntity<ID>, ID> {
+@RequiredArgsConstructor(onConstructor = @__(@Autowired ))
+public abstract class MyRestController<Type extends RestEntity<ID>, ID extends Serializable> {
 
     protected final SLUserService slUserService;
 
@@ -34,20 +43,12 @@ public abstract class MyRestController<Type extends RestEntity<ID>, ID> {
 
     protected final RequestHandler<Type> requestHandler;
 
+    protected final MyResourceProcessor<Type> resourceProcessor;
+
     protected final EntityLinks entityLinks;
 
-    @Autowired
-    public MyRestController(SLUserService slUserService, EntityService<Type, ID> entityService,
-        RequestHandler<Type> requestHandler, EntityLinks entityLinks) {
-
-        this.slUserService = slUserService;
-        this.entityService = entityService;
-        this.requestHandler = requestHandler;
-        this.entityLinks = entityLinks;
-    }
-
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public HttpEntity<? extends Resource<Type>> getSpecificEntity(@PathVariable ID id) {
+    public HttpEntity<? extends Resource<? extends Type>> getSpecificEntity(@PathVariable ID id, Principal principal) {
 
         Type specificEntity = entityService.findById(id);
 
@@ -55,22 +56,29 @@ public abstract class MyRestController<Type extends RestEntity<ID>, ID> {
             return null;
         }
 
-        return new HttpEntity<>(new Resource<>(specificEntity, getSelfRel(specificEntity, id)));
+        SLUser currentUser = principal == null ? null : slUserService.findById(principal.getName());
+
+        requestHandler.handleRead(specificEntity, currentUser);
+
+        return new HttpEntity<>(getResource(specificEntity, currentUser));
     }
 
 
     @RequestMapping(method = RequestMethod.GET)
-    public HttpEntity<? extends Resources<? extends Resource<Type>>> getAllEntities() {
+    public HttpEntity<? extends Resources<? extends Resource<? extends Type>>> getAllEntities(Principal principal) {
 
         List<Type> all = entityService.findAll();
 
-        List<Resource<Type>> resourcesList = new ArrayList<>();
+        List<Resource<? extends Type>> resourcesList = new ArrayList<>();
+
+        SLUser currentUser = principal == null ? null : slUserService.findById(principal.getName());
 
         for (Type entity : all) {
-            resourcesList.add(new Resource<>(entity, getSelfRel(entity, entity.getId())));
+            requestHandler.handleRead(entity, currentUser);
+            resourcesList.add(getResource(entity, currentUser));
         }
 
-        Resources<Resource<Type>> entityResources = new Resources<>(resourcesList);
+        Resources<Resource<? extends Type>> entityResources = new Resources<>(resourcesList);
 
         if (!all.isEmpty()) {
             entityResources.add(entityLinks.linkToCollectionResource(all.get(0).getClass()));
@@ -81,7 +89,7 @@ public abstract class MyRestController<Type extends RestEntity<ID>, ID> {
 
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public HttpEntity<? extends Resource<Type>> putEntity(@RequestBody Type entity, @PathVariable ID id,
+    public HttpEntity<? extends Resource<? extends Type>> putEntity(@RequestBody Type entity, @PathVariable ID id,
         Principal principal) {
 
         entity.setId(id);
@@ -97,7 +105,7 @@ public abstract class MyRestController<Type extends RestEntity<ID>, ID> {
 
 
     @RequestMapping(method = RequestMethod.POST)
-    public HttpEntity<? extends Resource<Type>> putUser(@RequestBody Type entity, Principal principal) {
+    public HttpEntity<? extends Resource<? extends Type>> putUser(@RequestBody Type entity, Principal principal) {
 
         SLUser currentUser = principal == null ? null : slUserService.findById(principal.getName());
 
@@ -105,27 +113,29 @@ public abstract class MyRestController<Type extends RestEntity<ID>, ID> {
     }
 
 
-    private HttpEntity<? extends Resource<Type>> createEntity(Type entity, SLUser currentUser) {
+    protected HttpEntity<? extends Resource<? extends Type>> createEntity(Type entity, SLUser currentUser) {
 
         requestHandler.handleBeforeCreate(entity, currentUser);
 
         Type createdEntity = entityService.create(entity);
 
-        Resource<Type> createdEntityResource = new Resource<>(createdEntity,
-                getSelfRel(createdEntity, createdEntity.getId()));
+        Resource<? extends Type> createdEntityResource = getResource(createdEntity, currentUser);
+
+        requestHandler.handleAfterCreate(createdEntity, currentUser);
 
         return new ResponseEntity<>(createdEntityResource, HttpStatus.CREATED);
     }
 
 
-    private HttpEntity<? extends Resource<Type>> updateEntity(Type entity, SLUser currentUser) {
+    protected HttpEntity<? extends Resource<? extends Type>> updateEntity(Type entity, SLUser currentUser) {
 
         requestHandler.handleBeforeUpdate(entityService.findById(entity.getId()), entity, currentUser);
 
         Type updatedEntity = entityService.update(entity);
 
-        Resource<Type> updatedEntityResource = new Resource<>(updatedEntity,
-                getSelfRel(updatedEntity, updatedEntity.getId()));
+        Resource<? extends Type> updatedEntityResource = getResource(updatedEntity, currentUser);
+
+        requestHandler.handleAfterUpdate(updatedEntity, currentUser);
 
         return new ResponseEntity<>(updatedEntityResource, HttpStatus.OK);
     }
@@ -138,8 +148,24 @@ public abstract class MyRestController<Type extends RestEntity<ID>, ID> {
         SLUser currentUser = principal == null ? null : slUserService.findById(principal.getName());
 
         Type toDelete = entityService.findById(id);
+
         requestHandler.handleBeforeDelete(toDelete, currentUser);
+
         entityService.delete(toDelete);
+
+        requestHandler.handleAfterDelete(toDelete, currentUser);
+    }
+
+
+    protected Resource<? extends Type> getResource(Type entity, SLUser currentUser) {
+
+        Resource<? extends Type> resource = resourceProcessor.toResource(entity, currentUser);
+
+        if (resource != null) {
+            resource.add(getSelfRel(entity, entity.getId()));
+        }
+
+        return resource;
     }
 
 

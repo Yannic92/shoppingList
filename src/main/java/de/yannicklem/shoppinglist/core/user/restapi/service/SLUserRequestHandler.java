@@ -1,8 +1,8 @@
-package de.yannicklem.shoppinglist.core.user.restapi;
+package de.yannicklem.shoppinglist.core.user.restapi.service;
 
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.exception.PermissionDeniedException;
-import de.yannicklem.shoppinglist.restutils.RequestHandler;
+import de.yannicklem.shoppinglist.restutils.service.RequestHandler;
 
 import lombok.RequiredArgsConstructor;
 
@@ -37,7 +37,7 @@ public class SLUserRequestHandler implements RequestHandler<SLUser> {
 
 
     @Override
-    public void handleBeforeRead(SLUser object, SLUser currentUser) {
+    public void handleRead(SLUser object, SLUser currentUser) {
     }
 
 
@@ -48,5 +48,20 @@ public class SLUserRequestHandler implements RequestHandler<SLUser> {
             throw new PermissionDeniedException(String.format("User is not allowed to delete user '%s'",
                     slUser == null ? null : slUser.getUsername()));
         }
+    }
+
+
+    @Override
+    public void handleAfterCreate(SLUser entity, SLUser currentUser) {
+    }
+
+
+    @Override
+    public void handleAfterUpdate(SLUser entity, SLUser currentUser) {
+    }
+
+
+    @Override
+    public void handleAfterDelete(SLUser entity, SLUser currentUser) {
     }
 }
