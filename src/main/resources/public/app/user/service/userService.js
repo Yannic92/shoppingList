@@ -1,7 +1,7 @@
 shoppingList.factory('userService',['$resource', 'HALResource',
     function($resource, HALResource){
     
-        var userendpoint = 'api/sLUsers/:username';
+        var userendpoint = '/sLUsers/:username';
         var methods = {
             'update': { method:'PUT' },
             'delete': { method: 'DELETE'}

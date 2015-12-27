@@ -1,14 +1,14 @@
-package de.yannicklem.shoppinglist.core.user.entity;
+package de.yannicklem.shoppinglist.core.user.restapi;
+
+import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 
 import lombok.Getter;
 import lombok.Setter;
 
-import java.io.Serializable;
-
 
 @Getter
 @Setter
-public class SLUserDetailed {
+public class SLUserDetailed extends SLUser {
 
     private String username;
 

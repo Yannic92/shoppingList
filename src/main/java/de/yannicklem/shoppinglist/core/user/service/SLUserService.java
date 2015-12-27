@@ -3,24 +3,17 @@ package de.yannicklem.shoppinglist.core.user.service;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.core.user.registration.entity.Confirmation;
 import de.yannicklem.shoppinglist.core.user.registration.service.ConfirmationMailService;
+import de.yannicklem.shoppinglist.core.user.restapi.SLUserPermissionEvaluator;
 import de.yannicklem.shoppinglist.core.user.security.service.CurrentUserService;
 import de.yannicklem.shoppinglist.core.user.security.service.PasswordGenerator;
-import de.yannicklem.shoppinglist.core.user.security.service.SLUserPermissionEvaluator;
 import de.yannicklem.shoppinglist.exception.AlreadyExistsException;
 import de.yannicklem.shoppinglist.exception.EntityInvalidException;
 import de.yannicklem.shoppinglist.exception.NotFoundException;
-import de.yannicklem.shoppinglist.exception.PermissionDeniedException;
+import de.yannicklem.shoppinglist.restutils.EntityService;
 
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.data.rest.core.annotation.HandleAfterCreate;
-import org.springframework.data.rest.core.annotation.HandleAfterDelete;
-import org.springframework.data.rest.core.annotation.HandleBeforeCreate;
-import org.springframework.data.rest.core.annotation.HandleBeforeDelete;
-import org.springframework.data.rest.core.annotation.HandleBeforeSave;
-import org.springframework.data.rest.core.annotation.RepositoryEventHandler;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -33,16 +26,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
 
 @Service
-@RepositoryEventHandler(SLUser.class)
 @RequiredArgsConstructor(onConstructor = @__(@Autowired ))
-public class SLUserService implements UserDetailsService {
+public class SLUserService implements UserDetailsService, EntityService<SLUser, String> {
 
     private final SLUserRepository slUserRepository;
     private final SLUserValidationService slUserValidationService;
@@ -50,9 +41,10 @@ public class SLUserService implements UserDetailsService {
     private final CurrentUserService currentUserService;
     private final ConfirmationMailService confirmationMailService;
 
+    @Override
     public SLUser create(SLUser slUser) {
 
-        handleBeforeCreateSLUser(slUser);
+        handleBeforeCreate(slUser);
 
         SLUser created = slUserRepository.save(slUser);
 
@@ -62,14 +54,18 @@ public class SLUserService implements UserDetailsService {
     }
 
 
-    @HandleBeforeCreate(SLUser.class)
-    public void handleBeforeCreateSLUser(SLUser slUser) {
+    @Override
+    public SLUser update(SLUser slUser) {
+
+        handleBeforeSave(slUser);
+
+        return slUserRepository.save(slUser);
+    }
+
+
+    public void handleBeforeCreate(SLUser slUser) {
 
         slUserValidationService.validate(slUser);
-
-        if (!slUserPermissionEvaluator.currentUserIsAllowedToCreateUser(slUser)) {
-            throw new PermissionDeniedException("User is not allowed to create a new admin");
-        }
 
         if (usernameExists(slUser.getUsername())) {
             throw new AlreadyExistsException(String.format("Username '%s' already exists", slUser.getUsername()));
@@ -88,7 +84,6 @@ public class SLUserService implements UserDetailsService {
     }
 
 
-    @HandleAfterCreate(SLUser.class)
     public void handleAfterCreate(SLUser slUser) {
 
         if (!slUser.isEnabled()) {
@@ -97,21 +92,15 @@ public class SLUserService implements UserDetailsService {
     }
 
 
-    @HandleBeforeSave(SLUser.class)
     public void handleBeforeSave(SLUser slUser) {
 
         slUserValidationService.validate(slUser);
-
-        if (!slUserPermissionEvaluator.currentUserIsAllowedToUpdateUser(slUser)) {
-            throw new PermissionDeniedException(String.format("User is not allowed to update user '%s'",
-                    slUser.getUsername()));
-        }
 
         if (!usernameExists(slUser.getUsername())) {
             throw new NotFoundException(String.format("User '%s' not found", slUser.getUsername()));
         }
 
-        if (emailExists(slUser.getEmail()) && !findByName(slUser.getUsername()).getEmail().equals(slUser.getEmail())) {
+        if (emailExists(slUser.getEmail()) && !findById(slUser.getUsername()).getEmail().equals(slUser.getEmail())) {
             throw new AlreadyExistsException(String.format("E-mail address '%s' already exists", slUser.getEmail()));
         }
 
@@ -137,6 +126,10 @@ public class SLUserService implements UserDetailsService {
 
     public boolean usernameExists(String name) {
 
+        if (name == null) {
+            return false;
+        }
+
         return slUserRepository.exists(name);
     }
 
@@ -147,6 +140,7 @@ public class SLUserService implements UserDetailsService {
     }
 
 
+    @Override
     public void delete(SLUser slUser) {
 
         handleBeforeDelete(slUser);
@@ -155,23 +149,17 @@ public class SLUserService implements UserDetailsService {
     }
 
 
-    @HandleBeforeDelete(SLUser.class)
     public void handleBeforeDelete(SLUser slUser) {
 
+        if (slUser == null || !usernameExists(slUser.getUsername())) {
+            throw new NotFoundException(String.format("User '%s' not found",
+                    slUser == null ? null : slUser.getUsername()));
+        }
+
         slUserValidationService.validate(slUser);
-
-        if (!slUserPermissionEvaluator.currentUserIsAllowedToDeleteUser(slUser)) {
-            throw new PermissionDeniedException(String.format("User is not allowed to delete user '%s'",
-                    slUser.getUsername()));
-        }
-
-        if (!usernameExists(slUser.getUsername())) {
-            throw new NotFoundException(String.format("User '%s' not found", slUser.getUsername()));
-        }
     }
 
 
-    @HandleAfterDelete(SLUser.class)
     public void handleAfterCelete(SLUser slUser) {
 
         SLUser currentUser = currentUserService.getCurrentUser();
@@ -199,13 +187,22 @@ public class SLUserService implements UserDetailsService {
     }
 
 
+    @Override
     public List<SLUser> findAll() {
-        
+
         return slUserRepository.findAll();
     }
 
 
-    public SLUser findByName(String name) {
+    @Override
+    public boolean exists(String username) {
+
+        return slUserRepository.exists(username);
+    }
+
+
+    @Override
+    public SLUser findById(String name) {
 
         return slUserRepository.findOne(name);
     }

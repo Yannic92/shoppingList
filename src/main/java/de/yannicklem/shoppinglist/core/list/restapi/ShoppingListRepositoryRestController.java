@@ -7,45 +7,47 @@ import de.yannicklem.shoppinglist.core.user.security.service.CurrentUserService;
 import de.yannicklem.shoppinglist.core.user.service.SLUserService;
 import de.yannicklem.shoppinglist.exception.NotFoundException;
 
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.data.rest.webmvc.PersistentEntityResource;
-import org.springframework.data.rest.webmvc.PersistentEntityResourceAssembler;
-import org.springframework.data.rest.webmvc.RepositoryRestController;
-
 import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.hateoas.Resources;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 
-@RepositoryRestController
+@RestController
 @ExposesResourceFor(ShoppingList.class)
 @RequiredArgsConstructor(onConstructor = @__(@Autowired ))
 public class ShoppingListRepositoryRestController {
 
     private final ShoppingListService shoppingListService;
-    
+
     private final SLUserService slUserService;
 
     private final CurrentUserService currentUserService;
 
     @RequestMapping(method = RequestMethod.GET, value = ShoppingListEndpoints.SHOPPING_LISTS_ENDPOINT)
     @ResponseBody
-    public Resources<PersistentEntityResource> getShoppingList(PersistentEntityResourceAssembler resourceAssembler) {
+    public Resources<ShoppingListResource> getShoppingLists() {
 
         List<ShoppingList> shoppingLists = shoppingListService.findAll();
-        List<PersistentEntityResource> resources;
-        resources = shoppingLists.stream().map(resourceAssembler::toResource).collect(Collectors.toList());
+        List<ShoppingListResource> resources = new ArrayList<>();
+
+        for (ShoppingList shoppingList : shoppingLists) {
+            resources.add(new ShoppingListResource(shoppingList));
+        }
 
         return new Resources<>(resources);
     }
@@ -53,8 +55,7 @@ public class ShoppingListRepositoryRestController {
 
     @RequestMapping(method = RequestMethod.GET, value = ShoppingListEndpoints.SHOPPING_LISTS_SPECIFIC_ENDPOINT)
     @ResponseBody
-    public PersistentEntityResource getShoppingList(@PathVariable Long id,
-        PersistentEntityResourceAssembler resourceAssembler) {
+    public ShoppingListResource getShoppingList(@PathVariable Long id) {
 
         ShoppingList shoppingList = shoppingListService.findById(id);
 
@@ -62,34 +63,36 @@ public class ShoppingListRepositoryRestController {
             throw new NotFoundException(String.format("ShoppingList with id '%d' not found", id));
         }
 
-        return resourceAssembler.toResource(shoppingList);
+        return new ShoppingListResource(shoppingList);
     }
 
 
     @RequestMapping(method = RequestMethod.POST, value = ShoppingListEndpoints.SHOPPING_LISTS_ENDPOINT)
     @ResponseBody
-    public PersistentEntityResource postShoppingList(@RequestBody ShoppingList shoppingList,
-        PersistentEntityResourceAssembler resourceAssembler) {
+    public ShoppingListResource postShoppingList(@RequestBody ShoppingList shoppingList) {
 
-        return putOrPostShoppingList(shoppingList, resourceAssembler);
+        return putOrPostShoppingList(shoppingList);
     }
 
 
     @RequestMapping(method = RequestMethod.PUT, value = ShoppingListEndpoints.SHOPPING_LISTS_SPECIFIC_ENDPOINT)
     @ResponseBody
-    public PersistentEntityResource putShoppingList(@PathVariable Long id, @RequestBody ShoppingList shoppingList,
-                                                     PersistentEntityResourceAssembler resourceAssembler) {
+    public ShoppingListResource putShoppingList(@PathVariable Long id, @RequestBody ShoppingList shoppingList) {
+
         shoppingList.setId(id);
-        return putOrPostShoppingList(shoppingList, resourceAssembler);
+
+        return putOrPostShoppingList(shoppingList);
     }
-    
-    private PersistentEntityResource putOrPostShoppingList(ShoppingList shoppingList,
-                                                     PersistentEntityResourceAssembler resourceAssembler){
+
+
+    private ShoppingListResource putOrPostShoppingList(ShoppingList shoppingList) {
+
         Set<SLUser> owners = new HashSet<>();
 
-        for(SLUser owner : shoppingList.getOwners()){
-            owners.add(slUserService.findByName(owner.getUsername()));
+        for (SLUser owner : shoppingList.getOwners()) {
+            owners.add(slUserService.findById(owner.getUsername()));
         }
+
         shoppingList.setOwners(owners);
 
         if (shoppingListService.exists(shoppingList)) {
@@ -98,6 +101,6 @@ public class ShoppingListRepositoryRestController {
             shoppingListService.handleBeforeCreate(shoppingList);
         }
 
-        return resourceAssembler.toResource(shoppingListService.save(shoppingList));
+        return new ShoppingListResource(shoppingListService.save(shoppingList));
     }
 }

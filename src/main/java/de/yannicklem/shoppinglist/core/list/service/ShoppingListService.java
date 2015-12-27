@@ -9,11 +9,6 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.data.rest.core.annotation.HandleBeforeCreate;
-import org.springframework.data.rest.core.annotation.HandleBeforeDelete;
-import org.springframework.data.rest.core.annotation.HandleBeforeSave;
-import org.springframework.data.rest.core.annotation.RepositoryEventHandler;
-
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,7 +16,6 @@ import java.util.List;
 
 
 @Service
-@RepositoryEventHandler(ShoppingList.class)
 @RequiredArgsConstructor(onConstructor = @__(@Autowired ))
 public class ShoppingListService {
 
@@ -30,7 +24,6 @@ public class ShoppingListService {
     private final ShoppingListRepository shoppingListRepository;
     private final ShoppingListPermissionEvaluator shoppingListPermissionEvaluator;
 
-    @HandleBeforeCreate(ShoppingList.class)
     public void handleBeforeCreate(ShoppingList shoppingList) {
 
         if (shoppingList != null) {
@@ -79,7 +72,6 @@ public class ShoppingListService {
     }
 
 
-    @HandleBeforeDelete(ShoppingList.class)
     public void handleBeforeDelete(ShoppingList shoppingList) {
 
         if (shoppingList == null) {
@@ -93,7 +85,6 @@ public class ShoppingListService {
     }
 
 
-    @HandleBeforeSave(ShoppingList.class)
     public void handleBeforeSave(ShoppingList shoppingList) {
 
         if (shoppingList == null) {

@@ -1,5 +1,5 @@
 shoppingList.factory('authService',['$http', '$rootScope', function($http, $rootScope){
-    var USER_ENDPOINT = 'api/sLUsers/current';
+    var USER_ENDPOINT = 'sLUsers/current';
     
     var authService = {
         authenticate : function (credentials) {

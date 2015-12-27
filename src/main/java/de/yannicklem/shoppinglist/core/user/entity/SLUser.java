@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import de.yannicklem.shoppinglist.core.user.registration.entity.Confirmation;
+import de.yannicklem.shoppinglist.restutils.RestEntity;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -13,12 +14,11 @@ import lombok.ToString;
 
 import org.hibernate.validator.constraints.Email;
 
-import org.springframework.hateoas.Identifiable;
-import org.springframework.hateoas.ResourceSupport;
+import org.springframework.hateoas.core.Relation;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -39,7 +39,8 @@ import javax.persistence.Table;
 @Table(name = "USERS")
 @ToString(exclude = "password")
 @EqualsAndHashCode(of = { "username" })
-public class SLUser implements UserDetails {
+@Relation(collectionRelation = "sLUsers")
+public class SLUser implements UserDetails, RestEntity<String> {
 
     @Id
     @Column(unique = true, nullable = false)
@@ -87,7 +88,8 @@ public class SLUser implements UserDetails {
         this.accountNonLocked = true;
         this.credentialsNonExpired = true;
     }
-    
+
+
     public SLUser(String username, String firstName, String lastName, String password, String email, boolean enabled,
         Confirmation confirmation, Collection<? extends GrantedAuthority> authorities) {
 
@@ -154,5 +156,19 @@ public class SLUser implements UserDetails {
         if (authorities != null) {
             this.authorities.addAll(authorities);
         }
+    }
+
+
+    @Override
+    public String getId() {
+
+        return getUsername();
+    }
+
+
+    @Override
+    public void setId(String s) {
+
+        setUsername(s);
     }
 }

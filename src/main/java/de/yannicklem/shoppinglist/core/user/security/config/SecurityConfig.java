@@ -55,9 +55,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.httpBasic()
             .and()
             .authorizeRequests()
-            .antMatchers(HttpMethod.POST, "/api/sLUsers")
+            .antMatchers(HttpMethod.POST, "/sLUsers")
             .permitAll()
-            .antMatchers(HttpMethod.PUT, "/api/sLUsers/**")
+            .antMatchers(HttpMethod.PUT, "/sLUsers/**")
             .permitAll()
             .antMatchers(HttpMethod.POST, "/logout")
             .permitAll()
@@ -84,7 +84,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(slUserService).passwordEncoder(new BCryptPasswordEncoder());
         auth.jdbcAuthentication().dataSource(datasource);
 
-        SLUser currentAdmin = slUserService.findByName("admin");
+        SLUser currentAdmin = slUserService.findById("admin");
 
         if (currentAdmin != null) {
             slUserService.delete(currentAdmin);

@@ -1,7 +1,7 @@
 shoppingList.factory('listService',['$resource', 'HALResource','$filter','$q',
     function($resource, HALResource,$filter,$q){
 
-        var listsEndpoint = 'api/shoppingLists/:id';
+        var listsEndpoint = '/shoppingLists/:id';
         var methods = {
             'update': { method:'PUT' },
             'delete': { method: 'DELETE'}

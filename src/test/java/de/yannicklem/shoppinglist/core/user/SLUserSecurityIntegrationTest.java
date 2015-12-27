@@ -5,14 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.yannicklem.shoppinglist.SLUserTestEntity;
 import de.yannicklem.shoppinglist.TestUtils;
-import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.WebShoppingListApplication;
-
-import de.yannicklem.shoppinglist.core.user.entity.SLUserDetailed;
-import de.yannicklem.shoppinglist.core.user.service.SLUserRepository;
 import de.yannicklem.shoppinglist.core.user.entity.SLAuthority;
-import org.hamcrest.CoreMatchers;
-import org.hamcrest.Matchers;
+import de.yannicklem.shoppinglist.core.user.entity.SLUser;
+import de.yannicklem.shoppinglist.core.user.service.SLUserRepository;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -41,7 +37,6 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 
@@ -64,7 +59,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebAppConfiguration
 public class SLUserSecurityIntegrationTest {
 
-    private final String sLUsersEndpoint = "/api/sLUsers";
+    private final String sLUsersEndpoint = "/sLUsers";
     @Autowired
     private WebApplicationContext applicationContext;
 
@@ -126,14 +121,14 @@ public class SLUserSecurityIntegrationTest {
     public void getAnotherUsersInformationAsUserReturnsTheInformation() throws Exception {
 
         mockMvc.perform(get(sLUsersEndpoint + "/" + slUserTest.getUsername()).with(user(slUserTest2)))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaTypes.HAL_JSON))
-                .andExpect(jsonPath("username", is(slUserTest.getUsername())))
-                .andExpect(jsonPath("firstName", is(slUserTest.getFirstName())))
-                .andExpect(jsonPath("lastName", is(slUserTest.getLastName())))
-                .andExpect(jsonPath("email").doesNotExist())
-                .andExpect(jsonPath("authorities").doesNotExist())
-                .andExpect(jsonPath("password").doesNotExist());
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaTypes.HAL_JSON))
+            .andExpect(jsonPath("username", is(slUserTest.getUsername())))
+            .andExpect(jsonPath("firstName", is(slUserTest.getFirstName())))
+            .andExpect(jsonPath("lastName", is(slUserTest.getLastName())))
+            .andExpect(jsonPath("email").doesNotExist())
+            .andExpect(jsonPath("authorities").doesNotExist())
+            .andExpect(jsonPath("password").doesNotExist());
     }
 
 
@@ -251,7 +246,6 @@ public class SLUserSecurityIntegrationTest {
             .andExpect(jsonPath("email").doesNotExist())
             .andExpect(jsonPath("authorities").doesNotExist())
             .andExpect(jsonPath("password").doesNotExist());
-        
 
         assertThat(sLUserRepository.exists(sLUserTest3.getUsername()), is(true));
     }
@@ -295,7 +289,7 @@ public class SLUserSecurityIntegrationTest {
             .andExpect(jsonPath("email").doesNotExist())
             .andExpect(jsonPath("authorities").doesNotExist())
             .andExpect(jsonPath("password").doesNotExist());
-        
+
         assertThat(sLUserRepository.exists(sLUserTest3.getUsername()), is(true));
     }
 
@@ -317,7 +311,7 @@ public class SLUserSecurityIntegrationTest {
             .andExpect(jsonPath("email").doesNotExist())
             .andExpect(jsonPath("authorities").doesNotExist())
             .andExpect(jsonPath("password").doesNotExist());
-        
+
         assertThat(sLUserRepository.exists(sLUserTest3.getUsername()), is(true));
     }
 
@@ -357,7 +351,7 @@ public class SLUserSecurityIntegrationTest {
             .andExpect(content().contentType(MediaTypes.HAL_JSON))
             .andExpect(jsonPath("username", is(sLUserTest3.getUsername())))
             .andExpect(jsonPath("firstName", is(sLUserTest3.getFirstName())))
-            .andExpect(jsonPath("lastName", is(sLUserTest3.getLastName())))    
+            .andExpect(jsonPath("lastName", is(sLUserTest3.getLastName())))
             .andExpect(jsonPath("email").doesNotExist())
             .andExpect(jsonPath("authorities").doesNotExist())
             .andExpect(jsonPath("password").doesNotExist());
@@ -441,7 +435,7 @@ public class SLUserSecurityIntegrationTest {
     @Test
     public void createAnAdminThatAlreadyExistsAsUserReturnsForbidden() throws Exception {
 
-        byte[] sLUserTest2JsonBytes =getJsonBytes(new SLUserTestEntity(slUserAdmin));
+        byte[] sLUserTest2JsonBytes = getJsonBytes(new SLUserTestEntity(slUserAdmin));
         mockMvc.perform(post(sLUsersEndpoint).content(sLUserTest2JsonBytes)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(csrf())
@@ -590,7 +584,7 @@ public class SLUserSecurityIntegrationTest {
 
         SLUserTestEntity slUserTestEntity = new SLUserTestEntity(slUserTest);
         slUserTestEntity.setEmail("changed@hska.de");
-        
+
         byte[] sLUserTest2JsonBytes = getJsonBytes(slUserTestEntity);
         mockMvc.perform(put(sLUsersEndpoint + "/" + slUserTest.getUsername()).content(sLUserTest2JsonBytes)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -620,7 +614,7 @@ public class SLUserSecurityIntegrationTest {
             .andExpect(jsonPath("email").doesNotExist())
             .andExpect(jsonPath("authorities").doesNotExist())
             .andExpect(jsonPath("password").doesNotExist());
-        
+
         assertThat(sLUserRepository.findOne(slUserTest.getUsername()).getEmail(), is("changed@hska.de"));
     }
 
@@ -653,7 +647,7 @@ public class SLUserSecurityIntegrationTest {
 
         byte[] sLUserTest2JsonBytes = getJsonBytes(new SLUserTestEntity(slUserTest));
         mockMvc.perform(delete(sLUsersEndpoint + "/" + slUserTest.getUsername()).contentType(
-                MediaType.APPLICATION_JSON).with(csrf()))
+                        MediaType.APPLICATION_JSON).with(csrf()))
             .andExpect(status().isUnauthorized());
 
         assertThat(sLUserRepository.exists(slUserTest.getUsername()), is(true));
@@ -664,7 +658,7 @@ public class SLUserSecurityIntegrationTest {
     public void deleteUserAsAnotherUserReturnsForbidden() throws Exception {
 
         mockMvc.perform(delete(sLUsersEndpoint + "/" + slUserTest.getUsername()).contentType(
-                MediaType.APPLICATION_JSON).with(csrf()).with(user(slUserTest2)))
+                        MediaType.APPLICATION_JSON).with(csrf()).with(user(slUserTest2)))
             .andExpect(status().isForbidden());
 
         assertThat(sLUserRepository.exists(slUserTest.getUsername()), is(true));
@@ -695,12 +689,12 @@ public class SLUserSecurityIntegrationTest {
 
 
     @Test
-    public void deleteNonExistingUserAsUserReturnsNotFound() throws Exception {
+    public void deleteNonExistingUserAsUserReturnsForbidden() throws Exception {
 
         mockMvc.perform(delete(sLUsersEndpoint + "/nonExistent").contentType(MediaType.APPLICATION_JSON)
                 .with(csrf())
                 .with(user(slUserTest)))
-            .andExpect(status().isNotFound());
+            .andExpect(status().isForbidden());
 
         assertThat(sLUserRepository.exists("nonExistent"), is(false));
     }
@@ -714,9 +708,10 @@ public class SLUserSecurityIntegrationTest {
 
         assertThat(sLUserRepository.exists("nonExistent"), is(false));
     }
-    
+
+
     private byte[] getJsonBytes(SLUserTestEntity slUser) throws JsonProcessingException {
-        
+
         return new ObjectMapper().writeValueAsBytes(slUser);
     }
 }
