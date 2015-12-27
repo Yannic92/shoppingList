@@ -1,4 +1,4 @@
-package de.yannicklem.shoppinglist.restutils;
+package de.yannicklem.shoppinglist.restutils.entity;
 
 import java.io.Serializable;
 

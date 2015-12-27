@@ -3,7 +3,6 @@ package de.yannicklem.shoppinglist.core.user.service;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.core.user.registration.entity.Confirmation;
 import de.yannicklem.shoppinglist.core.user.registration.service.ConfirmationMailService;
-import de.yannicklem.shoppinglist.core.user.restapi.service.SLUserPermissionEvaluator;
 import de.yannicklem.shoppinglist.core.user.security.service.CurrentUserService;
 import de.yannicklem.shoppinglist.core.user.security.service.PasswordGenerator;
 import de.yannicklem.shoppinglist.exception.AlreadyExistsException;
@@ -37,7 +36,6 @@ public class SLUserService implements UserDetailsService, EntityService<SLUser, 
 
     private final SLUserRepository slUserRepository;
     private final SLUserValidationService slUserValidationService;
-    private final SLUserPermissionEvaluator slUserPermissionEvaluator;
     private final CurrentUserService currentUserService;
     private final ConfirmationMailService confirmationMailService;
 

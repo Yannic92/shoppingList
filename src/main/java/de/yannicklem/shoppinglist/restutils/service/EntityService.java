@@ -1,6 +1,6 @@
 package de.yannicklem.shoppinglist.restutils.service;
 
-import de.yannicklem.shoppinglist.restutils.RestEntity;
+import de.yannicklem.shoppinglist.restutils.entity.RestEntity;
 
 import java.io.Serializable;
 

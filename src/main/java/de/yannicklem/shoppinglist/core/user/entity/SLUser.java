@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import de.yannicklem.shoppinglist.core.user.registration.entity.Confirmation;
-import de.yannicklem.shoppinglist.restutils.RestEntity;
+import de.yannicklem.shoppinglist.restutils.entity.RestEntity;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
