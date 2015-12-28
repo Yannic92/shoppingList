@@ -57,7 +57,7 @@ public class SLUserRequestHandler implements RequestHandler<SLUser> {
 
 
     @Override
-    public void handleAfterUpdate(SLUser entity, SLUser currentUser) {
+    public void handleAfterUpdate(SLUser oldEntity, SLUser newEntity, SLUser currentUser) {
     }
 
 

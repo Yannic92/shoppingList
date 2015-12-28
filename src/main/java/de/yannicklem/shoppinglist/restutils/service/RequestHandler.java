@@ -21,7 +21,7 @@ public interface RequestHandler<Type extends RestEntity> {
     void handleAfterCreate(Type entity, SLUser currentUser);
 
 
-    void handleAfterUpdate(Type entity, SLUser currentUser);
+    void handleAfterUpdate(Type oldEntity, Type newEntity, SLUser currentUser);
 
 
     void handleAfterDelete(Type entity, SLUser currentUser);

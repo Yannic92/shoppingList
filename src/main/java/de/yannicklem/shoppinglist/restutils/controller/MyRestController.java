@@ -9,6 +9,8 @@ import de.yannicklem.shoppinglist.restutils.service.RequestHandler;
 
 import lombok.RequiredArgsConstructor;
 
+import org.apache.log4j.Logger;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.hateoas.EntityLinks;
@@ -33,9 +35,15 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.apache.log4j.Logger.getLogger;
+
+import static java.lang.invoke.MethodHandles.lookup;
+
 
 @RequiredArgsConstructor(onConstructor = @__(@Autowired ))
 public abstract class MyRestController<Type extends RestEntity<ID>, ID extends Serializable> {
+
+    private static final Logger LOGGER = getLogger(lookup().lookupClass());
 
     protected final SLUserService slUserService;
 
@@ -74,8 +82,13 @@ public abstract class MyRestController<Type extends RestEntity<ID>, ID extends S
         SLUser currentUser = principal == null ? null : slUserService.findById(principal.getName());
 
         for (Type entity : all) {
-            requestHandler.handleRead(entity, currentUser);
-            resourcesList.add(getResource(entity, currentUser));
+            try {
+                requestHandler.handleRead(entity, currentUser);
+                resourcesList.add(getResource(entity, currentUser));
+            } catch (Exception e) {
+                LOGGER.debug(String.format("Filtered %s with id '%s'", entity.getClass().getTypeName(),
+                        entity.getId().toString()));
+            }
         }
 
         Resources<Resource<? extends Type>> entityResources = new Resources<>(resourcesList);
@@ -94,6 +107,8 @@ public abstract class MyRestController<Type extends RestEntity<ID>, ID extends S
 
         entity.setId(id);
 
+        resourceProcessor.initializeNestedEntities(entity);
+
         SLUser currentUser = principal == null ? null : slUserService.findById(principal.getName());
 
         if (!entityService.exists(id)) {
@@ -106,6 +121,8 @@ public abstract class MyRestController<Type extends RestEntity<ID>, ID extends S
 
     @RequestMapping(method = RequestMethod.POST)
     public HttpEntity<? extends Resource<? extends Type>> putUser(@RequestBody Type entity, Principal principal) {
+
+        resourceProcessor.initializeNestedEntities(entity);
 
         SLUser currentUser = principal == null ? null : slUserService.findById(principal.getName());
 
@@ -129,13 +146,14 @@ public abstract class MyRestController<Type extends RestEntity<ID>, ID extends S
 
     protected HttpEntity<? extends Resource<? extends Type>> updateEntity(Type entity, SLUser currentUser) {
 
-        requestHandler.handleBeforeUpdate(entityService.findById(entity.getId()), entity, currentUser);
+        Type currentEntity = entityService.findById(entity.getId());
+        requestHandler.handleBeforeUpdate(currentEntity, entity, currentUser);
 
         Type updatedEntity = entityService.update(entity);
 
         Resource<? extends Type> updatedEntityResource = getResource(updatedEntity, currentUser);
 
-        requestHandler.handleAfterUpdate(updatedEntity, currentUser);
+        requestHandler.handleAfterUpdate(currentEntity, updatedEntity, currentUser);
 
         return new ResponseEntity<>(updatedEntityResource, HttpStatus.OK);
     }

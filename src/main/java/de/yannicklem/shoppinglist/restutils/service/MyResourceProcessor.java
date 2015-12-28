@@ -9,4 +9,7 @@ import org.springframework.hateoas.Resource;
 public interface MyResourceProcessor<Type extends RestEntity> {
 
     Resource<? extends Type> toResource(Type entity, SLUser currentUser);
+
+
+    Type initializeNestedEntities(Type entity);
 }

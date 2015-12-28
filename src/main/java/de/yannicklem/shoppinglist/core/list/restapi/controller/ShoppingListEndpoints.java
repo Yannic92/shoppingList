@@ -1,5 +1,4 @@
-package de.yannicklem.shoppinglist.core.list.restapi;
-
+package de.yannicklem.shoppinglist.core.list.restapi.controller;
 
 public class ShoppingListEndpoints {
 

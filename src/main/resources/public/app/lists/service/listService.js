@@ -27,13 +27,7 @@ shoppingList.factory('listService',['$resource', 'HALResource','$filter','$q',
             entity.id = resource.id;
             entity._links = resource._links;
             entity.name = resource.name;
-            entity.owners = [];
-            
-            entity.promise = $resource(resource._links.owners.href).get().$promise
-                .then(function(response){
-                    entity.owners.push.apply(entity.owners, HALResource.getContent(response));
-                    return entity;
-                });
+            entity.owners = resource.owners;
             
             return entity;
         };
@@ -45,15 +39,10 @@ shoppingList.factory('listService',['$resource', 'HALResource','$filter','$q',
                 return entities;
             }
             
-            var promises = [];
-            
             for(var i = 0 ; i < resources.length; i++){
                 var entity = toEntity(resources[i]);
                 entities.push(entity);
-                promises.push(entity.promise);
             }
-            
-            entities.promise = $q.all(promises);
             
             return entities;
         };
@@ -75,7 +64,7 @@ shoppingList.factory('listService',['$resource', 'HALResource','$filter','$q',
                     .then(function (response) {
                         var responseEntity = toEntity(response);
                         replaceExisting(responseEntity);
-                        return responseEntity.promise;
+                        return responseEntity;
                     });
             },
             create: function(list){
@@ -83,7 +72,7 @@ shoppingList.factory('listService',['$resource', 'HALResource','$filter','$q',
                     .then(function(response){
                         var responseEntity = toEntity(response);
                         persistedLists.push(responseEntity);
-                        return responseEntity.promise;
+                        return responseEntity;
                     })
             },
             update: function (list) {
@@ -91,7 +80,7 @@ shoppingList.factory('listService',['$resource', 'HALResource','$filter','$q',
                     .then(function (response) {
                         var responseEntity = toEntity(response);
                         replaceExisting(responseEntity);
-                        return responseEntity.promise;
+                        return responseEntity;
                     })
             },
             fetch: function () {
@@ -100,7 +89,7 @@ shoppingList.factory('listService',['$resource', 'HALResource','$filter','$q',
                         var entities = toEntities(HALResource.getContent(response));
                         persistedLists.splice(0, persistedLists.length);
                         persistedLists.push.apply(persistedLists, entities);
-                        return entities.promise;
+                        return entities;
                     });
                 
                 return persistedLists.promise;

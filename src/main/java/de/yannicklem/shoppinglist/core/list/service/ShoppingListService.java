@@ -2,8 +2,9 @@ package de.yannicklem.shoppinglist.core.list.service;
 
 import de.yannicklem.shoppinglist.core.list.entity.ShoppingList;
 import de.yannicklem.shoppinglist.core.user.security.service.CurrentUserService;
-import de.yannicklem.shoppinglist.exception.EntityInvalidException;
-import de.yannicklem.shoppinglist.exception.PermissionDeniedException;
+import de.yannicklem.shoppinglist.exception.AlreadyExistsException;
+import de.yannicklem.shoppinglist.exception.NotFoundException;
+import de.yannicklem.shoppinglist.restutils.service.EntityService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -11,92 +12,98 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired ))
-public class ShoppingListService {
+public class ShoppingListService implements EntityService<ShoppingList, Long> {
 
     private final CurrentUserService currentUserService;
     private final ShoppingListValidationService shoppingListValidationService;
     private final ShoppingListRepository shoppingListRepository;
-    private final ShoppingListPermissionEvaluator shoppingListPermissionEvaluator;
 
-    public void handleBeforeCreate(ShoppingList shoppingList) {
+    private void handleBeforeCreate(ShoppingList shoppingList) {
 
         if (shoppingList != null) {
             shoppingList.getOwners().add(currentUserService.getCurrentUser());
+        }
+
+        if (shoppingList != null && exists(shoppingList.getId())) {
+            throw new AlreadyExistsException("Shopping list already exists");
         }
 
         shoppingListValidationService.validate(shoppingList);
     }
 
 
-    public List<ShoppingList> findAll() {
+    private void handleBeforeUpdate(ShoppingList shoppingList) {
 
-        List<ShoppingList> all = shoppingListRepository.findAll();
-
-        if (all != null && !all.isEmpty()) {
-            all = filterAfterRead(all);
+        if (shoppingList == null || !exists(shoppingList.getId())) {
+            throw new NotFoundException("Shopping list not found");
         }
 
-        return all;
-    }
-
-
-    private List<ShoppingList> filterAfterRead(List<ShoppingList> shoppingLists) {
-
-        List<ShoppingList> filtered = new ArrayList<>();
-
-        for (ShoppingList shoppingList : shoppingLists) {
-            if (shoppingListPermissionEvaluator.currentUserIsAllowedToReadShoppingList(shoppingList)) {
-                filtered.add(shoppingList);
-            }
-        }
-
-        return filtered;
-    }
-
-
-    public ShoppingList findById(Long id) {
-
-        ShoppingList shoppingList = shoppingListRepository.findOne(id);
-
-        if (shoppingListPermissionEvaluator.currentUserIsAllowedToReadShoppingList(shoppingList)) {
-            return shoppingList;
-        }
-
-        throw new PermissionDeniedException("Access denied");
+        shoppingListValidationService.validate(shoppingList);
     }
 
 
     public void handleBeforeDelete(ShoppingList shoppingList) {
 
         if (shoppingList == null) {
-            throw new EntityInvalidException("shopping list must not be null.");
-        }
-
-        if (!shoppingListPermissionEvaluator.currentUserIsAllowedToDeleteShoppingList(shoppingList)) {
-            throw new PermissionDeniedException(String.format(
-                    "User is not allowed to delete shopping list with id '%d'", shoppingList.getId()));
+            throw new NotFoundException("shopping list not found.");
         }
     }
 
 
-    public void handleBeforeSave(ShoppingList shoppingList) {
+    @Override
+    public List<ShoppingList> findAll() {
 
-        if (shoppingList == null) {
-            throw new EntityInvalidException("shopping list must not be null");
+        return shoppingListRepository.findAll();
+    }
+
+
+    @Override
+    public boolean exists(Long id) {
+
+        if (id == null) {
+            return false;
         }
 
-        if (!shoppingListPermissionEvaluator.currentUserIsAllowedToUpdateShoppingList(findById(shoppingList.getId()))) {
-            throw new PermissionDeniedException(String.format("User is not allowed to edit shopping list with id '%d'",
-                    shoppingList.getId()));
-        }
+        return shoppingListRepository.exists(id);
+    }
 
-        shoppingListValidationService.validate(shoppingList);
+
+    @Override
+    public ShoppingList create(ShoppingList shoppingList) {
+
+        handleBeforeCreate(shoppingList);
+
+        return shoppingListRepository.save(shoppingList);
+    }
+
+
+    @Override
+    public ShoppingList update(ShoppingList entity) {
+
+        handleBeforeUpdate(entity);
+
+        return shoppingListRepository.save(entity);
+    }
+
+
+    @Override
+    public void delete(ShoppingList entity) {
+
+        handleBeforeDelete(entity);
+
+        shoppingListRepository.delete(entity);
+    }
+
+
+    @Override
+    public ShoppingList findById(Long id) {
+
+        return shoppingListRepository.findOne(id);
     }
 
 
@@ -107,11 +114,5 @@ public class ShoppingListService {
         }
 
         return shoppingListRepository.exists(shoppingList.getId());
-    }
-
-
-    public ShoppingList save(ShoppingList shoppingList) {
-
-        return shoppingListRepository.save(shoppingList);
     }
 }

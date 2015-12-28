@@ -9,25 +9,19 @@ import de.yannicklem.shoppinglist.exception.AlreadyExistsException;
 import de.yannicklem.shoppinglist.exception.EntityInvalidException;
 import de.yannicklem.shoppinglist.exception.NotFoundException;
 import de.yannicklem.shoppinglist.restutils.service.EntityService;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
 import org.springframework.stereotype.Service;
-
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import java.util.List;
-
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 
 @Service
@@ -55,7 +49,7 @@ public class SLUserService implements UserDetailsService, EntityService<SLUser, 
     @Override
     public SLUser update(SLUser slUser) {
 
-        handleBeforeSave(slUser);
+        handleBeforeUpdate(slUser);
 
         return slUserRepository.save(slUser);
     }
@@ -90,7 +84,7 @@ public class SLUserService implements UserDetailsService, EntityService<SLUser, 
     }
 
 
-    public void handleBeforeSave(SLUser slUser) {
+    public void handleBeforeUpdate(SLUser slUser) {
 
         slUserValidationService.validate(slUser);
 
@@ -104,10 +98,6 @@ public class SLUserService implements UserDetailsService, EntityService<SLUser, 
 
         PasswordEncoder encoder = new BCryptPasswordEncoder();
         slUser.setPassword(encoder.encode(slUser.getPassword()));
-
-        Confirmation confirmation = new Confirmation();
-        confirmation.setCode(PasswordGenerator.generatePassword());
-        slUser.setConfirmation(confirmation);
     }
 
 
