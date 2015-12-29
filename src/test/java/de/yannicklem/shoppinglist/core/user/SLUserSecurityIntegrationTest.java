@@ -6,9 +6,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.yannicklem.shoppinglist.SLUserTestEntity;
 import de.yannicklem.shoppinglist.TestUtils;
 import de.yannicklem.shoppinglist.WebShoppingListApplication;
+import de.yannicklem.shoppinglist.core.persistence.SLUserRepository;
 import de.yannicklem.shoppinglist.core.user.entity.SLAuthority;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
-import de.yannicklem.shoppinglist.core.user.service.SLUserRepository;
 
 import org.junit.Before;
 import org.junit.Test;

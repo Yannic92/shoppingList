@@ -1,9 +1,9 @@
 package de.yannicklem.shoppinglist.core.user.security.config;
 
+import de.yannicklem.shoppinglist.core.persistence.SLUserService;
 import de.yannicklem.shoppinglist.core.user.entity.SLAuthority;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.core.user.security.service.PasswordGenerator;
-import de.yannicklem.shoppinglist.core.user.service.SLUserService;
 
 import org.apache.log4j.Logger;
 

@@ -16,6 +16,7 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
@@ -34,13 +35,15 @@ public class Item extends OwnedRestEntity<Long> {
     private Long entityId;
 
     @JsonIgnore
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private final Set<SLUser> owners;
 
     private Integer count;
 
     @ManyToOne(
-        optional = false, cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH }
+        optional = false, fetch = FetchType.EAGER, cascade = {
+            CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH
+        }
     )
     private Article article;
 

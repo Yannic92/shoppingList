@@ -1,8 +1,8 @@
 package de.yannicklem.shoppinglist.core.user.restapi.controller;
 
+import de.yannicklem.shoppinglist.core.persistence.SLUserService;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.core.user.registration.entity.Confirmation;
-import de.yannicklem.shoppinglist.core.user.service.SLUserService;
 import de.yannicklem.shoppinglist.restutils.controller.MyRestController;
 import de.yannicklem.shoppinglist.restutils.service.EntityService;
 import de.yannicklem.shoppinglist.restutils.service.MyResourceProcessor;

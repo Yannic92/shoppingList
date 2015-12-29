@@ -1,7 +1,7 @@
-package de.yannicklem.shoppinglist.core.item.service;
+package de.yannicklem.shoppinglist.core.persistence;
 
 import de.yannicklem.shoppinglist.core.item.entity.Item;
-import de.yannicklem.shoppinglist.core.user.security.service.CurrentUserService;
+import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.restutils.service.EntityService;
 
 import lombok.RequiredArgsConstructor;
@@ -17,15 +17,11 @@ import java.util.List;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired ))
 public class ItemService implements EntityService<Item, Long> {
 
-    private final CurrentUserService currentUserService;
     private final ItemValidationService itemValidationService;
     private final ItemRepository itemRepository;
+    private final ArticleService articleService;
 
     public void handleBeforeCreate(Item item) {
-
-        if (item != null) {
-            item.getOwners().add(currentUserService.getCurrentUser());
-        }
 
         itemValidationService.validate(item);
     }
@@ -64,7 +60,17 @@ public class ItemService implements EntityService<Item, Long> {
     @Override
     public Item update(Item entity) {
 
+        handleBeforeUpdate(entity);
+
         return itemRepository.save(entity);
+    }
+
+
+    private void handleBeforeUpdate(Item entity) {
+
+        entity.getArticle().setOwners(entity.getOwners());
+
+        articleService.update(entity.getArticle());
     }
 
 
@@ -72,5 +78,22 @@ public class ItemService implements EntityService<Item, Long> {
     public void delete(Item entity) {
 
         itemRepository.delete(entity);
+    }
+
+
+    @Override
+    public void deleteAll() {
+
+        List<Item> all = findAll();
+
+        for (Item item : all) {
+            delete(item);
+        }
+    }
+
+
+    public List<Item> findItemsOwnedBy(SLUser slUser) {
+
+        return itemRepository.findItemsOwnedBy(slUser);
     }
 }

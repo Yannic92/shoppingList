@@ -25,4 +25,7 @@ public interface EntityService<Type extends RestEntity, ID extends Serializable>
 
 
     void delete(Type entity);
+
+
+    void deleteAll();
 }

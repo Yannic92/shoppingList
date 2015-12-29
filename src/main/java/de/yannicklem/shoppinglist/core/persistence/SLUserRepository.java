@@ -1,4 +1,4 @@
-package de.yannicklem.shoppinglist.core.user.service;
+package de.yannicklem.shoppinglist.core.persistence;
 
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 

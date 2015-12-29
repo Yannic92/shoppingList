@@ -1,7 +1,7 @@
-package de.yannicklem.shoppinglist.core.article.service;
+package de.yannicklem.shoppinglist.core.persistence;
 
 import de.yannicklem.shoppinglist.core.article.entity.Article;
-import de.yannicklem.shoppinglist.core.user.security.service.CurrentUserService;
+import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.restutils.service.EntityService;
 
 import lombok.RequiredArgsConstructor;
@@ -17,15 +17,10 @@ import java.util.List;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired ))
 public class ArticleService implements EntityService<Article, Long> {
 
-    private final CurrentUserService currentUserService;
     private final ArticleValidationService articleValidationService;
     private final ArticleRepository articleRepository;
 
     public void handleBeforeCreate(Article article) {
-
-        if (article != null) {
-            article.getOwners().add(currentUserService.getCurrentUser());
-        }
 
         articleValidationService.validate(article);
     }
@@ -72,5 +67,22 @@ public class ArticleService implements EntityService<Article, Long> {
     public void delete(Article article) {
 
         articleRepository.delete(article);
+    }
+
+
+    @Override
+    public void deleteAll() {
+
+        List<Article> all = findAll();
+
+        for (Article article : all) {
+            delete(article);
+        }
+    }
+
+
+    public List<Article> findArticlesOwnedBy(SLUser slUser) {
+
+        return articleRepository.findArticlesOwnedBy(slUser);
     }
 }

@@ -1,10 +1,10 @@
 package de.yannicklem.shoppinglist.core.item.restapi.service;
 
 import de.yannicklem.shoppinglist.core.article.entity.Article;
-import de.yannicklem.shoppinglist.core.article.service.ArticleService;
 import de.yannicklem.shoppinglist.core.item.entity.Item;
+import de.yannicklem.shoppinglist.core.persistence.ArticleService;
+import de.yannicklem.shoppinglist.core.persistence.SLUserService;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
-import de.yannicklem.shoppinglist.core.user.service.SLUserService;
 import de.yannicklem.shoppinglist.restutils.service.MyResourceProcessor;
 
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package de.yannicklem.shoppinglist.core.article.service;
+package de.yannicklem.shoppinglist.core.persistence;
 
 import de.yannicklem.shoppinglist.core.article.entity.Article;
 import de.yannicklem.shoppinglist.exception.EntityInvalidException;

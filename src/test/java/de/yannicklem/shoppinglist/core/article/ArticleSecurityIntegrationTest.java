@@ -3,9 +3,9 @@ package de.yannicklem.shoppinglist.core.article;
 import de.yannicklem.shoppinglist.TestUtils;
 import de.yannicklem.shoppinglist.WebShoppingListApplication;
 import de.yannicklem.shoppinglist.core.article.entity.Article;
-import de.yannicklem.shoppinglist.core.article.service.ArticleRepository;
+import de.yannicklem.shoppinglist.core.persistence.ArticleService;
+import de.yannicklem.shoppinglist.core.persistence.SLUserService;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
-import de.yannicklem.shoppinglist.core.user.service.SLUserRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,10 +42,10 @@ public class ArticleSecurityIntegrationTest {
     private Filter springSecurityFilterChain;
 
     @Autowired
-    private SLUserRepository sLUserRepository;
+    private SLUserService slUserService;
 
     @Autowired
-    private ArticleRepository articleRepository;
+    private ArticleService articleService;
 
     private MockMvc mockMvc;
 
@@ -65,10 +65,10 @@ public class ArticleSecurityIntegrationTest {
         userOne = TestUtils.completelyInitializedTestUser("TestUser");
         userTwo = TestUtils.completelyInitializedTestUser("AnotherTestUser");
         admin = TestUtils.completelyInitializedTestAdmin("Admin");
-        sLUserRepository.deleteAll();
-        sLUserRepository.save(userOne);
-        sLUserRepository.save(userTwo);
-        sLUserRepository.save(admin);
+        slUserService.deleteAll();
+        slUserService.create(userOne);
+        slUserService.create(userTwo);
+        slUserService.create(admin);
 
         articleOfUserOne = new Article("UserOneArticle", 9.99, new HashSet<>());
         articleOfUserOne.getOwners().add(userOne);
@@ -77,10 +77,10 @@ public class ArticleSecurityIntegrationTest {
         articleOfAdmin = new Article("AdminArticle", 9.97, new HashSet<>());
         articleOfAdmin.getOwners().add(admin);
 
-        articleRepository.deleteAll();
-        articleRepository.save(articleOfUserOne);
-        articleRepository.save(articleOfUserTwo);
-        articleRepository.save(articleOfAdmin);
+        articleService.deleteAll();
+        articleService.create(articleOfUserOne);
+        articleService.create(articleOfUserTwo);
+        articleService.create(articleOfAdmin);
     }
 
 

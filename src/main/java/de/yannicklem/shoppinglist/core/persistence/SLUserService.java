@@ -1,5 +1,8 @@
-package de.yannicklem.shoppinglist.core.user.service;
+package de.yannicklem.shoppinglist.core.persistence;
 
+import de.yannicklem.shoppinglist.core.article.entity.Article;
+import de.yannicklem.shoppinglist.core.item.entity.Item;
+import de.yannicklem.shoppinglist.core.list.entity.ShoppingList;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.core.user.registration.entity.Confirmation;
 import de.yannicklem.shoppinglist.core.user.registration.service.ConfirmationMailService;
@@ -9,19 +12,25 @@ import de.yannicklem.shoppinglist.exception.AlreadyExistsException;
 import de.yannicklem.shoppinglist.exception.EntityInvalidException;
 import de.yannicklem.shoppinglist.exception.NotFoundException;
 import de.yannicklem.shoppinglist.restutils.service.EntityService;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
 import org.springframework.stereotype.Service;
+
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.HttpSession;
 import java.util.List;
+
+import javax.servlet.http.HttpSession;
 
 
 @Service
@@ -29,6 +38,9 @@ import java.util.List;
 public class SLUserService implements UserDetailsService, EntityService<SLUser, String> {
 
     private final SLUserRepository slUserRepository;
+    private final ShoppingListService shoppingListService;
+    private final ItemService itemService;
+    private final ArticleService articleService;
     private final SLUserValidationService slUserValidationService;
     private final CurrentUserService currentUserService;
     private final ConfirmationMailService confirmationMailService;
@@ -145,6 +157,44 @@ public class SLUserService implements UserDetailsService, EntityService<SLUser, 
         }
 
         slUserValidationService.validate(slUser);
+
+        List<ShoppingList> listsOwnedByUserToDelete = shoppingListService.findListsOwnedBy(slUser);
+
+        for (ShoppingList shoppingList : listsOwnedByUserToDelete) {
+            if (shoppingList.getOwners().contains(slUser)) {
+                shoppingList.getOwners().remove(slUser);
+                shoppingListService.update(shoppingList);
+            }
+        }
+
+        List<Item> itemsOwnedByUserToDelete = itemService.findItemsOwnedBy(slUser);
+
+        for (Item item : itemsOwnedByUserToDelete) {
+            if (item.getOwners().contains(slUser)) {
+                item.getOwners().remove(slUser);
+                itemService.update(item);
+            }
+        }
+
+        List<Article> articlesOwnedByUserToDelete = articleService.findArticlesOwnedBy(slUser);
+
+        for (Article article : articlesOwnedByUserToDelete) {
+            if (article.getOwners().contains(slUser)) {
+                article.getOwners().remove(slUser);
+                articleService.update(article);
+            }
+        }
+    }
+
+
+    @Override
+    public void deleteAll() {
+
+        List<SLUser> all = findAll();
+
+        for (SLUser slUser : all) {
+            delete(slUser);
+        }
     }
 
 

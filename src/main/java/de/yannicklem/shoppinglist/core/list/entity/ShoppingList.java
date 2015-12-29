@@ -14,6 +14,7 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
@@ -31,12 +32,12 @@ public class ShoppingList extends OwnedRestEntity<Long> {
     @GeneratedValue
     private Long entityId;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private final Set<SLUser> owners;
 
     private String name;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private final Set<Item> items;
 
     public ShoppingList() {

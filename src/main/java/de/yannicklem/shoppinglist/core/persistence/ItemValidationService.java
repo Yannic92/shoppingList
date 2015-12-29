@@ -1,6 +1,5 @@
-package de.yannicklem.shoppinglist.core.item.service;
+package de.yannicklem.shoppinglist.core.persistence;
 
-import de.yannicklem.shoppinglist.core.article.service.ArticleValidationService;
 import de.yannicklem.shoppinglist.core.item.entity.Item;
 import de.yannicklem.shoppinglist.exception.EntityInvalidException;
 

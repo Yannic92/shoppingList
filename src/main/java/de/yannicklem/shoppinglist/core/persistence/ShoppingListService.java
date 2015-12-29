@@ -1,8 +1,10 @@
-package de.yannicklem.shoppinglist.core.list.service;
+package de.yannicklem.shoppinglist.core.persistence;
 
+import de.yannicklem.shoppinglist.core.item.entity.Item;
 import de.yannicklem.shoppinglist.core.list.entity.ShoppingList;
-import de.yannicklem.shoppinglist.core.user.security.service.CurrentUserService;
+import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.exception.AlreadyExistsException;
+import de.yannicklem.shoppinglist.exception.EntityInvalidException;
 import de.yannicklem.shoppinglist.exception.NotFoundException;
 import de.yannicklem.shoppinglist.restutils.service.EntityService;
 
@@ -13,27 +15,35 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired ))
 public class ShoppingListService implements EntityService<ShoppingList, Long> {
 
-    private final CurrentUserService currentUserService;
     private final ShoppingListValidationService shoppingListValidationService;
+    private final ItemService itemService;
     private final ShoppingListRepository shoppingListRepository;
 
     private void handleBeforeCreate(ShoppingList shoppingList) {
 
-        if (shoppingList != null) {
-            shoppingList.getOwners().add(currentUserService.getCurrentUser());
+        if (shoppingList == null) {
+            throw new EntityInvalidException("shoppingList must not be null");
         }
 
-        if (shoppingList != null && exists(shoppingList.getEntityId())) {
+        if (exists(shoppingList.getEntityId())) {
             throw new AlreadyExistsException("Shopping list already exists");
         }
 
         shoppingListValidationService.validate(shoppingList);
+
+        Set<Item> items = shoppingList.getItems();
+
+        for (Item item : items) {
+            item.setOwners(shoppingList.getOwners());
+            item.getArticle().setOwners(shoppingList.getOwners());
+        }
     }
 
 
@@ -44,6 +54,13 @@ public class ShoppingListService implements EntityService<ShoppingList, Long> {
         }
 
         shoppingListValidationService.validate(shoppingList);
+
+        Set<Item> items = shoppingList.getItems();
+
+        for (Item item : items) {
+            item.setOwners(shoppingList.getOwners());
+            itemService.update(item);
+        }
     }
 
 
@@ -101,6 +118,17 @@ public class ShoppingListService implements EntityService<ShoppingList, Long> {
 
 
     @Override
+    public void deleteAll() {
+
+        List<ShoppingList> all = findAll();
+
+        for (ShoppingList shoppingList : all) {
+            delete(shoppingList);
+        }
+    }
+
+
+    @Override
     public ShoppingList findById(Long id) {
 
         return shoppingListRepository.findOne(id);
@@ -114,5 +142,11 @@ public class ShoppingListService implements EntityService<ShoppingList, Long> {
         }
 
         return shoppingListRepository.exists(shoppingList.getEntityId());
+    }
+
+
+    public List<ShoppingList> findListsOwnedBy(SLUser slUser) {
+
+        return shoppingListRepository.findListsOwnedBy(slUser);
     }
 }
