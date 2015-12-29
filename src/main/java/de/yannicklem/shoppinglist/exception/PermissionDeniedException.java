@@ -10,7 +10,7 @@ public class PermissionDeniedException extends RuntimeException {
 
     public PermissionDeniedException() {
 
-        super();
+        super("Permission denied");
     }
 
 

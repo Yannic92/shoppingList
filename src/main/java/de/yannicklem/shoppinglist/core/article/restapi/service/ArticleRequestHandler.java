@@ -2,31 +2,59 @@ package de.yannicklem.shoppinglist.core.article.restapi.service;
 
 import de.yannicklem.shoppinglist.core.article.entity.Article;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
+import de.yannicklem.shoppinglist.exception.PermissionDeniedException;
 import de.yannicklem.shoppinglist.restutils.service.RequestHandler;
+
+import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
 
 
 @Service
+@RequiredArgsConstructor(onConstructor = @__(@Autowired ))
 public class ArticleRequestHandler implements RequestHandler<Article> {
+
+    private final ArticlePermissionEvaluator articlePermissionEvaluator;
 
     @Override
     public void handleBeforeCreate(Article entity, SLUser currentUser) {
+
+        if (entity != null && currentUser != null) {
+            entity.getOwners().add(currentUser);
+        }
+
+        if (!articlePermissionEvaluator.isAllowedToCreate(entity, currentUser)) {
+            throw new PermissionDeniedException();
+        }
     }
 
 
     @Override
     public void handleBeforeUpdate(Article oldEntity, Article newEntity, SLUser currentUser) {
+
+        if (!articlePermissionEvaluator.isAllowedToUpdate(oldEntity, newEntity, currentUser)) {
+            throw new PermissionDeniedException();
+        }
     }
 
 
     @Override
     public void handleRead(Article entity, SLUser currentUser) {
+
+        if (!articlePermissionEvaluator.isAllowedToRead(entity, currentUser)) {
+            throw new PermissionDeniedException();
+        }
     }
 
 
     @Override
     public void handleBeforeDelete(Article entity, SLUser currentUser) {
+
+        if (!articlePermissionEvaluator.isAllowedToDelete(entity, currentUser)) {
+            throw new PermissionDeniedException();
+        }
     }
 
 

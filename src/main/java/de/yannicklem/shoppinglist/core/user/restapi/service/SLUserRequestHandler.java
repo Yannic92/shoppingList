@@ -21,7 +21,7 @@ public class SLUserRequestHandler implements RequestHandler<SLUser> {
     public void handleBeforeCreate(SLUser userToCreate, SLUser currentUser) {
 
         if (!slUserPermissionEvaluator.isAllowedToCreate(userToCreate, currentUser)) {
-            throw new PermissionDeniedException("User is not allowed to create a new admin");
+            throw new PermissionDeniedException();
         }
     }
 
@@ -30,8 +30,7 @@ public class SLUserRequestHandler implements RequestHandler<SLUser> {
     public void handleBeforeUpdate(SLUser oldUser, SLUser newUser, SLUser currentUser) {
 
         if (!slUserPermissionEvaluator.isAllowedToUpdate(oldUser, newUser, currentUser)) {
-            throw new PermissionDeniedException(String.format("User is not allowed to update user '%s'",
-                    oldUser.getUsername()));
+            throw new PermissionDeniedException();
         }
     }
 
@@ -45,8 +44,7 @@ public class SLUserRequestHandler implements RequestHandler<SLUser> {
     public void handleBeforeDelete(SLUser slUser, SLUser currentUser) {
 
         if (!slUserPermissionEvaluator.isAllowedToDelete(slUser, currentUser)) {
-            throw new PermissionDeniedException(String.format("User is not allowed to delete user '%s'",
-                    slUser == null ? null : slUser.getUsername()));
+            throw new PermissionDeniedException();
         }
     }
 

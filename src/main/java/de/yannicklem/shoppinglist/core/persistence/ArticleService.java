@@ -43,6 +43,10 @@ public class ArticleService implements EntityService<Article, Long> {
     @Override
     public boolean exists(Long id) {
 
+        if (id == null) {
+            return false;
+        }
+
         return articleRepository.exists(id);
     }
 
