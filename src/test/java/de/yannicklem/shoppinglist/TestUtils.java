@@ -24,7 +24,7 @@ public class TestUtils {
 
     public static Confirmation completelyInitializedConfirmation() {
 
-        return new Confirmation(99, "safsafsa21e10smsad");
+        return new Confirmation(null, "safsafsa21e10smsad");
     }
 
 

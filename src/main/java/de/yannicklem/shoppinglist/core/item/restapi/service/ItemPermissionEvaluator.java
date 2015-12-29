@@ -1,7 +1,7 @@
-package de.yannicklem.shoppinglist.core.list.restapi.service;
+package de.yannicklem.shoppinglist.core.item.restapi.service;
 
 import de.yannicklem.shoppinglist.core.OwnedRestEntityPermissionEvaluator;
-import de.yannicklem.shoppinglist.core.list.entity.ShoppingList;
+import de.yannicklem.shoppinglist.core.item.entity.Item;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.restutils.service.PermissionEvaluator;
 
@@ -14,33 +14,33 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired ))
-public class ShoppingListPermissionEvaluator implements PermissionEvaluator<ShoppingList> {
+public class ItemPermissionEvaluator implements PermissionEvaluator<Item> {
 
     private final OwnedRestEntityPermissionEvaluator ownedRestEntityPermissionEvaluator;
 
     @Override
-    public boolean isAllowedToUpdate(ShoppingList oldObject, ShoppingList newObject, SLUser currentUser) {
+    public boolean isAllowedToUpdate(Item oldObject, Item newObject, SLUser currentUser) {
 
         return ownedRestEntityPermissionEvaluator.isAllowedToUpdate(oldObject, newObject, currentUser);
     }
 
 
     @Override
-    public boolean isAllowedToCreate(ShoppingList object, SLUser currentUser) {
+    public boolean isAllowedToCreate(Item object, SLUser currentUser) {
 
         return ownedRestEntityPermissionEvaluator.isAllowedToCreate(object, currentUser);
     }
 
 
     @Override
-    public boolean isAllowedToDelete(ShoppingList object, SLUser currentUser) {
+    public boolean isAllowedToDelete(Item object, SLUser currentUser) {
 
         return ownedRestEntityPermissionEvaluator.isAllowedToDelete(object, currentUser);
     }
 
 
     @Override
-    public boolean isAllowedToRead(ShoppingList object, SLUser currentUser) {
+    public boolean isAllowedToRead(Item object, SLUser currentUser) {
 
         return ownedRestEntityPermissionEvaluator.isAllowedToRead(object, currentUser);
     }

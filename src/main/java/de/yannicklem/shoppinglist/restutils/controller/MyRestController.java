@@ -14,8 +14,6 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.hateoas.EntityLinks;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
 
 import org.springframework.http.HttpEntity;
@@ -56,7 +54,7 @@ public abstract class MyRestController<Type extends RestEntity<ID>, ID extends S
     protected final EntityLinks entityLinks;
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public HttpEntity<? extends Resource<? extends Type>> getSpecificEntity(@PathVariable ID id, Principal principal) {
+    public HttpEntity<? extends Type> getSpecificEntity(@PathVariable ID id, Principal principal) {
 
         Type specificEntity = entityService.findById(id);
 
@@ -68,30 +66,29 @@ public abstract class MyRestController<Type extends RestEntity<ID>, ID extends S
 
         requestHandler.handleRead(specificEntity, currentUser);
 
-        return new HttpEntity<>(getResource(specificEntity, currentUser));
+        return new HttpEntity<>(resourceProcessor.process(specificEntity, currentUser));
     }
 
 
     @RequestMapping(method = RequestMethod.GET)
-    public HttpEntity<? extends Resources<? extends Resource<? extends Type>>> getAllEntities(Principal principal) {
+    public HttpEntity<? extends Resources<? extends Type>> getAllEntities(Principal principal) {
 
         List<Type> all = entityService.findAll();
-
-        List<Resource<? extends Type>> resourcesList = new ArrayList<>();
+        List<Type> resourcesList = new ArrayList<>();
 
         SLUser currentUser = principal == null ? null : slUserService.findById(principal.getName());
 
         for (Type entity : all) {
             try {
                 requestHandler.handleRead(entity, currentUser);
-                resourcesList.add(getResource(entity, currentUser));
+                resourcesList.add(resourceProcessor.process(entity, currentUser));
             } catch (Exception e) {
                 LOGGER.debug(String.format("Filtered %s with id '%s'", entity.getClass().getTypeName(),
-                        entity.getId().toString()));
+                        entity.getEntityId().toString()));
             }
         }
 
-        Resources<Resource<? extends Type>> entityResources = new Resources<>(resourcesList);
+        Resources<? extends Type> entityResources = new Resources<>(resourcesList);
 
         if (!all.isEmpty()) {
             entityResources.add(entityLinks.linkToCollectionResource(all.get(0).getClass()));
@@ -102,10 +99,9 @@ public abstract class MyRestController<Type extends RestEntity<ID>, ID extends S
 
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public HttpEntity<? extends Resource<? extends Type>> putEntity(@RequestBody Type entity, @PathVariable ID id,
-        Principal principal) {
+    public HttpEntity<? extends Type> putEntity(@RequestBody Type entity, @PathVariable ID id, Principal principal) {
 
-        entity.setId(id);
+        entity.setEntityId(id);
 
         resourceProcessor.initializeNestedEntities(entity);
 
@@ -120,7 +116,7 @@ public abstract class MyRestController<Type extends RestEntity<ID>, ID extends S
 
 
     @RequestMapping(method = RequestMethod.POST)
-    public HttpEntity<? extends Resource<? extends Type>> putUser(@RequestBody Type entity, Principal principal) {
+    public HttpEntity<? extends Type> putUser(@RequestBody Type entity, Principal principal) {
 
         resourceProcessor.initializeNestedEntities(entity);
 
@@ -130,13 +126,13 @@ public abstract class MyRestController<Type extends RestEntity<ID>, ID extends S
     }
 
 
-    protected HttpEntity<? extends Resource<? extends Type>> createEntity(Type entity, SLUser currentUser) {
+    protected HttpEntity<? extends Type> createEntity(Type entity, SLUser currentUser) {
 
         requestHandler.handleBeforeCreate(entity, currentUser);
 
         Type createdEntity = entityService.create(entity);
 
-        Resource<? extends Type> createdEntityResource = getResource(createdEntity, currentUser);
+        Type createdEntityResource = resourceProcessor.process(createdEntity, currentUser);
 
         requestHandler.handleAfterCreate(createdEntity, currentUser);
 
@@ -144,14 +140,14 @@ public abstract class MyRestController<Type extends RestEntity<ID>, ID extends S
     }
 
 
-    protected HttpEntity<? extends Resource<? extends Type>> updateEntity(Type entity, SLUser currentUser) {
+    protected HttpEntity<? extends Type> updateEntity(Type entity, SLUser currentUser) {
 
-        Type currentEntity = entityService.findById(entity.getId());
+        Type currentEntity = entityService.findById(entity.getEntityId());
         requestHandler.handleBeforeUpdate(currentEntity, entity, currentUser);
 
         Type updatedEntity = entityService.update(entity);
 
-        Resource<? extends Type> updatedEntityResource = getResource(updatedEntity, currentUser);
+        Type updatedEntityResource = resourceProcessor.process(updatedEntity, currentUser);
 
         requestHandler.handleAfterUpdate(currentEntity, updatedEntity, currentUser);
 
@@ -172,23 +168,5 @@ public abstract class MyRestController<Type extends RestEntity<ID>, ID extends S
         entityService.delete(toDelete);
 
         requestHandler.handleAfterDelete(toDelete, currentUser);
-    }
-
-
-    protected Resource<? extends Type> getResource(Type entity, SLUser currentUser) {
-
-        Resource<? extends Type> resource = resourceProcessor.toResource(entity, currentUser);
-
-        if (resource != null) {
-            resource.add(getSelfRel(entity, entity.getId()));
-        }
-
-        return resource;
-    }
-
-
-    private Link getSelfRel(Type entity, ID id) {
-
-        return entityLinks.linkToSingleResource(entity.getClass(), id);
     }
 }

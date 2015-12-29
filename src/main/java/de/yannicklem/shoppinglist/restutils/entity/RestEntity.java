@@ -1,12 +1,14 @@
 package de.yannicklem.shoppinglist.restutils.entity;
 
+import org.springframework.hateoas.ResourceSupport;
+
 import java.io.Serializable;
 
 
-public interface RestEntity<ID extends Serializable> {
+public abstract class RestEntity<ID extends Serializable> extends ResourceSupport {
 
-    ID getId();
+    public abstract ID getEntityId();
 
 
-    void setId(ID id);
+    public abstract void setEntityId(ID id);
 }

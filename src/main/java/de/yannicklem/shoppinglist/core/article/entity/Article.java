@@ -2,6 +2,7 @@ package de.yannicklem.shoppinglist.core.article.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import de.yannicklem.shoppinglist.core.OwnedRestEntity;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 
 import lombok.EqualsAndHashCode;
@@ -21,13 +22,13 @@ import javax.persistence.ManyToMany;
 @Entity
 @Getter
 @Setter
-@EqualsAndHashCode(of = "id")
+@EqualsAndHashCode(of = "entityId", callSuper = false)
 @ToString
-public class Article {
+public class Article extends OwnedRestEntity<Long> {
 
     @Id
     @GeneratedValue
-    private Long id;
+    private Long entityId;
 
     private String name;
     private double priceInEuro;
@@ -52,6 +53,7 @@ public class Article {
         this.owners = new HashSet<>();
     }
 
+    @Override
     public void setOwners(Set<SLUser> owners) {
 
         this.owners.clear();

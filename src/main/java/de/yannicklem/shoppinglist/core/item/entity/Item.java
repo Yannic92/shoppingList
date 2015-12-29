@@ -2,6 +2,7 @@ package de.yannicklem.shoppinglist.core.item.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import de.yannicklem.shoppinglist.core.OwnedRestEntity;
 import de.yannicklem.shoppinglist.core.article.entity.Article;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 
@@ -25,12 +26,12 @@ import javax.persistence.ManyToOne;
 @Getter
 @Setter
 @ToString
-@EqualsAndHashCode(of = "id")
-public class Item {
+@EqualsAndHashCode(of = "entityId", callSuper = false)
+public class Item extends OwnedRestEntity<Long> {
 
     @Id
     @GeneratedValue
-    private Long id;
+    private Long entityId;
 
     @JsonIgnore
     @ManyToMany
@@ -38,7 +39,9 @@ public class Item {
 
     private Integer count;
 
-    @ManyToOne(optional = false, cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
+    @ManyToOne(
+        optional = false, cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH }
+    )
     private Article article;
 
     public Item() {
@@ -46,6 +49,7 @@ public class Item {
         this.owners = new HashSet<>();
     }
 
+    @Override
     public void setOwners(Set<SLUser> owners) {
 
         this.owners.clear();

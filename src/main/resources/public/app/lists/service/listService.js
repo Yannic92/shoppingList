@@ -11,7 +11,7 @@ shoppingList.factory('listService',['$resource', 'HALResource','$filter','$q',
         var toResource = function (entity) {
             var resource = {};
             resource._links = entity._links;
-            resource.id = entity.id;
+            resource.entityId = entity.entityId;
             resource.name = entity.name;
             resource.owners = [];
             
@@ -24,7 +24,7 @@ shoppingList.factory('listService',['$resource', 'HALResource','$filter','$q',
         
         var toEntity = function (resource){
             var entity = {};
-            entity.id = resource.id;
+            entity.entityId = resource.entityId;
             entity._links = resource._links;
             entity.name = resource.name;
             entity.owners = resource.owners;
@@ -48,7 +48,7 @@ shoppingList.factory('listService',['$resource', 'HALResource','$filter','$q',
         };
         
         var replaceExisting = function (list) {
-            var existingList = $filter('filter')(persistedLists, {id: list.id})[0];
+            var existingList = $filter('filter')(persistedLists, {entityId: list.entityId})[0];
             var index = persistedLists.indexOf(existingList);
             persistedLists.splice(index, 1, list);
         };
@@ -60,7 +60,7 @@ shoppingList.factory('listService',['$resource', 'HALResource','$filter','$q',
                 return persistedLists;
             },
             getUpdated: function(list) {
-                return Lists.get({id: list.id}).$promise
+                return Lists.get({id: list.entityId}).$promise
                     .then(function (response) {
                         var responseEntity = toEntity(response);
                         replaceExisting(responseEntity);
@@ -76,7 +76,7 @@ shoppingList.factory('listService',['$resource', 'HALResource','$filter','$q',
                     })
             },
             update: function (list) {
-                return Lists.update({id: list.id}, toResource(list)).$promise
+                return Lists.update({id: list.entityId}, toResource(list)).$promise
                     .then(function (response) {
                         var responseEntity = toEntity(response);
                         replaceExisting(responseEntity);
@@ -95,9 +95,9 @@ shoppingList.factory('listService',['$resource', 'HALResource','$filter','$q',
                 return persistedLists.promise;
             },
             delete: function (list) {
-                return Lists.delete({id: list.id}).$promise
+                return Lists.delete({id: list.entityId}).$promise
                     .then(function(){
-                        var existingList = $filter('filter')(persistedLists, {id: list.id})[0];
+                        var existingList = $filter('filter')(persistedLists, {id: list.entityId})[0];
                         var index = persistedLists.indexOf(existingList);
                         persistedLists.splice(index,1);
                     });

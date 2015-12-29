@@ -18,7 +18,7 @@
         <div ng-repeat="list in lists track by $index" style="width: 100%;">
             <div layout="row" layout-align="start center">
                 <div layout flex>
-                    <md-button class="md-primary" ng-href="#/lists/{{list.id}}" ng-click="closeNav()" style="text-align: left;">
+                    <md-button class="md-primary" ng-href="#/lists/{{list.entityId}}" ng-click="closeNav()" style="text-align: left;">
                         <md-icon md-font-set="material-icons">list</md-icon>
                         {{list.name}}
                     </md-button>

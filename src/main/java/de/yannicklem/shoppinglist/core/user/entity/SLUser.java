@@ -3,25 +3,16 @@ package de.yannicklem.shoppinglist.core.user.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-
 import de.yannicklem.shoppinglist.core.user.registration.entity.Confirmation;
 import de.yannicklem.shoppinglist.restutils.entity.RestEntity;
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-
 import org.hibernate.validator.constraints.Email;
-
 import org.springframework.hateoas.core.Relation;
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -31,6 +22,9 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Entity
@@ -38,9 +32,9 @@ import javax.persistence.Table;
 @Setter
 @Table(name = "USERS")
 @ToString(exclude = "password")
-@EqualsAndHashCode(of = { "username" })
+@EqualsAndHashCode(of = { "username" }, callSuper = false)
 @Relation(collectionRelation = "sLUsers")
-public class SLUser implements UserDetails, RestEntity<String> {
+public class SLUser extends RestEntity<String> implements UserDetails {
 
     @Id
     @Column(unique = true, nullable = false)
@@ -161,7 +155,7 @@ public class SLUser implements UserDetails, RestEntity<String> {
 
     @Override
     @JsonIgnore
-    public String getId() {
+    public String getEntityId() {
 
         return getUsername();
     }
@@ -169,7 +163,7 @@ public class SLUser implements UserDetails, RestEntity<String> {
 
     @Override
     @JsonIgnore
-    public void setId(String s) {
+    public void setEntityId(String s) {
 
         setUsername(s);
     }

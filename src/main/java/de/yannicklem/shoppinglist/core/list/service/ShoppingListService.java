@@ -29,7 +29,7 @@ public class ShoppingListService implements EntityService<ShoppingList, Long> {
             shoppingList.getOwners().add(currentUserService.getCurrentUser());
         }
 
-        if (shoppingList != null && exists(shoppingList.getId())) {
+        if (shoppingList != null && exists(shoppingList.getEntityId())) {
             throw new AlreadyExistsException("Shopping list already exists");
         }
 
@@ -39,7 +39,7 @@ public class ShoppingListService implements EntityService<ShoppingList, Long> {
 
     private void handleBeforeUpdate(ShoppingList shoppingList) {
 
-        if (shoppingList == null || !exists(shoppingList.getId())) {
+        if (shoppingList == null || !exists(shoppingList.getEntityId())) {
             throw new NotFoundException("Shopping list not found");
         }
 
@@ -109,10 +109,10 @@ public class ShoppingListService implements EntityService<ShoppingList, Long> {
 
     public boolean exists(ShoppingList shoppingList) {
 
-        if (shoppingList == null || shoppingList.getId() == null) {
+        if (shoppingList == null || shoppingList.getEntityId() == null) {
             return false;
         }
 
-        return shoppingListRepository.exists(shoppingList.getId());
+        return shoppingListRepository.exists(shoppingList.getEntityId());
     }
 }

@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityLinks;
 import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.hateoas.MediaTypes;
-import org.springframework.hateoas.Resource;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -44,7 +43,7 @@ public class SLUserRestController extends MyRestController<SLUser, String> {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = SLUserEndpoints.SLUSER_CURRENT_ENDPOINT)
-    public Resource<? extends SLUser> getCurrentUser(Principal principal) {
+    public SLUser getCurrentUser(Principal principal) {
 
         SLUser currentUser = principal == null ? null : slUserService.findById(principal.getName());
 
@@ -52,7 +51,7 @@ public class SLUserRestController extends MyRestController<SLUser, String> {
             return null;
         }
 
-        return getResource(currentUser, currentUser);
+        return resourceProcessor.process(currentUser, currentUser);
     }
 
 
@@ -64,14 +63,12 @@ public class SLUserRestController extends MyRestController<SLUser, String> {
 
 
     @Override
-    protected HttpEntity<? extends Resource<? extends SLUser>> createEntity(SLUser entity, SLUser currentUser) {
+    protected HttpEntity<? extends SLUser> createEntity(SLUser entity, SLUser currentUser) {
 
-        HttpEntity<? extends Resource<? extends SLUser>> resp = super.createEntity(entity, currentUser);
+        HttpEntity<? extends SLUser> resp = super.createEntity(entity, currentUser);
 
         if (currentUser == null) {
-            Resource<? extends SLUser> body = resp.getBody();
-
-            return new ResponseEntity<>(getResource(body.getContent(), body.getContent()), HttpStatus.CREATED);
+            return new ResponseEntity<>(resourceProcessor.process(resp.getBody(), resp.getBody()), HttpStatus.CREATED);
         } else {
             return resp;
         }

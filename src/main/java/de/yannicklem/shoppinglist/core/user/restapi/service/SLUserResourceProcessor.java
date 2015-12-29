@@ -5,47 +5,64 @@ import de.yannicklem.shoppinglist.core.user.restapi.SLUserDetailed;
 import de.yannicklem.shoppinglist.core.user.service.SLUserService;
 import de.yannicklem.shoppinglist.restutils.service.MyResourceProcessor;
 
-import lombok.RequiredArgsConstructor;
-
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.EntityLinks;
+import org.springframework.hateoas.Link;
 
 import org.springframework.stereotype.Service;
 
 
 @Service
-@RequiredArgsConstructor(onConstructor = @__(@Autowired ))
-public class SLUserResourceProcessor implements MyResourceProcessor<SLUser> {
+public class SLUserResourceProcessor extends MyResourceProcessor<SLUser> {
 
     private final SLUserService slUserService;
 
+    @Autowired
+    public SLUserResourceProcessor(EntityLinks entityLinks, SLUserService slUserService) {
+
+        super(entityLinks);
+
+        this.slUserService = slUserService;
+    }
+
     @Override
-    public Resource<? extends SLUser> toResource(SLUser entity, SLUser currentUser) {
+    public SLUser process(SLUser entity, SLUser currentUser) {
 
         if (currentUser == null) {
-            return new Resource<>(entity);
+            return super.process(entity, currentUser);
         }
 
         if (currentUser.isAdmin()) {
-            return new Resource<>(new SLUserDetailed(entity));
+            SLUserDetailed slUserDetailed = new SLUserDetailed(entity);
+            slUserDetailed.add(getSelfRel(slUserDetailed));
+
+            return slUserDetailed;
         }
 
         if (currentUser.equals(entity)) {
-            return new Resource<>(new SLUserDetailed(entity));
+            SLUserDetailed slUserDetailed = new SLUserDetailed(entity);
+            slUserDetailed.add(getSelfRel(slUserDetailed));
+
+            return slUserDetailed;
         }
 
-        return new Resource<>(entity);
+        return super.process(entity, currentUser);
+    }
+
+
+    private Link getSelfRel(SLUser slUser) {
+
+        return entityLinks.linkToSingleResource(SLUser.class, slUser.getEntityId()).withSelfRel();
     }
 
 
     @Override
     public SLUser initializeNestedEntities(SLUser entity) {
 
-        SLUser persistedUser = slUserService.findById(entity.getId());
+        SLUser persistedUser = slUserService.findById(entity.getEntityId());
 
         if (persistedUser != null) {
-            entity.setAuthorities(persistedUser.getAuthorities());
             entity.setConfirmation(persistedUser.getConfirmation());
             entity.setAccountNonExpired(persistedUser.isAccountNonExpired());
             entity.setAccountNonLocked(persistedUser.isAccountNonLocked());

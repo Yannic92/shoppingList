@@ -52,7 +52,7 @@ shoppingList.controller('newList', ['$scope','$rootScope','listService','$mdToas
                             .position("bottom right")
                             .hideDelay(3000)
                     );
-                    $location.path("/lists/" + createdList.id);
+                    $location.path("/lists/" + createdList.entityId);
                 })
                 .finally(function () {
                     $scope.loading = false;

@@ -12,7 +12,7 @@ shoppingList.controller('editList', ['$scope','$rootScope','listService','$filte
         
         lists.promise
             .then(function () {
-                $scope.list = angular.copy($filter('filter')(lists, {id: $routeParams.id})[0]);
+                $scope.list = angular.copy($filter('filter')(lists, {entityId: $routeParams.id})[0]);
                 $scope.updating = false;
             });
         
@@ -26,7 +26,7 @@ shoppingList.controller('editList', ['$scope','$rootScope','listService','$filte
                             .position("bottom right")
                             .hideDelay(3000)
                     );
-                    $location.path("/lists/" + updatedList.id);
+                    $location.path("/lists/" + updatedList.entityId);
                 }).finally(function () {
                     $scope.updating = false;
                 });
