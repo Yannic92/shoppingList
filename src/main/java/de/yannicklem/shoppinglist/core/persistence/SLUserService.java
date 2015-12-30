@@ -172,7 +172,12 @@ public class SLUserService implements UserDetailsService, EntityService<SLUser, 
         for (Item item : itemsOwnedByUserToDelete) {
             if (item.getOwners().contains(slUser)) {
                 item.getOwners().remove(slUser);
-                itemService.update(item);
+
+                if (item.getOwners().isEmpty()) {
+                    itemService.delete(item);
+                } else {
+                    itemService.update(item);
+                }
             }
         }
 

@@ -1,5 +1,6 @@
 package de.yannicklem.shoppinglist.core.persistence;
 
+import de.yannicklem.shoppinglist.core.article.entity.Article;
 import de.yannicklem.shoppinglist.core.item.entity.Item;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 
@@ -18,4 +19,7 @@ public interface ItemRepository extends CrudRepository<Item, Long> {
 
     @Query("SELECT i FROM Item i WHERE :user MEMBER OF i.owners")
     List<Item> findItemsOwnedBy(@Param("user") SLUser slUser);
+
+
+    List<Item> findByArticle(Article article);
 }

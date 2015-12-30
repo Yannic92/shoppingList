@@ -23,7 +23,6 @@ import java.util.Set;
 public class ShoppingListService implements EntityService<ShoppingList, Long> {
 
     private final ShoppingListValidationService shoppingListValidationService;
-    private final ItemService itemService;
     private final ShoppingListRepository shoppingListRepository;
 
     private void handleBeforeCreate(ShoppingList shoppingList) {
@@ -59,7 +58,7 @@ public class ShoppingListService implements EntityService<ShoppingList, Long> {
 
         for (Item item : items) {
             item.setOwners(shoppingList.getOwners());
-            itemService.update(item);
+            item.getArticle().setOwners(shoppingList.getOwners());
         }
     }
 

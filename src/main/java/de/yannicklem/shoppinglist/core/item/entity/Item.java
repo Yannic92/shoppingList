@@ -11,6 +11,10 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import org.hibernate.annotations.GenericGenerator;
+
+import org.springframework.hateoas.core.Relation;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -28,10 +32,15 @@ import javax.persistence.ManyToOne;
 @Setter
 @ToString
 @EqualsAndHashCode(of = "entityId", callSuper = false)
+@Relation(collectionRelation = "items")
 public class Item extends OwnedRestEntity<Long> {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(generator = "useExistingOrGenerate")
+    @GenericGenerator(
+        name = "useExistingOrGenerate",
+        strategy = "de.yannicklem.shoppinglist.core.persistence.UseExistingOrGenerateIdGenerator"
+    )
     private Long entityId;
 
     @JsonIgnore
@@ -50,6 +59,24 @@ public class Item extends OwnedRestEntity<Long> {
     public Item() {
 
         this.owners = new HashSet<>();
+    }
+
+
+    public Item(Item item) {
+
+        this();
+        this.count = item.getCount();
+        this.article = item.getArticle();
+        setOwners(item.getOwners());
+    }
+
+
+    public Item(Article article, Integer count, Set<SLUser> owners) {
+
+        this();
+        this.article = article;
+        this.count = count;
+        setOwners(owners);
     }
 
     @Override

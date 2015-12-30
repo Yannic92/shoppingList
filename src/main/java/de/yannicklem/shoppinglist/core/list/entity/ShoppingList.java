@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,7 +31,11 @@ import javax.persistence.OneToMany;
 public class ShoppingList extends OwnedRestEntity<Long> {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(generator = "useExistingOrGenerate")
+    @GenericGenerator(
+        name = "useExistingOrGenerate",
+        strategy = "de.yannicklem.shoppinglist.core.persistence.UseExistingOrGenerateIdGenerator"
+    )
     private Long entityId;
 
     @ManyToMany(fetch = FetchType.EAGER)

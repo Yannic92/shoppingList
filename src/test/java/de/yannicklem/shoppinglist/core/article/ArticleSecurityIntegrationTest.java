@@ -2,35 +2,49 @@ package de.yannicklem.shoppinglist.core.article;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import de.yannicklem.shoppinglist.TestUtils;
 import de.yannicklem.shoppinglist.WebShoppingListApplication;
 import de.yannicklem.shoppinglist.core.article.entity.Article;
 import de.yannicklem.shoppinglist.core.persistence.ArticleService;
 import de.yannicklem.shoppinglist.core.persistence.SLUserService;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
+
 import org.junit.Before;
 import org.junit.Test;
+
 import org.junit.runner.RunWith;
+
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.boot.test.SpringApplicationConfiguration;
+
 import org.springframework.hateoas.MediaTypes;
+
 import org.springframework.http.MediaType;
+
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
 import org.springframework.web.context.WebApplicationContext;
 
-import javax.servlet.Filter;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.servlet.Filter;
+
 import static org.hamcrest.MatcherAssert.assertThat;
+
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
+
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -66,7 +80,6 @@ public class ArticleSecurityIntegrationTest {
 
     private Article articleOfUserOne;
     private Article articleOfUserTwo;
-    private Article articleOfAdmin;
 
     @Before
     public void setup() {
@@ -85,13 +98,10 @@ public class ArticleSecurityIntegrationTest {
         articleOfUserOne.getOwners().add(userOne);
         articleOfUserTwo = new Article("UserTwoArticle", 9.98, new HashSet<>());
         articleOfUserTwo.getOwners().add(userTwo);
-        articleOfAdmin = new Article("AdminArticle", 9.97, new HashSet<>());
-        articleOfAdmin.getOwners().add(admin);
 
         articleService.deleteAll();
         articleService.create(articleOfUserOne);
         articleService.create(articleOfUserTwo);
-        articleService.create(articleOfAdmin);
     }
 
 
@@ -109,7 +119,7 @@ public class ArticleSecurityIntegrationTest {
         mockMvc.perform(get(articlesEndpoint).with(user(admin)))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaTypes.HAL_JSON))
-            .andExpect(jsonPath("_embedded.articles", hasSize(3)));
+            .andExpect(jsonPath("_embedded.articles", hasSize(2)));
     }
 
 

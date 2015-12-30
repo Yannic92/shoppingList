@@ -1,6 +1,7 @@
 package de.yannicklem.shoppinglist.core.persistence;
 
 import de.yannicklem.shoppinglist.core.article.entity.Article;
+import de.yannicklem.shoppinglist.core.item.entity.Item;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.restutils.service.EntityService;
 
@@ -19,6 +20,7 @@ public class ArticleService implements EntityService<Article, Long> {
 
     private final ArticleValidationService articleValidationService;
     private final ArticleRepository articleRepository;
+    private final ItemService itemService;
 
     public void handleBeforeCreate(Article article) {
 
@@ -70,7 +72,18 @@ public class ArticleService implements EntityService<Article, Long> {
     @Override
     public void delete(Article article) {
 
+        handleBeforeDelete(article);
         articleRepository.delete(article);
+    }
+
+
+    private void handleBeforeDelete(Article article) {
+
+        List<Item> itemsByArticle = itemService.findItemsByArticle(article);
+
+        for (Item item : itemsByArticle) {
+            itemService.delete(item);
+        }
     }
 
 

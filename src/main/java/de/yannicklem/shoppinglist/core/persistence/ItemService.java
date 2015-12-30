@@ -1,7 +1,9 @@
 package de.yannicklem.shoppinglist.core.persistence;
 
+import de.yannicklem.shoppinglist.core.article.entity.Article;
 import de.yannicklem.shoppinglist.core.item.entity.Item;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
+import de.yannicklem.shoppinglist.exception.AlreadyExistsException;
 import de.yannicklem.shoppinglist.restutils.service.EntityService;
 
 import lombok.RequiredArgsConstructor;
@@ -19,11 +21,32 @@ public class ItemService implements EntityService<Item, Long> {
 
     private final ItemValidationService itemValidationService;
     private final ItemRepository itemRepository;
-    private final ArticleService articleService;
 
     public void handleBeforeCreate(Item item) {
 
+        if (item != null && item.getArticle() != null) {
+            item.getArticle().getOwners().addAll(item.getOwners());
+        }
+
         itemValidationService.validate(item);
+
+        if (item != null && exists(item.getEntityId())) {
+            throw new AlreadyExistsException("Item already exists");
+        }
+    }
+
+
+    public void handleBeforeUpdate(Item item) {
+
+        if (item != null && item.getArticle() != null) {
+            item.getArticle().getOwners().addAll(item.getOwners());
+        }
+
+        itemValidationService.validate(item);
+
+        if (item != null && !exists(item.getEntityId())) {
+            throw new AlreadyExistsException("Item not found");
+        }
     }
 
 
@@ -44,6 +67,10 @@ public class ItemService implements EntityService<Item, Long> {
     @Override
     public boolean exists(Long id) {
 
+        if (id == null) {
+            return false;
+        }
+
         return itemRepository.exists(id);
     }
 
@@ -63,14 +90,6 @@ public class ItemService implements EntityService<Item, Long> {
         handleBeforeUpdate(entity);
 
         return itemRepository.save(entity);
-    }
-
-
-    private void handleBeforeUpdate(Item entity) {
-
-        entity.getArticle().setOwners(entity.getOwners());
-
-        articleService.update(entity.getArticle());
     }
 
 
@@ -95,5 +114,11 @@ public class ItemService implements EntityService<Item, Long> {
     public List<Item> findItemsOwnedBy(SLUser slUser) {
 
         return itemRepository.findItemsOwnedBy(slUser);
+    }
+
+
+    public List<Item> findItemsByArticle(Article article) {
+
+        return itemRepository.findByArticle(article);
     }
 }

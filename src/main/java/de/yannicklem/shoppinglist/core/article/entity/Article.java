@@ -10,6 +10,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import org.springframework.hateoas.core.Relation;
 
 import java.util.HashSet;
@@ -31,7 +33,11 @@ import javax.persistence.ManyToMany;
 public class Article extends OwnedRestEntity<Long> {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(generator = "useExistingOrGenerate")
+    @GenericGenerator(
+        name = "useExistingOrGenerate",
+        strategy = "de.yannicklem.shoppinglist.core.persistence.UseExistingOrGenerateIdGenerator"
+    )
     private Long entityId;
 
     private String name;
@@ -47,6 +53,15 @@ public class Article extends OwnedRestEntity<Long> {
         this.name = name;
         this.priceInEuro = priceInEuro;
         setOwners(owners);
+    }
+
+
+    public Article(Article article) {
+
+        this();
+        this.name = article.getName();
+        this.priceInEuro = article.getPriceInEuro();
+        setOwners(article.getOwners());
     }
 
 

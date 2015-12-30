@@ -1,6 +1,7 @@
 package de.yannicklem.shoppinglist.core.item.restapi.service;
 
 import de.yannicklem.shoppinglist.core.OwnedRestEntityPermissionEvaluator;
+import de.yannicklem.shoppinglist.core.article.entity.Article;
 import de.yannicklem.shoppinglist.core.item.entity.Item;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.restutils.service.PermissionEvaluator;
@@ -28,7 +29,14 @@ public class ItemPermissionEvaluator implements PermissionEvaluator<Item> {
     @Override
     public boolean isAllowedToCreate(Item object, SLUser currentUser) {
 
-        return ownedRestEntityPermissionEvaluator.isAllowedToCreate(object, currentUser);
+        if (!ownedRestEntityPermissionEvaluator.isAllowedToCreate(object, currentUser)) {
+            return false;
+        }
+
+        Article updatedArticle = new Article(object.getArticle());
+        updatedArticle.setOwners(object.getOwners());
+
+        return ownedRestEntityPermissionEvaluator.isAllowedToUpdate(object.getArticle(), updatedArticle, currentUser);
     }
 
 

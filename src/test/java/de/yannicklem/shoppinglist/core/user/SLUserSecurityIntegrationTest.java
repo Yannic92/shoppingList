@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.yannicklem.shoppinglist.SLUserTestEntity;
 import de.yannicklem.shoppinglist.TestUtils;
 import de.yannicklem.shoppinglist.WebShoppingListApplication;
-import de.yannicklem.shoppinglist.core.persistence.SLUserRepository;
+import de.yannicklem.shoppinglist.core.persistence.SLUserService;
 import de.yannicklem.shoppinglist.core.user.entity.SLAuthority;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 
@@ -65,7 +65,7 @@ public class SLUserSecurityIntegrationTest {
     private Filter springSecurityFilterChain;
 
     @Autowired
-    private SLUserRepository sLUserRepository;
+    private SLUserService slUserService;
 
     private MockMvc mockMvc;
 
@@ -78,13 +78,13 @@ public class SLUserSecurityIntegrationTest {
 
         mockMvc = MockMvcBuilders.webAppContextSetup(applicationContext).addFilter(springSecurityFilterChain).build();
 
-        sLUserRepository.deleteAll();
+        slUserService.deleteAll();
         slUserTest = TestUtils.completelyInitializedTestUser("Test");
         slUserTest2 = TestUtils.completelyInitializedTestUser("Test2");
         slUserAdmin = TestUtils.completelyInitializedTestAdmin("AdminTest");
-        sLUserRepository.save(slUserTest);
-        sLUserRepository.save(slUserTest2);
-        sLUserRepository.save(slUserAdmin);
+        slUserService.create(slUserTest);
+        slUserService.create(slUserTest2);
+        slUserService.create(slUserAdmin);
     }
 
 
@@ -111,7 +111,7 @@ public class SLUserSecurityIntegrationTest {
         mockMvc.perform(get(sLUsersEndpoint).with(user(slUserAdmin)))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaTypes.HAL_JSON))
-            .andExpect(jsonPath("_embedded.sLUsers", hasSize(sLUserRepository.findAll().size())));
+            .andExpect(jsonPath("_embedded.sLUsers", hasSize(slUserService.findAll().size())));
     }
 
 
@@ -153,7 +153,7 @@ public class SLUserSecurityIntegrationTest {
         mockMvc.perform(post(sLUsersEndpoint).content(sLUserTest3JsonBytes).contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isForbidden());
 
-        assertThat(sLUserRepository.exists(sLUserTest3.getUsername()), is(false));
+        assertThat(slUserService.exists(sLUserTest3.getUsername()), is(false));
     }
 
 
@@ -166,7 +166,7 @@ public class SLUserSecurityIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isForbidden());
 
-        assertThat(sLUserRepository.exists(sLUserTest3.getUsername()), is(false));
+        assertThat(slUserService.exists(sLUserTest3.getUsername()), is(false));
     }
 
 
@@ -180,7 +180,7 @@ public class SLUserSecurityIntegrationTest {
                 .with(csrf()))
             .andExpect(status().isForbidden());
 
-        assertThat(sLUserRepository.exists(sLUserTest3.getUsername()), is(false));
+        assertThat(slUserService.exists(sLUserTest3.getUsername()), is(false));
     }
 
 
@@ -194,7 +194,7 @@ public class SLUserSecurityIntegrationTest {
                 .with(csrf()))
             .andExpect(status().isForbidden());
 
-        assertThat(sLUserRepository.exists(sLUserTest3.getUsername()), is(false));
+        assertThat(slUserService.exists(sLUserTest3.getUsername()), is(false));
     }
 
 
@@ -209,7 +209,7 @@ public class SLUserSecurityIntegrationTest {
                 .with(user(slUserTest)))
             .andExpect(status().isForbidden());
 
-        assertThat(sLUserRepository.exists(sLUserTest3.getUsername()), is(false));
+        assertThat(slUserService.exists(sLUserTest3.getUsername()), is(false));
     }
 
 
@@ -224,7 +224,7 @@ public class SLUserSecurityIntegrationTest {
                 .with(user(slUserTest)))
             .andExpect(status().isForbidden());
 
-        assertThat(sLUserRepository.exists(sLUserTest3.getUsername()), is(false));
+        assertThat(slUserService.exists(sLUserTest3.getUsername()), is(false));
     }
 
 
@@ -245,7 +245,7 @@ public class SLUserSecurityIntegrationTest {
             .andExpect(jsonPath("authorities").doesNotExist())
             .andExpect(jsonPath("password").doesNotExist());
 
-        assertThat(sLUserRepository.exists(sLUserTest3.getUsername()), is(true));
+        assertThat(slUserService.exists(sLUserTest3.getUsername()), is(true));
     }
 
 
@@ -266,7 +266,7 @@ public class SLUserSecurityIntegrationTest {
             .andExpect(jsonPath("authorities").doesNotExist())
             .andExpect(jsonPath("password").doesNotExist());
 
-        assertThat(sLUserRepository.exists(sLUserTest3.getUsername()), is(true));
+        assertThat(slUserService.exists(sLUserTest3.getUsername()), is(true));
     }
 
 
@@ -288,7 +288,7 @@ public class SLUserSecurityIntegrationTest {
             .andExpect(jsonPath("authorities").doesNotExist())
             .andExpect(jsonPath("password").doesNotExist());
 
-        assertThat(sLUserRepository.exists(sLUserTest3.getUsername()), is(true));
+        assertThat(slUserService.exists(sLUserTest3.getUsername()), is(true));
     }
 
 
@@ -310,7 +310,7 @@ public class SLUserSecurityIntegrationTest {
             .andExpect(jsonPath("authorities").doesNotExist())
             .andExpect(jsonPath("password").doesNotExist());
 
-        assertThat(sLUserRepository.exists(sLUserTest3.getUsername()), is(true));
+        assertThat(slUserService.exists(sLUserTest3.getUsername()), is(true));
     }
 
 
@@ -331,7 +331,7 @@ public class SLUserSecurityIntegrationTest {
             .andExpect(jsonPath("email", is(sLUserTest3.getEmail())))
             .andExpect(jsonPath("authorities").doesNotExist())
             .andExpect(jsonPath("password").doesNotExist());
-        assertThat(sLUserRepository.exists(sLUserTest3.getUsername()), is(true));
+        assertThat(slUserService.exists(sLUserTest3.getUsername()), is(true));
     }
 
 
@@ -354,7 +354,7 @@ public class SLUserSecurityIntegrationTest {
             .andExpect(jsonPath("authorities").doesNotExist())
             .andExpect(jsonPath("password").doesNotExist());
 
-        assertThat(sLUserRepository.exists(sLUserTest3.getUsername()), is(true));
+        assertThat(slUserService.exists(sLUserTest3.getUsername()), is(true));
     }
 
 
@@ -376,7 +376,7 @@ public class SLUserSecurityIntegrationTest {
             .andExpect(jsonPath("authorities").doesNotExist())
             .andExpect(jsonPath("password").doesNotExist());
 
-        assertThat(sLUserRepository.exists(sLUserTest3.getUsername()), is(true));
+        assertThat(slUserService.exists(sLUserTest3.getUsername()), is(true));
     }
 
 
@@ -398,7 +398,7 @@ public class SLUserSecurityIntegrationTest {
             .andExpect(jsonPath("authorities").doesNotExist())
             .andExpect(jsonPath("password").doesNotExist());
 
-        assertThat(sLUserRepository.exists(sLUserTest3.getUsername()), is(true));
+        assertThat(slUserService.exists(sLUserTest3.getUsername()), is(true));
     }
 
 
@@ -412,7 +412,7 @@ public class SLUserSecurityIntegrationTest {
                 .with(user(slUserTest)))
             .andExpect(status().isBadRequest());
 
-        assertThat(sLUserRepository.exists(slUserTest2.getUsername()), is(true));
+        assertThat(slUserService.exists(slUserTest2.getUsername()), is(true));
     }
 
 
@@ -426,7 +426,7 @@ public class SLUserSecurityIntegrationTest {
                 .with(user(slUserAdmin)))
             .andExpect(status().isBadRequest());
 
-        assertThat(sLUserRepository.exists(slUserTest2.getUsername()), is(true));
+        assertThat(slUserService.exists(slUserTest2.getUsername()), is(true));
     }
 
 
@@ -440,7 +440,7 @@ public class SLUserSecurityIntegrationTest {
                 .with(user(slUserTest)))
             .andExpect(status().isForbidden());
 
-        assertThat(sLUserRepository.exists(slUserAdmin.getUsername()), is(true));
+        assertThat(slUserService.exists(slUserAdmin.getUsername()), is(true));
     }
 
 
@@ -456,7 +456,7 @@ public class SLUserSecurityIntegrationTest {
                 .with(csrf()))
             .andExpect(status().isBadRequest());
 
-        assertThat(sLUserRepository.exists(slUserInvalid.getUsername()), is(false));
+        assertThat(slUserService.exists(slUserInvalid.getUsername()), is(false));
     }
 
 
@@ -472,7 +472,7 @@ public class SLUserSecurityIntegrationTest {
                 .with(csrf()))
             .andExpect(status().isBadRequest());
 
-        assertThat(sLUserRepository.exists(slUserInvalid.getUsername()), is(false));
+        assertThat(slUserService.exists(slUserInvalid.getUsername()), is(false));
     }
 
 
@@ -489,7 +489,7 @@ public class SLUserSecurityIntegrationTest {
                 .with(user(slUserTest)))
             .andExpect(status().isBadRequest());
 
-        assertThat(sLUserRepository.exists(slUserInvalid.getUsername()), is(false));
+        assertThat(slUserService.exists(slUserInvalid.getUsername()), is(false));
     }
 
 
@@ -506,7 +506,7 @@ public class SLUserSecurityIntegrationTest {
                 .with(user(slUserTest)))
             .andExpect(status().isBadRequest());
 
-        assertThat(sLUserRepository.exists(slUserInvalid.getUsername()), is(false));
+        assertThat(slUserService.exists(slUserInvalid.getUsername()), is(false));
     }
 
 
@@ -523,7 +523,7 @@ public class SLUserSecurityIntegrationTest {
                 .with(user(slUserAdmin)))
             .andExpect(status().isBadRequest());
 
-        assertThat(sLUserRepository.exists(slUserInvalid.getUsername()), is(false));
+        assertThat(slUserService.exists(slUserInvalid.getUsername()), is(false));
     }
 
 
@@ -540,7 +540,7 @@ public class SLUserSecurityIntegrationTest {
                 .with(user(slUserAdmin)))
             .andExpect(status().isBadRequest());
 
-        assertThat(sLUserRepository.exists(slUserInvalid.getUsername()), is(false));
+        assertThat(slUserService.exists(slUserInvalid.getUsername()), is(false));
     }
 
 
@@ -556,7 +556,7 @@ public class SLUserSecurityIntegrationTest {
                 .with(csrf()))
             .andExpect(status().isForbidden());
 
-        assertThat(sLUserRepository.findOne(slUserTest.getUsername()).getEmail(), is(not("changed@hska.de")));
+        assertThat(slUserService.findById(slUserTest.getUsername()).getEmail(), is(not("changed@hska.de")));
     }
 
 
@@ -573,7 +573,7 @@ public class SLUserSecurityIntegrationTest {
                 .with(user(slUserTest)))
             .andExpect(status().isForbidden());
 
-        assertThat(sLUserRepository.findOne(slUserTest.getUsername()).getAuthorities().size(), is(1));
+        assertThat(slUserService.findById(slUserTest.getUsername()).getAuthorities().size(), is(1));
     }
 
 
@@ -590,7 +590,7 @@ public class SLUserSecurityIntegrationTest {
                 .with(user(slUserTest2)))
             .andExpect(status().isForbidden());
 
-        assertThat(sLUserRepository.findOne(slUserTest.getUsername()).getEmail(), is(not("changed@hska.de")));
+        assertThat(slUserService.findById(slUserTest.getUsername()).getEmail(), is(not("changed@hska.de")));
     }
 
 
@@ -613,7 +613,7 @@ public class SLUserSecurityIntegrationTest {
             .andExpect(jsonPath("authorities").doesNotExist())
             .andExpect(jsonPath("password").doesNotExist());
 
-        assertThat(sLUserRepository.findOne(slUserTest.getUsername()).getEmail(), is("changed@hska.de"));
+        assertThat(slUserService.findById(slUserTest.getUsername()).getEmail(), is("changed@hska.de"));
     }
 
 
@@ -636,7 +636,7 @@ public class SLUserSecurityIntegrationTest {
             .andExpect(jsonPath("authorities").doesNotExist())
             .andExpect(jsonPath("password").doesNotExist());
 
-        assertThat(sLUserRepository.findOne(slUserTest.getUsername()).getEmail(), is("changed@hska.de"));
+        assertThat(slUserService.findById(slUserTest.getUsername()).getEmail(), is("changed@hska.de"));
     }
 
 
@@ -648,7 +648,7 @@ public class SLUserSecurityIntegrationTest {
                         MediaType.APPLICATION_JSON).with(csrf()))
             .andExpect(status().isUnauthorized());
 
-        assertThat(sLUserRepository.exists(slUserTest.getUsername()), is(true));
+        assertThat(slUserService.exists(slUserTest.getUsername()), is(true));
     }
 
 
@@ -659,7 +659,7 @@ public class SLUserSecurityIntegrationTest {
                         MediaType.APPLICATION_JSON).with(csrf()).with(user(slUserTest2)))
             .andExpect(status().isForbidden());
 
-        assertThat(sLUserRepository.exists(slUserTest.getUsername()), is(true));
+        assertThat(slUserService.exists(slUserTest.getUsername()), is(true));
     }
 
 
@@ -670,7 +670,7 @@ public class SLUserSecurityIntegrationTest {
                         MediaType.APPLICATION_JSON).with(csrf()).with(user(slUserAdmin)))
             .andExpect(status().isNoContent());
 
-        assertThat(sLUserRepository.exists(slUserTest.getUsername()), is(false));
+        assertThat(slUserService.exists(slUserTest.getUsername()), is(false));
     }
 
 
@@ -682,7 +682,7 @@ public class SLUserSecurityIntegrationTest {
                 .with(user(slUserAdmin)))
             .andExpect(status().isNotFound());
 
-        assertThat(sLUserRepository.exists("nonExistent"), is(false));
+        assertThat(slUserService.exists("nonExistent"), is(false));
     }
 
 
@@ -694,7 +694,7 @@ public class SLUserSecurityIntegrationTest {
                 .with(user(slUserTest)))
             .andExpect(status().isForbidden());
 
-        assertThat(sLUserRepository.exists("nonExistent"), is(false));
+        assertThat(slUserService.exists("nonExistent"), is(false));
     }
 
 
@@ -704,7 +704,7 @@ public class SLUserSecurityIntegrationTest {
         mockMvc.perform(delete(sLUsersEndpoint + "/nonExistent").contentType(MediaType.APPLICATION_JSON).with(csrf()))
             .andExpect(status().isUnauthorized());
 
-        assertThat(sLUserRepository.exists("nonExistent"), is(false));
+        assertThat(slUserService.exists("nonExistent"), is(false));
     }
 
 
