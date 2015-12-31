@@ -136,6 +136,10 @@ public class SLUserService implements UserDetailsService, EntityService<SLUser, 
 
     public boolean emailExists(String email) {
 
+        if (email == null) {
+            return false;
+        }
+
         return slUserRepository.findByEmail(email) != null;
     }
 
@@ -240,12 +244,20 @@ public class SLUserService implements UserDetailsService, EntityService<SLUser, 
     @Override
     public boolean exists(String username) {
 
+        if (username == null) {
+            return false;
+        }
+
         return usernameExists(username);
     }
 
 
     @Override
     public SLUser findById(String name) {
+
+        if (name == null) {
+            return null;
+        }
 
         return slUserRepository.findOne(name);
     }
