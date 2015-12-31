@@ -97,7 +97,7 @@ shoppingList.factory('listService',['$resource', 'HALResource','$filter','$q',
             delete: function (list) {
                 return Lists.delete({id: list.entityId}).$promise
                     .then(function(){
-                        var existingList = $filter('filter')(persistedLists, {id: list.entityId})[0];
+                        var existingList = $filter('filter')(persistedLists, {entityId: list.entityId})[0];
                         var index = persistedLists.indexOf(existingList);
                         persistedLists.splice(index,1);
                     });
