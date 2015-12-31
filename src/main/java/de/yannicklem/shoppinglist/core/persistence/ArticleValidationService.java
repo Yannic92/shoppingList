@@ -26,7 +26,7 @@ public class ArticleValidationService {
         }
 
         if (article.getName() == null || article.getName().isEmpty()) {
-            throw new EntityInvalidException("Articl name must not be null or empty");
+            throw new EntityInvalidException("Article name must not be null or empty");
         }
 
         if (article.getPriceInEuro() < 0) {

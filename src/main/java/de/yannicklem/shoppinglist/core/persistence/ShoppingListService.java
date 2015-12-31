@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -130,6 +131,10 @@ public class ShoppingListService implements EntityService<ShoppingList, Long> {
     @Override
     public ShoppingList findById(Long id) {
 
+        if (id == null) {
+            return null;
+        }
+
         return shoppingListRepository.findOne(id);
     }
 
@@ -146,6 +151,20 @@ public class ShoppingListService implements EntityService<ShoppingList, Long> {
 
     public List<ShoppingList> findListsOwnedBy(SLUser slUser) {
 
+        if (slUser == null) {
+            return new ArrayList<>();
+        }
+
         return shoppingListRepository.findListsOwnedBy(slUser);
+    }
+
+
+    public List<ShoppingList> findShoppingListsContainingItem(Item entity) {
+
+        if (entity == null) {
+            return new ArrayList<>();
+        }
+
+        return shoppingListRepository.findShoppingListsContainingItem(entity);
     }
 }

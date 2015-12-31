@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -28,8 +29,18 @@ public class ArticleService implements EntityService<Article, Long> {
     }
 
 
+    public void handleBeforeUpdate(Article article) {
+
+        articleValidationService.validate(article);
+    }
+
+
     @Override
     public Article findById(Long id) {
+
+        if (id == null) {
+            return null;
+        }
 
         return articleRepository.findOne(id);
     }
@@ -65,6 +76,8 @@ public class ArticleService implements EntityService<Article, Long> {
     @Override
     public Article update(Article article) {
 
+        handleBeforeUpdate(article);
+
         return articleRepository.save(article);
     }
 
@@ -73,6 +86,7 @@ public class ArticleService implements EntityService<Article, Long> {
     public void delete(Article article) {
 
         handleBeforeDelete(article);
+
         articleRepository.delete(article);
     }
 
@@ -99,6 +113,10 @@ public class ArticleService implements EntityService<Article, Long> {
 
 
     public List<Article> findArticlesOwnedBy(SLUser slUser) {
+
+        if (slUser == null) {
+            return new ArrayList<>();
+        }
 
         return articleRepository.findArticlesOwnedBy(slUser);
     }
