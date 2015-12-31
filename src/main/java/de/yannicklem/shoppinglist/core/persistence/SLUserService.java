@@ -167,7 +167,12 @@ public class SLUserService implements UserDetailsService, EntityService<SLUser, 
         for (ShoppingList shoppingList : listsOwnedByUserToDelete) {
             if (shoppingList.getOwners().contains(slUser)) {
                 shoppingList.getOwners().remove(slUser);
-                shoppingListService.update(shoppingList);
+
+                if (shoppingList.getOwners().isEmpty()) {
+                    shoppingListService.delete(shoppingList);
+                } else {
+                    shoppingListService.update(shoppingList);
+                }
             }
         }
 
@@ -190,7 +195,12 @@ public class SLUserService implements UserDetailsService, EntityService<SLUser, 
         for (Article article : articlesOwnedByUserToDelete) {
             if (article.getOwners().contains(slUser)) {
                 article.getOwners().remove(slUser);
-                articleService.update(article);
+
+                if (article.getOwners().isEmpty()) {
+                    articleService.delete(article);
+                } else {
+                    articleService.update(article);
+                }
             }
         }
     }

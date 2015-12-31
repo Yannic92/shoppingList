@@ -4,6 +4,7 @@ import de.yannicklem.shoppinglist.core.article.entity.Article;
 import de.yannicklem.shoppinglist.core.item.entity.Item;
 import de.yannicklem.shoppinglist.core.list.entity.ShoppingList;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
+import de.yannicklem.shoppinglist.core.user.security.service.CurrentUserService;
 import de.yannicklem.shoppinglist.exception.AlreadyExistsException;
 import de.yannicklem.shoppinglist.exception.NotFoundException;
 import de.yannicklem.shoppinglist.restutils.service.EntityService;
@@ -25,6 +26,7 @@ public class ItemService implements EntityService<Item, Long> {
     private final ItemValidationService itemValidationService;
     private final ShoppingListService shoppingListService;
     private final ItemRepository itemRepository;
+    private final CurrentUserService currentUserService;
 
     public void handleBeforeCreate(Item item) {
 
@@ -104,9 +106,20 @@ public class ItemService implements EntityService<Item, Long> {
     @Override
     public void delete(Item entity) {
 
-        handleBeforeDelete(entity);
+        if (entity == null) {
+            throw new NotFoundException("Item not found");
+        }
 
-        itemRepository.delete(entity);
+        SLUser currentUser = currentUserService.getCurrentUser();
+        entity.getOwners().remove(currentUser);
+
+        if (entity.getOwners().isEmpty()) {
+            handleBeforeDelete(entity);
+
+            itemRepository.delete(entity);
+        } else {
+            update(entity);
+        }
     }
 
 

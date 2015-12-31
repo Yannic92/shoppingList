@@ -3,6 +3,8 @@ package de.yannicklem.shoppinglist.core.persistence;
 import de.yannicklem.shoppinglist.core.article.entity.Article;
 import de.yannicklem.shoppinglist.core.item.entity.Item;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
+import de.yannicklem.shoppinglist.core.user.security.service.CurrentUserService;
+import de.yannicklem.shoppinglist.exception.NotFoundException;
 import de.yannicklem.shoppinglist.restutils.service.EntityService;
 
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,7 @@ public class ArticleService implements EntityService<Article, Long> {
     private final ArticleValidationService articleValidationService;
     private final ArticleRepository articleRepository;
     private final ItemService itemService;
+    private final CurrentUserService currentUserService;
 
     public void handleBeforeCreate(Article article) {
 
@@ -85,9 +88,20 @@ public class ArticleService implements EntityService<Article, Long> {
     @Override
     public void delete(Article article) {
 
-        handleBeforeDelete(article);
+        if (article == null) {
+            throw new NotFoundException("Article not found");
+        }
 
-        articleRepository.delete(article);
+        SLUser currentUser = currentUserService.getCurrentUser();
+        article.getOwners().remove(currentUser);
+
+        if (article.getOwners().isEmpty()) {
+            handleBeforeDelete(article);
+
+            articleRepository.delete(article);
+        } else {
+            update(article);
+        }
     }
 
 

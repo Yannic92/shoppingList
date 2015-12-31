@@ -193,12 +193,13 @@ public class ArticleSecurityIntegrationTest {
 
 
     @Test
-    public void deleteArticleOfUserOneAsAdminDeletesArticle() throws Exception {
+    public void deleteArticleOfUserOneAsAdminReturnsNoContentButArticleRemains() throws Exception {
 
         mockMvc.perform(delete(articlesEndpoint + "/" + articleOfUserOne.getEntityId()).with(csrf()).with(user(admin)))
             .andExpect(status().isNoContent());
 
-        assertThat(articleService.exists(articleOfUserOne.getEntityId()), is(false));
+        // Not deleted because article still has owners
+        assertThat(articleService.exists(articleOfUserOne.getEntityId()), is(true));
     }
 
 

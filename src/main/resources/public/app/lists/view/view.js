@@ -24,7 +24,20 @@ shoppingList.controller('listView', ['$scope', '$rootScope','listService','$rout
         lists.promise
             .then(function () {
                 if($routeParams.listId){
-                    $scope.list = angular.copy($filter('filter')(lists, {entityId: $routeParams.listId})[0]);    
+                    $scope.list = angular.copy($filter('filter')(lists, {entityId: $routeParams.listId})[0]); 
+                    $scope.list.items = [
+                        {
+                            done: false,
+                            article: {
+                                name: "Test"
+                            }
+                        },{
+                            done: true,
+                            article: {
+                                name: "Test2"
+                            }
+                        }
+                    ]
                 }  
             }).finally(function () {
                 $scope.updating = false;

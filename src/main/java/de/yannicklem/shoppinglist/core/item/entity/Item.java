@@ -47,6 +47,8 @@ public class Item extends OwnedRestEntity<Long> {
     @ManyToMany(fetch = FetchType.EAGER)
     private final Set<SLUser> owners;
 
+    private boolean done;
+
     private Integer count;
 
     @ManyToOne(
@@ -59,6 +61,7 @@ public class Item extends OwnedRestEntity<Long> {
     public Item() {
 
         this.owners = new HashSet<>();
+        done = false;
     }
 
 

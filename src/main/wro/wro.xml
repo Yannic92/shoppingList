@@ -6,7 +6,7 @@
         <js>webjar:angularjs/1.4.7/angular-animate.min.js</js>
         <js>webjar:angularjs/1.4.7/angular-aria.min.js</js>
         <js>webjar:angularjs/1.4.7/angular-messages.min.js</js>
-        <js>webjar:angular-material/1.0.0-rc2/angular-material.min.js</js>
+        <js>webjar:angular-material/1.0.1/angular-material.min.js</js>
     </group>
     <group name="app-compact">
         <js>file:@project.basedir@/src/main/resources/public/app/**.js</js>

@@ -1,9 +1,11 @@
 <md-sidenav ng-if="authenticated" class="md-sidenav-left md-whiteframe-z2" md-component-id="leftNav" md-is-locked-open="$mdMedia('gt-md')">
     <md-toolbar hide-gt-md>
         <div class="md-toolbar-tools" layout="row" layout-align="start center">
-            <md-button style="text-align: left;" ng-href="#/lists" ng-click="closeNav()" flex>
-                <span>Einkaufslisten</span>
-            </md-button>
+            <div flex>
+                <md-button style="text-align: left;" ng-href="#/lists" ng-click="closeNav()">
+                    <span>Einkaufslisten</span>
+                </md-button>
+            </div>
 
             <md-button ng-if="authenticated" class="md-icon-button" ng-click="closeNav()">
                 <md-icon md-font-set="material-icons">keyboard_arrow_left</md-icon>
