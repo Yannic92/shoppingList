@@ -4,12 +4,12 @@ import org.hibernate.HibernateException;
 
 import org.hibernate.engine.spi.SessionImplementor;
 
-import org.hibernate.id.SequenceGenerator;
+import org.hibernate.id.IdentityGenerator;
 
 import java.io.Serializable;
 
 
-public class UseExistingOrGenerateIdGenerator extends SequenceGenerator {
+public class UseExistingOrGenerateIdGenerator extends IdentityGenerator {
 
     @Override
     public Serializable generate(SessionImplementor session, Object object) throws HibernateException {
