@@ -43,7 +43,12 @@ shoppingList.controller('listView', ['$scope', '$rootScope','listService','itemS
         lists.promise
             .then(function () {
                 if($routeParams.listId){
-                    $scope.list = angular.copy($filter('filter')(lists, {entityId: $routeParams.listId})[0]);
+                    $scope.list = $filter('filter')(lists, {entityId: $routeParams.listId})[0];
+                    
+                    if(!$scope.list){
+                        $scope.$parent.goto("/lists");
+                        return;
+                    }
                     $rootScope.title = $scope.list.name;
                     $rootScope.options = [
                         {
@@ -118,15 +123,28 @@ shoppingList.controller('listView', ['$scope', '$rootScope','listService','itemS
         $scope.deleteList = function(ev) {
             var confirm = $mdDialog.confirm()
                 .title("Möchtest du die Liste '" + $scope.list.name+ "' wirklich löschen?")
-                .content('Die Liste kann nicht wiederhergestellt werden.')
+                .content(listService.getDeleteMessage())
                 .targetEvent(ev)
                 .ok('Ja')
                 .cancel('Nein');
 
             $mdDialog.show(confirm)
                 .then(function () {
-                    listService.delete($scope.list);
+                    var index = lists.indexOf($scope.list);
+                    listService.delete($scope.list)
+                        .then(function () {
+                            goToPreviousList(index); 
+                        });  
                 });
+        };
+        
+        var goToPreviousList = function(lastIndex){
+            if(lists && lists.length && lists.length > 0){
+                var newIndex = lastIndex < lists.length ? lastIndex : lastIndex - 1;
+                $scope.$parent.goto("/lists/" + lists[newIndex].entityId);
+            }else{
+                $scope.$parent.goto("/lists");
+            }
         };
         
         $scope.$on('$destroy', function(){  

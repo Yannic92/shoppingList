@@ -111,6 +111,14 @@ shoppingList.factory('listService',['$resource', 'HALResource','$filter','$q',
                         var index = persistedLists.indexOf(existingList);
                         persistedLists.splice(index,1);
                     });
+            },
+            getDeleteMessage: function(list){
+                if(list && list.owners && list.owners.length > 1){
+                    return "Die Liste wäre nur für dich nicht mehr verfügbar. Solltest du sie zurück wollen, " +
+                        "müsstest du dich an die restlichen Nutzer der Liste wenden."
+                }else{
+                    return "Die Liste kann nicht wiederhergestellt werden."
+                }
             }
         };
         

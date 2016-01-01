@@ -19,7 +19,7 @@
         <md-list-item ng-repeat="item in list.items | orderBy: article.name track by $index">
             <md-checkbox aria-label="item" ng-change="updateItem(item)" md-no-ink class="md-primary" ng-model="item.done"></md-checkbox>
             <p>{{item.article.name}}</p>
-            <md-icon class="md-secondary" md-font-set="material-icons" ng-click="deleteItem(item, $event)">
+            <md-icon aria-label="delete item" class="md-secondary" md-font-set="material-icons" ng-click="deleteItem(item, $event)">
                 delete
             </md-icon>
         </md-list-item>

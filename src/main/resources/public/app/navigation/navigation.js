@@ -79,7 +79,7 @@ shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'aut
                     $location.path("/login");
                     $window.location.reload();
                 });
-        }
+        };
     }
 ]);
 
