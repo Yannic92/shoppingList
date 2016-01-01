@@ -4,19 +4,26 @@
     </md-button>
     <md-menu-content>
         <md-menu-item>
-            <md-button class="md-primary" ng-href="#/userData">
+            <md-button ng-href="#/userData">
                 <md-icon md-menu-origin  md-font-set="material-icons">
                     person
                 </md-icon>
                 {{user.username}}
             </md-button>
         </md-menu-item>
-        <md-menu-item>
-            <md-button class="md-warn" ng-href="#/deleteAccount">
-                <md-icon md-menu-origin md-font-set="material-icons">
-                    remove_circle
+        <md-menu-divider ng-if="options.length > 0"></md-menu-divider>
+        <md-menu-item ng-repeat="option in options track by $index">
+            <md-button ng-if="option.action" class="{{option.class}}" ng-click="option.action()">
+                <md-icon ng-if="option.icon" md-font-set="material-icons">
+                    {{option.icon}}
                 </md-icon>
-                Konto löschen
+                {{option.text}}
+            </md-button>
+            <md-button ng-if="option.link" class="{{option.class}}" ng-href="{{option.link}}">
+                <md-icon ng-if="option.icon" md-font-set="material-icons">
+                    {{option.icon}}
+                </md-icon>
+                {{option.text}}
             </md-button>
         </md-menu-item>
         <md-menu-divider></md-menu-divider>

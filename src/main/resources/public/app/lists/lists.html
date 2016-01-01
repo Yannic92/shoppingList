@@ -1,1 +1,13 @@
-<h2 class="md-display-3" style="text-align: center;">Hier wird noch gearbeitet!</h2>
+<div ng-if="listsAreEmpty()" layout="column" layout-align="center center">
+    <h2 class="md-display-2" style="text-align: center;">Du hast noch keine Einkaufsliste
+        <md-icon style="font-size: 56px;" md-font-set="material-icons">
+            mood_bad
+        </md-icon>
+    </h2>
+    <md-button class="md-primary" ng-href="#/newList">
+        <md-icon md-font-set="material-icons">
+            add_shopping_cart
+        </md-icon>
+        Erstelle dir doch eine
+    </md-button>
+</div>

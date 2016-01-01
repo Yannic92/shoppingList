@@ -18,4 +18,7 @@ public interface ArticleRepository extends CrudRepository<Article, Long> {
 
     @Query("SELECT a FROM Article a WHERE :user MEMBER OF a.owners")
     List<Article> findArticlesOwnedBy(@Param("user") SLUser slUser);
+
+
+    Article findByName(String name);
 }

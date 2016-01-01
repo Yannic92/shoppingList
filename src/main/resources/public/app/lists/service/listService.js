@@ -14,9 +14,18 @@ shoppingList.factory('listService',['$resource', 'HALResource','$filter','$q',
             resource.entityId = entity.entityId;
             resource.name = entity.name;
             resource.owners = [];
-            
-            for(var i = 0; i < entity.owners.length ; i++){
-                resource.owners.push({username: entity.owners[i].username});
+            resource.items = [];
+
+            if(entity.owners) {
+                for (var i = 0; i < entity.owners.length; i++) {
+                    resource.owners.push({username: entity.owners[i].username});
+                }
+            }
+
+            if(entity.items) {
+                for (var i = 0; i < entity.items.length; i++) {
+                    resource.items.push({entityId: entity.items[i].entityId});
+                }
             }
             
             return resource;
@@ -28,6 +37,7 @@ shoppingList.factory('listService',['$resource', 'HALResource','$filter','$q',
             entity._links = resource._links;
             entity.name = resource.name;
             entity.owners = resource.owners;
+            entity.items = resource.items;
             
             return entity;
         };

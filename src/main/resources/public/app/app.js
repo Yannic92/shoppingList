@@ -17,6 +17,13 @@ shoppingList.run(['$rootScope', '$location', '$anchorScroll',
     function ($rootScope, $location, $anchorScroll) {
         $rootScope.authenticated = false;
         $rootScope.user = "";
+        $rootScope.reset = function(){
+            $rootScope.options = [];
+            $rootScope.title = "";
+            $rootScope.shortCutAction = {
+                available: false
+            }
+        };
         $rootScope.goToTop = function () {
             $location.hash('top');
             $anchorScroll();

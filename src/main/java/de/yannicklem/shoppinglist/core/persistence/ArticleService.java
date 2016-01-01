@@ -134,4 +134,14 @@ public class ArticleService implements EntityService<Article, Long> {
 
         return articleRepository.findArticlesOwnedBy(slUser);
     }
+
+
+    public Article findByName(String name) {
+
+        if (name == null) {
+            return null;
+        }
+
+        return articleRepository.findByName(name);
+    }
 }

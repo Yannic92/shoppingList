@@ -1,6 +1,7 @@
 package de.yannicklem.shoppinglist.core.article.restapi.service;
 
 import de.yannicklem.shoppinglist.core.article.entity.Article;
+import de.yannicklem.shoppinglist.core.persistence.ArticleService;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.exception.PermissionDeniedException;
 import de.yannicklem.shoppinglist.restutils.service.RequestHandler;
@@ -17,12 +18,23 @@ import org.springframework.stereotype.Service;
 public class ArticleRequestHandler implements RequestHandler<Article> {
 
     private final ArticlePermissionEvaluator articlePermissionEvaluator;
+    private final ArticleService articleService;
 
     @Override
     public void handleBeforeCreate(Article entity, SLUser currentUser) {
 
         if (entity != null && currentUser != null) {
             entity.getOwners().add(currentUser);
+        }
+
+        if (entity != null) {
+            Article articleWithSameName = articleService.findByName(entity.getName());
+
+            if (articleWithSameName != null) {
+                entity.setEntityId(articleWithSameName.getEntityId());
+                entity.setOwners(articleWithSameName.getOwners());
+                entity.setPriceInEuro(articleWithSameName.getPriceInEuro());
+            }
         }
 
         if (!articlePermissionEvaluator.isAllowedToCreate(entity, currentUser)) {

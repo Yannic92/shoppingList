@@ -1,5 +1,5 @@
-shoppingList.factory('itemService',['$resource', 'HALResource','$filter','$q',
-    function($resource, HALResource,$filter,$q){
+shoppingList.factory('itemService',['$resource', 'HALResource','$filter','articleService',
+    function($resource, HALResource,$filter,articleService){
 
         var itemsEndpoint = '/items/:id';
         var methods = {
@@ -15,7 +15,7 @@ shoppingList.factory('itemService',['$resource', 'HALResource','$filter','$q',
             resource._links = entity._links;
             resource.entityId = entity.entityId;
             resource.count = entity.count;
-            resource.article = {entityID: entity.article.entityID};
+            resource.article = {entityId: entity.article.entityId};
             resource.done = entity.done;
             
             return resource;
@@ -62,12 +62,17 @@ shoppingList.factory('itemService',['$resource', 'HALResource','$filter','$q',
                 return persistedItems;
             },
             create: function(item){
-                return Items.save(toResource(item)).$promise
-                    .then(function(response){
-                        var responseEntity = toEntity(response);
-                        persistedItems.push(responseEntity);
-                        return responseEntity;
-                    })
+                
+                return articleService.create(item.article).then(function(createdArticle){
+                    item.article.entityId = createdArticle.entityId;
+                    return Items.save(toResource(item)).$promise
+                        .then(function(response){
+                            var responseEntity = toEntity(response);
+                            persistedItems.push(responseEntity);
+                            return responseEntity;
+                        })
+                })
+                
             },
             update: function (item) {
                 return Items.update({id: item.entityId}, toResource(item)).$promise

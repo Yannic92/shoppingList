@@ -12,22 +12,19 @@
             </md-button>
         </div>
     </md-toolbar>
-    <div layout="column" layout-align="center start">
-        <md-button layout="row" class="md-primary" ng-href="#/newList" ng-click="closeNav()">
-            <md-icon md-font-set="material-icons">add_shopping_cart</md-icon>
-            Neue Einkaufsliste
-        </md-button>
-        <div ng-repeat="list in lists track by $index" style="width: 100%;">
-            <div layout="row" layout-align="start center">
-                <div layout flex>
-                    <md-button class="md-primary" ng-href="#/lists/{{list.entityId}}" ng-click="closeNav()" style="text-align: left;">
-                        <md-icon md-font-set="material-icons">list</md-icon>
-                        {{list.name}}
-                    </md-button>
-                </div>
-                <div ng-controller="listMenu" ng-include="'app/navigation/leftSideNav/listMenu/listMenu.html'"></div>
-            </div>
-            
-        </div>
+    <div layout="column">
+        <md-list ng-cloak>
+            <md-list-item ng-click="goto('/newList')">
+                <md-icon md-font-set="material-icons">add_shopping_cart</md-icon>
+                <p>Neue Einkaufsliste</p>
+            </md-list-item>
+            <md-list-item ng-repeat="list in lists | orderBy: name track by $index" ng-click="goto('/lists/'+ list.entityId)">
+                <md-icon md-font-set="material-icons">list</md-icon>
+                <p>{{list.name}}</p>
+                <md-icon class="md-secondary" md-font-set="material-icons" ng-click="deleteList(list, $event)">
+                    delete
+                </md-icon>
+            </md-list-item>
+        </md-list>
     </div>
 </md-sidenav>

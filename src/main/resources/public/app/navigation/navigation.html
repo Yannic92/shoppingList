@@ -9,6 +9,9 @@
                     <span md-flex>{{title}}</span>
                 </h1>
             </div>
+                <md-button ng-if="shortCutAction.available" class="md-icon-button" ng-click="shortCutAction.action()">
+                    <md-icon md-font-set="material-icons">{{shortCutAction.icon}}</md-icon>
+                </md-button>
             <div ng-if="authenticated">
                 <div ng-controller="userMenu" ng-include="'app/navigation/userMenu/userMenu.html'"></div>
             </div>

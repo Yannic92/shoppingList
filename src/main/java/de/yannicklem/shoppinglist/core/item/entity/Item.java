@@ -49,7 +49,7 @@ public class Item extends OwnedRestEntity<Long> {
 
     private boolean done;
 
-    private Integer count;
+    private int count;
 
     @ManyToOne(
         optional = false, fetch = FetchType.EAGER, cascade = {

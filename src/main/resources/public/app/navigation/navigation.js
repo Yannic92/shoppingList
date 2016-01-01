@@ -67,6 +67,12 @@ shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'aut
             $rootScope.goToTop();
         });
         
+        $scope.goto = function(path){
+            
+            $scope.closeNav();
+            $location.path(path);
+        };
+        
         $scope.logout = function () {
             authService.logout()
                 .then(function () {

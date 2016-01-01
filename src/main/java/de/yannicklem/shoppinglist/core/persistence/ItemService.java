@@ -117,7 +117,7 @@ public class ItemService implements EntityService<Item, Long> {
             handleBeforeDelete(entity);
 
             itemRepository.delete(entity);
-        } else {
+        }else{
             update(entity);
         }
     }

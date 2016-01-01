@@ -1,21 +1,42 @@
 <loading-cycle ng-if="updating"></loading-cycle>
-<div ng-if="!updating">
-    <md-toolbar class="md-menu-toolbar">
-        <div class="md-whiteframe-1dp" layout="row">
-            <md-toolbar-filler layout layout-align="center center">
-                <md-button class="md-icon-button" ng-click="update()" ng-disabled="updating">
-                    <md-icon md-font-set="material-icons">
-                        sync
-                    </md-icon>
-                </md-button>
-            </md-toolbar-filler>
-            <div layout="row" layout-align="end end" flex>
-                <h2 class="md-toolbar-tools">{{list.name}}</h2>
-                <div ng-controller="listMenu" ng-include="'app/navigation/leftSideNav/listMenu/listMenu.html'"></div>
-            </div>
-        </div>
-    </md-toolbar>
+<div class="list-view" ng-if="!updating">
+    <form ng-if="!loading" id="createNewItemForm" role="form" name="createNewItemForm" ng-submit="createNewItem()">
+        <md-autocomplete
+                md-selected-item="selectedArticle"
+                md-selected-item-change="createNewItem(selectedArticle, $mdAutocompleteCtrl)"
+                md-search-text="ctrl.newItem.article.name"
+                md-items="article in articles | filter: {name: ctrl.newItem.article.name} | limitTo: 5"
+                md-item-text="article.name"
+                md-min-length="1"
+                placeholder="Neuer Posten"
+                md-autofocus="true">
+            <md-item-template>
+                <span md-highlight-text="ctrl.newItem.article.name" md-highlight-flags="^i">{{article.name}}</span>
+            </md-item-template>
+        </md-autocomplete>
+    </form>
     <md-list ng-cloak>
-        <md-list-item ng-repeat="item in list.items" ng-include="'/app/item/item.html'"></md-list-item>
+        <md-list-item ng-repeat="item in list.items | orderBy: article.name track by $index">
+            <md-checkbox aria-label="item" ng-change="updateItem(item)" md-no-ink class="md-primary" ng-model="item.done"></md-checkbox>
+            <p>{{item.article.name}}</p>
+            <md-icon class="md-secondary" md-font-set="material-icons" ng-click="deleteItem(item, $event)">
+                delete
+            </md-icon>
+        </md-list-item>
     </md-list>
+    <div ng-if="list.items.length == 0" layout="row" layout-align="center center">
+        <div>
+            <h3 class="md-display-3" style="text-align: center;">Liste ist leer
+                <md-icon style="font-size: 56px;" md-font-set="material-icons">
+                    mood_bad
+                </md-icon>
+            </h3>
+            <p class="md-title info" style="text-align: center;">
+                Gib einfach im obenstehenden Textfeld den Namen des Artikels ein, den du einkaufen möchtest und bestätige mit Enter
+            </p>
+        </div>
+
+    </div>
+
+    
 </div>
