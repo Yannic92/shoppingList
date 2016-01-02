@@ -63,6 +63,7 @@ public class SLUserResourceProcessor extends MyResourceProcessor<SLUser> {
         SLUser persistedUser = slUserService.findById(entity.getEntityId());
 
         if (persistedUser != null) {
+            entity.setAuthorities(persistedUser.getAuthorities());
             entity.setConfirmation(persistedUser.getConfirmation());
             entity.setAccountNonExpired(persistedUser.isAccountNonExpired());
             entity.setAccountNonLocked(persistedUser.isAccountNonLocked());

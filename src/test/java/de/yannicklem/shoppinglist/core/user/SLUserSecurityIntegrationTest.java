@@ -96,12 +96,12 @@ public class SLUserSecurityIntegrationTest {
 
 
     @Test
-    public void getUsersAsUserReturnsAllUsers() throws Exception {
+    public void getUsersAsUserReturnsAllUsersExceptAdmin() throws Exception {
 
         mockMvc.perform(get(sLUsersEndpoint).with(user(slUserTest)))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaTypes.HAL_JSON))
-            .andExpect(jsonPath("_embedded.sLUsers", hasSize(3)));
+            .andExpect(jsonPath("_embedded.sLUsers", hasSize(2)));
     }
 
 
@@ -561,7 +561,7 @@ public class SLUserSecurityIntegrationTest {
 
 
     @Test
-    public void updateUserAsSameUserToAdminReturnsForbidden() throws Exception {
+    public void updateUserAsSameUserToAdminHasNoEffect() throws Exception {
 
         SLUserTestEntity slUserTestEntity = new SLUserTestEntity(slUserTest);
         slUserTestEntity.getAuthorities().add(new SLAuthority(SLAuthority.ADMIN));
@@ -571,9 +571,9 @@ public class SLUserSecurityIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(csrf())
                 .with(user(slUserTest)))
-            .andExpect(status().isForbidden());
+            .andExpect(status().isOk());
 
-        assertThat(slUserService.findById(slUserTest.getUsername()).getAuthorities().size(), is(1));
+        assertThat(slUserService.findById(slUserTest.getUsername()).isAdmin(), is(false));
     }
 
 
