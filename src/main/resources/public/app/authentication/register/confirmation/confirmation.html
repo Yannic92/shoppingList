@@ -1,13 +1,13 @@
 <loading-cycle ng-if="loading"></loading-cycle>
-<div ng-if="!loading" class="content">
+<div ng-if="!loading" class="content" layout="column">
     <h2 class="md-display-3" style="text-align: center;">Fast geschafft!</h2>
     <p class=".md-body-2 info" style="text-align: center;">
         Dir wurde ein Bestätigungscode per E-Mail zugesandt. 
         Trage diesen bitte hier ein, um die Registrierung abzuschließen.
     </p>
 
-    <form name="confirmationForm" ng-submit="confirm()">
-        <md-input-container>
+    <form layout="column" layout-align="center center" name="confirmationForm" ng-submit="confirm()">
+        <md-input-container id="confirmationCodeInputContainer">
             <label for="confirmationCode">Bestätigungscode</label>
             <input id="confirmationCode" name="confirmationCode" ng-model="confirmation.code" type="text" required>
         </md-input-container>

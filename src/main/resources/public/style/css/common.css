@@ -68,3 +68,12 @@ div.content>form{
 .warning{
     color: rgb(244,67,54);
 }
+
+#confirmationCodeInputContainer{
+    min-width: 250px;
+}
+
+.striked-out{
+    text-decoration: line-through;
+    color: lightslategray;
+}
