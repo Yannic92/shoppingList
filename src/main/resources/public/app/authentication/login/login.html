@@ -1,11 +1,11 @@
 <loading-cycle ng-if="loggingIn"></loading-cycle>
-<form ng-if="!loggingIn" id="loginForm" name="loginForm" role="form" ng-submit="login()">
-    <md-input-container class="md-icon-float md-block">
+<form ng-if="!loggingIn" id="loginForm" name="loginForm" layout="column" role="form" ng-submit="login()">
+    <md-input-container class="md-icon-float">
         <label for="username">Benutzername/E-Mail</label>
         <md-icon md-font-set="material-icons">person</md-icon>
         <input id="username" name="username" ng-model="credentials.username" type="text" required>
     </md-input-container>
-    <md-input-container class="md-icon-float md-block">
+    <md-input-container class="md-icon-float">
         <label for="password">Passwort</label>
         <md-icon md-font-set="material-icons">vpn_key</md-icon>
         <input id="password" name="password" type="password" ng-model="credentials.password" required>
