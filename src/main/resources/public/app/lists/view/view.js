@@ -79,7 +79,7 @@ shoppingList.controller('listView', ['$scope', '$rootScope','listService','itemS
                 .then(function(updatedList){
                     $scope.list = updatedList;
                 }).finally(function () {
-                    //$scope.updating = false;
+                    $scope.updating = false;
                 });
         };
         
