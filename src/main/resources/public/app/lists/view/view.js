@@ -56,7 +56,7 @@ shoppingList.controller('listView', ['$scope', '$rootScope','listService','itemS
                     $rootScope.options = [
                         {
                             icon: "settings",
-                            text: "Liste Bearbeiten",
+                            text: "Liste bearbeiten",
                             link: "#/lists/" + $scope.list.entityId + "/edit"
                         },{
                             icon: "delete",
