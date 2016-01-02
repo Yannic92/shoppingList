@@ -58,8 +58,7 @@ shoppingList.controller('listView', ['$scope', '$rootScope','listService','itemS
                         },{
                             icon: "delete",
                             text: "Liste löschen",
-                            action: $scope.deleteList,
-                            class: "md-warn"
+                            action: $scope.deleteList
                         }
                     ];
                     
@@ -80,7 +79,7 @@ shoppingList.controller('listView', ['$scope', '$rootScope','listService','itemS
                 .then(function(updatedList){
                     $scope.list = updatedList;
                 }).finally(function () {
-                    $scope.updating = false;
+                    //$scope.updating = false;
                 });
         };
         
