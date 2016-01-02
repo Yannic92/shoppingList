@@ -18,7 +18,7 @@
                 <md-icon md-font-set="material-icons">add_shopping_cart</md-icon>
                 <p>Neue Einkaufsliste</p>
             </md-list-item>
-            <md-list-item ng-repeat="list in lists | orderBy: name track by $index" ng-click="goto('/lists/'+ list.entityId)">
+            <md-list-item ng-repeat="list in lists | orderBy: 'name' track by $index" ng-click="goto('/lists/'+ list.entityId)">
                 <md-icon md-font-set="material-icons">list</md-icon>
                 <p>{{list.name}}</p>
                 <md-icon aria-label="delete list" class="md-secondary" md-font-set="material-icons" ng-click="deleteList(list, $event)">

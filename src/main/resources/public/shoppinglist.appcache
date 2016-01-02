@@ -1,5 +1,5 @@
 CACHE MANIFEST
-#02.01.2016 14:28
+#02.01.2016 17:43
 
 CACHE:
 /app/authentication/login/login.html
@@ -10,11 +10,14 @@ CACHE:
 /app/user/edit/userData.html
 /app/lists/lists.html
 /app/lists/view/view.html
+/app/lists/view/emptyList.html
 /app/lists/new/newList.html
 /app/lists/edit/editList.html
 /app/directives/loadingCycle.html
 /app/authentication/register/register.html
 /app/authentication/register/confirmation/confirmation.html
+/app/item/new/newItem.html
+/app/item/item.html
 
 /style/css/app-compact.css
 /lib/angular.js

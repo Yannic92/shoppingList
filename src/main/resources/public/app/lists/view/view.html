@@ -17,7 +17,7 @@
         </md-autocomplete>
     </form>
     <md-list ng-cloak>
-        <div ng-repeat="item in list.items | orderBy: article.name track by $index" 
+        <div ng-repeat="item in list.items | orderBy: 'article.name' track by $index" 
              ng-include="'/app/item/item.html'" 
              ng-controller="itemController">
         </div>
