@@ -1,15 +1,16 @@
 <loading-cycle ng-if="updating"></loading-cycle>
-<div class="list-view" ng-if="!updating">
-    <form ng-if="!loading" id="createNewItemForm" role="form" name="createNewItemForm" ng-submit="createNewItem()">
-        <md-autocomplete
-                md-selected-item="selectedArticle"
-                md-selected-item-change="createNewItem(selectedArticle, $mdAutocompleteCtrl)"
-                md-search-text="ctrl.newItem.article.name"
-                md-items="article in articles | filter: {name: ctrl.newItem.article.name} | limitTo: 5"
-                md-item-text="article.name"
-                md-min-length="1"
-                placeholder="Neuer Posten"
-                md-autofocus="true">
+<div flex class="list-view" ng-if="!updating">
+    <form ng-if="!loading" id="createNewItemForm" role="form" layout="row" name="createNewItemForm" ng-submit="createNewItem()">
+        <md-autocomplete id ="newItemAutocomplete" flex
+                         md-selected-item="selectedArticle"
+                         md-selected-item-change="createNewItem($event)"
+                         md-search-text="ctrl.newItem.article.name"
+                         md-items="article in articles | filter: {name: ctrl.newItem.article.name} | limitTo: 5"
+                         md-item-text="article.name"
+                         md-min-length="1"
+                         md-autofocus
+                         ng-disabled="creating"
+                         placeholder="Neuer Posten">
             <md-item-template>
                 <span md-highlight-text="ctrl.newItem.article.name" md-highlight-flags="^i">{{article.name}}</span>
             </md-item-template>

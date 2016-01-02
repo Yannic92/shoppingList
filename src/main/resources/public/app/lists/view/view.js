@@ -7,8 +7,8 @@ shoppingList.config(['$routeProvider', function ($routeProvider) {
         .when('/lists/:listId', routeConfig);
 }]);
 
-shoppingList.controller('listView', ['$scope', '$rootScope','listService','itemService','$routeParams','$filter', 'articleService','$mdDialog',
-    function ($scope, $rootScope,listService,itemService,$routeParams,$filter, articleService,$mdDialog) {
+shoppingList.controller('listView', ['$scope', '$rootScope','listService','itemService','$routeParams','$filter', 'articleService','$mdDialog','$mdMedia',
+    function ($scope, $rootScope,listService,itemService,$routeParams,$filter, articleService,$mdDialog, $mdMedia) {
         'use strict';
         
         var lists = listService.get();
@@ -19,20 +19,23 @@ shoppingList.controller('listView', ['$scope', '$rootScope','listService','itemS
             name: '',
             items: []
         };
-        
+
         $scope.ctrl = $scope;
         
         $scope.updating = true;
+        $scope.creating = false;
         
-        $scope.newItem = {
+        var newItem = $scope.newItem = {
+            count: "",
             article : {
                 name: "",
                 priceInEuro: 0
             }
         };
-        
+
         var initNewItem = function () {
-            $scope.newItem = {
+            newItem = $scope.newItem = {
+                count: "",
                 article : {
                     name: "",
                     priceInEuro: 0
@@ -83,25 +86,39 @@ shoppingList.controller('listView', ['$scope', '$rootScope','listService','itemS
                 });
         };
         
-        $scope.createNewItem = function () {
+        $scope.createNewItem = function (ev) {
+            
+            $scope.creating = true;
             
             if($scope.selectedArticle){
                 
                 $scope.newItem.article = $scope.selectedArticle;
             }
-            
-            $scope.newItem.count = 1;
-            
-            itemService.create($scope.newItem)
-                .then(function(createdItem){
-                    $scope.list.items.push(createdItem);
-                    listService.update($scope.list)
-                        .then(function(){
-                            initNewItem();
-                        },function(){
-                            
-                        });
+
+            $mdDialog.show({
+                    controller: createNewItemController,
+                    templateUrl: 'app/item/new/newItem.html',
+                    parent: angular.element(document.body),
+                    targetEvent: ev,
+                    clickOutsideToClose:true,
+                    fullscreen: false
                 })
+                .then(function(item) {
+                    itemService.create(item)
+                        .then(function(createdItem){
+                            $scope.list.items.push(createdItem);
+                            listService.update($scope.list)
+                                .then(function(){
+                                    initNewItem();
+                                },function(){
+
+                                });
+                        })
+                }, function() {
+                    $scope.status = 'You cancelled the dialog.';
+                }).finally(function(){
+                $scope.creating = false;
+            }); 
         };
 
         $scope.deleteList = function(ev) {
@@ -134,5 +151,17 @@ shoppingList.controller('listView', ['$scope', '$rootScope','listService','itemS
         $scope.$on('$destroy', function(){  
             $rootScope.reset();
         });
+
+        function createNewItemController($scope, $mdDialog) {
+            
+            $scope.newItem = angular.copy(newItem);
+
+            $scope.cancel = function() {
+                $mdDialog.cancel();
+            };
+            $scope.create = function() {
+                $mdDialog.hide($scope.newItem);
+            };
+        }
     }
 ]);

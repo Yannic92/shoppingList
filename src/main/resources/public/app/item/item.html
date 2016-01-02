@@ -1,6 +1,9 @@
-<md-list-item>
+<md-list-item class="md-2-line">
     <md-checkbox aria-label="item" ng-change="updateItem(item)" md-no-ink class="md-primary" ng-model="item.done"></md-checkbox>
-    <p ng-class="{ 'striked-out': item.done}">{{item.article.name}}</p>
+    <div class="md-list-item-text">
+        <h3 ng-class="{ 'striked-out': item.done}">{{item.article.name}}</h3>
+        <p ng-class="{ 'striked-out': item.done}">{{item.count}} </p>
+    </div>
     <md-icon aria-label="delete item" class="md-secondary" md-font-set="material-icons" ng-click="deleteItem(item, $event)">
         delete
     </md-icon>

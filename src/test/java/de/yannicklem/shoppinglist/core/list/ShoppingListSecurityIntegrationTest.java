@@ -94,10 +94,10 @@ public class ShoppingListSecurityIntegrationTest {
 
         articleService.deleteAll();
 
-        itemOfUserOne = new Item(articleOfUserOne, 2, new HashSet<>());
+        itemOfUserOne = new Item(articleOfUserOne, "2", new HashSet<>());
         itemOfUserOne.getOwners().add(userOne);
 
-        itemOfUserTwo = new Item(articleOfUserTwo, 3, new HashSet<>());
+        itemOfUserTwo = new Item(articleOfUserTwo, "3", new HashSet<>());
         itemOfUserTwo.getOwners().add(userTwo);
 
         itemService.deleteAll();

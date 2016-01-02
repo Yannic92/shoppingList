@@ -29,10 +29,6 @@ public class ItemValidationService {
         validateOwners(item.getOwners());
 
         articleValidationService.validate(item.getArticle());
-
-        if (item.getCount() <= 0) {
-            throw new EntityInvalidException("Count must be >0");
-        }
     }
 
 

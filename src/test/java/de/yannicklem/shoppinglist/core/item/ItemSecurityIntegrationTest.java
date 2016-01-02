@@ -109,10 +109,10 @@ public class ItemSecurityIntegrationTest {
 
         articleService.deleteAll();
 
-        itemOfUserOne = new Item(articleOfUserOne, 2, new HashSet<>());
+        itemOfUserOne = new Item(articleOfUserOne, "2 x", new HashSet<>());
         itemOfUserOne.getOwners().add(userOne);
 
-        itemOfUserTwo = new Item(articleOfUserTwo, 3, new HashSet<>());
+        itemOfUserTwo = new Item(articleOfUserTwo, "2 x", new HashSet<>());
         itemOfUserTwo.getOwners().add(userTwo);
 
         itemService.deleteAll();
@@ -243,7 +243,7 @@ public class ItemSecurityIntegrationTest {
     @Test
     public void createItemWithArticleOfUserOneViaPutAsUserOneCreatesAndReturnsItem() throws Exception {
 
-        Item newItem = new Item(articleOfUserOne, 23, new HashSet<>());
+        Item newItem = new Item(articleOfUserOne, "23 x", new HashSet<>());
         newItem.getOwners().add(userOne);
 
         mockMvc.perform(put(itemsEndpoint + "/1337").content(getJsonBytes(newItem))
@@ -261,7 +261,7 @@ public class ItemSecurityIntegrationTest {
     @Test
     public void createItemWithArticleOfUserOneViaPutAsUserTwoReturnsForbidden() throws Exception {
 
-        Item newItem = new Item(articleOfUserOne, 23, new HashSet<>());
+        Item newItem = new Item(articleOfUserOne, "23 x", new HashSet<>());
 
         mockMvc.perform(put(itemsEndpoint + "/1337").content(getJsonBytes(newItem))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -274,7 +274,7 @@ public class ItemSecurityIntegrationTest {
     @Test
     public void createItemWithArticleOfUserOneViaPutAsAdminCreatesAndReturnsItem() throws Exception {
 
-        Item newItem = new Item(articleOfUserOne, 23, new HashSet<>());
+        Item newItem = new Item(articleOfUserOne, "23 x", new HashSet<>());
         newItem.getOwners().add(userOne);
 
         mockMvc.perform(put(itemsEndpoint + "/1337").content(getJsonBytes(newItem))
@@ -298,7 +298,7 @@ public class ItemSecurityIntegrationTest {
 
         Item updatedItem = new Item(itemOfUserOne);
         updatedItem.setEntityId(itemOfUserOne.getEntityId());
-        updatedItem.setCount(itemOfUserOne.getCount() - 1);
+        updatedItem.setCount(itemOfUserOne.getCount() + "1");
 
         mockMvc.perform(put(itemsEndpoint + "/" + updatedItem.getEntityId()).content(getJsonBytes(updatedItem))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -337,7 +337,7 @@ public class ItemSecurityIntegrationTest {
 
         Item updatedItem = new Item(itemOfUserOne);
         updatedItem.setEntityId(itemOfUserOne.getEntityId());
-        updatedItem.setCount(itemOfUserOne.getCount() - 1);
+        updatedItem.setCount(itemOfUserOne.getCount() + "1");
 
         mockMvc.perform(put(itemsEndpoint + "/" + updatedItem.getEntityId()).content(getJsonBytes(updatedItem))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -354,7 +354,7 @@ public class ItemSecurityIntegrationTest {
 
         Item updatedItem = new Item(itemOfUserOne);
         updatedItem.setEntityId(itemOfUserOne.getEntityId());
-        updatedItem.setCount(itemOfUserOne.getCount() - 1);
+        updatedItem.setCount(itemOfUserOne.getCount() + "1");
 
         mockMvc.perform(put(itemsEndpoint + "/" + updatedItem.getEntityId()).content(getJsonBytes(updatedItem))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -368,7 +368,7 @@ public class ItemSecurityIntegrationTest {
 
         Item updatedItem = new Item(itemOfUserOne);
         updatedItem.setEntityId(itemOfUserOne.getEntityId());
-        updatedItem.setCount(itemOfUserOne.getCount() - 1);
+        updatedItem.setCount(itemOfUserOne.getCount() + "1");
 
         mockMvc.perform(put(itemsEndpoint + "/" + updatedItem.getEntityId()).content(getJsonBytes(updatedItem))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -383,7 +383,7 @@ public class ItemSecurityIntegrationTest {
     @Test
     public void createItemViaPostAsUserOneCreatesAndReturnsItem() throws Exception {
 
-        Item newItem = new Item(articleOfUserOne, 23, new HashSet<>());
+        Item newItem = new Item(articleOfUserOne, "23", new HashSet<>());
 
         mockMvc.perform(post(itemsEndpoint).content(getJsonBytes(newItem))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -397,7 +397,7 @@ public class ItemSecurityIntegrationTest {
     @Test
     public void createArticleViaPostAsAdminCreatesAndReturnsArticle() throws Exception {
 
-        Item newItem = new Item(articleOfUserOne, 23, new HashSet<>());
+        Item newItem = new Item(articleOfUserOne, "23", new HashSet<>());
 
         mockMvc.perform(post(itemsEndpoint).content(getJsonBytes(newItem))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -411,7 +411,7 @@ public class ItemSecurityIntegrationTest {
     @Test
     public void createArticleViaPostAsAnonymousUserReturnsUnauthorized() throws Exception {
 
-        Item newItem = new Item(articleOfUserOne, 23, new HashSet<>());
+        Item newItem = new Item(articleOfUserOne, "23", new HashSet<>());
 
         mockMvc.perform(post(itemsEndpoint).content(getJsonBytes(newItem))
                 .contentType(MediaType.APPLICATION_JSON)

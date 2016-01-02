@@ -49,7 +49,7 @@ public class Item extends OwnedRestEntity<Long> {
 
     private boolean done;
 
-    private int count;
+    private String count;
 
     @ManyToOne(
         optional = false, fetch = FetchType.EAGER, cascade = {
@@ -74,7 +74,7 @@ public class Item extends OwnedRestEntity<Long> {
     }
 
 
-    public Item(Article article, Integer count, Set<SLUser> owners) {
+    public Item(Article article, String count, Set<SLUser> owners) {
 
         this();
         this.article = article;
