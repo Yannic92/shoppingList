@@ -89,6 +89,11 @@ shoppingList.controller('editList', ['$scope','$rootScope','listService','$filte
         $scope.disableUpdateButton = function(createShoppingListForm){
             return !createShoppingListForm || !createShoppingListForm.$valid || createShoppingListForm.$pristine || $scope.list.owners.length == 0;
         };
+
+        $scope.firstNameOrLastNameIsDefined = function(user){
+
+            return user.firstName || user.lastName;
+        };
     }
 ]);
 

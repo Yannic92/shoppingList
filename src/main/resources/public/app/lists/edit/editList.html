@@ -25,7 +25,7 @@
             <md-icon class="md-avatar-icon" md-font-set="material-icons">person</md-icon>
             <div class="md-list-item-text">
                 <h3>{{owner.username}}</h3>
-                <h4>{{owner.firstName ? owner.firstName : '?'}} {{owner.lastName ? owner.lastName : '?'}}</h4>
+                <h4 ng-if="firstNameOrLastNameIsDefined(owner)">{{owner.firstName ? owner.firstName : ''}} {{owner.lastName ? owner.lastName : ''}}</h4>
             </div>
             <md-button class="md-icon-button md-secondary" ng-click="removeUserFromOwners($index, owner)" type="button">
                 <md-icon md-font-set="material-icons">delete</md-icon>
