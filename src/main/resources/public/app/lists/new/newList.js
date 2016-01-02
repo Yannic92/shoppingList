@@ -40,6 +40,11 @@ shoppingList.controller('newList', ['$scope','$rootScope','listService','$mdToas
             }
         };
         
+        $scope.firstNameOrLastNameIsDefined = function(user){
+            
+            return user.firstName || user.lastName;
+        };
+        
         fetchUsersIfNecessary();
         
         $scope.createList = function () {
