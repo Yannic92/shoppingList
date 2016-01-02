@@ -37,6 +37,10 @@ public class SLUserRequestHandler implements RequestHandler<SLUser> {
 
     @Override
     public void handleRead(SLUser object, SLUser currentUser) {
+
+        if (object.isAdmin() && !currentUser.isAdmin()) {
+            throw new PermissionDeniedException();
+        }
     }
 
 
