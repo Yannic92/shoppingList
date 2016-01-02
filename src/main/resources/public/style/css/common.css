@@ -78,8 +78,8 @@ div.content>form{
 }
 
 .striked-out{
-    text-decoration: line-through;
-    color: lightslategray;
+    text-decoration: line-through !important;
+    color: lightslategray !important;
 }
 
 .text-centered{
