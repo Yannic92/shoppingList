@@ -113,13 +113,9 @@ public class ItemService implements EntityService<Item, Long> {
         SLUser currentUser = currentUserService.getCurrentUser();
         entity.getOwners().remove(currentUser);
 
-        if (entity.getOwners().isEmpty()) {
-            handleBeforeDelete(entity);
+        handleBeforeDelete(entity);
 
-            itemRepository.delete(entity);
-        }else{
-            update(entity);
-        }
+        itemRepository.delete(entity);
     }
 
 

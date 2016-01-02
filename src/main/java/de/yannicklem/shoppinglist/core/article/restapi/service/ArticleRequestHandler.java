@@ -23,10 +23,6 @@ public class ArticleRequestHandler implements RequestHandler<Article> {
     @Override
     public void handleBeforeCreate(Article entity, SLUser currentUser) {
 
-        if (entity != null && currentUser != null) {
-            entity.getOwners().add(currentUser);
-        }
-
         if (entity != null) {
             Article articleWithSameName = articleService.findByName(entity.getName());
 
@@ -34,6 +30,10 @@ public class ArticleRequestHandler implements RequestHandler<Article> {
                 entity.setEntityId(articleWithSameName.getEntityId());
                 entity.setOwners(articleWithSameName.getOwners());
                 entity.setPriceInEuro(articleWithSameName.getPriceInEuro());
+            }
+
+            if (currentUser != null) {
+                entity.getOwners().add(currentUser);
             }
         }
 

@@ -31,14 +31,12 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.HashSet;
-import java.util.Set;
 
 import javax.servlet.Filter;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 
@@ -216,7 +214,7 @@ public class ArticleSecurityIntegrationTest {
     // PUT-Tests
 
     @Test
-    public void createArticleViaPutAsUserOneCreatesAndReturnsArticle() throws Exception {
+    public void createArticleViaPutAsUserOneCreatesAndReturnsMethodNotAllowed() throws Exception {
 
         Article newArticle = new Article("newArticle", 213.32, new HashSet<>());
 
@@ -224,13 +222,12 @@ public class ArticleSecurityIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(csrf())
                 .with(user(userOne)))
-            .andExpect(status().isCreated())
-            .andExpect(jsonPath("name", is(newArticle.getName())));
+            .andExpect(status().isMethodNotAllowed());
     }
 
 
     @Test
-    public void createArticleViaPutAsAdminCreatesAndReturnsArticle() throws Exception {
+    public void createArticleViaPutAsAdminCreatesAndReturnsMethodNotAllowed() throws Exception {
 
         Article newArticle = new Article("newArticle", 213.32, new HashSet<>());
 
@@ -238,8 +235,7 @@ public class ArticleSecurityIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(csrf())
                 .with(user(admin)))
-            .andExpect(status().isCreated())
-            .andExpect(jsonPath("name", is(newArticle.getName())));
+            .andExpect(status().isMethodNotAllowed());
     }
 
 
@@ -256,7 +252,7 @@ public class ArticleSecurityIntegrationTest {
 
 
     @Test
-    public void updateArticleNameOfUserOneAsUserOneUpdatesAndReturnsArticle() throws Exception {
+    public void updateArticleNameOfUserOneAsUserOneUpdatesAndReturnsMethodNotAllowed() throws Exception {
 
         Article newArticle = new Article(articleOfUserOne.getName(), articleOfUserOne.getPriceInEuro(),
                 articleOfUserOne.getOwners());
@@ -267,37 +263,12 @@ public class ArticleSecurityIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(csrf())
                 .with(user(userOne)))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("name", is(newArticle.getName())))
-            .andExpect(jsonPath("name", is(not(articleOfUserOne.getName()))));
+            .andExpect(status().isMethodNotAllowed());
     }
 
 
     @Test
-    public void updateArticleOwnersOfUserOneAsUserOneHasNoEffectAndReturnsArticle() throws Exception {
-
-        Article newArticle = new Article(articleOfUserOne.getName(), articleOfUserOne.getPriceInEuro(),
-                articleOfUserOne.getOwners());
-        newArticle.setEntityId(articleOfUserOne.getEntityId());
-        newArticle.getOwners().remove(userOne);
-        newArticle.getOwners().add(userTwo);
-
-        mockMvc.perform(put(articlesEndpoint + "/" + newArticle.getEntityId()).content(getJsonBytes(newArticle))
-                .contentType(MediaType.APPLICATION_JSON)
-                .with(csrf())
-                .with(user(userOne)))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("name", is(newArticle.getName())));
-
-        Set<SLUser> updatedOwners = articleService.findById(newArticle.getEntityId()).getOwners();
-
-        assertThat(updatedOwners, hasSize(1));
-        assertThat(updatedOwners.iterator().next(), is(userOne));
-    }
-
-
-    @Test
-    public void updateArticleNameOfUserOneAsAdminUpdatesAndReturnsArticle() throws Exception {
+    public void updateArticleNameOfUserOneAsAdminUpdatesAndReturnsMethodNotAllowed() throws Exception {
 
         Article newArticle = new Article(articleOfUserOne.getName(), articleOfUserOne.getPriceInEuro(),
                 articleOfUserOne.getOwners());
@@ -308,9 +279,7 @@ public class ArticleSecurityIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(csrf())
                 .with(user(admin)))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("name", is(newArticle.getName())))
-            .andExpect(jsonPath("name", is(not(articleOfUserOne.getName()))));
+            .andExpect(status().isMethodNotAllowed());
     }
 
 
@@ -330,7 +299,7 @@ public class ArticleSecurityIntegrationTest {
 
 
     @Test
-    public void updateArticleNameOfUserOneAsUserTwoReturnsForbidden() throws Exception {
+    public void updateArticleNameOfUserOneAsUserTwoReturnsMethodNotAllowed() throws Exception {
 
         Article newArticle = new Article(articleOfUserOne.getName(), articleOfUserOne.getPriceInEuro(),
                 articleOfUserOne.getOwners());
@@ -341,7 +310,7 @@ public class ArticleSecurityIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(csrf())
                 .with(user(userTwo)))
-            .andExpect(status().isForbidden());
+            .andExpect(status().isMethodNotAllowed());
     }
 
 

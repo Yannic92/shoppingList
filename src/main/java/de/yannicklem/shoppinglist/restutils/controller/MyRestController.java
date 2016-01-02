@@ -116,7 +116,7 @@ public abstract class MyRestController<Type extends RestEntity<ID>, ID extends S
 
 
     @RequestMapping(method = RequestMethod.POST)
-    public HttpEntity<? extends Type> putUser(@RequestBody Type entity, Principal principal) {
+    public HttpEntity<? extends Type> postEntity(@RequestBody Type entity, Principal principal) {
 
         resourceProcessor.initializeNestedEntities(entity);
 

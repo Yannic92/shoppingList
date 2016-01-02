@@ -13,10 +13,18 @@ import org.springframework.hateoas.EntityLinks;
 import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.hateoas.MediaTypes;
 
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.security.Principal;
 
 
 @RestController
@@ -34,5 +42,13 @@ public class ArticleController extends MyRestController<Article, Long> {
         EntityLinks entityLinks) {
 
         super(slUserService, entityService, requestHandler, resourceProcessor, entityLinks);
+    }
+
+    @Override
+    @RequestMapping(method = RequestMethod.PUT, value = ArticleEndpoints.ARTICLE_ENDPOINT)
+    public HttpEntity<? extends Article> putEntity(@RequestBody Article entity, @PathVariable Long aLong,
+        Principal principal) {
+
+        return new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
     }
 }
