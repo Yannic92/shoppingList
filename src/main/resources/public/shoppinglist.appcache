@@ -4,7 +4,7 @@ CACHE MANIFEST
 CACHE:
 /app/authentication/login/login.html
 /app/navigation/navigation.html
-/app/navigation/userMenu/userMenu.html
+/app/navigation/navMenu/navMenu.html
 /app/navigation/leftSideNav/leftSideNav.html
 /app/user/delete/userDelete.html
 /app/user/edit/userData.html
