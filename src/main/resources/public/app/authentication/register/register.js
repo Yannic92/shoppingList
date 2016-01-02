@@ -25,6 +25,11 @@ shoppingList.controller('register', ['$scope', '$rootScope', 'userService', '$lo
                     $scope.loading = false;
                 });
         };
+
+        $scope.$on('$destroy', function(){
+
+            $rootScope.reset();
+        });
     }
 ]);
 

@@ -16,27 +16,10 @@
         </md-autocomplete>
     </form>
     <md-list ng-cloak>
-        <md-list-item ng-repeat="item in list.items | orderBy: article.name track by $index">
-            <md-checkbox aria-label="item" ng-change="updateItem(item)" md-no-ink class="md-primary" ng-model="item.done"></md-checkbox>
-            <p ng-class="{ 'striked-out': item.done}">{{item.article.name}}</p>
-            <md-icon aria-label="delete item" class="md-secondary" md-font-set="material-icons" ng-click="deleteItem(item, $event)">
-                delete
-            </md-icon>
-        </md-list-item>
-    </md-list>
-    <div ng-if="list.items.length == 0" layout="row" layout-align="center center">
-        <div>
-            <h3 class="md-display-3" style="text-align: center;">Liste ist leer
-                <md-icon style="font-size: 56px;" md-font-set="material-icons">
-                    mood_bad
-                </md-icon>
-            </h3>
-            <p class="md-title info" style="text-align: center;">
-                Gib einfach im obenstehenden Textfeld den Namen des Artikels ein, den du einkaufen möchtest und bestätige mit Enter
-            </p>
+        <div ng-repeat="item in list.items | orderBy: article.name track by $index" 
+             ng-include="'/app/item/item.html'" 
+             ng-controller="itemController">
         </div>
-
-    </div>
-
-    
+    </md-list>
+    <section class="padding-content" ng-if="list.items.length == 0" ng-include="'app/lists/view/emptyList.html'"></section>
 </div>

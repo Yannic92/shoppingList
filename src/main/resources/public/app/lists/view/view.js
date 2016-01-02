@@ -104,21 +104,6 @@ shoppingList.controller('listView', ['$scope', '$rootScope','listService','itemS
                         });
                 })
         };
-        
-        $scope.deleteItem = function(item, event) {
-            
-            itemService.delete(item)
-                .then(function(){
-                    var index = $scope.list.items.indexOf(item);
-                    $scope.list.items.splice(index, 1);
-                });
-            
-        };
-        
-        $scope.updateItem = function(item){
-            
-            itemService.update(item);
-        };
 
         $scope.deleteList = function(ev) {
             var confirm = $mdDialog.confirm()

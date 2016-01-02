@@ -2,7 +2,7 @@ shoppingList.controller('login',[ '$rootScope', '$scope', '$location', 'authServ
     function ($rootScope, $scope, $location, authService, $mdToast) {
         
         
-        $scope.credentials = {};
+        $rootScope.credentials = {};
         $scope.loggingIn = false;
         $rootScope.title="Login";
 
@@ -77,6 +77,11 @@ shoppingList.controller('login',[ '$rootScope', '$scope', '$location', 'authServ
         };
 
         redirectIfLoggedIn();
+        
+        $scope.$on('$destroy', function(){
+            
+            $rootScope.reset();
+        });
         
     }
 ]);

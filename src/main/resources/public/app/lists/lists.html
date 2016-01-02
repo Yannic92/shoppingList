@@ -1,6 +1,7 @@
-<div ng-if="listsAreEmpty()" layout="column" layout-align="center center">
-    <h2 class="md-display-2" style="text-align: center;">Du hast noch keine Einkaufsliste
-        <md-icon style="font-size: 56px;" md-font-set="material-icons">
+<section ng-if="listsAreEmpty()" layout="column" layout-align="center center">
+    <h2 class="md-display-3 text-centered">
+        Du hast noch keine Einkaufsliste
+        <md-icon class="md-display-3" md-font-set="material-icons">
             mood_bad
         </md-icon>
     </h2>
@@ -10,4 +11,4 @@
         </md-icon>
         Erstelle dir doch eine
     </md-button>
-</div>
+</section>

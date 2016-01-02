@@ -22,6 +22,11 @@ shoppingList.controller('confirmation',[ '$scope', '$rootScope', 'userService', 
                     $scope.loading = false;
                 });
         }
+
+        $scope.$on('$destroy', function(){
+
+            $rootScope.reset();
+        });
     }
 ]);
 

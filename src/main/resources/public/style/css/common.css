@@ -61,6 +61,10 @@ div.content>form{
     padding: 0 16px;
 }
 
+.padding-content{
+    padding: 0 16px;
+}
+
 .info{
     color: rgb(63,81,181);
 }
@@ -76,4 +80,12 @@ div.content>form{
 .striked-out{
     text-decoration: line-through;
     color: lightslategray;
+}
+
+.text-centered{
+    text-align: center;
+}
+
+md-icon.md-display-3{
+    font-size: 56px !important;
 }
