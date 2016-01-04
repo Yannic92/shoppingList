@@ -28,7 +28,7 @@
                 <h3>{{owner.username}}</h3>
                 <h4 ng-if="firstNameOrLastNameIsDefined(owner)">{{owner.firstName ? owner.firstName : ''}} {{owner.lastName ? owner.lastName : ''}}</h4>
             </div>
-            <md-button aria-label="remove user from owners list" class="md-icon-button md-secondary" ng-click="removeUserFromOwners($index, owner)" type="button">
+            <md-button ng-if="!isLoggedInUser(owner)" aria-label="remove user from owners list" class="md-icon-button md-secondary" ng-click="removeUserFromOwners($index, owner)" type="button">
                 <md-icon md-svg-src="img/icons/action/ic_delete_24px.svg"></md-icon>
             </md-button>
         </md-list-item>
