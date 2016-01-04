@@ -2,7 +2,7 @@
 <html manifest="shoppinglist.appcache" ng-app="shoppingList">
 <head lang="de">
     <meta charset="UTF-8">
-    <meta name="viewport" content="initial-scale=1"/>
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
     <link rel="stylesheet" href="style/css/app-compact.css" type="text/css">
     <link rel="SHORTCUT ICON" href="img/fav.ico" type="image/x-icon">
     <!--Android-->
@@ -18,7 +18,7 @@
 </head>
 <body ng-controller="navigation">
     <a id="top"></a>
-    <ng-include src="'app/navigation/navigation.html'"></ng-include>
+    <ng-include layout-fill src="'app/navigation/navigation.html'"></ng-include>
     <script type="text/javascript" src="lib/angular.js"></script>
     <script type="text/javascript" src="lib/app-compact.js"></script>
 </body>
