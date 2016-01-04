@@ -17,10 +17,10 @@
         </md-autocomplete>
     </form>
     <md-list ng-cloak>
-        <div ng-repeat="item in list.items | orderBy: 'article.name' track by $index" 
-             ng-include="'/app/item/item.html'" 
+        <ng-include ng-repeat="item in list.items | orderBy: 'article.name' track by $index" 
+             src="'/app/item/item.html'"
              ng-controller="itemController">
-        </div>
+        </ng-include>
     </md-list>
-    <section class="padding-content" ng-if="list.items.length == 0" ng-include="'app/lists/view/emptyList.html'"></section>
+    <ng-include class="padding-content" ng-if="list.items.length == 0" src="'app/lists/view/emptyList.html'"></ng-include>
 </div>

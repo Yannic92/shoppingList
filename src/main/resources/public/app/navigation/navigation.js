@@ -5,13 +5,18 @@ shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'aut
         $scope.openNav = function(){
             $mdSidenav('leftNav').open();
         };
-        
+
+        $scope.toggleNav = function(){
+
+            $mdSidenav('leftNav').toggle();
+        };
+
         $scope.closeNav = function(){
             if(!$mdMedia('gt-md')) {
                 $mdSidenav('leftNav').close();
             }
         };
-        
+
         var urlIsDefined = function(url){
             return url && url.$$route;
         };
@@ -56,7 +61,7 @@ shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'aut
                     event.preventDefault();
                     redirectToLoginIfAuthenticationRequired(newUrl);
                 }
-                
+
             }
         });
 
@@ -66,13 +71,13 @@ shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'aut
             $rootScope.error = false;
             $rootScope.goToTop();
         });
-        
+
         $scope.goto = function(path){
-            
+
             $scope.closeNav();
             $location.path(path);
         };
-        
+
         $scope.logout = function () {
             authService.logout()
                 .then(function () {

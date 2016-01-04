@@ -7,24 +7,24 @@ shoppingList.config(['$routeProvider', function ($routeProvider) {
         .when('/lists/:listId', routeConfig);
 }]);
 
-shoppingList.controller('listView', ['$scope', '$rootScope','listService','itemService','$routeParams','$filter', 'articleService','$mdDialog','$mdMedia',
-    function ($scope, $rootScope,listService,itemService,$routeParams,$filter, articleService,$mdDialog, $mdMedia) {
+shoppingList.controller('listView', ['$scope', '$rootScope','listService','itemService','$routeParams','$filter', 'articleService','$mdDialog',
+    function ($scope, $rootScope,listService,itemService,$routeParams,$filter, articleService,$mdDialog) {
         'use strict';
-        
+
         var lists = listService.get();
-        
+
         $scope.articles = articleService.get();
-        
+
         $scope.list = {
             name: '',
             items: []
         };
 
         $scope.ctrl = $scope;
-        
+
         $scope.updating = true;
         $scope.creating = false;
-        
+
         var newItem = $scope.newItem = {
             count: "",
             article : {
@@ -47,7 +47,7 @@ shoppingList.controller('listView', ['$scope', '$rootScope','listService','itemS
             .then(function () {
                 if($routeParams.listId){
                     $scope.list = $filter('filter')(lists, {entityId: $routeParams.listId})[0];
-                    
+
                     if(!$scope.list){
                         $scope.$parent.goto("/lists");
                         return;
@@ -55,27 +55,28 @@ shoppingList.controller('listView', ['$scope', '$rootScope','listService','itemS
                     $rootScope.title = $scope.list.name;
                     $rootScope.options = [
                         {
-                            icon: "settings",
+                            icon: "img/icons/action/ic_settings_24px.svg",
                             text: "Liste bearbeiten",
                             link: "#/lists/" + $scope.list.entityId + "/edit"
                         },{
-                            icon: "delete",
+                            icon: "img/icons/action/ic_delete_24px.svg",
                             text: "Liste löschen",
                             action: $scope.deleteList
                         }
                     ];
-                    
+
                     $rootScope.shortCutAction = {
                         parameters: "$mdOpenMenu, $event",
-                        icon: "sync",
+                        icon: "img/icons/notification/ic_sync_24px.svg",
                         action: $scope.update,
-                        available: true
+                        available: true,
+                        ariaLabel: "refetch current list from server"
                     }
-                }  
+                }
             }).finally(function () {
                 $scope.updating = false;
             });
-        
+
         $scope.update = function () {
             $scope.updating = true;
             listService.getUpdated($scope.list)
@@ -85,13 +86,13 @@ shoppingList.controller('listView', ['$scope', '$rootScope','listService','itemS
                     $scope.updating = false;
                 });
         };
-        
+
         $scope.createNewItem = function (ev) {
-            
+
             $scope.creating = true;
-            
+
             if($scope.selectedArticle){
-                
+
                 $scope.newItem.article = $scope.selectedArticle;
             }
 
@@ -118,7 +119,7 @@ shoppingList.controller('listView', ['$scope', '$rootScope','listService','itemS
                     $scope.status = 'You cancelled the dialog.';
                 }).finally(function(){
                 $scope.creating = false;
-            }); 
+            });
         };
 
         $scope.deleteList = function(ev) {
@@ -134,11 +135,11 @@ shoppingList.controller('listView', ['$scope', '$rootScope','listService','itemS
                     var index = lists.indexOf($scope.list);
                     listService.delete($scope.list)
                         .then(function () {
-                            goToPreviousList(index); 
-                        });  
+                            goToPreviousList(index);
+                        });
                 });
         };
-        
+
         var goToPreviousList = function(lastIndex){
             if(lists && lists.length && lists.length > 0){
                 var newIndex = lastIndex < lists.length ? lastIndex : lastIndex - 1;
@@ -147,13 +148,13 @@ shoppingList.controller('listView', ['$scope', '$rootScope','listService','itemS
                 $scope.$parent.goto("/lists");
             }
         };
-        
-        $scope.$on('$destroy', function(){  
+
+        $scope.$on('$destroy', function(){
             $rootScope.reset();
         });
 
         function createNewItemController($scope, $mdDialog) {
-            
+
             $scope.newItem = angular.copy(newItem);
 
             $scope.cancel = function() {

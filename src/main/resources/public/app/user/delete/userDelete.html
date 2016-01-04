@@ -5,12 +5,8 @@
         Du bist dabei dein Benutzerkonto zu löschen. Dies löscht unwiderruflich deine Benutzerdaten und jede deiner Einkaufslisten.
     </p>
 
-    <form ng-submit="deleteAccount()">
-        <md-button class="md-raised md-warn" type="submit">
-            <md-icon md-menu-origin md-font-set="material-icons">
-                delete
-            </md-icon>
-            Trotzdem löschen
-        </md-button>
-    </form>
+    <md-button class="md-raised md-warn" ng-click="deleteAccount()">
+        <md-icon md-svg-src="img/icons/action/ic_delete_24px.svg"></md-icon>
+        Trotzdem löschen
+    </md-button>
 </div>

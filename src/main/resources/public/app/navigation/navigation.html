@@ -3,18 +3,18 @@
         <md-toolbar>
             <div layout="row" layout-align="start center">
                 <div layout="row" layout-align="start center" flex>
-                    <md-button ng-if="authenticated" class="md-icon-button" ng-click="openNav()" hide-gt-md>
-                        <md-icon md-font-set="material-icons">menu</md-icon>
+                    <md-button ng-if="authenticated" aria-label="toggle menu" class="md-icon-button" ng-click="toggleNav()" hide-gt-md>
+                        <md-icon md-svg-src="img/icons/navigation/ic_menu_24px.svg"></md-icon>
                     </md-button>
                     <h1 class="md-toolbar-tools">
                         <span md-flex>{{title}}</span>
                     </h1>
                 </div>
-                    <md-button ng-if="shortCutAction.available" class="md-icon-button" ng-click="shortCutAction.action()">
-                        <md-icon md-font-set="material-icons">{{shortCutAction.icon}}</md-icon>
+                    <md-button ng-if="shortCutAction.available" aria-label="{{shortCutAction.ariaLabel}}" class="md-icon-button" ng-click="shortCutAction.action()">
+                        <md-icon md-svg-src="{{shortCutAction.icon}}"></md-icon>
                     </md-button>
                 <div ng-if="authenticated">
-                    <div ng-controller="navMenu" ng-include="'app/navigation/navMenu/navMenu.html'"></div>
+                    <ng-include ng-controller="navMenu" src="'app/navigation/navMenu/navMenu.html'"></ng-include>
                 </div>
             </div>
         </md-toolbar>
@@ -27,7 +27,7 @@
         </md-toolbar>
     </md-content>
     <md-content flex layout="row">
-        <div ng-if="authenticated" ng-controller="leftSideNav" ng-include="'app/navigation/leftSideNav/leftSideNav.html'" layout></div>
+        <ng-include ng-if="authenticated" ng-controller="leftSideNav" src="'app/navigation/leftSideNav/leftSideNav.html'" layout></ng-include>
         <md-content layout="column" flex ng-view class="content"></md-content>
     </md-content>
 </div>

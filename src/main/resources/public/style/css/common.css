@@ -87,5 +87,6 @@ div.content>form{
 }
 
 md-icon.md-display-3{
-    font-size: 56px !important;
+    width: 56px !important;
+    height: 56px !important;
 }
