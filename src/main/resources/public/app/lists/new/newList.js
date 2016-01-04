@@ -80,8 +80,8 @@ shoppingList.controller('newList', ['$scope','$rootScope','listService','$mdToas
             return user && user.username === $rootScope.user.username;
         };
 
-        $scope.disableCreateButton = function(createShoppingListForm){
-            return !createShoppingListForm || !createShoppingListForm.$valid || createShoppingListForm.$pristine || $scope.list.owners.length == 0;
+        $scope.disableCreateButton = function(){
+            return !$scope.createShoppingListForm || !$scope.createShoppingListForm.$valid || $scope.createShoppingListForm.$pristine || $scope.list.owners.length == 0;
         };
     }
 ]);
