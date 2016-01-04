@@ -4,5 +4,5 @@
         <h3 ng-class="{ 'striked-out': item.done}">{{item.article.name}}</h3>
         <p ng-class="{ 'striked-out': item.done}">{{item.count}} </p>
     </div>
-    <md-icon md-svg-src="img/icons/action/ic_delete_24px.svg"></md-icon>
+    <md-icon ng-click="deleteItem(item)" md-svg-src="img/icons/action/ic_delete_24px.svg"></md-icon>
 </md-list-item>
