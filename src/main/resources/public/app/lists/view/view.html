@@ -2,6 +2,7 @@
 <div flex ng-if="!updating">
     <form id="createNewItemForm" role="form" class="md-padding" name="createNewItemForm" ng-submit="createNewItem()">
         <md-autocomplete id ="newItemAutocomplete"
+                         md-no-cache="true"
                          md-selected-item="selectedArticle"
                          md-selected-item-change="createNewItem($event)"
                          md-search-text="ctrl.newItem.article.name"

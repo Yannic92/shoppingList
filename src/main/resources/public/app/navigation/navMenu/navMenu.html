@@ -9,6 +9,13 @@
                 {{user.username}}
             </md-button>
         </md-menu-item>
+        <md-menu-item>
+            <md-button ng-href="#/dictionary">
+                <md-icon md-svg-src="img/icons/action/ic_chrome_reader_mode_24px.svg"></md-icon>
+                Wörterbuch
+            </md-button>
+        </md-menu-item>
+
         <md-menu-divider ng-if="options.length > 0"></md-menu-divider>
         <md-menu-item ng-repeat="option in options track by $index">
             <md-button ng-if="option.action" class="{{option.class}}" ng-click="option.action()">

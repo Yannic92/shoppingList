@@ -3,6 +3,7 @@ package de.yannicklem.shoppinglist.core.article.restapi.service;
 import de.yannicklem.shoppinglist.core.article.entity.Article;
 import de.yannicklem.shoppinglist.core.persistence.ArticleService;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
+import de.yannicklem.shoppinglist.exception.BadRequestException;
 import de.yannicklem.shoppinglist.exception.PermissionDeniedException;
 import de.yannicklem.shoppinglist.restutils.service.RequestHandler;
 
@@ -66,6 +67,10 @@ public class ArticleRequestHandler implements RequestHandler<Article> {
 
         if (!articlePermissionEvaluator.isAllowedToDelete(entity, currentUser)) {
             throw new PermissionDeniedException();
+        }
+
+        if (articleService.isUsedInItem(entity)) {
+            throw new BadRequestException("Lösche zuerst den Artikel aus deiner Einkaufsliste");
         }
     }
 

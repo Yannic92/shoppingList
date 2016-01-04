@@ -144,4 +144,10 @@ public class ArticleService implements EntityService<Article, Long> {
 
         return articleRepository.findByName(name);
     }
+
+
+    public boolean isUsedInItem(Article article) {
+
+        return !itemService.findItemsByArticle(article).isEmpty();
+    }
 }

@@ -18,6 +18,8 @@ CACHE:
 /app/authentication/register/confirmation/confirmation.html
 /app/item/new/newItem.html
 /app/item/item.html
+/app/article/dictionary/dictionary.html
+/app/article/dictionary/emptyDictionary.html
 
 /style/css/app-compact.css
 /lib/angular.js
@@ -108,6 +110,10 @@ CACHE:
 /img/icons/action/ic_settings_input_hdmi_48px.svg
 /img/icons/action/ic_settings_phone_48px.svg
 /img/icons/action/ic_settings_voice_48px.svg
+/img/icons/action/ic_search_24px.svg
+/img/icons/action/ic_search_48px.svg
+/img/icons/action/ic_chrome_reader_mode_24px.svg
+/img/icons/action/ic_chrome_reader_mode_48px.svg
 /img/icons/communication/ic_email_24px.svg
 /img/icons/communication/ic_email_48px.svg
 /img/icons/communication/ic_vpn_key_24px.svg
@@ -141,6 +147,7 @@ CACHE:
 /img/icons/social/ic_person_add_18px.svg
 /img/icons/social/ic_person_add_24px.svg
 /img/icons/social/ic_person_add_48px.svg
+
 
 NETWORK:
 /

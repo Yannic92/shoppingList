@@ -2,32 +2,33 @@
     <md-content>
         <md-toolbar>
             <div layout="row" layout-align="start center">
-                <div layout="row" layout-align="start center" flex>
-                    <md-button ng-if="authenticated" aria-label="toggle menu" class="md-icon-button" ng-click="toggleNav()" hide-gt-md>
-                        <md-icon md-svg-src="img/icons/navigation/ic_menu_24px.svg"></md-icon>
-                    </md-button>
-                    <h1 class="md-toolbar-tools">
-                        <span md-flex>{{title}}</span>
-                    </h1>
-                </div>
-                    <md-button ng-if="shortCutAction.available" aria-label="{{shortCutAction.ariaLabel}}" class="md-icon-button" ng-click="shortCutAction.action()">
-                        <md-icon md-svg-src="{{shortCutAction.icon}}"></md-icon>
-                    </md-button>
+                <md-button ng-if="authenticated" aria-label="toggle menu" class="md-icon-button" ng-click="toggleNav()" hide-gt-md>
+                    <md-icon md-svg-src="img/icons/navigation/ic_menu_24px.svg"></md-icon>
+                </md-button>
+                <h1 class="md-toolbar-tools">
+                    {{title}}
+                </h1>
+                <md-button ng-if="shortCutAction.available" aria-label="{{shortCutAction.ariaLabel}}" class="md-icon-button" ng-click="shortCutAction.action()">
+                    <md-icon md-svg-src="{{shortCutAction.icon}}"></md-icon>
+                </md-button>
                 <div ng-if="authenticated">
                     <ng-include ng-controller="navMenu" src="'app/navigation/navMenu/navMenu.html'"></ng-include>
                 </div>
             </div>
         </md-toolbar>
-        <md-toolbar class="md-tall md-warn" ng-if="error" >
-            <div style="height: 128px;line-height: 128px;text-align: center;">
-                    <span style="display: inline-block;vertical-align: middle;line-height: normal;">
-                        {{errorMessage}}
-                    </span>
-            </div>
-        </md-toolbar>
     </md-content>
     <md-content flex layout="row">
         <ng-include ng-if="authenticated" ng-controller="leftSideNav" src="'app/navigation/leftSideNav/leftSideNav.html'" layout></ng-include>
-        <md-content layout="column" flex ng-view class="content"></md-content>
+        <div layout="column" layout-fill>
+            <md-toolbar class="md-tall md-warn" ng-if="error" >
+                <div style="height: 128px;line-height: 128px;text-align: center;">
+                    <span style="display: inline-block;vertical-align: middle;line-height: normal;">
+                        {{errorMessage}}
+                    </span>
+                </div>
+            </md-toolbar>
+            <md-content layout="column" flex ng-view class="content"></md-content>
+        </div>
+
     </md-content>
 </div>
