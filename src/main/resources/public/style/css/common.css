@@ -85,3 +85,11 @@ md-icon.md-display-3{
 .disabled {
     color: lightgray !important;
 }
+
+#addUserField{
+    padding-left: 16px;
+}
+
+.autocompleteIcon{
+    margin-right:32px;
+}
