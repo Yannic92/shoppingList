@@ -1,5 +1,5 @@
-shoppingList.controller('login',[ '$rootScope', '$scope', '$location', 'authService','$mdToast',
-    function ($rootScope, $scope, $location, authService, $mdToast) {
+shoppingList.controller('login',[ '$rootScope', '$scope', '$location', 'authService','$mdToast','$mdMedia',
+    function ($rootScope, $scope, $location, authService, $mdToast,$mdMedia) {
         
         
         $rootScope.credentials = {};
@@ -83,6 +83,9 @@ shoppingList.controller('login',[ '$rootScope', '$scope', '$location', 'authServ
             $rootScope.reset();
         });
         
+        $scope.gtSm = function () {
+            return $mdMedia('gt-sm')
+        }
     }
 ]);
 
