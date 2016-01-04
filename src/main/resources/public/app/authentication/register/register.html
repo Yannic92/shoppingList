@@ -1,5 +1,5 @@
 <loading-cycle ng-if="loading"></loading-cycle>
-<form layout-padding ng-if="!loading" name="registerForm">
+<form ng-if="!loading" name="registerForm" layout-padding>
     <md-input-container class="md-icon-float md-block">
         <label for="firstName">Vorname</label>
         <md-icon md-svg-src="img/icons/social/ic_person_24px.svg"></md-icon>
@@ -67,7 +67,7 @@
         * Alle mit einem Stern gekennzeichneten Felder sind Pflichtfelder. Die Angabe Ihres Vor- und Nachnamens ist optional. Sowohl Ihr Vorname als auch Ihr Nachname, dienen
         lediglich dazu, dass Ihre Freunde Sie später leichter finden können, um Einkaufslisten zu teilen
     </span>
-    <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
+    <section layout="row" layout-sm="column" layout-align="center center" >
         <md-button class="md-primary" ng-disabled="!registerForm.$valid" ng-click="register()">
             Registrieren
         </md-button>

@@ -1,5 +1,5 @@
 <loading-cycle ng-if="updating"></loading-cycle>
-<form ng-if="!updating" id="updateUserDataForm" role="form" name="updateUserDataForm" ng-submit="updateUserData()">
+<form ng-if="!updating" id="updateUserDataForm" role="form" name="updateUserDataForm" ng-submit="updateUserData()" layout-padding>
     <md-input-container class="md-icon-float md-block">
         <label for="firstName">Vorname</label>
         <md-icon md-svg-src="img/icons/social/ic_person_24px.svg"></md-icon>
@@ -61,19 +61,16 @@
         </div>
     </md-input-container>
     <span class="md-caption">
-        * Alle mit einem Stern gekennzeichneten Felder sind Pflichtfelder. Die Angabe Ihres Vor- und Nachnamens ist optional. Sowohl Ihr Vorname als auch Ihr Nachname, dienen 
+        * Alle mit einem Stern gekennzeichneten Felder sind Pflichtfelder. Die Angabe Ihres Vor- und Nachnamens ist optional. Sowohl Ihr Vorname als auch Ihr Nachname, dienen
         lediglich dazu, dass Ihre Freunde Sie später leichter finden können, um Einkaufslisten zu teilen
     </span>
-    <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
+    <section layout="column" layout-gt-sm="row" layout-align="center center" >
         <md-button class="md-primary" ng-disabled="!updateUserDataForm.$valid || updateUserDataForm.$pristine" type="submit">
             Aktualisieren
         </md-button>
+        <md-button class="md-warn" ng-href="#/deleteAccount">
+            <md-icon md-svg-src="img/icons/content/ic_remove_circle_24px.svg"></md-icon>
+            Konto löschen
+        </md-button>
     </section>
 </form>
-<section layout="row" layout-sm="column" layout-align="center center">
-    <md-button class="md-warn" ng-href="#/deleteAccount">
-        <md-icon md-svg-src="img/icons/content/ic_remove_circle_24px.svg"></md-icon>
-        Konto löschen
-    </md-button>
-</section>
-

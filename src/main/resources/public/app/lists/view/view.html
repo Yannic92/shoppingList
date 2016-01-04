@@ -1,6 +1,6 @@
 <loading-cycle ng-if="updating"></loading-cycle>
 <div flex class="list-view" ng-if="!updating">
-    <form ng-if="!loading" id="createNewItemForm" role="form" layout="row" name="createNewItemForm" ng-submit="createNewItem()">
+    <form ng-if="!loading" id="createNewItemForm" role="form" layout="row" layout-padding name="createNewItemForm" ng-submit="createNewItem()">
         <md-autocomplete id ="newItemAutocomplete" flex
                          md-selected-item="selectedArticle"
                          md-selected-item-change="createNewItem($event)"
@@ -17,7 +17,7 @@
         </md-autocomplete>
     </form>
     <md-list ng-cloak>
-        <ng-include ng-repeat="item in list.items | orderBy: 'article.name' track by $index" 
+        <ng-include ng-repeat="item in list.items | orderBy: 'article.name' track by $index"
              src="'/app/item/item.html'"
              ng-controller="itemController">
         </ng-include>
