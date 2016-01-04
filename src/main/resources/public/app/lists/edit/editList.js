@@ -1,5 +1,5 @@
-shoppingList.controller('editList', ['$scope','$rootScope','listService','$filter','$routeParams','$mdToast','$location','$mdDialog','userService',
-    function ($scope, $rootScope, listService,$filter,$routeParams,$mdToast,$location,$mdDialog,userService) {
+shoppingList.controller('editList', ['$scope','$rootScope','listService','$filter','$routeParams','$mdToast','$location','$mdDialog','userService','$timeout',
+    function ($scope, $rootScope, listService,$filter,$routeParams,$mdToast,$location,$mdDialog,userService,$timeout) {
         $rootScope.title = "Einkaufsliste bearbeiten";
         var lists = listService.get();
         $scope.list = {
@@ -9,16 +9,17 @@ shoppingList.controller('editList', ['$scope','$rootScope','listService','$filte
         $scope.userSearchText = "";
         $scope.users = userService.get();
         $scope.ctrl = $scope;
-        
+        $scope.saveIsVisible = false;
+
         lists.promise
             .then(function () {
                 $scope.list = angular.copy($filter('filter')(lists, {entityId: $routeParams.id})[0]);
                 $scope.updating = false;
             });
-        
+
         $scope.updateList = function () {
             $scope.updating = true;
-            listService.update($scope.list)
+            return listService.update($scope.list)
                 .then(function (updatedList) {
                     $mdToast.show(
                         $mdToast.simple()
@@ -26,20 +27,23 @@ shoppingList.controller('editList', ['$scope','$rootScope','listService','$filte
                             .position("bottom right")
                             .hideDelay(3000)
                     );
-                    $location.path("/lists/" + updatedList.entityId);
                 }).finally(function () {
+                    $scope.hideSave();
                     $scope.updating = false;
+                    $scope.updateShoppingListForm.$setPristine();
                 });
         };
 
         $scope.addUserToOwners = function (selectedUser) {
             if(selectedUser){
                 $scope.list.owners.push(selectedUser);
+                $scope.updateList()
+                    .then(function(){
+                        $scope.userSearchText = "";
+                    });
             }
-
-            $scope.userSearchText = "";
         };
-        
+
         $scope.removeUserFromOwners = function (index, user){
             if(user.username == $rootScope.user.username){
                 $mdDialog.show(
@@ -49,10 +53,12 @@ shoppingList.controller('editList', ['$scope','$rootScope','listService','$filte
                         .ok('Ja')
                         .cancel('Nein')
                 ).then(function(){
-                        $scope.list.owners.splice(index, 1);
-                    })
+                    $scope.list.owners.splice(index, 1);
+                    $scope.updateList();
+                })
             }else {
                 $scope.list.owners.splice(index, 1);
+                $scope.updateList();
             }
         };
 
@@ -86,13 +92,24 @@ shoppingList.controller('editList', ['$scope','$rootScope','listService','$filte
 
         fetchUsersIfNecessary();
 
-        $scope.disableUpdateButton = function(createShoppingListForm){
-            return !createShoppingListForm || !createShoppingListForm.$valid || createShoppingListForm.$pristine || $scope.list.owners.length == 0;
+        $scope.nameChanged = function(createShoppingListForm){
+            return createShoppingListForm && createShoppingListForm.$valid && !createShoppingListForm.$pristine;
         };
 
         $scope.firstNameOrLastNameIsDefined = function(user){
 
             return user.firstName || user.lastName;
+        };
+
+        $scope.showSave = function(){
+            $scope.saveIsVisible = true;
+        };
+
+        $scope.hideSave = function(){
+            $timeout(function(){
+                $scope.saveIsVisible = false;
+            }, 100);
+
         };
     }
 ]);

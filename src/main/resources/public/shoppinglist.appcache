@@ -116,6 +116,8 @@ CACHE:
 /img/icons/content/ic_remove_circle_48px.svg
 /img/icons/content/ic_remove_circle_outline_24px.svg
 /img/icons/content/ic_remove_circle_outline_48px.svg
+/img/icons/content/ic_save_24px.svg
+/img/icons/content/ic_save_48px.svg
 /img/icons/hardware/ic_keyboard_arrow_left_24px.svg
 /img/icons/hardware/ic_keyboard_arrow_left_48px.svg
 /img/icons/navigation/ic_menu_18px.svg
@@ -136,6 +138,9 @@ CACHE:
 /img/icons/social/ic_mood_bad_48px.svg
 /img/icons/social/ic_person_24px.svg
 /img/icons/social/ic_person_48px.svg
+/img/icons/social/ic_person_add_18px.svg
+/img/icons/social/ic_person_add_24px.svg
+/img/icons/social/ic_person_add_48px.svg
 
 NETWORK:
 /

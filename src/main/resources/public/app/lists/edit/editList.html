@@ -1,25 +1,35 @@
 <loading-cycle ng-if="updating"></loading-cycle>
-<form ng-if="!updating" id="updateShoppingListForm" role="form" name="updateShoppingListForm" ng-submit="updateList()" class="md-padding">
-    <md-input-container class="md-icon-float md-block">
-        <md-icon md-svg-src="img/icons/action/ic_list_24px.svg"></md-icon>
-        <input id="name" name="name" ng-model="list.name" type="text" placeholder="Name der Liste">
-    </md-input-container>
-    <md-autocomplete
-            md-selected-item="selectedUser"
-            md-selected-item-change="addUserToOwners(selectedUser, $mdAutocompleteCtrl)"
-            md-search-text="ctrl.userSearchText"
-            md-items="user in users | filter: hasProperty | filter: notContained | limitTo: 5"
-            md-item-text="user.username"
-            md-min-length="1"
-            placeholder="Nutzer finden">
-        <md-item-template>
-            <span md-highlight-text="userSearchText" md-highlight-flags="^i">{{user.username}}</span>
-        </md-item-template>
-        <md-not-found>
-            Kein Treffer gefunden.
-        </md-not-found>
-    </md-autocomplete>
+<div ng-hide="updating">
+    <div class="md-padding">
+        <form id="updateShoppingListForm" role="form" name="updateShoppingListForm" ng-submit="updateList()">
+            <md-input-container class="md-icon-float md-block" ng-class="{'md-icon-right' : saveIsVisible}">
+                <md-icon md-svg-src="img/icons/action/ic_list_24px.svg"></md-icon>
+                <input id="name" name="name" ng-model="list.name" ng-focus="showSave()" ng-blur="hideSave()" type="text" placeholder="Name der Liste">
+                <md-icon ng-if="saveIsVisible && !nameChanged(updateShoppingListForm)" class="disabled" md-svg-src="img/icons/content/ic_save_24px.svg"></md-icon>
+                <md-icon ng-if="saveIsVisible && nameChanged(updateShoppingListForm)" md-svg-src="img/icons/content/ic_save_24px.svg" type="submit" ng-click="updateList()"></md-icon>
+            </md-input-container>
+        </form>
+    </div>
     <md-list>
+        <md-subheader class="md-no-sticky">Berechtigte Nutzer:</md-subheader>
+        <div class="md-padding" layout="row">
+            <md-icon style="margin-right:32px;" md-svg-src="img/icons/social/ic_person_add_24px.svg"></md-icon>
+            <md-autocomplete flex
+                             md-selected-item="selectedUser"
+                             md-selected-item-change="addUserToOwners(selectedUser, $mdAutocompleteCtrl)"
+                             md-search-text="ctrl.userSearchText"
+                             md-items="user in users | filter: hasProperty | filter: notContained | limitTo: 5"
+                             md-item-text="user.username"
+                             md-min-length="1"
+                             placeholder="Nutzer hinzufügen">
+                <md-item-template>
+                    <span md-highlight-text="userSearchText" md-highlight-flags="^i">{{user.username}}</span>
+                </md-item-template>
+                <md-not-found>
+                    Kein Treffer gefunden.
+                </md-not-found>
+            </md-autocomplete>
+        </div>
         <md-list-item class="md-2-line" ng-repeat="owner in list.owners track by $index">
             <md-icon md-svg-src="img/icons/social/ic_person_24px.svg"></md-icon>
             <div class="md-list-item-text">
@@ -31,13 +41,12 @@
             </md-button>
         </md-list-item>
     </md-list>
-    <section layout="column" layout-align="center center">
-        <md-button class="md-primary" ng-disabled="disableUpdateButton(updateShoppingListForm)" type="submit">
-            Aktualisieren
+
+    <section layout="row" layout-align="center center">
+        <md-button ng-href="{{'#/lists/' + list.entityId}}">
+            Fertig
         </md-button>
     </section>
-
-</form>
-
+</div>
 
 
