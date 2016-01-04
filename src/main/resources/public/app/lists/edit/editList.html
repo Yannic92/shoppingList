@@ -1,5 +1,5 @@
 <loading-cycle ng-if="updating"></loading-cycle>
-<form ng-if="!updating" id="updateShoppingListForm" role="form" name="updateShoppingListForm" ng-submit="updateList()" layout-padding>
+<form ng-if="!updating" id="updateShoppingListForm" role="form" name="updateShoppingListForm" ng-submit="updateList()" class="md-padding">
     <md-input-container class="md-icon-float md-block">
         <md-icon md-svg-src="img/icons/action/ic_list_24px.svg"></md-icon>
         <input id="name" name="name" ng-model="list.name" type="text" placeholder="Name der Liste">
