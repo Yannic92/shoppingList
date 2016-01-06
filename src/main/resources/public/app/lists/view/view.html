@@ -1,4 +1,5 @@
-<div flex ng-if="!loading">
+<div ng-if="!loading">
+    <div flex>
     <form id="createNewItemForm" role="form" class="md-padding" name="createNewItemForm" ng-submit="createNewItem()">
         <md-autocomplete id ="newItemAutocomplete"
                          md-no-cache="true"
@@ -15,11 +16,14 @@
             </md-item-template>
         </md-autocomplete>
     </form>
-    <md-list ng-cloak>
-        <ng-include ng-repeat="item in list.items | orderBy: 'article.name' track by $index"
-             src="'/app/item/item.html'"
-             ng-controller="itemController">
-        </ng-include>
-    </md-list>
+        <md-content>
+            <md-list ng-cloak role="list">
+                <ng-include ng-repeat="item in list.items | orderBy: 'article.name' track by $index"
+                     src="'/app/item/item.html'"
+                     ng-controller="itemController">
+                </ng-include>
+            </md-list>
+        </md-content>
     <ng-include class="padding-content" ng-if="list.items.length == 0" src="'app/lists/view/emptyList.html'"></ng-include>
+    </div>
 </div>

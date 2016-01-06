@@ -1,4 +1,4 @@
-<div ng-if="!dictionaryIsEmpty()" class="md-padding">
+<div ng-if="!dictionaryIsEmpty()">
     <md-input-container class="md-block">
         <md-icon md-svg-src="img/icons/action/ic_search_24px.svg"></md-icon>
         <input id="filter" name="filter" ng-model="filter" type="text" placeholder="Filtern..">
@@ -11,4 +11,4 @@
         </md-list-item>
     </md-list>
 </div>
-<ng-include ng-if="dictionaryIsEmpty()" class="md-padding" src="'/app/article/dictionary/emptyDictionary.html'"></ng-include>
+<ng-include ng-if="dictionaryIsEmpty()" src="'/app/article/dictionary/emptyDictionary.html'"></ng-include>

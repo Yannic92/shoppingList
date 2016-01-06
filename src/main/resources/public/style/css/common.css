@@ -86,22 +86,14 @@ md-icon.md-display-3{
     color: lightgray !important;
 }
 
-#addUserField{
-    padding-left: 16px;
-}
-
 .autocompleteIcon{
-    margin-right:32px;
+    margin-right:16px;
 }
 
 md-list-item.md-2-line .md-list-item-text h3, md-list-item.md-2-line>.md-no-style .md-list-item-text h3, md-list-item.md-3-line .md-list-item-text h3, md-list-item.md-3-line>.md-no-style .md-list-item-text h3{
     white-space: normal;
 }
 
-.titlebar{
-    padding-right:0px !important;
-}
-
-md-list-item.md-list-item-with-secondary .md-no-style, md-list-item.md-no-proxy{
+md-list-item.md-list-item-with-secondary .md-list-item-text{
     padding-right: 45px;
 }
