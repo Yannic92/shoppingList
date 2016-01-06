@@ -77,9 +77,9 @@ body {
     text-align: center;
 }
 
-md-icon.md-display-3{
-    width: 56px !important;
-    height: 56px !important;
+.md-display-1>md-icon{
+    width: 34px !important;
+    height: 34px !important;
 }
 
 .disabled {
