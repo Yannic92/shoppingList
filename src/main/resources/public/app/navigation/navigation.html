@@ -19,7 +19,7 @@
     </md-content>
     <md-content flex layout="row">
         <ng-include ng-if="authenticated" ng-controller="leftSideNav" src="'app/navigation/leftSideNav/leftSideNav.html'" layout></ng-include>
-        <div layout="column" layout-fill>
+        <div layout="column" flex>
             <md-toolbar class="md-tall md-warn" ng-if="error" >
                 <div style="height: 128px;line-height: 128px;text-align: center;">
                     <span style="display: inline-block;vertical-align: middle;line-height: normal;">
