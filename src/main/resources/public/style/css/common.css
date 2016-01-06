@@ -105,3 +105,9 @@ md-list-item.md-list-item-with-secondary .md-list-item-text{
 .titlebar{
     padding-right: 0px;
 }
+
+.md-headline{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}

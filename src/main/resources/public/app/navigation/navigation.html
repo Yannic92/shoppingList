@@ -8,7 +8,7 @@
                 {{title}}
             </h1>
             <span flex></span>
-            <div class="md-toolbar-item">
+            <div class="md-toolbar-item" layout="row">
                 <md-button ng-if="shortCutAction.available" aria-label="{{shortCutAction.ariaLabel}}" class="md-icon-button" ng-click="shortCutAction.action()">
                     <md-icon md-svg-src="{{shortCutAction.icon}}"></md-icon>
                 </md-button>
