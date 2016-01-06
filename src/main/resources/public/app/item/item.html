@@ -1,10 +1,10 @@
-<md-list-item flex="nogrow" class="md-2-line">
+<md-list-item flex="nogrow" class="md-2-line md-list-item-with-secondary">
     <md-checkbox aria-label="item" ng-change="updateItem(item)" md-no-ink ng-model="item.done"></md-checkbox>
     <div class="md-list-item-text">
         <h3 ng-class="{ 'striked-out': item.done}">{{item.article.name}}</h3>
         <p ng-class="{ 'striked-out': item.done}">{{item.count}} </p>
     </div>
-    <md-button class="md-secondary-container md-icon-button" ng-click="deleteItem(item)">
-        <md-icon md-svg-src="img/icons/action/ic_delete_24px.svg"></md-icon>
+    <md-button class="md-secondary-container md-icon-button">
+        <md-icon ng-click="deleteItem(item)" class="md-secondary" md-svg-src="img/icons/action/ic_delete_24px.svg"></md-icon>
     </md-button>
 </md-list-item>

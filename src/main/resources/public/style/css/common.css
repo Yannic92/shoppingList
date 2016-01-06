@@ -101,3 +101,7 @@ md-list-item.md-2-line .md-list-item-text h3, md-list-item.md-2-line>.md-no-styl
 .titlebar{
     padding-right:0px !important;
 }
+
+md-list-item.md-list-item-with-secondary .md-no-style, md-list-item.md-no-proxy{
+    padding-right: 45px;
+}
