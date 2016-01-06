@@ -1,5 +1,5 @@
 <md-list-item flex="nogrow" class="md-2-line md-list-item-with-secondary">
-    <md-checkbox aria-label="item" ng-change="updateItem(item)" md-no-ink ng-model="item.done"></md-checkbox>
+    <md-checkbox aria-label="item" ng-change="updateItem(item)" class="md-primary" md-no-ink ng-model="item.done"></md-checkbox>
     <div class="md-list-item-text">
         <h3 ng-class="{ 'striked-out': item.done}">{{item.article.name}}</h3>
         <p ng-class="{ 'striked-out': item.done}">{{item.count}} </p>
