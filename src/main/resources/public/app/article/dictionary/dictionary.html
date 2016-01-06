@@ -5,8 +5,10 @@
     </md-input-container>
 
     <md-list ng-cloak>
-        <md-list-item ng-repeat="article in articles | filter: filter track by $index" class="secondary-button-padding">
-            <p>{{article.name}}</p>
+        <md-list-item class="md-2-line md-list-item-with-secondary" ng-repeat="article in articles | filter: filter track by $index" >
+            <div class="md-list-item-text">
+                <h3>{{article.name}}</h3>
+            </div>
             <md-icon class="md-secondary" ng-click="deleteArticle(article)" md-svg-src="img/icons/action/ic_delete_24px.svg"></md-icon>
         </md-list-item>
     </md-list>
