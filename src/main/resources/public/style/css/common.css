@@ -97,3 +97,7 @@ md-list-item.md-2-line .md-list-item-text h3, md-list-item.md-2-line>.md-no-styl
 md-list-item.md-list-item-with-secondary .md-list-item-text{
     padding-right: 45px;
 }
+
+.md-list-item-inner{
+    overflow: hidden;
+}
