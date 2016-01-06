@@ -101,3 +101,7 @@ md-list-item.md-list-item-with-secondary .md-list-item-text{
 .md-list-item-inner{
     overflow: hidden;
 }
+
+.titlebar{
+    padding-right: 0px;
+}

@@ -18,7 +18,7 @@
     </div>
 </md-toolbar>
 
-<md-content md-scroll-y layout="column" layout-padding flex>
+<md-content md-scroll-y layout="column" flex>
     <div class="md-tall md-warn" ng-if="error" >
         <div style="height: 128px;line-height: 128px;text-align: center;">
             <span style="display: inline-block;vertical-align: middle;line-height: normal;">
@@ -26,6 +26,6 @@
             </span>
         </div>
     </div>
-    <loading-cycle flex ng-if="loading"></loading-cycle>
+    <loading-cycle layout-padding flex ng-if="loading"></loading-cycle>
     <div ng-view></div>
 </md-content>
