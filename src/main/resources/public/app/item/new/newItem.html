@@ -2,12 +2,11 @@
     <form>
         <md-toolbar>
             <div class="md-toolbar-tools">
-                <h2>Neuer Posten: {{newItem.article.name}}</h2>
+                <h2 class="md-headline md-toolbar-item">{{newItem.article.name}}</h2>
             </div>
         </md-toolbar>
         <md-dialog-content layout="column">
             <div class="md-dialog-content">
-                <h2>Lege die Menge fest</h2>
                 <md-input-container>
                     <label md-autofocus>Menge</label>
                     <input ng-model="newItem.count">
