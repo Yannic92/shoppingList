@@ -1,5 +1,4 @@
-<loading-cycle ng-if="updating"></loading-cycle>
-<div flex ng-if="!updating">
+<div flex ng-if="!loading">
     <form id="createNewItemForm" role="form" class="md-padding" name="createNewItemForm" ng-submit="createNewItem()">
         <md-autocomplete id ="newItemAutocomplete"
                          md-no-cache="true"

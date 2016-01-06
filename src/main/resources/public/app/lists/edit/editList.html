@@ -1,5 +1,4 @@
-<loading-cycle ng-if="updating"></loading-cycle>
-<div ng-hide="updating">
+<div ng-hide="loading">
     <div class="md-padding">
         <form id="updateShoppingListForm" role="form" name="updateShoppingListForm" ng-submit="updateList()">
             <md-input-container class="md-icon-float md-block" ng-class="{'md-icon-right' : saveIsVisible}">

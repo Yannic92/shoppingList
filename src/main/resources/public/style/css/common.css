@@ -93,3 +93,11 @@ md-icon.md-display-3{
 .autocompleteIcon{
     margin-right:32px;
 }
+
+md-list-item.md-2-line .md-list-item-text h3, md-list-item.md-2-line>.md-no-style .md-list-item-text h3, md-list-item.md-3-line .md-list-item-text h3, md-list-item.md-3-line>.md-no-style .md-list-item-text h3{
+    white-space: normal;
+}
+
+.titlebar{
+    padding-right:0px !important;
+}

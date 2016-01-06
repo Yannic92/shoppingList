@@ -1,6 +1,5 @@
-<loading-cycle ng-if="loggingIn"></loading-cycle>
-<div layout="row" class="md-padding">
-    <form ng-if="!loggingIn" id="loginForm" name="loginForm" role="form" ng-submit="login()"
+<div ng-if="!loggingIn" layout="row" class="md-padding">
+    <form id="loginForm" name="loginForm" role="form" ng-submit="login()"
           flex-offset-gt-md="25" flex-gt-md="50"
           flex-offset-gt-sm="15" flex-gt-sm="66"
           flex-sm

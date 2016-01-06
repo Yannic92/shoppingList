@@ -1,16 +1,16 @@
 shoppingList.controller('confirmation',[ '$scope', '$rootScope', 'userService', '$routeParams','$location',
     function ($scope, $rootScope, userService, $routeParams, $location) {
-        
+
         $rootScope.title="Registrierung bestätigen";
-        $scope.loading = false;
+        $rootScope.loading = false;
         var username = $routeParams.username;
-                
+
         $scope.confirmation = {
             code: $routeParams.code ? $routeParams.code : ''
         };
 
         $scope.confirm = function () {
-            $scope.loading = true;
+            $rootScope.loading = true;
             userService.confirmRegistrationFor(username, $scope.confirmation)
                 .then(function(){
                     $location.path("/login");
@@ -19,7 +19,7 @@ shoppingList.controller('confirmation',[ '$scope', '$rootScope', 'userService', 
                     $rootScope.errorMessage = error.data.message;
                     $rootScope.goToTop();
                 }).finally(function () {
-                    $scope.loading = false;
+                    $rootScope.loading = false;
                 });
         }
 
@@ -35,7 +35,7 @@ shoppingList.config(['$routeProvider', function ($routeProvider) {
         templateUrl: '/app/authentication/register/confirmation/confirmation.html',
         controller: 'confirmation'
     };
-    
+
     $routeProvider.when('/register/confirmation/:username', routeConfig)
         .when('/register/confirmation/:username/:code', routeConfig);
 }]);

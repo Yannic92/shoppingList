@@ -19,11 +19,12 @@
 
     <title>Einkaufsliste</title>
 </head>
-<body ng-controller="navigation" layout>
+<body ng-controller="navigation" layout="row">
     <a id="top"></a>
-    <ng-include layout-fill src="'app/navigation/navigation.html'"></ng-include>
-    <script type="text/javascript" src="lib/angular.js"></script>
+    <ng-include ng-if="authenticated" ng-controller="leftSideNav" src="'app/navigation/leftSideNav/leftSideNav.html'" layout="row"></ng-include>
+    <ng-include layout="column" flex src="'app/navigation/navigation.html'"></ng-include>
 
+    <script type="text/javascript" src="lib/angular.js"></script>
     <script type="text/javascript" src="app/app.js"></script>
     <script type="text/javascript" src="app/directives/compareTo.js"></script>
     <script type="text/javascript" src="app/directives/loadingCycle.js"></script>

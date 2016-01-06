@@ -5,7 +5,7 @@ shoppingList.controller('editList', ['$scope','$rootScope','listService','$filte
         $scope.list = {
             name: ''
         };
-        $scope.updating = true;
+        $rootScope.loading = true;
         $scope.userSearchText = "";
         $scope.users = userService.get();
         $scope.ctrl = $scope;
@@ -14,11 +14,11 @@ shoppingList.controller('editList', ['$scope','$rootScope','listService','$filte
         lists.promise
             .then(function () {
                 $scope.list = angular.copy($filter('filter')(lists, {entityId: $routeParams.id})[0]);
-                $scope.updating = false;
+                $rootScope.loading = false;
             });
 
         $scope.updateList = function () {
-            $scope.updating = true;
+            $rootScope.loading = true;
             return listService.update($scope.list)
                 .then(function (updatedList) {
                     $mdToast.show(
@@ -29,7 +29,7 @@ shoppingList.controller('editList', ['$scope','$rootScope','listService','$filte
                     );
                 }).finally(function () {
                     $scope.hideSave();
-                    $scope.updating = false;
+                    $rootScope.loading = false;
                     $scope.updateShoppingListForm.$setPristine();
                 });
         };
@@ -111,6 +111,10 @@ shoppingList.controller('editList', ['$scope','$rootScope','listService','$filte
             }, 100);
 
         };
+
+        $scope.$on('$destroy', function(){
+            $rootScope.reset();
+        });
     }
 ]);
 

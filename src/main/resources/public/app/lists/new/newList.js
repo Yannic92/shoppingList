@@ -2,7 +2,7 @@ shoppingList.controller('newList', ['$scope','$rootScope','listService','$mdToas
     function ($scope, $rootScope, listService,$mdToast,$location,userService,$mdDialog) {
 
         $rootScope.title = "Neue Einkaufsliste";
-        $scope.loading = false;
+        $rootScope.loading = false;
         $scope.userSearchText = "";
         $scope.ctrl = $scope;
         $scope.list = {
@@ -48,7 +48,7 @@ shoppingList.controller('newList', ['$scope','$rootScope','listService','$mdToas
         fetchUsersIfNecessary();
 
         $scope.createList = function () {
-            $scope.loading = true;
+            $rootScope.loading = true;
             listService.create($scope.list)
                 .then(function (createdList) {
                     $mdToast.show(
@@ -60,7 +60,7 @@ shoppingList.controller('newList', ['$scope','$rootScope','listService','$mdToas
                     $location.path("/lists/" + createdList.entityId);
                 })
                 .finally(function () {
-                    $scope.loading = false;
+                    $rootScope.loading = false;
                 });
         };
 
@@ -83,6 +83,10 @@ shoppingList.controller('newList', ['$scope','$rootScope','listService','$mdToas
         $scope.disableCreateButton = function(){
             return !$scope.createShoppingListForm || !$scope.createShoppingListForm.$valid || $scope.createShoppingListForm.$pristine || $scope.list.owners.length == 0;
         };
+
+        $scope.$on('$destroy', function(){
+            $rootScope.reset();
+        });
     }
 ]);
 

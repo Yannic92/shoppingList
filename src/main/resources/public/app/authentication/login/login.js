@@ -1,9 +1,10 @@
 shoppingList.controller('login',[ '$rootScope', '$scope', '$location', 'authService','$mdToast','$mdMedia',
     function ($rootScope, $scope, $location, authService, $mdToast,$mdMedia) {
-        
-        
+
+
         $rootScope.credentials = {};
         $scope.loggingIn = false;
+        $rootScope.loading = false;
         $rootScope.title="Login";
 
         $scope.login = function () {
@@ -45,7 +46,7 @@ shoppingList.controller('login',[ '$rootScope', '$scope', '$location', 'authServ
                    logginInFinished();
                 });
         };
-        
+
         var showWelcomeToast = function () {
             var name = $rootScope.user.firstName ? $rootScope.user.firstName : $rootScope.user.username;
             var message = "Hallo " + name;
@@ -56,9 +57,10 @@ shoppingList.controller('login',[ '$rootScope', '$scope', '$location', 'authServ
                     .hideDelay(3000)
             );
         };
-        
+
         var loggingIn = function(){
             $scope.loggingIn = true;
+            $rootScope.loading = true;
             $mdToast.show(
                 $mdToast.simple()
                     .content("Prüfe Authentifizierung...")
@@ -66,23 +68,24 @@ shoppingList.controller('login',[ '$rootScope', '$scope', '$location', 'authServ
                     .hideDelay(0)
             );
         };
-        
+
         var logginInFinished = function () {
             $scope.loggingIn = false;
+            $rootScope.loading = false;
             $mdToast.hide();
         };
-        
+
         $scope.loginDisabled = function () {
             return $scope.loggingIn || ($scope.loginForm && !$scope.loginForm.$valid);
         };
 
         redirectIfLoggedIn();
-        
+
         $scope.$on('$destroy', function(){
-            
+
             $rootScope.reset();
         });
-        
+
         $scope.gtSm = function () {
             return $mdMedia('gt-sm')
         }

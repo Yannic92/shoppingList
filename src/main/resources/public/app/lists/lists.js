@@ -12,7 +12,7 @@ shoppingList.controller('lists', ['$scope', '$rootScope','listService',
         'use strict';
 
         $rootScope.title = "Einkaufslisten";
-        $scope.loading = true;
+        $rootScope.loading = true;
 
         var lists = listService.get();
 
@@ -20,11 +20,15 @@ shoppingList.controller('lists', ['$scope', '$rootScope','listService',
             if(!$scope.listsAreEmpty()){
                 $scope.$parent.goto("/lists/" + lists[0].entityId);
             }
-            $scope.loading = false;
+            $rootScope.loading = false;
         });
 
         $scope.listsAreEmpty = function(){
             return !lists || !lists.length || lists.length == 0;
         };
+
+        $scope.$on('$destroy', function(){
+            $rootScope.reset();
+        });
     }
 ]);

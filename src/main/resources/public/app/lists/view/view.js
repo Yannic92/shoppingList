@@ -22,7 +22,7 @@ shoppingList.controller('listView', ['$scope', '$rootScope','listService','itemS
 
         $scope.ctrl = $scope;
 
-        $scope.updating = true;
+        $rootScope.loading = true;
         $scope.creating = false;
 
         var newItem = $scope.newItem = {
@@ -74,16 +74,16 @@ shoppingList.controller('listView', ['$scope', '$rootScope','listService','itemS
                     }
                 }
             }).finally(function () {
-                $scope.updating = false;
+                $rootScope.loading = false;
             });
 
         $scope.update = function () {
-            $scope.updating = true;
+            $rootScope.loading = true;
             listService.getUpdated($scope.list)
                 .then(function(updatedList){
                     $scope.list = updatedList;
                 }).finally(function () {
-                    $scope.updating = false;
+                    $rootScope.loading = false;
                 });
         };
 
@@ -96,30 +96,31 @@ shoppingList.controller('listView', ['$scope', '$rootScope','listService','itemS
                 $scope.newItem.article = $scope.selectedArticle;
             }
 
-            $mdDialog.show({
-                    controller: createNewItemController,
-                    templateUrl: 'app/item/new/newItem.html',
-                    parent: angular.element(document.body),
-                    targetEvent: ev,
-                    clickOutsideToClose:true,
-                    fullscreen: false
-                })
-                .then(function(item) {
-                    itemService.create(item)
-                        .then(function(createdItem){
-                            $scope.list.items.push(createdItem);
-                            listService.update($scope.list)
-                                .then(function(){
-                                    initNewItem();
-                                },function(){
+            if($scope.newItem.article.name != '') {
 
-                                });
-                        })
-                }, function() {
-                    $scope.status = 'You cancelled the dialog.';
-                }).finally(function(){
-                $scope.creating = false;
-            });
+                $mdDialog.show({
+                        controller: createNewItemController,
+                        templateUrl: 'app/item/new/newItem.html',
+                        parent: angular.element(document.body),
+                        targetEvent: ev,
+                        clickOutsideToClose: true,
+                        fullscreen: false
+                    })
+                    .then(function (item) {
+                        return itemService.create(item)
+                            .then(function (createdItem) {
+                                $scope.list.items.push(createdItem);
+                                listService.update($scope.list)
+                                    .then(function () {
+                                        initNewItem();
+                                    }, function () {
+
+                                    });
+                            })
+                    }).finally(function () {
+                    $scope.creating = false;
+                });
+            }
         };
 
         $scope.deleteList = function(ev) {

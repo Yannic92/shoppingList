@@ -13,12 +13,14 @@
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
     <link rel="apple-touch-icon" sizes="180x180" href="img/fav.ico">
-    
+
     <title>Einkaufsliste</title>
 </head>
-<body ng-controller="navigation">
+<body ng-controller="navigation" layout="row">
     <a id="top"></a>
-    <ng-include layout-fill src="'app/navigation/navigation.html'"></ng-include>
+    <ng-include ng-if="authenticated" ng-controller="leftSideNav" src="'app/navigation/leftSideNav/leftSideNav.html'" layout="row"></ng-include>
+    <ng-include layout="column" flex src="'app/navigation/navigation.html'"></ng-include>
+
     <script type="text/javascript" src="lib/angular.js"></script>
     <script type="text/javascript" src="lib/app-compact.js"></script>
 </body>

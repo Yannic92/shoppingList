@@ -22,7 +22,8 @@ shoppingList.run(['$rootScope', '$location', '$anchorScroll',
             $rootScope.title = "";
             $rootScope.shortCutAction = {
                 available: false
-            }
+            };
+            $rootScope.loading = false;
         };
         $rootScope.goToTop = function () {
             $location.hash('top');
