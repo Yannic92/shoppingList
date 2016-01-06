@@ -89,14 +89,16 @@ shoppingList.controller('listView', ['$scope', '$rootScope','listService','itemS
 
         $scope.createNewItem = function (ev) {
 
-            $scope.creating = true;
-
             if($scope.selectedArticle){
 
                 $scope.newItem.article = $scope.selectedArticle;
             }
 
+            $scope.newItem.article.name = $scope.newItem.article.name.trim();
+
             if($scope.newItem.article.name != '') {
+
+                $scope.creating = true;
 
                 $mdDialog.show({
                         controller: createNewItemController,
