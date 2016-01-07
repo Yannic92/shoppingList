@@ -20,7 +20,6 @@
     <title>Einkaufsliste</title>
 </head>
 <body ng-controller="navigation" layout="row">
-    <a id="top"></a>
     <ng-include ng-if="authenticated" ng-controller="leftSideNav" src="'app/navigation/leftSideNav/leftSideNav.html'" layout="row"></ng-include>
     <ng-include layout="column" flex src="'app/navigation/navigation.html'"></ng-include>
 

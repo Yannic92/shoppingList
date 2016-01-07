@@ -66,10 +66,16 @@ shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'aut
         });
 
         $rootScope.$on('$routeChangeSuccess', function () {
-            $scope.navCollapsed = true;
+            $scope.closeNav();
             $rootScope.errorMessage = "";
             $rootScope.error = false;
             $rootScope.goToTop();
+        });
+
+        $rootScope.$watch('error', function(){
+            if($rootScope.error){
+                $rootScope.goToTop()
+            }
         });
 
         $scope.goto = function(path){
@@ -84,6 +90,11 @@ shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'aut
                     $location.path("/login");
                     $window.location.reload();
                 });
+        };
+
+        $scope.closeError = function(){
+            $rootScope.error = false;
+            $rootScope.errorMessage = "";
         };
     }
 ]);
