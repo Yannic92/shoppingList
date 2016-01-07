@@ -1,19 +1,25 @@
-shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'authService', '$route', '$mdSidenav','$mdMedia','$window',
-    function ($rootScope, $scope, $location, authService, $route, $mdSidenav,$mdMedia, $window) {
+shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'authService', '$route', '$mdComponentRegistry','$mdMedia','$window',
+    function ($rootScope, $scope, $location, authService, $route, $mdComponentRegistry,$mdMedia, $window) {
         $scope.lastPath = "";
 
         $scope.openNav = function(){
-            $mdSidenav('leftNav').open();
+            $mdComponentRegistry.when('leftNav').then(function(it){
+                it.open();
+            });
         };
 
         $scope.toggleNav = function(){
 
-            $mdSidenav('leftNav').toggle();
+            $mdComponentRegistry.when('leftNav').then(function(it){
+                it.toggle();
+            });
         };
 
         $scope.closeNav = function(){
             if(!$mdMedia('gt-md')) {
-                $mdSidenav('leftNav').close();
+                $mdComponentRegistry.when('leftNav').then(function(it){
+                    it.close();
+                });
             }
         };
 
