@@ -24,6 +24,7 @@ shoppingList.run(['$rootScope', '$location', '$anchorScroll',
                 available: false
             };
             $rootScope.loading = false;
+            $rootScope.authenticationAlreadyChecked = false;
         };
         $rootScope.goToTop = function () {
             $location.hash('top');

@@ -39,9 +39,11 @@ shoppingList.controller('login',[ '$rootScope', '$scope', '$location', 'authServ
             loggingIn();
             authService.isAuthenticated()
                 .then(function (user) {
-                    $rootScope.user = user;
-                    $location.replace();
-                    $location.path('/lists')
+                    if(user) {
+                        $rootScope.user = user;
+                        $location.replace();
+                        $location.path('/lists')
+                    }
                 }).finally(function(){
                    logginInFinished();
                 });
@@ -79,7 +81,9 @@ shoppingList.controller('login',[ '$rootScope', '$scope', '$location', 'authServ
             return $scope.loggingIn || ($scope.loginForm && !$scope.loginForm.$valid);
         };
 
-        redirectIfLoggedIn();
+        if(!$rootScope.authenticationAlreadyChecked) {
+            redirectIfLoggedIn();
+        }
 
         $scope.$on('$destroy', function(){
 

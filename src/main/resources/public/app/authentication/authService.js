@@ -1,6 +1,6 @@
 shoppingList.factory('authService',['$http', '$rootScope', function($http, $rootScope){
     var USER_ENDPOINT = 'sLUsers/current';
-    
+
     var authService = {
         authenticate : function (credentials) {
             var headers = authService.getAuthenticationHeader(credentials);
@@ -12,6 +12,7 @@ shoppingList.factory('authService',['$http', '$rootScope', function($http, $root
             });
         },
         isAuthenticated : function(){
+            $rootScope.authenticationAlreadyChecked = true;
             return $http.get(USER_ENDPOINT)
                 .then(function(response){
                     if(response.data.username){
