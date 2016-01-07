@@ -89,6 +89,16 @@ public class SLUserSecurityIntegrationTest {
 
 
     @Test
+    public void getUserAsUserReturnsUserInformation() throws Exception {
+
+        mockMvc.perform(get(sLUsersEndpoint + "/" + slUserTest.getEntityId()).with(user((slUserTest))))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaTypes.HAL_JSON_VALUE))
+            .andExpect(jsonPath("createdAt").doesNotExist());
+    }
+
+
+    @Test
     public void getUsersReturnsUnauthorizedForAnonymousUsers() throws Exception {
 
         mockMvc.perform(get(sLUsersEndpoint)).andExpect(status().isUnauthorized());

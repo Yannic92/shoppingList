@@ -14,12 +14,15 @@ import lombok.ToString;
 
 import org.hibernate.validator.constraints.Email;
 
+import org.springframework.data.annotation.CreatedDate;
+
 import org.springframework.hateoas.core.Relation;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -80,6 +83,10 @@ public class SLUser extends RestEntity<String> implements UserDetails {
     @JsonIgnore
     private Confirmation confirmation;
 
+    @CreatedDate
+    @JsonIgnore
+    private Date createdAt;
+
     public SLUser() {
 
         authorities = new HashSet<>();
@@ -87,6 +94,7 @@ public class SLUser extends RestEntity<String> implements UserDetails {
         this.accountNonExpired = true;
         this.accountNonLocked = true;
         this.credentialsNonExpired = true;
+        this.createdAt = new Date();
     }
 
 
@@ -172,5 +180,16 @@ public class SLUser extends RestEntity<String> implements UserDetails {
     public void setEntityId(String s) {
 
         setUsername(s);
+    }
+
+
+    @JsonIgnore
+    public void setCreatedAt(Date createdAt) {
+
+        if (createdAt == null) {
+            createdAt = new Date();
+        }
+
+        this.createdAt = createdAt;
     }
 }

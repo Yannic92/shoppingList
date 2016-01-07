@@ -15,7 +15,11 @@ import de.yannicklem.shoppinglist.restutils.service.EntityService;
 
 import lombok.RequiredArgsConstructor;
 
+import org.apache.log4j.Logger;
+
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.scheduling.annotation.Scheduled;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -28,15 +32,24 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpSession;
+
+import static org.apache.log4j.Logger.getLogger;
+
+import static java.lang.invoke.MethodHandles.lookup;
 
 
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired ))
 public class SLUserService implements UserDetailsService, EntityService<SLUser, String> {
 
+    private static final long ONE_HOUR = 1000 * 60 * 60;
+
+    private static Logger LOGGER = getLogger(lookup().lookupClass());
     private final SLUserRepository slUserRepository;
     private final ShoppingListService shoppingListService;
     private final ItemService itemService;
@@ -44,6 +57,20 @@ public class SLUserService implements UserDetailsService, EntityService<SLUser, 
     private final SLUserValidationService slUserValidationService;
     private final CurrentUserService currentUserService;
     private final ConfirmationMailService confirmationMailService;
+
+    @Scheduled(fixedRate = ONE_HOUR)
+    public void clearNotEnabledUsersOlderThanTwoDays() {
+
+        Date twoDaysBefore = new Date(new Date().getTime() - TimeUnit.DAYS.toMillis(2));
+        List<SLUser> inactiveUsersOlderThanTwoDays = slUserRepository.findInactiveUsersOlderThan(twoDaysBefore);
+
+        for (SLUser user : inactiveUsersOlderThanTwoDays) {
+            LOGGER.info("deleted inactive user: " + user.getUsername());
+        }
+
+        slUserRepository.save(slUserRepository.findAll());
+    }
+
 
     @Override
     public SLUser create(SLUser slUser) {
