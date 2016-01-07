@@ -65,10 +65,9 @@ public class SLUserService implements UserDetailsService, EntityService<SLUser, 
         List<SLUser> inactiveUsersOlderThanTwoDays = slUserRepository.findInactiveUsersOlderThan(twoDaysBefore);
 
         for (SLUser user : inactiveUsersOlderThanTwoDays) {
+            delete(user);
             LOGGER.info("deleted inactive user: " + user.getUsername());
         }
-
-        slUserRepository.save(slUserRepository.findAll());
     }
 
 
