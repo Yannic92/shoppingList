@@ -21,13 +21,15 @@
 <md-content md-scroll-y layout="column" flex>
     <a name="top" id="top"></a>
     <md-toolbar class="md-tall md-warn" ng-if="error" layout="row" layout-align="center center">
-        <div class="md-toolbar-tools fill-height" layout="row" layout-align="center center">
+        <div class="titlebar md-toolbar-tools fill-height text-centered" layout="row" layout-align="center center">
             <span class="md-toolbar-item">
                 {{errorMessage}}
             </span>
-            <md-button aria-label="close error" class="md-icon-button md-toolbar-item" ng-click="closeError()">
-                <md-icon md-svg-src="/img/icons/navigation/ic_close_24px.svg"></md-icon>
-            </md-button>
+            <div class=" md-toolbar-item" layout="row">
+                <md-button aria-label="close error" class="md-icon-button" ng-click="closeError()">
+                    <md-icon md-svg-src="/img/icons/navigation/ic_close_24px.svg"></md-icon>
+                </md-button>
+            </div>
         </div>
     </md-toolbar>
     <loading-cycle layout-padding flex ng-if="loading"></loading-cycle>
