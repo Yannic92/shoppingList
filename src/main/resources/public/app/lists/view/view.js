@@ -59,6 +59,11 @@ shoppingList.controller('listView', ['$scope', '$rootScope','listService','itemS
                             text: "Liste bearbeiten",
                             link: "#/lists/" + $scope.list.entityId + "/edit"
                         },{
+                            icon: "/img/icons/communication/ic_clear_all_24px.svg",
+                            text: "Liste leeren",
+                            action: $scope.clearList,
+                            disabled: $scope.listIsEmpty
+                        },{
                             icon: "img/icons/action/ic_delete_24px.svg",
                             text: "Liste löschen",
                             action: $scope.deleteList
@@ -125,6 +130,11 @@ shoppingList.controller('listView', ['$scope', '$rootScope','listService','itemS
             }
         };
 
+        $scope.listIsEmpty = function () {
+
+            return $scope.list && (!$scope.list.items || !$scope.list.items.length || !$scope.list.items.length > 0);
+        };
+
         $scope.deleteList = function(ev) {
             var confirm = $mdDialog.confirm()
                 .title("Möchtest du die Liste '" + $scope.list.name+ "' wirklich löschen?")
@@ -140,6 +150,22 @@ shoppingList.controller('listView', ['$scope', '$rootScope','listService','itemS
                         .then(function () {
                             goToPreviousList(index);
                         });
+                });
+        };
+
+        $scope.clearList = function(ev){
+
+            var confirm = $mdDialog.confirm()
+                .title("Möchtest du die Liste '" + $scope.list.name+ "' wirklich leeren?")
+                .content("Alle Posten auf der Liste werden unwiderruflich gelöscht.")
+                .targetEvent(ev)
+                .ok('Ja')
+                .cancel('Nein');
+
+            $mdDialog.show(confirm)
+                .then(function () {
+                    $scope.list.items.splice(0, $scope.list.items.length);
+                    listService.update($scope.list);
                 });
         };
 

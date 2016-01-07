@@ -111,3 +111,7 @@ md-list-item.md-list-item-with-secondary .md-list-item-text{
     overflow: hidden;
     white-space: nowrap;
 }
+
+md-menu-content{
+    overflow-y: hidden;
+}

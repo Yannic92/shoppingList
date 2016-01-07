@@ -1,5 +1,5 @@
 CACHE MANIFEST
-#07.01.2016 18:30
+#07.01.2016 19:12
 
 CACHE:
 /app/authentication/login/login.html
@@ -118,6 +118,8 @@ CACHE:
 /img/icons/communication/ic_email_48px.svg
 /img/icons/communication/ic_vpn_key_24px.svg
 /img/icons/communication/ic_vpn_key_48px.svg
+/img/icons/communication/ic_clear_all_24px.svg
+/img/icons/communication/ic_clear_all_48px.svg
 /img/icons/content/ic_remove_circle_24px.svg
 /img/icons/content/ic_remove_circle_48px.svg
 /img/icons/content/ic_remove_circle_outline_24px.svg
