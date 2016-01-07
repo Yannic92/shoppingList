@@ -41,6 +41,10 @@ public class SLUserRequestHandler implements RequestHandler<SLUser> {
         if (object.isAdmin() && !currentUser.isAdmin()) {
             throw new PermissionDeniedException();
         }
+
+        if (!object.isEnabled()) {
+            throw new PermissionDeniedException();
+        }
     }
 
 
