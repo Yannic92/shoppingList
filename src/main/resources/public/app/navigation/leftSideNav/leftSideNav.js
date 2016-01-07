@@ -1,9 +1,27 @@
 shoppingList.controller('leftSideNav', ['$scope','listService','$mdSidenav','$mdDialog','$location',
     function ($scope, listService, $mdSidenav, $mdDialog, $location) {
         $scope.lists = listService.get();
-        
+
+        $scope.deleteAllLists = function (ev) {
+            var confirm = $mdDialog.confirm()
+                .title("Möchtest wirklich alle Listen löschen?")
+                .content("Die Listen werden für dich nicht mehr zugänglich sein. Wenn du der einzige Besitzer der " +
+                    "Liste bist, wird sie unwiderruflich gelöscht.")
+                .targetEvent(ev)
+                .ok('Ja')
+                .cancel('Nein');
+
+            $mdDialog.show(confirm)
+                .then(function () {
+                    listService.deleteAll()
+                        .then(function(){
+                            $location.path("/lists");
+                        });
+                });
+        };
+
         $scope.deleteList = function(list, ev){
-            
+
             var confirm = $mdDialog.confirm()
                 .title("Möchtest du die Liste '" + list.name+ "' wirklich löschen?")
                 .content(listService.getDeleteMessage(list))
@@ -13,7 +31,6 @@ shoppingList.controller('leftSideNav', ['$scope','listService','$mdSidenav','$md
 
             $mdDialog.show(confirm)
                 .then(function () {
-                    //var deletedList = $filter('filter')($scope.lists, {entityId: list.entityId})[0];
                     var index = $scope.lists.indexOf(list);
                     listService.delete(list)
                         .then(function(){

@@ -27,10 +27,10 @@ shoppingList.factory('listService',['$resource', 'HALResource','$filter','$q',
                     resource.items.push({entityId: entity.items[i].entityId});
                 }
             }
-            
+
             return resource;
         };
-        
+
         var toEntity = function (resource){
             var entity = {};
             entity.entityId = resource.entityId;
@@ -38,33 +38,33 @@ shoppingList.factory('listService',['$resource', 'HALResource','$filter','$q',
             entity.name = resource.name;
             entity.owners = resource.owners;
             entity.items = resource.items;
-            
+
             return entity;
         };
-        
+
         var toEntities = function(resources){
-            
+
             var entities = [];
             if(!resources || !resources.length){
                 return entities;
             }
-            
+
             for(var i = 0 ; i < resources.length; i++){
                 var entity = toEntity(resources[i]);
                 entities.push(entity);
             }
-            
+
             return entities;
         };
-        
+
         var replaceExisting = function (list) {
             var existingList = $filter('filter')(persistedLists, {entityId: list.entityId})[0];
             var index = persistedLists.indexOf(existingList);
             persistedLists.splice(index, 1, list);
         };
-        
+
         var persistedLists = [];
-        
+
         var listService = {
             get: function(){
                 return persistedLists;
@@ -101,7 +101,7 @@ shoppingList.factory('listService',['$resource', 'HALResource','$filter','$q',
                         persistedLists.push.apply(persistedLists, entities);
                         return entities;
                     });
-                
+
                 return persistedLists.promise;
             },
             delete: function (list) {
@@ -112,6 +112,15 @@ shoppingList.factory('listService',['$resource', 'HALResource','$filter','$q',
                         persistedLists.splice(index,1);
                     });
             },
+            deleteAll: function(){
+                var promises = [];
+
+                for(var i = 0; i < persistedLists.length; i++){
+                    promises.push(listService.delete(persistedLists[i]));
+                }
+
+                return $q.all(promises);
+            },
             getDeleteMessage: function(list){
                 if(list && list.owners && list.owners.length > 1){
                     return "Die Liste wäre nur für dich nicht mehr verfügbar. Solltest du sie zurück wollen, " +
@@ -121,8 +130,8 @@ shoppingList.factory('listService',['$resource', 'HALResource','$filter','$q',
                 }
             }
         };
-        
+
         listService.fetch();
-        
+
         return listService;
     }]);

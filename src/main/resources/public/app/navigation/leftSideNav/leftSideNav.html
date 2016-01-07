@@ -12,19 +12,21 @@
             </md-button>
         </div>
     </md-toolbar>
-    <div layout="column">
-        <md-list ng-cloak>
-            <md-list-item ng-click="goto('/newList')">
-                <md-icon md-svg-src="img/icons/action/ic_add_shopping_cart_24px.svg"></md-icon>
-                <p>Neue Einkaufsliste</p>
-            </md-list-item>
-            <md-list-item ng-repeat="list in lists | orderBy: 'name' track by $index" ng-click="goto('/lists/'+ list.entityId)">
-                <md-icon md-svg-src="img/icons/action/ic_list_24px.svg"></md-icon>
-                <p>{{list.name}}</p>
-                <md-icon aria-label="delete list" class="md-secondary" ng-click="deleteList(list, $event)"
-                         md-svg-src="img/icons/action/ic_delete_24px.svg">
-                </md-icon>
-            </md-list-item>
-        </md-list>
-    </div>
+    <md-list ng-cloak>
+        <md-list-item ng-click="goto('/newList')">
+            <md-icon md-svg-src="img/icons/action/ic_add_shopping_cart_24px.svg"></md-icon>
+            <p>Neue Einkaufsliste</p>
+        </md-list-item>
+        <md-list-item ng-repeat="list in lists | orderBy: 'name' track by $index" ng-click="goto('/lists/'+ list.entityId)">
+            <md-icon md-svg-src="img/icons/action/ic_list_24px.svg"></md-icon>
+            <p>{{list.name}}</p>
+            <md-icon aria-label="delete list" class="md-secondary" ng-click="deleteList(list, $event)"
+                     md-svg-src="img/icons/action/ic_delete_24px.svg">
+            </md-icon>
+        </md-list-item>
+        <md-list-item ng-click="deleteAllLists($event)">
+            <md-icon md-svg-src="img/icons/content/ic_remove_circle_24px.svg"></md-icon>
+            <p>Alle Listen löschen</p>
+        </md-list-item>
+    </md-list>
 </md-sidenav>
