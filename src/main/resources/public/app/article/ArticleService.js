@@ -1,5 +1,5 @@
-shoppingList.factory('articleService',['$resource', 'HALResource','$filter',
-    function($resource, HALResource,$filter){
+shoppingList.factory('articleService',['$resource', 'HALResource','$filter', '$q',
+    function($resource, HALResource,$filter, $q){
 
         var articlesEndpoint = '/articles/:id';
         var methods = {
@@ -27,7 +27,7 @@ shoppingList.factory('articleService',['$resource', 'HALResource','$filter',
             entity._links = resource._links;
             entity.name = resource.name;
             entity.priceInEuro = resource.priceInEuro;
-            
+
             return entity;
         };
 
@@ -60,6 +60,16 @@ shoppingList.factory('articleService',['$resource', 'HALResource','$filter',
                 return persistedArticles;
             },
             create: function(article){
+                if (article) {
+                    var persistedArticlesWithSameName = $filter('filter')(persistedArticles, {name: article.name});
+                    if (persistedArticlesWithSameName && persistedArticlesWithSameName[0]) {
+                        article.entityId = persistedArticlesWithSameName[0].entityId;
+                        return $q(function(resolve, reject) {
+                            resolve(article);
+                        });
+                    }
+                }
+
                 return Articles.save(toResource(article)).$promise
                     .then(function(response){
                         var responseEntity = toEntity(response);
