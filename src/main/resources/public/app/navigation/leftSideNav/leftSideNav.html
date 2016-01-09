@@ -1,5 +1,5 @@
-<md-sidenav ng-if="authenticated" class="md-sidenav-left md-whiteframe-z2" md-component-id="leftNav" md-is-locked-open="$mdMedia('gt-md')">
-    <md-toolbar hide-gt-md>
+<md-sidenav ng-if="authenticated" class="md-sidenav-left md-whiteframe-z2" md-component-id="leftNav" md-is-locked-open="$mdMedia('gt-sm')">
+    <md-toolbar hide-gt-sm>
         <div class="md-toolbar-tools" layout="row" layout-align="start center">
             <div flex>
                 <md-button style="text-align: left;" ng-href="#/lists" ng-click="closeNav()">
@@ -24,7 +24,7 @@
                      md-svg-src="img/icons/action/ic_delete_24px.svg">
             </md-icon>
         </md-list-item>
-        <md-list-item ng-click="deleteAllLists($event)">
+        <md-list-item ng-if="!listsAreEmpty()" ng-click="deleteAllLists($event)">
             <md-icon md-svg-src="img/icons/content/ic_remove_circle_24px.svg"></md-icon>
             <p>Alle Listen löschen</p>
         </md-list-item>

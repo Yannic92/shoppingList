@@ -16,7 +16,7 @@ shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'aut
         };
 
         $scope.closeNav = function(){
-            if(!$mdMedia('gt-md')) {
+            if(!$mdMedia('gt-sm')) {
                 $mdComponentRegistry.when('leftNav').then(function(it){
                     it.close();
                 });

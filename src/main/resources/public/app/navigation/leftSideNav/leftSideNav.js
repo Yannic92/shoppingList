@@ -39,6 +39,10 @@ shoppingList.controller('leftSideNav', ['$scope','listService','$mdSidenav','$md
                 });
         };
 
+        $scope.listsAreEmpty = function(){
+            return !$scope.lists || !$scope.lists.length || $scope.lists.length == 0;
+        };
+
         var goToPreviousListIfDeletedCurrentlyShownList = function(deletedList, lastIndex){
             if($location.path() === "/lists/" + deletedList.entityId && lastIndex != -1) {
                 if ($scope.lists && $scope.lists.length && $scope.lists.length > 0) {
