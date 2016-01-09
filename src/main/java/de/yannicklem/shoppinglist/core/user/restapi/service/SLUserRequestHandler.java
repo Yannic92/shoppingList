@@ -23,6 +23,10 @@ public class SLUserRequestHandler implements RequestHandler<SLUser> {
         if (!slUserPermissionEvaluator.isAllowedToCreate(userToCreate, currentUser)) {
             throw new PermissionDeniedException();
         }
+        
+        if(userToCreate != null && userToCreate.getEmail() != null){
+            userToCreate.setEmail(userToCreate.getEmail().toLowerCase());
+        }
     }
 
 
@@ -31,6 +35,10 @@ public class SLUserRequestHandler implements RequestHandler<SLUser> {
 
         if (!slUserPermissionEvaluator.isAllowedToUpdate(oldUser, newUser, currentUser)) {
             throw new PermissionDeniedException();
+        }
+
+        if(newUser != null && newUser.getEmail() != null){
+            newUser.setEmail(newUser.getEmail().toLowerCase());
         }
     }
 

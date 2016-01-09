@@ -25,15 +25,17 @@ public class ConfirmationMailService {
 
     public void sendConfirmationMailTo(SLUser slUser) {
 
+        String userConfirmationUri;
+        userConfirmationUri = confirmationUri.replace("{username}", slUser.getUsername())
+                .replace("{code}", slUser.getConfirmation().getCode());
+        
         String confirmationMessage = String.format("Hallo %s,\n\n"
                 + "es freut mich, dass du dich für die Verwendung der Einkaufsliste entschieden hast.\n"
                 + "Es fehlt noch ein letzter Schritt, damit du die Einkaufsliste verwenden kannst.\n"
-                + "Bestätige deine Registrierung mit folgendem Code: \n\n%s\n\n"
-                + "Folge einfach diesem Link zur Bestätigung deiner Registrierung: \n\n%s\n\n"
+                + "Folge einfach diesem Link zur Aktivierung deines Kontos: \n\n%s\n\n"
                 + "Solltest du dich nicht registriert haben, ignoriere diese E-Mail einfach.\n\n"
                 + "Viel Erfolg mit deiner Einkaufsliste",
-                slUser.getFirstName() != null ? slUser.getFirstName() : slUser.getUsername(),
-                slUser.getConfirmation().getCode(), confirmationUri.replace("{username}", slUser.getUsername()).replace("{code}", slUser.getConfirmation().getCode()));
+                slUser.getFirstName() != null ? slUser.getFirstName() : slUser.getUsername(), userConfirmationUri);
 
         mailService.sendMail(slUser.getEmail(), confirmationMessage);
     }

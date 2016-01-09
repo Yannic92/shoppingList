@@ -1,5 +1,5 @@
 CACHE MANIFEST
-#09.01.2016 17:09
+#09.01.2016 18:18
 
 CACHE:
 /app/authentication/login/login.html
@@ -15,6 +15,7 @@ CACHE:
 /app/lists/edit/editList.html
 /app/directives/loadingCycle.html
 /app/authentication/register/register.html
+/app/authentication/register/confirmation/confirmationNotification.html
 /app/authentication/register/confirmation/confirmation.html
 /app/item/new/newItem.html
 /app/item/item.html

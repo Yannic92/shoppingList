@@ -15,7 +15,7 @@ shoppingList.controller('register', ['$scope', '$rootScope', 'userService', '$lo
             $rootScope.loading = true;
             userService.create($scope.user)
                 .then(function () {
-                    $location.path("/register/confirmation/" + $scope.user.username)
+                    $location.path("/register/confirmation");
                 }, function (error) {
                     $rootScope.error = true;
                     $rootScope.errorMessage = error.data.message;

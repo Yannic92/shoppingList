@@ -1,22 +1,25 @@
-<div ng-if="!loading" class="md-padding" layout="column">
-    <h2 class="md-display-1 text-centered">Fast geschafft!</h2>
+<div ng-if="!loading && success" class="md-padding" layout="column">
+    <h2 class="md-display-1 text-centered">Aktivierung erfolgreich!</h2>
     <p class="info text-centered">
-        Dir wurde ein Bestätigungscode per E-Mail zugesandt.
-        Trage diesen bitte hier ein, um die Registrierung abzuschließen.
+        Dein Konto wurde erfolgreich aktiviert. Du kannst dich nun einloggen, um die Einkaufsliste zu verwenden.
     </p>
-
-    <form layout="column" layout-align="center center" name="confirmationForm" ng-submit="confirm()">
-        <md-input-container id="confirmationCodeInputContainer">
-            <label for="confirmationCode">Bestätigungscode</label>
-            <input id="confirmationCode" name="confirmationCode" ng-model="confirmation.code" type="text" required>
-        </md-input-container>
-        <section layout="row" layout-sm="column" layout-align="center center" >
-            <md-button class="md-primary" ng-disabled="!confirmationForm.$valid" type="submit">
-                Registrierung bestätigen
-            </md-button>
-            <md-tooltip ng-if="!confirmationForm.$valid">
-                Bitten geben Sie zunächst Ihren Bestätigungscode ein
-            </md-tooltip>
-        </section>
-    </form>
+    <md-button class="md-primary" ng-href="#/login">
+        Los gehts!
+    </md-button>
+</div>
+<div ng-if="!loading && !success" class="md-padding" layout="column">
+    <h2 class="md-display-1 text-centered">Aktivierung fehlgeschlagen!
+        <md-icon md-svg-src="img/icons/social/ic_mood_bad_48px.svg"></md-icon>
+    </h2>
+    <p class="info text-centered">
+        Leider ist bei der Aktivierung deines Kontos ein Fehler aufgetreten.<br/>
+        Bitte bedenke, dass die Aktivierung bis maximal zwei Tage nach deiner Registrierung möglich ist.<br/>
+    </p>
+    <p class="info text-centered">
+        Falls deine Registrierung mehr als zwei Tage zurück liegt, registriere dich bitte erneut.
+    </p>
+    <p class="info text-centered">
+        Falls das nicht der Fall ist, sende bitte eine E-Mail mit deinem Nutzernamen und/oder deiner E-Mailadresse an 
+        <a href="mailto:shoppinglist.confirmation@gmail.com">shoppinglist.confirmation@gmail.com</a>.
+    </p>
 </div>

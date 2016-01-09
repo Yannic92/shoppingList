@@ -259,7 +259,7 @@ public class SLUserService implements UserDetailsService, EntityService<SLUser, 
         SLUser user = slUserRepository.findOne(username);
 
         if (user == null) {
-            user = slUserRepository.findByEmail(username);
+            user = slUserRepository.findByEmail(username.toLowerCase());
         }
 
         if (user == null) {
@@ -304,14 +304,14 @@ public class SLUserService implements UserDetailsService, EntityService<SLUser, 
         SLUser slUser = slUserRepository.findOne(name);
 
         if (slUser == null || slUser.isEnabled()) {
-            throw new NotFoundException(String.format("User '%s' not found", name));
+            throw new EntityInvalidException("Aktivierung nicht möglich");
         }
 
         if (slUser.getConfirmation().getCode().equals(confirmation.getCode())) {
             slUser.setEnabled(true);
             slUserRepository.save(slUser);
         } else {
-            throw new EntityInvalidException("Bestätigungscode nicht korrekt");
+            throw new EntityInvalidException("Aktivierung nicht möglich");
         }
     }
 }
