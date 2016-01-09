@@ -7,8 +7,15 @@ shoppingList.factory('authService',['$http', '$rootScope', function($http, $root
 
             return $http.get(USER_ENDPOINT, {
                 headers: headers
-            }).then(function(){
-                return authService.isAuthenticated();
+            }).then(function(response){
+                if(response.data && response.data.username){
+                    $rootScope.authenticated = true;
+                    return response.data;
+                }else {
+                    $rootScope.authenticated = false;
+                }
+            }, function(){
+                $rootScope.authenticated = false;
             });
         },
         isAuthenticated : function(){
