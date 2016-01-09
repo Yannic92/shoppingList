@@ -87,7 +87,7 @@ body {
 }
 
 .autocompleteIcon{
-    margin-right:16px;
+    margin-right:32px;
 }
 
 md-list-item.md-2-line .md-list-item-text h3, md-list-item.md-2-line>.md-no-style .md-list-item-text h3, md-list-item.md-3-line .md-list-item-text h3, md-list-item.md-3-line>.md-no-style .md-list-item-text h3{
@@ -103,7 +103,7 @@ md-list-item.md-list-item-with-secondary .md-list-item-text{
 }
 
 .titlebar{
-    padding-right: 0px;
+    padding-right: 0;
 }
 
 .md-headline{
@@ -114,4 +114,14 @@ md-list-item.md-list-item-with-secondary .md-list-item-text{
 
 md-menu-content{
     overflow-y: hidden;
+}
+
+md-list-item {
+    margin-left: -8px;
+}
+
+@media (min-width: 960px) {
+    md-list-item {
+        margin-left: 0;
+    }
 }
