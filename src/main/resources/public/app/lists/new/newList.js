@@ -49,6 +49,9 @@ shoppingList.controller('newList', ['$scope','$rootScope','listService','$mdToas
 
         $scope.createList = function () {
             $rootScope.loading = true;
+            $rootScope.errorMessage = '';
+            $rootScope.error = false;
+
             listService.create($scope.list)
                 .then(function (createdList) {
                     $mdToast.show(
@@ -58,6 +61,9 @@ shoppingList.controller('newList', ['$scope','$rootScope','listService','$mdToas
                             .hideDelay(3000)
                     );
                     $location.path("/lists/" + createdList.entityId);
+                }, function(error){
+                    $rootScope.errorMessage = error.data.message;
+                    $rootScope.error = true;
                 })
                 .finally(function () {
                     $rootScope.loading = false;
@@ -78,10 +84,6 @@ shoppingList.controller('newList', ['$scope','$rootScope','listService','$mdToas
 
         $scope.isLoggedInUser = function (user) {
             return user && user.username === $rootScope.user.username;
-        };
-
-        $scope.disableCreateButton = function(){
-            return !$scope.createShoppingListForm || !$scope.createShoppingListForm.$valid || $scope.createShoppingListForm.$pristine || $scope.list.owners.length == 0;
         };
 
         $scope.$on('$destroy', function(){

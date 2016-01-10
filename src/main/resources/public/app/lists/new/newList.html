@@ -33,12 +33,12 @@
                 <h3>{{owner.username}}</h3>
                 <h4 ng-if="firstNameOrLastNameIsDefined(owner)">{{owner.firstName ? owner.firstName : ''}} {{owner.lastName ? owner.lastName : ''}}</h4>
             </div>
-            <md-icon aria-label="remove user from owners list" class="md-secondary" ng-click="removeUserFromOwners($index, owner)" md-svg-src="img/icons/action/ic_delete_24px.svg"></md-icon>
+            <md-icon aria-label="remove user from owners list" ng-if="!isLoggedInUser(owner)" class="md-secondary" ng-click="removeUserFromOwners($index, owner)" md-svg-src="img/icons/action/ic_delete_24px.svg"></md-icon>
         </md-list-item>
     </md-list>
 
     <section layout="row" layout-align="center center">
-        <md-button class="md-primary" ng-disabled="disableCreateButton()" type="submit" ng-click="createList()">
+        <md-button class="md-primary" type="submit" ng-click="createList()">
             Erstellen
         </md-button>
     </section>

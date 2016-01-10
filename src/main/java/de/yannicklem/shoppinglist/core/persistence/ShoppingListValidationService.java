@@ -36,7 +36,7 @@ public class ShoppingListValidationService {
     private void validateOwners(Set<SLUser> owners) {
 
         if (owners == null || owners.isEmpty()) {
-            throw new EntityInvalidException("Owners must not be null or empty");
+            throw new EntityInvalidException("Es muss mindestens einen Besitzer geben");
         }
 
         owners.forEach(slUserValidationService::validate);
@@ -56,7 +56,7 @@ public class ShoppingListValidationService {
     private void validateName(String name) {
 
         if (name == null || name.isEmpty()) {
-            throw new EntityInvalidException("Name must not be null or empty");
+            throw new EntityInvalidException("Eine Liste darf keinen leeren Namen haben");
         }
     }
 }
