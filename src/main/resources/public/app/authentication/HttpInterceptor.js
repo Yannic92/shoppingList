@@ -2,8 +2,8 @@ shoppingList.service('MyHttpInterceptor',['$location', '$q', '$injector', '$root
     function ($location ,$q, $injector, $rootScope,$window) {
         return {
             responseError: function(rejection) {
-                if(rejection.status == 401 || rejection.status == 403) {
-                    
+                if(rejection.status == 401 || (rejection.status == 403 && rejection.data.message.indexOf("CSRF") > -1)) {
+
                     if($rootScope.authenticated) {
                         var $mdDialog = $injector.get('$mdDialog');
                         $mdDialog.show(
