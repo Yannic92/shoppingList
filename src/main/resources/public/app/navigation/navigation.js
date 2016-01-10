@@ -109,7 +109,8 @@ shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'aut
         };
 
         if (window.applicationCache) {
-            applicationCache.addEventListener('updateready', function() {
+            window.applicationCache.addEventListener('updateready', function() {
+                console.log("New Version available!");
                 $scope.newVersionAvailable = true;
             });
         }
