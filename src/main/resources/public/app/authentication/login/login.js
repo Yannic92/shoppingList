@@ -39,11 +39,9 @@ shoppingList.controller('login',[ '$rootScope', '$scope', '$location', 'authServ
             loggingIn();
             authService.isAuthenticated()
                 .then(function (user) {
-                    if(user) {
-                        $rootScope.user = user;
-                        $location.replace();
-                        $location.path('/lists')
-                    }
+                    $rootScope.user = user;
+                    $location.replace();
+                    $location.path('/lists')
                 }).finally(function(){
                    logginInFinished();
                 });

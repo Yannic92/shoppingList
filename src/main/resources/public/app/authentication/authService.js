@@ -14,8 +14,6 @@ shoppingList.factory('authService',['$http', '$rootScope', function($http, $root
                 }else {
                     $rootScope.authenticated = false;
                 }
-            }, function(){
-                $rootScope.authenticated = false;
             });
         },
         isAuthenticated : function(){
@@ -28,8 +26,6 @@ shoppingList.factory('authService',['$http', '$rootScope', function($http, $root
                     }else{
                         $rootScope.authenticated = false;
                     }
-                }, function () {
-                    $rootScope.authenticated = false;
                 });
         },
         getAuthenticationHeader : function(credentials){

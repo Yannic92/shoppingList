@@ -54,11 +54,10 @@ shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'aut
             authService.isAuthenticated()
                 .then(function (user) {
                     $rootScope.user = user;
-                    if (!$rootScope.authenticated) {
-                        redirectToLoginIfNotFreeRotue(newUrl);
-                    }else{
-                        $route.reload();
-                    }
+                    $route.reload();
+
+                }, function(){
+                    redirectToLoginIfNotFreeRotue(newUrl);
                 });
         };
 
