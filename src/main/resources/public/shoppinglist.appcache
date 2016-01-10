@@ -1,5 +1,5 @@
 CACHE MANIFEST
-#09.01.2016 22:46
+#10.01.2016 14:14
 
 CACHE:
 /app/authentication/login/login.html
@@ -83,6 +83,7 @@ CACHE:
 /img/icons/hardware/ic_keyboard_arrow_left_24px.svg
 /img/icons/navigation/ic_menu_24px.svg
 /img/icons/navigation/ic_more_vert_24px.svg
+/img/icons/navigation/ic_refresh_24px.svg
 /img/icons/navigation/ic_close_24px.svg
 /img/icons/notification/ic_sync_24px.svg
 /img/icons/notification/ic_sync_disabled_24px.svg

@@ -125,3 +125,9 @@ md-list-item {
         margin-left: 0;
     }
 }
+
+.update-notification {
+    white-space: normal;
+    line-height: 16px;
+    font-size: 12px;
+}

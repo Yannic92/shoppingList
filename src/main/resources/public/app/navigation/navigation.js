@@ -1,6 +1,7 @@
 shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'authService', '$route', '$mdComponentRegistry','$mdMedia','$window',
     function ($rootScope, $scope, $location, authService, $route, $mdComponentRegistry,$mdMedia, $window) {
         $scope.lastPath = "";
+        $scope.newVersionAvailable = false;
 
         $scope.openNav = function(){
             $mdComponentRegistry.when('leftNav').then(function(it){
@@ -102,6 +103,24 @@ shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'aut
             $rootScope.error = false;
             $rootScope.errorMessage = "";
         };
+
+        $scope.closeUpdateNotification = function(){
+            $scope.newVersionAvailable = false;
+        };
+
+        if (window.applicationCache) {
+            applicationCache.addEventListener('updateready', function() {
+                $scope.newVersionAvailable = true;
+            });
+        }
+
+        $scope.reload = function(){
+            $window.location.reload();
+        };
+
+        $scope.isXs = function(){
+            return $mdMedia('xs');
+        }
     }
 ]);
 

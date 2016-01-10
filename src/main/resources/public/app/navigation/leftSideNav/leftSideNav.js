@@ -4,9 +4,8 @@ shoppingList.controller('leftSideNav', ['$scope','listService','$mdSidenav','$md
 
         $scope.deleteAllLists = function (ev) {
             var confirm = $mdDialog.confirm()
-                .title("Möchtest wirklich alle Listen löschen?")
-                .content("Die Listen werden für dich nicht mehr zugänglich sein. Wenn du der einzige Besitzer der " +
-                    "Liste bist, wird sie unwiderruflich gelöscht.")
+                .title("Möchtest du wirklich alle Listen löschen?")
+                .content("Wenn du der einzige Besitzer einer der Listen bist, wird diese Liste unwiderruflich gelöscht.")
                 .targetEvent(ev)
                 .ok('Ja')
                 .cancel('Nein');

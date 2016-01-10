@@ -32,6 +32,21 @@
             </div>
         </div>
     </md-toolbar>
+    <md-toolbar class="md-hue-3" ng-class="{'md-tall' : isXs()}" ng-if="newVersionAvailable" layout="row" layout-align="center center">
+        <div class="titlebar md-toolbar-tools fill-height text-centered" layout="row" layout-align="center center">
+            <div flex>
+                <md-button ng-click="reload()" class="update-notification">
+                    <md-icon md-svg-src="/img/icons/navigation/ic_refresh_24px.svg"></md-icon>
+                    Eine neue Version ist verfügbar: Jetzt aktualisieren!
+                </md-button>
+            </div>
+            <div class="md-toolbar-item" layout="row">
+                <md-button aria-label="close error" class="md-icon-button" ng-click="closeUpdateNotification()">
+                    <md-icon md-svg-src="/img/icons/navigation/ic_close_24px.svg"></md-icon>
+                </md-button>
+            </div>
+        </div>
+    </md-toolbar>
     <loading-cycle layout-padding flex ng-if="loading"></loading-cycle>
     <div ng-view></div>
 </md-content>
