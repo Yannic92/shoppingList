@@ -45,8 +45,7 @@ shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'aut
                 if(urlIsDefined(newUrl)){
                     $scope.lastPath = newUrl;
                 }
-                $location.replace();
-                $location.path('/login')
+                $location.path('/login').replace();
             }
         };
 
