@@ -7,6 +7,7 @@ import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.core.user.security.service.CurrentUserService;
 import de.yannicklem.shoppinglist.exception.AlreadyExistsException;
 import de.yannicklem.shoppinglist.exception.NotFoundException;
+import de.yannicklem.shoppinglist.exception.PermissionDeniedException;
 import de.yannicklem.shoppinglist.restutils.service.EntityService;
 
 import lombok.RequiredArgsConstructor;
@@ -68,9 +69,13 @@ public class ItemService implements EntityService<Item, Long> {
 
 
     @Override
-    public List<Item> findAll() {
+    public List<Item> findAll(SLUser currentUser) {
 
-        return itemRepository.findAll();
+        if(currentUser == null || currentUser.isAdmin()) {
+            return itemRepository.findAll();
+        }else{
+            return itemRepository.findItemsOwnedBy(currentUser);
+        }
     }
 
 
@@ -137,7 +142,7 @@ public class ItemService implements EntityService<Item, Long> {
     @Override
     public void deleteAll() {
 
-        List<Item> all = findAll();
+        List<Item> all = findAll(currentUserService.getCurrentUser());
 
         for (Item item : all) {
             delete(item);

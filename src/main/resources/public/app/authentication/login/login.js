@@ -13,8 +13,7 @@ shoppingList.controller('login',[ '$rootScope', '$scope', '$location', 'authServ
                 .then(function (user) {
                     $rootScope.user = user;
                     showWelcomeToast();
-                    $location.replace();
-                    $location.path('/lists')
+                    $location.path('/lists').replace();
                 }, function(error){
                     $rootScope.error = true;
                     if(error.status == 401){

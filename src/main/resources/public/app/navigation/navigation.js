@@ -45,6 +45,7 @@ shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'aut
                 if(urlIsDefined(newUrl)){
                     $scope.lastPath = newUrl;
                 }
+                $rootScope.redirected = true;
                 $location.path('/login').replace();
             }
         };
@@ -83,17 +84,21 @@ shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'aut
             }
         });
 
-        $scope.goto = function(path){
+        $scope.goto = function(path, replace){
 
             $scope.closeNav();
             $location.path(path);
+            if(replace){
+                $location.replace();
+            }
         };
 
         $scope.logout = function () {
             authService.logout()
                 .then(function () {
-                    $location.path("/login");
-                    $window.location.reload();
+                    //$location.path("/login").replace();
+                    history.go($rootScope.usersHistoryLength - 1);
+                    $window.location.href = "/#/login";
                 });
         };
 

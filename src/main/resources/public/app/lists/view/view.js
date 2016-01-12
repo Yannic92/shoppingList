@@ -49,7 +49,7 @@ shoppingList.controller('listView', ['$scope', '$rootScope','listService','itemS
                     $scope.list = $filter('filter')(lists, {entityId: $routeParams.listId})[0];
 
                     if(!$scope.list){
-                        $scope.$parent.goto("/lists");
+                        $scope.$parent.goto("/lists", true);
                         return;
                     }
                     $rootScope.title = $scope.list.name;
@@ -172,9 +172,9 @@ shoppingList.controller('listView', ['$scope', '$rootScope','listService','itemS
         var goToPreviousList = function(lastIndex){
             if(lists && lists.length && lists.length > 0){
                 var newIndex = lastIndex < lists.length ? lastIndex : lastIndex - 1;
-                $scope.$parent.goto("/lists/" + lists[newIndex].entityId);
+                $scope.$parent.goto("/lists/" + lists[newIndex].entityId, true);
             }else{
-                $scope.$parent.goto("/lists");
+                $scope.$parent.goto("/lists", true);
             }
         };
 

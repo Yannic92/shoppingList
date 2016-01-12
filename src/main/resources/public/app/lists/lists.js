@@ -18,7 +18,7 @@ shoppingList.controller('lists', ['$scope', '$rootScope','listService',
 
         lists.promise.then(function(){
             if(!$scope.listsAreEmpty()){
-                $scope.$parent.goto("/lists/" + lists[0].entityId);
+                $scope.$parent.goto("/lists/" + lists[0].entityId, true);
             }
             $rootScope.loading = false;
         });

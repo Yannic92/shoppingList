@@ -121,7 +121,7 @@ public class SLUserSecurityIntegrationTest {
         mockMvc.perform(get(sLUsersEndpoint).with(user(slUserAdmin)))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaTypes.HAL_JSON))
-            .andExpect(jsonPath("_embedded.sLUsers", hasSize(slUserService.findAll().size())));
+            .andExpect(jsonPath("_embedded.sLUsers", hasSize(slUserService.findAll(slUserAdmin).size())));
     }
 
 
@@ -251,7 +251,7 @@ public class SLUserSecurityIntegrationTest {
             .andExpect(jsonPath("username", is(sLUserTest3.getUsername())))
             .andExpect(jsonPath("firstName", is(sLUserTest3.getFirstName())))
             .andExpect(jsonPath("lastName", is(sLUserTest3.getLastName())))
-            .andExpect(jsonPath("email", is(sLUserTest3.getEmail())))
+            .andExpect(jsonPath("email", is(sLUserTest3.getEmail().toLowerCase())))
             .andExpect(jsonPath("authorities").doesNotExist())
             .andExpect(jsonPath("password").doesNotExist());
 
@@ -272,7 +272,7 @@ public class SLUserSecurityIntegrationTest {
             .andExpect(jsonPath("username", is(sLUserTest3.getUsername())))
             .andExpect(jsonPath("firstName", is(sLUserTest3.getFirstName())))
             .andExpect(jsonPath("lastName", is(sLUserTest3.getLastName())))
-            .andExpect(jsonPath("email", is(sLUserTest3.getEmail())))
+            .andExpect(jsonPath("email", is(sLUserTest3.getEmail().toLowerCase())))
             .andExpect(jsonPath("authorities").doesNotExist())
             .andExpect(jsonPath("password").doesNotExist());
 
@@ -338,7 +338,7 @@ public class SLUserSecurityIntegrationTest {
             .andExpect(jsonPath("username", is(sLUserTest3.getUsername())))
             .andExpect(jsonPath("firstName", is(sLUserTest3.getFirstName())))
             .andExpect(jsonPath("lastName", is(sLUserTest3.getLastName())))
-            .andExpect(jsonPath("email", is(sLUserTest3.getEmail())))
+            .andExpect(jsonPath("email", is(sLUserTest3.getEmail().toLowerCase())))
             .andExpect(jsonPath("authorities").doesNotExist())
             .andExpect(jsonPath("password").doesNotExist());
         assertThat(slUserService.exists(sLUserTest3.getUsername()), is(true));
@@ -360,7 +360,7 @@ public class SLUserSecurityIntegrationTest {
             .andExpect(jsonPath("username", is(sLUserTest3.getUsername())))
             .andExpect(jsonPath("firstName", is(sLUserTest3.getFirstName())))
             .andExpect(jsonPath("lastName", is(sLUserTest3.getLastName())))
-            .andExpect(jsonPath("email", is(sLUserTest3.getEmail())))
+            .andExpect(jsonPath("email", is(sLUserTest3.getEmail().toLowerCase())))
             .andExpect(jsonPath("authorities").doesNotExist())
             .andExpect(jsonPath("password").doesNotExist());
 
@@ -382,7 +382,7 @@ public class SLUserSecurityIntegrationTest {
             .andExpect(jsonPath("username", is(sLUserTest3.getUsername())))
             .andExpect(jsonPath("firstName", is(sLUserTest3.getFirstName())))
             .andExpect(jsonPath("lastName", is(sLUserTest3.getLastName())))
-            .andExpect(jsonPath("email", is(sLUserTest3.getEmail())))
+            .andExpect(jsonPath("email", is(sLUserTest3.getEmail().toLowerCase())))
             .andExpect(jsonPath("authorities").doesNotExist())
             .andExpect(jsonPath("password").doesNotExist());
 
@@ -404,7 +404,7 @@ public class SLUserSecurityIntegrationTest {
             .andExpect(jsonPath("username", is(sLUserTest3.getUsername())))
             .andExpect(jsonPath("firstName", is(sLUserTest3.getFirstName())))
             .andExpect(jsonPath("lastName", is(sLUserTest3.getLastName())))
-            .andExpect(jsonPath("email", is(sLUserTest3.getEmail())))
+            .andExpect(jsonPath("email", is(sLUserTest3.getEmail().toLowerCase())))
             .andExpect(jsonPath("authorities").doesNotExist())
             .andExpect(jsonPath("password").doesNotExist());
 

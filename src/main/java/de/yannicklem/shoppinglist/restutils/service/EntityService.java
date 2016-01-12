@@ -1,5 +1,6 @@
 package de.yannicklem.shoppinglist.restutils.service;
 
+import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.restutils.entity.RestEntity;
 
 import java.io.Serializable;
@@ -12,7 +13,7 @@ public interface EntityService<Type extends RestEntity, ID extends Serializable>
     Type findById(ID id);
 
 
-    List<Type> findAll();
+    List<Type> findAll(SLUser currentUser);
 
 
     boolean exists(ID id);

@@ -73,10 +73,9 @@ public abstract class MyRestController<Type extends RestEntity<ID>, ID extends S
     @RequestMapping(method = RequestMethod.GET)
     public HttpEntity<? extends Resources<? extends Type>> getAllEntities(Principal principal) {
 
-        List<Type> all = entityService.findAll();
-        List<Type> resourcesList = new ArrayList<>();
-
         SLUser currentUser = principal == null ? null : slUserService.findById(principal.getName());
+        List<Type> all = entityService.findAll(currentUser);
+        List<Type> resourcesList = new ArrayList<>();
 
         for (Type entity : all) {
             try {

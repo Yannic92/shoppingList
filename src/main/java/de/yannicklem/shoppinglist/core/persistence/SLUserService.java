@@ -235,7 +235,7 @@ public class SLUserService implements UserDetailsService, EntityService<SLUser, 
     @Override
     public void deleteAll() {
 
-        List<SLUser> all = findAll();
+        List<SLUser> all = findAll(currentUserService.getCurrentUser());
 
         for (SLUser slUser : all) {
             delete(slUser);
@@ -271,7 +271,7 @@ public class SLUserService implements UserDetailsService, EntityService<SLUser, 
 
 
     @Override
-    public List<SLUser> findAll() {
+    public List<SLUser> findAll(SLUser currentUser) {
 
         return slUserRepository.findAll();
     }
