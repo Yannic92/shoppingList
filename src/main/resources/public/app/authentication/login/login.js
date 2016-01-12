@@ -1,8 +1,7 @@
-shoppingList.controller('login',[ '$rootScope', '$scope', '$location', 'authService','$mdToast','$mdMedia',
-    function ($rootScope, $scope, $location, authService, $mdToast,$mdMedia) {
+shoppingList.controller('login',[ '$rootScope', '$scope', '$location', 'authService','$mdToast','$mdMedia','userService',
+    function ($rootScope, $scope, $location, authService, $mdToast,$mdMedia, userService) {
 
-
-        $rootScope.credentials = {};
+        $scope.credentials = userService.getCredentials();
         $scope.loggingIn = false;
         $rootScope.loading = false;
         $rootScope.title="Login";
@@ -12,6 +11,9 @@ shoppingList.controller('login',[ '$rootScope', '$scope', '$location', 'authServ
             authService.authenticate($scope.credentials)
                 .then(function (user) {
                     $rootScope.user = user;
+                    if($scope.credentials.rememberMe){
+                        userService.storeCredentials($scope.credentials);
+                    }
                     showWelcomeToast();
                     $location.path('/lists').replace();
                 }, function(error){
@@ -41,7 +43,7 @@ shoppingList.controller('login',[ '$rootScope', '$scope', '$location', 'authServ
                     $rootScope.user = user;
                     $location.path('/lists').replace();
                 }).finally(function(){
-                   logginInFinished();
+                    logginInFinished();
                 });
         };
 
@@ -76,6 +78,10 @@ shoppingList.controller('login',[ '$rootScope', '$scope', '$location', 'authServ
         $scope.loginDisabled = function () {
             return $scope.loggingIn || ($scope.loginForm && !$scope.loginForm.$valid);
         };
+
+        if($scope.credentials && $scope.credentials.username){
+            $scope.login();
+        }
 
         if(!$rootScope.authenticationAlreadyChecked) {
             redirectIfLoggedIn();

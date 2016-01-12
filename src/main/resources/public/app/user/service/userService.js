@@ -1,6 +1,6 @@
 shoppingList.factory('userService',['$resource', 'HALResource',
     function($resource, HALResource){
-    
+
         var userendpoint = '/sLUsers/:username';
         var methods = {
             'update': { method:'PUT' },
@@ -11,13 +11,23 @@ shoppingList.factory('userService',['$resource', 'HALResource',
         var usersList = [];
         var fetched = false;
         var fetching = false;
-        
+
         var userService = {
             get: function(){
                 if(!fetched && !fetching){
                     userService.fetch();
                 }
                 return usersList;
+            },
+            storeCredentials : function(credentials){
+                localStorage.setItem("credentials", JSON.stringify(credentials));
+
+            },
+            getCredentials: function(){
+                return JSON.parse( localStorage.getItem("credentials") || '{}');
+            },
+            clearCredentials: function () {
+                localStorage.setItem("credentials", JSON.stringify({}));
             },
             fetch: function(){
                 fetching = true;
@@ -30,7 +40,7 @@ shoppingList.factory('userService',['$resource', 'HALResource',
                         fetching = false;
                         return usersList;
                     });
-                
+
                 return usersList.promise;
             },
             create: function(user){
@@ -52,6 +62,6 @@ shoppingList.factory('userService',['$resource', 'HALResource',
                 return USER_CONFIRMATION.update({username: username}, confirmation).$promise;
             }
         };
-        
+
         return userService;
 }]);

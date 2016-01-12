@@ -126,6 +126,10 @@ md-list-item {
     }
 }
 
+.rememberMeCheckBox{
+    padding-left: 36px;
+}
+
 .update-notification {
     white-space: normal;
     line-height: 16px;

@@ -1,4 +1,4 @@
-shoppingList.factory('authService',['$http', '$rootScope', function($http, $rootScope){
+shoppingList.factory('authService',['$http', '$rootScope', 'userService', function($http, $rootScope, userService){
     var USER_ENDPOINT = 'sLUsers/current';
 
     var authService = {
@@ -41,10 +41,12 @@ shoppingList.factory('authService',['$http', '$rootScope', function($http, $root
                 $rootScope.authenticated = false;
                 $rootScope.headers = {};
                 $rootScope.user = '';
+                userService.clearCredentials();
             }).error(function () {
                 $rootScope.authenticated = false;
                 $rootScope.headers = {};
                 $rootScope.user = '';
+                userService.clearCredentials();
             });
         }
     };
