@@ -113,13 +113,12 @@ shoppingList.factory('listService',['$resource', 'HALResource','$filter','$q',
                     });
             },
             deleteAll: function(){
-                var promises = [];
 
-                for(var i = 0; i < persistedLists.length; i++){
-                    promises.push(listService.delete(persistedLists[i]));
-                }
-
-                return $q.all(promises);
+                return Lists.delete().$promise
+                    .then(function(){
+                        persistedLists.splice(0, persistedLists.length);
+                        return persistedLists;
+                    })
             },
             getDeleteMessage: function(list){
                 if(list && list.owners && list.owners.length > 1){
