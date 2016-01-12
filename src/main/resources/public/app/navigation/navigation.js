@@ -1,5 +1,5 @@
-shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'authService', '$route', '$mdComponentRegistry','$mdMedia','$window',
-    function ($rootScope, $scope, $location, authService, $route, $mdComponentRegistry,$mdMedia, $window) {
+shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'authService', '$route', '$mdComponentRegistry','$mdMedia','$window','$timeout',
+    function ($rootScope, $scope, $location, authService, $route, $mdComponentRegistry,$mdMedia, $window, $timeout) {
         $scope.lastPath = "";
         $scope.newVersionAvailable = false;
 
@@ -103,6 +103,12 @@ shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'aut
                 .then(function () {
                     $scope.loggedOut = true;
                     history.go(- (history.length - $rootScope.usersHistoryLength));
+                    $timeout(function(){
+                        if($scope.loggedOut){
+                            $location.path("/login").replace();
+                            $scope.loggedOut = false;
+                        }
+                    }, 100);
                 });
         };
 
