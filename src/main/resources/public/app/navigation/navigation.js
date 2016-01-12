@@ -103,7 +103,6 @@ shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'aut
                 .then(function () {
                     $scope.loggedOut = true;
                     history.go(- (history.length - $rootScope.usersHistoryLength));
-                    $location.path("/login").replace();
                 });
         };
 
