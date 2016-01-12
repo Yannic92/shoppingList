@@ -42,10 +42,10 @@ shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'aut
 
         var redirectToLoginIfNotFreeRotue = function(newUrl) {
             if (!isFreeRoute(newUrl)) {
+
                 if(urlIsDefined(newUrl)){
                     $scope.lastPath = newUrl;
                 }
-                $rootScope.redirected = true;
                 $location.path('/login').replace();
             }
         };
@@ -63,7 +63,7 @@ shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'aut
 
         $rootScope.$on('$routeChangeStart', function (event, newUrl, oldUrl) {
             if(!$rootScope.authenticated){
-                if(!isFreeRoute(newUrl)){
+                if(!isFreeRoute(newUrl) && !$scope.loggedOut){
                     event.preventDefault();
                     redirectToLoginIfAuthenticationRequired(newUrl);
                 }
@@ -76,6 +76,11 @@ shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'aut
             $rootScope.errorMessage = "";
             $rootScope.error = false;
             $rootScope.goToTop();
+
+            if($scope.loggedOut){
+                $location.path("/login").replace();
+                $scope.loggedOut = false;
+            }
         });
 
         $rootScope.$watch('error', function(){
@@ -96,9 +101,9 @@ shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'aut
         $scope.logout = function () {
             authService.logout()
                 .then(function () {
-                    //$location.path("/login").replace();
-                    history.go($rootScope.usersHistoryLength - 1);
-                    $window.location.href = "/#/login";
+                    $scope.loggedOut = true;
+                    history.go(- (history.length - $rootScope.usersHistoryLength));
+                    $location.path("/login").replace();
                 });
         };
 
