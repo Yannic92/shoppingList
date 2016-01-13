@@ -18,6 +18,11 @@ shoppingList.factory('authService',['$http', '$rootScope', 'userService', functi
         },
         isAuthenticated : function(){
             $rootScope.authenticationAlreadyChecked = true;
+            var credentials = userService.getCredentials();
+            if(credentials && credentials.username){
+                return authService.authenticate(credentials);
+            }
+
             return $http.get(USER_ENDPOINT)
                 .then(function(response){
                     if(response.data.username){

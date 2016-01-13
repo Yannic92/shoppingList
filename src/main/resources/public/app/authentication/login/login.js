@@ -79,10 +79,6 @@ shoppingList.controller('login',[ '$rootScope', '$scope', '$location', 'authServ
             return $scope.loggingIn || ($scope.loginForm && !$scope.loginForm.$valid);
         };
 
-        if($scope.credentials && $scope.credentials.username){
-            $scope.login();
-        }
-
         if(!$rootScope.authenticationAlreadyChecked) {
             redirectIfLoggedIn();
         }
