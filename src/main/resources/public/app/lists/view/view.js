@@ -54,7 +54,7 @@ shoppingList.controller('listView', ['$scope', '$rootScope','listService','itemS
                     }
 
                     if(!$scope.list.updated) {
-                        $scope.update().then(init);
+                        return $scope.update().then(init);
                     }else{
                         init();
                     }
