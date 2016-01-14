@@ -99,7 +99,11 @@ public class ArticleService implements EntityService<Article, Long> {
 
         handleBeforeCreate(article);
 
-        return articleRepository.save(article);
+        Article createdArticle = articleRepository.save(article);
+
+        handleAfterCreate(article);
+
+        return createdArticle;
     }
 
 
@@ -108,7 +112,11 @@ public class ArticleService implements EntityService<Article, Long> {
 
         handleBeforeUpdate(article);
 
-        return articleRepository.save(article);
+        Article updatedArticle = articleRepository.save(article);
+
+        handleAfterUpdate(article);
+
+        return updatedArticle;
     }
 
 
@@ -126,6 +134,8 @@ public class ArticleService implements EntityService<Article, Long> {
             handleBeforeDelete(article);
 
             articleRepository.delete(article);
+
+            handleAfterDelete(article);
         } else {
             update(article);
         }
