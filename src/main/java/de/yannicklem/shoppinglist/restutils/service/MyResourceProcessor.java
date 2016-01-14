@@ -17,7 +17,9 @@ public abstract class MyResourceProcessor<Type extends RestEntity> {
 
     public Type process(Type entity, SLUser currentUser) {
 
-        entity.add(entityLinks.linkToSingleResource(entity.getClass(), entity.getEntityId()).withSelfRel());
+        if (entity.getId() == null) {
+            entity.add(entityLinks.linkToSingleResource(entity.getClass(), entity.getEntityId()).withSelfRel());
+        }
 
         return entity;
     }

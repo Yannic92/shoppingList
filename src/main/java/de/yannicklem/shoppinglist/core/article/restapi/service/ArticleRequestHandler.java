@@ -9,6 +9,8 @@ import de.yannicklem.shoppinglist.restutils.service.RequestHandler;
 
 import lombok.RequiredArgsConstructor;
 
+import net.sf.ehcache.CacheManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
@@ -103,11 +105,15 @@ public class ArticleRequestHandler implements RequestHandler<Article> {
 
     @Override
     public void handleAfterCreate(Article entity, SLUser currentUser) {
+
+        CacheManager.getInstance().getCache("articles").removeAll();
     }
 
 
     @Override
     public void handleAfterUpdate(Article oldEntity, Article newEntity, SLUser currentUser) {
+
+        CacheManager.getInstance().getCache("articles").removeAll();
     }
 
 
