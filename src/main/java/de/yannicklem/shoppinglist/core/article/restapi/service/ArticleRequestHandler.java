@@ -119,5 +119,7 @@ public class ArticleRequestHandler implements RequestHandler<Article> {
 
     @Override
     public void handleAfterDelete(Article entity, SLUser currentUser) {
+
+        CacheManager.getInstance().getCache("articles").removeAll();
     }
 }
