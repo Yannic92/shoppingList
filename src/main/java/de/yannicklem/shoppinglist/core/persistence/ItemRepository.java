@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -22,4 +23,10 @@ public interface ItemRepository extends CrudRepository<Item, Long> {
 
 
     List<Item> findByArticle(Article article);
+
+
+    @Query(
+        "SELECT i FROM Item i WHERE i NOT IN (SELECT DISTINCT iTemp FROM ShoppingList s INNER JOIN s.items iTemp) AND i.createdAt < :date"
+    )
+    List<Item> findUnusedItems(@Param("date") Date date);
 }

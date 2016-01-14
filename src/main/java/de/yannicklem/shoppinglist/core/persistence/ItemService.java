@@ -7,7 +7,6 @@ import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.core.user.security.service.CurrentUserService;
 import de.yannicklem.shoppinglist.exception.AlreadyExistsException;
 import de.yannicklem.shoppinglist.exception.NotFoundException;
-import de.yannicklem.shoppinglist.exception.PermissionDeniedException;
 import de.yannicklem.shoppinglist.restutils.service.EntityService;
 
 import lombok.RequiredArgsConstructor;
@@ -17,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -71,9 +71,9 @@ public class ItemService implements EntityService<Item, Long> {
     @Override
     public List<Item> findAll(SLUser currentUser) {
 
-        if(currentUser == null || currentUser.isAdmin()) {
+        if (currentUser == null || currentUser.isAdmin()) {
             return itemRepository.findAll();
-        }else{
+        } else {
             return itemRepository.findItemsOwnedBy(currentUser);
         }
     }
@@ -167,5 +167,11 @@ public class ItemService implements EntityService<Item, Long> {
         }
 
         return itemRepository.findByArticle(article);
+    }
+
+
+    public List<Item> findUnusedItems(Date date) {
+
+        return itemRepository.findUnusedItems(date);
     }
 }

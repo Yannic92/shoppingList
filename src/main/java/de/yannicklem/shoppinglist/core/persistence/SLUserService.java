@@ -12,42 +12,29 @@ import de.yannicklem.shoppinglist.exception.AlreadyExistsException;
 import de.yannicklem.shoppinglist.exception.EntityInvalidException;
 import de.yannicklem.shoppinglist.exception.NotFoundException;
 import de.yannicklem.shoppinglist.restutils.service.EntityService;
-
 import lombok.RequiredArgsConstructor;
-
 import org.apache.log4j.Logger;
-
 import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.scheduling.annotation.Scheduled;
-
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
 import org.springframework.stereotype.Service;
-
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import javax.servlet.http.HttpSession;
-
-import static org.apache.log4j.Logger.getLogger;
 
 import static java.lang.invoke.MethodHandles.lookup;
+import static org.apache.log4j.Logger.getLogger;
 
 
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired ))
 public class SLUserService implements UserDetailsService, EntityService<SLUser, String> {
-
-    private static final long ONE_HOUR = 1000 * 60 * 60;
 
     private static Logger LOGGER = getLogger(lookup().lookupClass());
     private final SLUserRepository slUserRepository;
@@ -57,19 +44,6 @@ public class SLUserService implements UserDetailsService, EntityService<SLUser, 
     private final SLUserValidationService slUserValidationService;
     private final CurrentUserService currentUserService;
     private final ConfirmationMailService confirmationMailService;
-
-    @Scheduled(fixedRate = ONE_HOUR)
-    public void clearNotEnabledUsersOlderThanTwoDays() {
-
-        Date twoDaysBefore = new Date(new Date().getTime() - TimeUnit.DAYS.toMillis(2));
-        List<SLUser> inactiveUsersOlderThanTwoDays = slUserRepository.findInactiveUsersOlderThan(twoDaysBefore);
-
-        for (SLUser user : inactiveUsersOlderThanTwoDays) {
-            delete(user);
-            LOGGER.info("deleted inactive user: " + user.getUsername());
-        }
-    }
-
 
     @Override
     public SLUser create(SLUser slUser) {
@@ -313,5 +287,12 @@ public class SLUserService implements UserDetailsService, EntityService<SLUser, 
         } else {
             throw new EntityInvalidException("Aktivierung nicht möglich");
         }
+    }
+
+
+    public List<SLUser> findInactiveUsersOlderThan(Date date) {
+
+
+        return slUserRepository.findInactiveUsersOlderThan(date);
     }
 }
