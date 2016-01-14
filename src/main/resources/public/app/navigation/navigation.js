@@ -51,6 +51,7 @@ shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'aut
         };
 
         var redirectToLoginIfAuthenticationRequired = function(newUrl) {
+            $rootScope.loading = true;
             authService.isAuthenticated()
                 .then(function (user) {
                     $rootScope.user = user;
@@ -58,6 +59,9 @@ shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'aut
 
                 }, function(){
                     redirectToLoginIfNotFreeRotue(newUrl);
+                })
+                .finally(function () {
+                    $rootScope.loading = false;
                 });
         };
 
