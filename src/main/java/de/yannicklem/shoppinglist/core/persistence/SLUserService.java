@@ -12,24 +12,32 @@ import de.yannicklem.shoppinglist.exception.AlreadyExistsException;
 import de.yannicklem.shoppinglist.exception.EntityInvalidException;
 import de.yannicklem.shoppinglist.exception.NotFoundException;
 import de.yannicklem.shoppinglist.restutils.service.EntityService;
+
 import lombok.RequiredArgsConstructor;
+
 import org.apache.log4j.Logger;
+
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
 import org.springframework.stereotype.Service;
+
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.List;
 
-import static java.lang.invoke.MethodHandles.lookup;
+import javax.servlet.http.HttpSession;
+
 import static org.apache.log4j.Logger.getLogger;
+
+import static java.lang.invoke.MethodHandles.lookup;
 
 
 @Service
@@ -54,6 +62,8 @@ public class SLUserService implements UserDetailsService, EntityService<SLUser, 
 
         handleAfterCreate(created);
 
+        LOGGER.info("Created user: " + created.getUsername());
+
         return created;
     }
 
@@ -63,7 +73,11 @@ public class SLUserService implements UserDetailsService, EntityService<SLUser, 
 
         handleBeforeUpdate(slUser);
 
-        return slUserRepository.save(slUser);
+        SLUser updatedUser = slUserRepository.save(slUser);
+
+        LOGGER.info("Updated user: " + updatedUser.getUsername());
+
+        return updatedUser;
     }
 
 
@@ -150,6 +164,8 @@ public class SLUserService implements UserDetailsService, EntityService<SLUser, 
         handleBeforeDelete(slUser);
         slUserRepository.delete(slUser);
         handleAfterCelete(slUser);
+
+        LOGGER.info("Deleted user: " + slUser.getUsername());
     }
 
 
@@ -291,7 +307,6 @@ public class SLUserService implements UserDetailsService, EntityService<SLUser, 
 
 
     public List<SLUser> findInactiveUsersOlderThan(Date date) {
-
 
         return slUserRepository.findInactiveUsersOlderThan(date);
     }
