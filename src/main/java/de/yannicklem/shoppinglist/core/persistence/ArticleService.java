@@ -9,6 +9,8 @@ import de.yannicklem.shoppinglist.restutils.service.EntityService;
 
 import lombok.RequiredArgsConstructor;
 
+import net.sf.ehcache.CacheManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
@@ -38,6 +40,24 @@ public class ArticleService implements EntityService<Article, Long> {
     public void handleBeforeUpdate(Article article) {
 
         articleValidationService.validate(article);
+    }
+
+
+    public void handleAfterCreate(Article article) {
+
+        CacheManager.getInstance().getCache("articles").removeAll();
+    }
+
+
+    public void handleAfterDelete(Article article) {
+
+        CacheManager.getInstance().getCache("articles").removeAll();
+    }
+
+
+    public void handleAfterUpdate(Article article) {
+
+        CacheManager.getInstance().getCache("articles").removeAll();
     }
 
 
