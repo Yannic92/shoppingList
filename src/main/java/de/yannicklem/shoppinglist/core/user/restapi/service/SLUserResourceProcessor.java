@@ -69,6 +69,7 @@ public class SLUserResourceProcessor extends MyResourceProcessor<SLUser> {
             entity.setAccountNonLocked(persistedUser.isAccountNonLocked());
             entity.setCredentialsNonExpired(persistedUser.isCredentialsNonExpired());
             entity.setEnabled(persistedUser.isEnabled());
+            entity.setCreatedAt(persistedUser.getCreatedAt());
         }
 
         return entity;

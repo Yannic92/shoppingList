@@ -5,8 +5,8 @@ if(!shoppingList){
     shoppingList.requires.push.apply(shoppingList.requires, dependecies);
 }
 
-shoppingList.config(['$routeProvider', '$httpProvider', '$locationProvider',
-    function ($routeProvider, $httpProvider, $locationProvider) {
+shoppingList.config(['$routeProvider', '$httpProvider',
+    function ($routeProvider, $httpProvider) {
         $routeProvider.otherwise({redirectTo: '/lists'});
         $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
         $httpProvider.interceptors.push('MyHttpInterceptor');

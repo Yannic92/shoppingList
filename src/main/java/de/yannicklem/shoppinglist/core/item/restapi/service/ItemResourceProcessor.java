@@ -39,7 +39,9 @@ public class ItemResourceProcessor extends MyResourceProcessor<Item> {
         }
 
         if (entity != null && itemService.exists(entity.getEntityId())) {
-            entity.setOwners(itemService.findById(entity.getEntityId()).getOwners());
+            Item existingItem = itemService.findById(entity.getEntityId());
+            entity.setOwners(existingItem.getOwners());
+            entity.setCreatedAt(existingItem.getCreatedAt());
         }
 
         return entity;

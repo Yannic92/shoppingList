@@ -13,8 +13,6 @@ import lombok.ToString;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import org.springframework.data.annotation.CreatedDate;
-
 import org.springframework.hateoas.core.Relation;
 
 import java.util.Date;
@@ -58,13 +56,13 @@ public class Item extends OwnedRestEntity<Long> {
     )
     private Article article;
 
-    @CreatedDate
     @JsonIgnore
     private Date createdAt;
 
     public Item() {
 
         this.owners = new HashSet<>();
+        this.createdAt = new Date();
         done = false;
     }
 

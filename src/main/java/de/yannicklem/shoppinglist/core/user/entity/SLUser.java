@@ -14,8 +14,6 @@ import lombok.ToString;
 
 import org.hibernate.validator.constraints.Email;
 
-import org.springframework.data.annotation.CreatedDate;
-
 import org.springframework.hateoas.core.Relation;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -83,7 +81,6 @@ public class SLUser extends RestEntity<String> implements UserDetails {
     @JsonIgnore
     private Confirmation confirmation;
 
-    @CreatedDate
     @JsonIgnore
     private Date createdAt;
 
