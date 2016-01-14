@@ -1,10 +1,10 @@
 shoppingList.service('MyHttpInterceptor',['$location', '$q', '$injector', '$rootScope','$window',
     function ($location ,$q, $injector, $rootScope,$window) {
 
-        var handleSessionTimeout = function () {
+        var handleSessionTimeout = function (rejection) {
             $rootScope.authenticated = true;
             var $mdDialog = $injector.get('$mdDialog');
-            $mdDialog.show(
+            return $mdDialog.show(
                 $mdDialog.alert()
                     .parent(angular.element(document.querySelector('#popupContainer')))
                     .clickOutsideToClose(true)
@@ -15,18 +15,21 @@ shoppingList.service('MyHttpInterceptor',['$location', '$q', '$injector', '$root
             ).then(function(){
                 $rootScope.authenticated = false;
                 $location.path("/login");
-                $window.location.reload()
+                $window.location.reload();
+            }).finally(function(){
+                return $q.reject(rejection);
             });
         };
 
         var checkForSessionTimeout = function (rejection) {
             $rootScope.sessionTimeOutCheck = true;
-            $injector.get('authService').isAuthenticated()
+            return $injector.get('authService').isAuthenticated()
                 .then(function(){
                     var $http = $injector.get('$http');
                     return $http(rejection.config);
                 }, function(){
                     $rootScope.authenticated = false;
+                    return $q.reject(rejection);
                 });
         };
 
@@ -35,9 +38,9 @@ shoppingList.service('MyHttpInterceptor',['$location', '$q', '$injector', '$root
                 if(rejection.status == 401 || (rejection.status == 403 && rejection.data.message.indexOf("CSRF") > -1)) {
 
                     if($rootScope.sessionTimeOutCheck) {
-                        handleSessionTimeout();
+                        return handleSessionTimeout();
                     }else if($rootScope.authenticated) {
-                        checkForSessionTimeout(rejection);
+                        return checkForSessionTimeout(rejection);
                     }else {
                         $location.path('/login');
                     }
