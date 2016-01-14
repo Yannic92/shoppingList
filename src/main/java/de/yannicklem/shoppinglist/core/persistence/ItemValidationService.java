@@ -28,7 +28,17 @@ public class ItemValidationService {
 
         validateOwners(item.getOwners());
 
+        validateCount(item.getCount());
+
         articleValidationService.validate(item.getArticle());
+    }
+
+
+    private void validateCount(String count) {
+
+        if (count != null && count.length() > 140) {
+            throw new EntityInvalidException("Menge darf maximal 140 Zeichen enthalten");
+        }
     }
 
 
