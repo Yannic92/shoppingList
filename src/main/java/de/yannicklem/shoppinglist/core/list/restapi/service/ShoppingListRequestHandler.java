@@ -1,7 +1,9 @@
 package de.yannicklem.shoppinglist.core.list.restapi.service;
 
 import de.yannicklem.shoppinglist.core.list.entity.ShoppingList;
+import de.yannicklem.shoppinglist.core.persistence.ShoppingListService;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
+import de.yannicklem.shoppinglist.exception.BadRequestException;
 import de.yannicklem.shoppinglist.exception.PermissionDeniedException;
 import de.yannicklem.shoppinglist.restutils.service.RequestHandler;
 
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 public class ShoppingListRequestHandler implements RequestHandler<ShoppingList> {
 
     private final ShoppingListPermissionEvaluator shoppingListPermissionEvaluator;
+    private final ShoppingListService shoppingListService;
 
     @Override
     public void handleBeforeCreate(ShoppingList entity, SLUser currentUser) {
@@ -28,6 +31,19 @@ public class ShoppingListRequestHandler implements RequestHandler<ShoppingList> 
         if (!shoppingListPermissionEvaluator.isAllowedToCreate(entity, currentUser)) {
             throw new PermissionDeniedException("Access denied");
         }
+
+        if (entity.getItems().size() >= 100) {
+            throw new BadRequestException("Eine Liste darf maximal 100 Posten enthalten");
+        }
+
+        for (SLUser owner : entity.getOwners()) {
+            Long numberOfListsOwnedByThisUser = shoppingListService.countListsOf(owner);
+
+            if (numberOfListsOwnedByThisUser >= 100) {
+                throw new BadRequestException(String.format("Der Nutzer '%s' hat das Maximum von 100 Listen erreicht",
+                        owner.getUsername()));
+            }
+        }
     }
 
 
@@ -36,6 +52,19 @@ public class ShoppingListRequestHandler implements RequestHandler<ShoppingList> 
 
         if (!shoppingListPermissionEvaluator.isAllowedToUpdate(oldEntity, newEntity, currentUser)) {
             throw new PermissionDeniedException("Access denied");
+        }
+
+        if (newEntity.getItems().size() >= 100) {
+            throw new BadRequestException("Eine Liste darf maximal 100 Posten enthalten");
+        }
+
+        for (SLUser owner : newEntity.getOwners()) {
+            Long numberOfListsOwnedByThisUser = shoppingListService.countListsOf(owner);
+
+            if (numberOfListsOwnedByThisUser >= 100) {
+                throw new BadRequestException(String.format("Der Nutzer '%s' hat das Maximum von 100 Listen erreicht",
+                        owner.getUsername()));
+            }
         }
     }
 

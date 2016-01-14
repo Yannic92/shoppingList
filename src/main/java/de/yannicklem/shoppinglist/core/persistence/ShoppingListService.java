@@ -4,7 +4,9 @@ import de.yannicklem.shoppinglist.core.item.entity.Item;
 import de.yannicklem.shoppinglist.core.list.entity.ShoppingList;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.core.user.security.service.CurrentUserService;
-import de.yannicklem.shoppinglist.exception.*;
+import de.yannicklem.shoppinglist.exception.AlreadyExistsException;
+import de.yannicklem.shoppinglist.exception.EntityInvalidException;
+import de.yannicklem.shoppinglist.exception.NotFoundException;
 import de.yannicklem.shoppinglist.restutils.service.EntityService;
 
 import lombok.RequiredArgsConstructor;
@@ -75,9 +77,9 @@ public class ShoppingListService implements EntityService<ShoppingList, Long> {
     @Override
     public List<ShoppingList> findAll(SLUser currentUser) {
 
-        if(currentUser == null || currentUser.isAdmin()) {
+        if (currentUser == null || currentUser.isAdmin()) {
             return shoppingListRepository.findAll();
-        }else{
+        } else {
             return shoppingListRepository.findListsOwnedBy(currentUser);
         }
     }
@@ -181,5 +183,11 @@ public class ShoppingListService implements EntityService<ShoppingList, Long> {
         }
 
         return shoppingListRepository.findShoppingListsContainingItem(entity);
+    }
+
+
+    public Long countListsOf(SLUser currentUser) {
+
+        return shoppingListRepository.countListsOfUser(currentUser);
     }
 }

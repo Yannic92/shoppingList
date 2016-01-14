@@ -23,4 +23,8 @@ public interface ShoppingListRepository extends CrudRepository<ShoppingList, Lon
 
     @Query("SELECT s FROM ShoppingList s WHERE :item MEMBER OF s.items")
     List<ShoppingList> findShoppingListsContainingItem(@Param("item") Item item);
+
+
+    @Query("SELECT COUNT(s) FROM ShoppingList s WHERE :user MEMBER OF s.owners")
+    Long countListsOfUser(@Param("user") SLUser currentUser);
 }

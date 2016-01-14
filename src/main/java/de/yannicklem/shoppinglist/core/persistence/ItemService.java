@@ -106,7 +106,7 @@ public class ItemService implements EntityService<Item, Long> {
         Item createdItem = itemRepository.save(entity);
 
         String articleName = createdItem.getArticle() == null ? null : createdItem.getArticle().getName();
-        LOGGER.info(String.format("deleted item: %d (%s)", createdItem.getEntityId(), articleName));
+        LOGGER.info(String.format("Created item: %d (%s)", createdItem.getEntityId(), articleName));
 
         return createdItem;
     }
@@ -120,7 +120,7 @@ public class ItemService implements EntityService<Item, Long> {
         Item updatedItem = itemRepository.save(entity);
 
         String articleName = updatedItem.getArticle() == null ? null : updatedItem.getArticle().getName();
-        LOGGER.info(String.format("deleted item: %d (%s)", updatedItem.getEntityId(), articleName));
+        LOGGER.info(String.format("Updated item: %d (%s)", updatedItem.getEntityId(), articleName));
 
         return updatedItem;
     }
@@ -141,7 +141,7 @@ public class ItemService implements EntityService<Item, Long> {
         itemRepository.delete(entity);
 
         String articleName = entity.getArticle() == null ? null : entity.getArticle().getName();
-        LOGGER.info(String.format("deleted item: %d (%s)", entity.getEntityId(), articleName));
+        LOGGER.info(String.format("Deleted item: %d (%s)", entity.getEntityId(), articleName));
     }
 
 
