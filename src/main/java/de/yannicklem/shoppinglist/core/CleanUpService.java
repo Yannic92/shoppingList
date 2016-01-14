@@ -63,11 +63,10 @@ public class CleanUpService {
 
         List<Item> unsedItems = itemService.findUnusedItems(oneMinuteAgo);
 
+        LOGGER.info("Deleting unused items");
+
         for (Item unusedItem : unsedItems) {
             itemService.delete(unusedItem);
-
-            String articleName = unusedItem.getArticle() == null ? null : unusedItem.getArticle().getName();
-            LOGGER.info(String.format("deleted unused item: %d (%s)", unusedItem.getEntityId(), articleName));
         }
     }
 }

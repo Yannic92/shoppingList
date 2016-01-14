@@ -11,6 +11,8 @@ import de.yannicklem.shoppinglist.restutils.service.EntityService;
 
 import lombok.RequiredArgsConstructor;
 
+import org.apache.log4j.Logger;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
@@ -19,10 +21,16 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static org.apache.log4j.Logger.getLogger;
+
+import static java.lang.invoke.MethodHandles.lookup;
+
 
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired ))
 public class ItemService implements EntityService<Item, Long> {
+
+    private static final Logger LOGGER = getLogger(lookup().lookupClass());
 
     private final ItemValidationService itemValidationService;
     private final ShoppingListService shoppingListService;
@@ -121,6 +129,9 @@ public class ItemService implements EntityService<Item, Long> {
         handleBeforeDelete(entity);
 
         itemRepository.delete(entity);
+
+        String articleName = entity.getArticle() == null ? null : entity.getArticle().getName();
+        LOGGER.info(String.format("deleted unused item: %d (%s)", entity.getEntityId(), articleName));
     }
 
 
