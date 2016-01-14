@@ -50,9 +50,12 @@ public class CleanUpService {
         Date twoDaysBefore = new Date(new Date().getTime() - TimeUnit.DAYS.toMillis(2));
         List<SLUser> inactiveUsersOlderThanTwoDays = userService.findInactiveUsersOlderThan(twoDaysBefore);
 
-        for (SLUser user : inactiveUsersOlderThanTwoDays) {
-            userService.delete(user);
-            LOGGER.info("deleted inactive user: " + user.getUsername());
+        if (inactiveUsersOlderThanTwoDays != null && !inactiveUsersOlderThanTwoDays.isEmpty()) {
+            LOGGER.info("Deleting inactive users");
+
+            for (SLUser user : inactiveUsersOlderThanTwoDays) {
+                userService.delete(user);
+            }
         }
     }
 
@@ -63,10 +66,12 @@ public class CleanUpService {
 
         List<Item> unsedItems = itemService.findUnusedItems(oneMinuteAgo);
 
-        LOGGER.info("Deleting unused items");
+        if (unsedItems != null && !unsedItems.isEmpty()) {
+            LOGGER.info("Deleting unused items");
 
-        for (Item unusedItem : unsedItems) {
-            itemService.delete(unusedItem);
+            for (Item unusedItem : unsedItems) {
+                itemService.delete(unusedItem);
+            }
         }
     }
 }
