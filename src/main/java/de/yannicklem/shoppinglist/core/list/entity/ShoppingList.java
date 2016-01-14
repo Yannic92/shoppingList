@@ -1,5 +1,7 @@
 package de.yannicklem.shoppinglist.core.list.entity;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import de.yannicklem.shoppinglist.core.OwnedRestEntity;
 import de.yannicklem.shoppinglist.core.item.entity.Item;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
@@ -16,7 +18,6 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
@@ -28,6 +29,7 @@ import javax.persistence.OneToMany;
 @Setter
 @ToString
 @EqualsAndHashCode(of = "entityId", callSuper = false)
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class ShoppingList extends OwnedRestEntity<Long> {
 
     @Id
@@ -38,12 +40,12 @@ public class ShoppingList extends OwnedRestEntity<Long> {
     )
     private Long entityId;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     private final Set<SLUser> owners;
 
     private String name;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL)
     private final Set<Item> items;
 
     public ShoppingList() {

@@ -15,6 +15,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 
 import org.springframework.stereotype.Service;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -24,6 +26,7 @@ import static org.apache.log4j.Logger.getLogger;
 import static java.lang.invoke.MethodHandles.lookup;
 
 
+@Transactional
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired ))
 public class CleanUpService {

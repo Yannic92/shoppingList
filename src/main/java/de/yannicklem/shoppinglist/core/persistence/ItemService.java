@@ -17,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -28,6 +30,7 @@ import static java.lang.invoke.MethodHandles.lookup;
 
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired ))
+@Transactional
 public class ItemService implements EntityService<Item, Long> {
 
     private static final Logger LOGGER = getLogger(lookup().lookupClass());
