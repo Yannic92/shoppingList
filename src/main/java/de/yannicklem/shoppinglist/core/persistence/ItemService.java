@@ -195,4 +195,12 @@ public class ItemService implements EntityService<Item, Long> {
 
         return itemRepository.findUnusedItems(date);
     }
+
+
+    public Long countItemsOfOwner(SLUser user) {
+
+        Long count = itemRepository.countItemsOfUser(user);
+
+        return count == null ? 0 : count;
+    }
 }

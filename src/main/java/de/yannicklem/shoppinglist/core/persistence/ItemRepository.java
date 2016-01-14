@@ -29,4 +29,8 @@ public interface ItemRepository extends CrudRepository<Item, Long> {
         "SELECT i FROM Item i WHERE i NOT IN (SELECT DISTINCT iTemp FROM ShoppingList s INNER JOIN s.items iTemp) AND i.createdAt < :date"
     )
     List<Item> findUnusedItems(@Param("date") Date date);
+
+
+    @Query("SELECT COUNT(i) FROM Item i WHERE :user MEMBER OF i.owners")
+    Long countItemsOfUser(@Param("user") SLUser user);
 }

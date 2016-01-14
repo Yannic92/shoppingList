@@ -188,6 +188,8 @@ public class ShoppingListService implements EntityService<ShoppingList, Long> {
 
     public Long countListsOf(SLUser currentUser) {
 
-        return shoppingListRepository.countListsOfUser(currentUser);
+        Long count = shoppingListRepository.countListsOfUser(currentUser);
+
+        return count == null ? 0 : count;
     }
 }

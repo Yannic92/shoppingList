@@ -21,4 +21,8 @@ public interface ArticleRepository extends CrudRepository<Article, Long> {
 
 
     Article findByName(String name);
+
+
+    @Query("SELECT COUNT(a) FROM Article a WHERE :user MEMBER OF a.owners")
+    Long countArticlesOfUser(@Param("user") SLUser user);
 }

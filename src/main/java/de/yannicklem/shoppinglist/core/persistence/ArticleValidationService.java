@@ -25,9 +25,7 @@ public class ArticleValidationService {
             throw new EntityInvalidException("Article must not be null");
         }
 
-        if (article.getName() == null || article.getName().isEmpty()) {
-            throw new EntityInvalidException("Article name must not be null or empty");
-        }
+        validateName(article.getName());
 
         if (article.getPriceInEuro() < 0) {
             throw new EntityInvalidException("Article price must be >=0");
@@ -44,5 +42,17 @@ public class ArticleValidationService {
         }
 
         owners.forEach(slUserValidationService::validate);
+    }
+
+
+    private void validateName(String name) {
+
+        if (name == null || name.isEmpty()) {
+            throw new EntityInvalidException("Der Name eines Artikels darf nicht leer sein");
+        }
+
+        if (name.length() > 140) {
+            throw new EntityInvalidException("Der Name eines Artikels darf nicht mehr als 140 Zeichen enthalten");
+        }
     }
 }

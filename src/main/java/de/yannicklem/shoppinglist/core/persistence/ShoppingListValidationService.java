@@ -18,6 +18,9 @@ import java.util.Set;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired ))
 public class ShoppingListValidationService {
 
+    private static final int MAX_NAME_LENGTH = 50;
+    public static final int MAX_ITEM_COUNT = 100;
+
     private final ItemValidationService itemValidationService;
     private final SLUserValidationService slUserValidationService;
 
@@ -49,6 +52,11 @@ public class ShoppingListValidationService {
             throw new EntityInvalidException("Items must not be null");
         }
 
+        if (items.size() >= MAX_ITEM_COUNT) {
+            throw new EntityInvalidException(String.format("Eine Liste darf maximal %d Posten enthalten",
+                    MAX_ITEM_COUNT));
+        }
+
         items.forEach(itemValidationService::validate);
     }
 
@@ -57,6 +65,11 @@ public class ShoppingListValidationService {
 
         if (name == null || name.isEmpty()) {
             throw new EntityInvalidException("Eine Liste darf keinen leeren Namen haben");
+        }
+
+        if (name.length() > MAX_NAME_LENGTH) {
+            throw new EntityInvalidException(String.format("Der Name einer Liste darf maximal %d Zeichen lang sein",
+                    MAX_NAME_LENGTH));
         }
     }
 }

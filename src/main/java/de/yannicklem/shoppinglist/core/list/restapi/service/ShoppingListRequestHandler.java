@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired ))
 public class ShoppingListRequestHandler implements RequestHandler<ShoppingList> {
 
+    public static final int MAX_LISTS_PER_USER = 100;
     private final ShoppingListPermissionEvaluator shoppingListPermissionEvaluator;
     private final ShoppingListService shoppingListService;
 
@@ -32,16 +33,12 @@ public class ShoppingListRequestHandler implements RequestHandler<ShoppingList> 
             throw new PermissionDeniedException("Access denied");
         }
 
-        if (entity.getItems().size() >= 100) {
-            throw new BadRequestException("Eine Liste darf maximal 100 Posten enthalten");
-        }
-
         for (SLUser owner : entity.getOwners()) {
             Long numberOfListsOwnedByThisUser = shoppingListService.countListsOf(owner);
 
-            if (numberOfListsOwnedByThisUser >= 100) {
-                throw new BadRequestException(String.format("Der Nutzer '%s' hat das Maximum von 100 Listen erreicht",
-                        owner.getUsername()));
+            if (numberOfListsOwnedByThisUser >= MAX_LISTS_PER_USER) {
+                throw new BadRequestException(String.format("Der Nutzer '%s' hat das Maximum von %d Listen erreicht",
+                        owner.getUsername(), MAX_LISTS_PER_USER));
             }
         }
     }
@@ -54,16 +51,12 @@ public class ShoppingListRequestHandler implements RequestHandler<ShoppingList> 
             throw new PermissionDeniedException("Access denied");
         }
 
-        if (newEntity.getItems().size() >= 100) {
-            throw new BadRequestException("Eine Liste darf maximal 100 Posten enthalten");
-        }
-
         for (SLUser owner : newEntity.getOwners()) {
             Long numberOfListsOwnedByThisUser = shoppingListService.countListsOf(owner);
 
-            if (numberOfListsOwnedByThisUser >= 100) {
-                throw new BadRequestException(String.format("Der Nutzer '%s' hat das Maximum von 100 Listen erreicht",
-                        owner.getUsername()));
+            if (numberOfListsOwnedByThisUser >= MAX_LISTS_PER_USER) {
+                throw new BadRequestException(String.format("Der Nutzer '%s' hat das Maximum von %d Listen erreicht",
+                        owner.getUsername(), MAX_LISTS_PER_USER));
             }
         }
     }

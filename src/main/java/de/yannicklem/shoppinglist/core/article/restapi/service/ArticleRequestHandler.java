@@ -18,6 +18,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired ))
 public class ArticleRequestHandler implements RequestHandler<Article> {
 
+    private static final int MAX_ARTICLES_PER_USER = 10000;
+
     private final ArticlePermissionEvaluator articlePermissionEvaluator;
     private final ArticleService articleService;
 
@@ -41,6 +43,18 @@ public class ArticleRequestHandler implements RequestHandler<Article> {
         if (!articlePermissionEvaluator.isAllowedToCreate(entity, currentUser)) {
             throw new PermissionDeniedException();
         }
+
+        assert entity != null;
+
+        for (SLUser owner : entity.getOwners()) {
+            Long numberOfItems = articleService.countArticlesOfOwner(owner);
+
+            if (numberOfItems > MAX_ARTICLES_PER_USER) {
+                throw new BadRequestException(String.format(
+                        "Der Nutzer %s hat das Maximum von %d Wörterbucheinträgen erreicht", owner.getUsername(),
+                        MAX_ARTICLES_PER_USER));
+            }
+        }
     }
 
 
@@ -49,6 +63,18 @@ public class ArticleRequestHandler implements RequestHandler<Article> {
 
         if (!articlePermissionEvaluator.isAllowedToUpdate(oldEntity, newEntity, currentUser)) {
             throw new PermissionDeniedException();
+        }
+
+        assert newEntity != null;
+
+        for (SLUser owner : newEntity.getOwners()) {
+            Long numberOfItems = articleService.countArticlesOfOwner(owner);
+
+            if (numberOfItems > MAX_ARTICLES_PER_USER) {
+                throw new BadRequestException(String.format(
+                        "Der Nutzer %s hat das Maximum von %d Wörterbucheinträgen erreicht", owner.getUsername(),
+                        MAX_ARTICLES_PER_USER));
+            }
         }
     }
 
