@@ -18,6 +18,7 @@ shoppingList.run(['$rootScope', '$location', '$anchorScroll',
         $rootScope.authenticated = false;
         $rootScope.user = "";
         $rootScope.usersHistoryLength = history.length;
+        $rootScope.authenticationAlreadyChecked = false;
         $rootScope.reset = function(){
             $rootScope.options = [];
             $rootScope.title = "";
@@ -25,7 +26,6 @@ shoppingList.run(['$rootScope', '$location', '$anchorScroll',
                 available: false
             };
             $rootScope.loading = false;
-            $rootScope.authenticationAlreadyChecked = false;
         };
         $rootScope.goToTop = function () {
             $location.hash('top');

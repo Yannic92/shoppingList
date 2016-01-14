@@ -1,19 +1,24 @@
 shoppingList.factory('authService',['$http', '$rootScope', 'userService', function($http, $rootScope, userService){
     var USER_ENDPOINT = 'sLUsers/current';
 
+    var handleSuccessfulLogin = function(response){
+        if(response.data && response.data.username){
+            $rootScope.authenticated = true;
+            return response.data;
+        }else {
+            $rootScope.authenticated = false;
+        }
+    };
+
     var authService = {
         authenticate : function (credentials) {
             var headers = authService.getAuthenticationHeader(credentials);
-
+            $rootScope.authenticationAlreadyChecked = true;
             return $http.get(USER_ENDPOINT, {
                 headers: headers
-            }).then(function(response){
-                if(response.data && response.data.username){
-                    $rootScope.authenticated = true;
-                    return response.data;
-                }else {
-                    $rootScope.authenticated = false;
-                }
+            }).then(function(){
+                return $http.get(USER_ENDPOINT)
+                    .then(handleSuccessfulLogin);
             });
         },
         isAuthenticated : function(){
@@ -24,14 +29,7 @@ shoppingList.factory('authService',['$http', '$rootScope', 'userService', functi
             }
 
             return $http.get(USER_ENDPOINT)
-                .then(function(response){
-                    if(response.data.username){
-                        $rootScope.authenticated = true;
-                        return response.data;
-                    }else{
-                        $rootScope.authenticated = false;
-                    }
-                });
+                .then(handleSuccessfulLogin);
         },
         getAuthenticationHeader : function(credentials){
             return credentials ? {
