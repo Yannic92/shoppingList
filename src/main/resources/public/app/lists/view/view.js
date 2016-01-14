@@ -52,31 +52,13 @@ shoppingList.controller('listView', ['$scope', '$rootScope','listService','itemS
                         $scope.$parent.goto("/lists", true);
                         return;
                     }
-                    $rootScope.title = $scope.list.name;
-                    $rootScope.options = [
-                        {
-                            icon: "img/icons/action/ic_settings_24px.svg",
-                            text: "Liste bearbeiten",
-                            link: "#/lists/" + $scope.list.entityId + "/edit"
-                        },{
-                            icon: "/img/icons/communication/ic_clear_all_24px.svg",
-                            text: "Liste leeren",
-                            action: $scope.clearList,
-                            disabled: $scope.listIsEmpty
-                        },{
-                            icon: "img/icons/action/ic_delete_24px.svg",
-                            text: "Liste löschen",
-                            action: $scope.deleteList
-                        }
-                    ];
 
-                    $rootScope.shortCutAction = {
-                        parameters: "$mdOpenMenu, $event",
-                        icon: "img/icons/notification/ic_sync_24px.svg",
-                        action: $scope.update,
-                        available: true,
-                        ariaLabel: "refetch current list from server"
+                    if(!$scope.list.updated) {
+                        $scope.update().then(init);
+                    }else{
+                        init();
                     }
+
                 }
             }).finally(function () {
                 $rootScope.loading = false;
@@ -84,7 +66,7 @@ shoppingList.controller('listView', ['$scope', '$rootScope','listService','itemS
 
         $scope.update = function () {
             $rootScope.loading = true;
-            listService.getUpdated($scope.list)
+            return listService.getUpdated($scope.list)
                 .then(function(updatedList){
                     $scope.list = updatedList;
                 }).finally(function () {
@@ -198,6 +180,35 @@ shoppingList.controller('listView', ['$scope', '$rootScope','listService','itemS
             $scope.create = function() {
                 $mdDialog.hide($scope.newItem);
             };
+        }
+
+        var init = function () {
+
+            $rootScope.title = $scope.list.name;
+            $rootScope.options = [
+                {
+                    icon: "img/icons/action/ic_settings_24px.svg",
+                    text: "Liste bearbeiten",
+                    link: "#/lists/" + $scope.list.entityId + "/edit"
+                },{
+                    icon: "/img/icons/communication/ic_clear_all_24px.svg",
+                    text: "Liste leeren",
+                    action: $scope.clearList,
+                    disabled: $scope.listIsEmpty
+                },{
+                    icon: "img/icons/action/ic_delete_24px.svg",
+                    text: "Liste löschen",
+                    action: $scope.deleteList
+                }
+            ];
+
+            $rootScope.shortCutAction = {
+                parameters: "$mdOpenMenu, $event",
+                icon: "img/icons/notification/ic_sync_24px.svg",
+                action: $scope.update,
+                available: true,
+                ariaLabel: "refetch current list from server"
+            }
         }
     }
 ]);

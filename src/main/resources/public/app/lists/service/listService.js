@@ -2,6 +2,7 @@ shoppingList.factory('listService',['$resource', 'HALResource','$filter','$q',
     function($resource, HALResource,$filter,$q){
 
         var listsEndpoint = '/shoppingLists/:id';
+        var listsNameOnlyEndpoint = 'shoppingLists/projections/name_only';
         var methods = {
             'update': { method:'PUT' },
             'delete': { method: 'DELETE'}
@@ -36,8 +37,8 @@ shoppingList.factory('listService',['$resource', 'HALResource','$filter','$q',
             entity.entityId = resource.entityId;
             entity._links = resource._links;
             entity.name = resource.name;
-            entity.owners = resource.owners;
-            entity.items = resource.items;
+            entity.owners = resource.owners ? resource.owners : [];
+            entity.items = resource.items ? resource.items : [];
 
             return entity;
         };
@@ -74,6 +75,8 @@ shoppingList.factory('listService',['$resource', 'HALResource','$filter','$q',
                     .then(function (response) {
                         var responseEntity = toEntity(response);
                         replaceExisting(responseEntity);
+                        list.updated = true;
+                        responseEntity.updated = true;
                         return responseEntity;
                     });
             },
@@ -94,7 +97,7 @@ shoppingList.factory('listService',['$resource', 'HALResource','$filter','$q',
                     })
             },
             fetch: function () {
-                persistedLists.promise = Lists.get().$promise
+                persistedLists.promise = $resource(listsNameOnlyEndpoint).get().$promise
                     .then(function(response){
                         var entities = toEntities(HALResource.getContent(response));
                         persistedLists.splice(0, persistedLists.length);

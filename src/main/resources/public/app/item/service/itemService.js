@@ -9,60 +9,60 @@ shoppingList.factory('itemService',['$resource', 'HALResource','$filter','articl
         var Items = $resource(itemsEndpoint, null, methods);
 
         var toResource = function (entity) {
-            
+
             var resource = {};
-            
+
             resource._links = entity._links;
             resource.entityId = entity.entityId;
             resource.count = entity.count;
             resource.article = {entityId: entity.article.entityId};
             resource.done = entity.done;
-            
+
             return resource;
         };
-        
+
         var toEntity = function (resource){
             var entity = {};
-            
+
             entity.entityId = resource.entityId;
             entity._links = resource._links;
             entity.count = resource.count;
             entity.article = resource.article;
             entity.done = resource.done;
-            
+
             return entity;
         };
-        
+
         var toEntities = function(resources){
-            
+
             var entities = [];
             if(!resources || !resources.length){
                 return entities;
             }
-            
+
             for(var i = 0 ; i < resources.length; i++){
                 var entity = toEntity(resources[i]);
                 entities.push(entity);
             }
-            
+
             return entities;
         };
-        
+
         var replaceExisting = function (item) {
-            
+
             var existingItem = $filter('filter')(persistedItems, {entityId: item.entityId})[0];
             var index = persistedItems.indexOf(existingItem);
             persistedItems.splice(index, 1, item);
         };
-        
+
         var persistedItems = [];
-        
+
         var itemService = {
             get: function(){
                 return persistedItems;
             },
             create: function(item){
-                
+
                 return articleService.create(item.article).then(function(createdArticle){
                     item.article.entityId = createdArticle.entityId;
                     return Items.save(toResource(item)).$promise
@@ -72,7 +72,7 @@ shoppingList.factory('itemService',['$resource', 'HALResource','$filter','articl
                             return responseEntity;
                         })
                 })
-                
+
             },
             update: function (item) {
                 return Items.update({id: item.entityId}, toResource(item)).$promise
@@ -90,7 +90,7 @@ shoppingList.factory('itemService',['$resource', 'HALResource','$filter','articl
                         persistedItems.push.apply(persistedItems, entities);
                         return entities;
                     });
-                
+
                 return persistedItems.promise;
             },
             delete: function (item) {
@@ -102,8 +102,6 @@ shoppingList.factory('itemService',['$resource', 'HALResource','$filter','articl
                     });
             }
         };
-        
-        itemService.fetch();
-        
+
         return itemService;
     }]);

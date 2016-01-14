@@ -18,7 +18,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
@@ -44,7 +43,7 @@ public class Article extends OwnedRestEntity<Long> {
     private double priceInEuro;
 
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     private final Set<SLUser> owners;
 
     public Article(String name, double priceInEuro, Set<SLUser> owners) {
