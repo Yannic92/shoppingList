@@ -19,7 +19,6 @@ import java.sql.SQLException;
 @SpringBootApplication
 @EnableScheduling
 @EnableTransactionManagement
-@EnableCaching
 public class WebShoppingListApplication {
 
     public static void main(String[] args) {

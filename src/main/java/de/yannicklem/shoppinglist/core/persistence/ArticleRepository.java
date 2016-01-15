@@ -21,25 +21,13 @@ public interface ArticleRepository extends CrudRepository<Article, Long> {
     List<Article> findAll();
 
 
-    @Cacheable
     @Query("SELECT a FROM Article a WHERE :user MEMBER OF a.owners")
     List<Article> findArticlesOwnedBy(@Param("user") SLUser slUser);
 
 
-    @Cacheable
     Article findByName(String name);
 
 
     @Query("SELECT COUNT(a) FROM Article a WHERE :user MEMBER OF a.owners")
     Long countArticlesOfUser(@Param("user") SLUser user);
-
-
-    @Cacheable
-    @Override
-    Article findOne(Long aLong);
-
-
-    @Cacheable
-    @Override
-    boolean exists(Long aLong);
 }
