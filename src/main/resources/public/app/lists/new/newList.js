@@ -1,5 +1,5 @@
-shoppingList.controller('newList', ['$scope','$rootScope','listService','$mdToast','$location','userService','$mdDialog',
-    function ($scope, $rootScope, listService,$mdToast,$location,userService,$mdDialog) {
+shoppingList.controller('newList', ['$scope','$rootScope','listService','$mdToast','userService',
+    function ($scope, $rootScope, listService,$mdToast, userService) {
 
         $rootScope.title = "Neue Einkaufsliste";
         $rootScope.loading = false;
@@ -60,7 +60,7 @@ shoppingList.controller('newList', ['$scope','$rootScope','listService','$mdToas
                             .position("bottom right")
                             .hideDelay(3000)
                     );
-                    $location.path("/lists/" + createdList.entityId);
+                    $scope.$parent.goto("/lists/" +  createdList.entityId, true);
                 }, function(error){
                     $rootScope.errorMessage = error.data.message;
                     $rootScope.error = true;

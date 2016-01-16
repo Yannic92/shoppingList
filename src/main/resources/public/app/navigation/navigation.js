@@ -133,13 +133,27 @@ shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'aut
             });
         }
 
+        $scope.isOnRoot = function(){
+            var currentPath = $location.path();
+
+            return currentPath && currentPath == "/lists";
+        };
+
         $scope.reload = function(){
             $window.location.reload();
         };
 
+        $scope.back = function () {
+            $window.history.back();
+        };
+
         $scope.isXs = function(){
             return $mdMedia('xs');
-        }
+        };
+
+        $scope.optionsAvailable = function () {
+            return $rootScope.options && $rootScope.options.length && $rootScope.options.length > 0;
+        };
     }
 ]);
 

@@ -1,7 +1,10 @@
 <md-toolbar>
     <div class="titlebar md-toolbar-tools">
-        <md-button ng-if="authenticated" aria-label="toggle menu" class="md-icon-button" ng-click="toggleNav()" hide-gt-sm>
+        <md-button ng-if="authenticated && isOnRoot()" aria-label="toggle menu" class="md-icon-button" ng-click="toggleNav()" hide-gt-sm>
             <md-icon md-svg-src="img/icons/navigation/ic_menu_24px.svg"></md-icon>
+        </md-button>
+        <md-button ng-if="authenticated && !isOnRoot()" aria-label="toggle menu" class="md-icon-button" ng-click="back()" hide-gt-sm>
+            <md-icon md-svg-src="img/icons/navigation/ic_arrow_back_24px.svg"></md-icon>
         </md-button>
         <div layout="row" class="fill-height" flex>
             <h1 class="md-toolbar-item md-breadcrumb md-headline">
@@ -12,7 +15,7 @@
                 <md-button ng-if="shortCutAction.available" aria-label="{{shortCutAction.ariaLabel}}" class="md-icon-button" ng-click="shortCutAction.action()">
                     <md-icon md-svg-src="{{shortCutAction.icon}}"></md-icon>
                 </md-button>
-                <ng-include ng-if="authenticated" ng-controller="navMenu" src="'app/navigation/navMenu/navMenu.html'"></ng-include>
+                <ng-include ng-if="authenticated && optionsAvailable()" ng-controller="navMenu" src="'app/navigation/navMenu/navMenu.html'"></ng-include>
             </div>
         </div>
     </div>

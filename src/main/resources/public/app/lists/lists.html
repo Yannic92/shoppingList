@@ -8,3 +8,13 @@
         Erstelle dir doch eine
     </md-button>
 </div>
+
+<md-list ng-cloak>
+    <md-list-item ng-repeat="list in lists | orderBy: 'name' track by $index" ng-click="goto('/lists/'+ list.entityId)">
+        <md-icon md-svg-src="img/icons/action/ic_list_24px.svg"></md-icon>
+        <p>{{list.name}}</p>
+        <md-icon aria-label="delete list" class="md-secondary" ng-click="deleteList(list, $event)"
+                 md-svg-src="img/icons/action/ic_delete_24px.svg">
+        </md-icon>
+    </md-list-item>
+</md-list>
