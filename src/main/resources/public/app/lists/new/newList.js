@@ -34,18 +34,10 @@ shoppingList.controller('newList', ['$scope','$rootScope','listService','$mdToas
             return true;
         };
 
-        var fetchUsersIfNecessary = function(){
-            if(!$scope.users.loaded){
-                userService.fetch();
-            }
-        };
-
         $scope.firstNameOrLastNameIsDefined = function(user){
 
             return user.firstName || user.lastName;
         };
-
-        fetchUsersIfNecessary();
 
         $scope.createList = function () {
             $rootScope.loading = true;

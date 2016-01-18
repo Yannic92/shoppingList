@@ -9,12 +9,10 @@ shoppingList.factory('userService',['$resource', 'HALResource',
         var USERS = $resource(userendpoint, null, methods);
         var USER_CONFIRMATION = $resource(userendpoint + "/confirmation", null, methods);
         var usersList = [];
-        var fetched = false;
-        var fetching = false;
 
         var userService = {
             get: function(){
-                if(!fetched && !fetching){
+                if(!usersList.fetching && !usersList.loaded){
                     userService.fetch();
                 }
                 return usersList;
@@ -30,14 +28,13 @@ shoppingList.factory('userService',['$resource', 'HALResource',
                 localStorage.setItem("credentials", JSON.stringify({}));
             },
             fetch: function(){
-                fetching = true;
+                usersList.fetching = true;
                 usersList.promise = USERS.get().$promise
                     .then(function (response) {
                         usersList.splice(0, usersList.length);
                         usersList.push.apply(usersList, HALResource.getContent(response));
                         usersList.loaded = true;
-                        fetched = true;
-                        fetching = false;
+                        usersList.fetching = false;
                         return usersList;
                     });
 

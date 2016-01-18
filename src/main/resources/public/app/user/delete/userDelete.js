@@ -1,7 +1,7 @@
 shoppingList.controller('userDelete', ['$rootScope','$scope','userService','authService','$location',
     function ($rootScope, $scope, userService, authService, $location) {
         $rootScope.title = "Konto löschen";
-        
+
         $scope.deleteAccount = function () {
             userService.delete($rootScope.user)
                 .then(function () {
@@ -11,7 +11,6 @@ shoppingList.controller('userDelete', ['$rootScope','$scope','userService','auth
                         })
                 })
         }
-        
     }
 ]);
 
