@@ -99,6 +99,7 @@ shoppingList.factory('itemService',['$resource', 'HALResource','$filter','articl
                         var existingList = $filter('filter')(persistedItems, {entityId: item.entityId})[0];
                         var index = persistedItems.indexOf(existingList);
                         persistedItems.splice(index,1);
+                        return item;
                     });
             }
         };

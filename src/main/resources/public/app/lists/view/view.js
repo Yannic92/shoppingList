@@ -7,8 +7,8 @@ shoppingList.config(['$routeProvider', function ($routeProvider) {
         .when('/lists/:listId', routeConfig);
 }]);
 
-shoppingList.controller('listView', ['$scope', '$rootScope','listService','itemService','$routeParams','$filter', 'articleService','$mdDialog',
-    function ($scope, $rootScope,listService,itemService,$routeParams,$filter, articleService,$mdDialog) {
+shoppingList.controller('listView', ['$scope', '$rootScope','listService','itemService','$routeParams','$filter', 'articleService','$mdDialog', '$q',
+    function ($scope, $rootScope,listService,itemService,$routeParams,$filter, articleService,$mdDialog, $q) {
         'use strict';
 
         var lists = listService.get();
@@ -145,15 +145,30 @@ shoppingList.controller('listView', ['$scope', '$rootScope','listService','itemS
 
             var confirm = $mdDialog.confirm()
                 .title("Möchtest du die Liste '" + $scope.list.name+ "' wirklich leeren?")
-                .content("Alle Posten auf der Liste werden unwiderruflich gelöscht.")
+                .content("Alle Posten auf der Liste, die als erledigt markiert wurden, werden unwiderruflich gelöscht.")
                 .targetEvent(ev)
                 .ok('Ja')
                 .cancel('Nein');
 
-            $mdDialog.show(confirm)
+            return $mdDialog.show(confirm)
                 .then(function () {
+                    var promises = [];
+                    var newItems = [];
+
+                    for(var i = 0; i < $scope.list.items.length; i++){
+                        if($scope.list.items[i].done) {
+                            promises.push(itemService.delete($scope.list.items[i]));
+                        }else{
+                            newItems.push($scope.list.items[i]);
+                        }
+                    }
+
+
                     $scope.list.items.splice(0, $scope.list.items.length);
-                    listService.update($scope.list);
+                    $scope.list.items.push.apply($scope.list.items, newItems);
+                    promises.push(listService.update($scope.list));
+
+                    return $q.all(promises);
                 });
         };
 
