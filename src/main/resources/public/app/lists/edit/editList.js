@@ -50,7 +50,7 @@ shoppingList.controller('editList', ['$scope','$rootScope','listService','$filte
         };
 
         $scope.removeUserFromOwners = function (index, user){
-            if($scope.isLoggedInUser(user)){
+            if(isLoggedInUser(user)){
                 $mdDialog.show(
                     $mdDialog.confirm()
                         .title("Warnung!")
@@ -65,6 +65,10 @@ shoppingList.controller('editList', ['$scope','$rootScope','listService','$filte
                 $scope.list.owners.splice(index, 1);
                 $scope.updateList();
             }
+        };
+
+        var isLoggedInUser = function (user) {
+            return user && user.username === $rootScope.user.username;
         };
 
         $scope.hasProperty = function (user) {
