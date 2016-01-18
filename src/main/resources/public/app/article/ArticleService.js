@@ -61,7 +61,7 @@ shoppingList.factory('articleService',['$resource', 'HALResource','$filter', '$q
             },
             create: function(article){
                 if (article) {
-                    var persistedArticlesWithSameName = $filter('filter')(persistedArticles, {name: article.name});
+                    var persistedArticlesWithSameName = $filter('filter')(persistedArticles, {name: article.name}, true);
                     if (persistedArticlesWithSameName && persistedArticlesWithSameName[0]) {
                         article.entityId = persistedArticlesWithSameName[0].entityId;
                         return $q(function(resolve, reject) {
