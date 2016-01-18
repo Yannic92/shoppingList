@@ -197,19 +197,79 @@ shoppingList.controller('listView', ['$scope', '$rootScope','listService','itemS
             };
         }
 
+        $scope.listDoesntContainsUndoneItems = function () {
+
+            if($scope.listIsEmpty()){
+                return true;
+            }
+
+            for(var i = 0; i < $scope.list.items.length; i++){
+                if(!$scope.list.items[i].done){
+                    return false;
+                }
+            }
+
+            return true;
+        };
+
+        $scope.listDoesntContainsDoneItems = function () {
+
+            if($scope.listIsEmpty()){
+                return true;
+            }
+
+            for(var i = 0; i < $scope.list.items.length; i++){
+                if($scope.list.items[i].done){
+                    return false;
+                }
+            }
+
+            return true;
+        };
+
+        $scope.setAllUndone = function(){
+
+            for(var i = 0; i < $scope.list.items.length; i++){
+                if($scope.list.items[i].done) {
+                    $scope.list.items[i].done = false;
+                    itemService.update($scope.list.items[i]);
+                }
+            }
+        };
+
+        $scope.setAllDone = function(){
+
+            for(var i = 0; i < $scope.list.items.length; i++){
+                if(!$scope.list.items[i].done) {
+                    $scope.list.items[i].done = true;
+                    itemService.update($scope.list.items[i]);
+                }
+            }
+        };
+
         var init = function () {
 
             $rootScope.title = $scope.list.name;
             $rootScope.options = [
                 {
-                    icon: "img/icons/action/ic_settings_24px.svg",
-                    text: "Liste bearbeiten",
-                    link: "#/lists/" + $scope.list.entityId + "/edit"
+                    icon: "/img/icons/Toggle/ic_check_box_24px.svg",
+                    text: "Alles erledigt",
+                    action: $scope.setAllDone,
+                    disabled: $scope.listDoesntContainsUndoneItems
+                },{
+                    icon: "/img/icons/Toggle/ic_check_box_outline_blank_24px.svg",
+                    text: "Nichts erledigt",
+                    action: $scope.setAllUndone,
+                    disabled: $scope.listDoesntContainsDoneItems
                 },{
                     icon: "/img/icons/communication/ic_clear_all_24px.svg",
                     text: "Liste leeren",
                     action: $scope.clearList,
                     disabled: $scope.listIsEmpty
+                },{
+                    icon: "img/icons/action/ic_settings_24px.svg",
+                    text: "Liste bearbeiten",
+                    link: "#/lists/" + $scope.list.entityId + "/edit"
                 },{
                     icon: "img/icons/action/ic_delete_24px.svg",
                     text: "Liste löschen",
