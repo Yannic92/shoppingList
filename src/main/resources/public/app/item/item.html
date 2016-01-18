@@ -4,5 +4,6 @@
         <h3 ng-class="{ 'striked-out': item.done}">{{item.article.name}}</h3>
         <p ng-class="{ 'striked-out': item.done}">{{item.count}} </p>
     </div>
-    <md-icon aria-label="delete item" ng-click="deleteItem(item)" class="md-secondary" md-svg-src="img/icons/action/ic_delete_24px.svg"></md-icon>
+    <md-icon ng-if="!item.deleting" aria-label="delete item" ng-click="deleteItem(item)" class="md-secondary" md-svg-src="img/icons/action/ic_delete_24px.svg"></md-icon>
+    <md-progress-circular ng-if="item.deleting" class="md-secondary" md-mode="indeterminate" md-diameter="20px"></md-progress-circular>
 </md-list-item>

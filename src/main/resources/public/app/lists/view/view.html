@@ -18,7 +18,7 @@
     </form>
         <md-content>
             <md-list ng-cloak role="list">
-                <ng-include ng-repeat="item in list.items | orderBy: 'article.name' track by $index"
+                <ng-include ng-repeat="item in list.items | orderBy: ['-deleting', 'done', 'article.name'] track by $index"
                      src="'/app/item/item.html'"
                      ng-controller="itemController">
                 </ng-include>
