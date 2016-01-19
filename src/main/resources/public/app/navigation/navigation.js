@@ -70,11 +70,12 @@ shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'aut
             if(!$rootScope.authenticated){
                 if(!isFreeRoute(newUrl)){
                     if(!$scope.initialLoad){
-                        history.back();
+                        event.preventDefault();
+                        $window.history.back();
+                    }else {
+                        event.preventDefault();
+                        redirectToLoginIfAuthenticationRequired(newUrl);
                     }
-
-                    event.preventDefault();
-                    redirectToLoginIfAuthenticationRequired(newUrl);
                 }
 
             }
