@@ -50,14 +50,13 @@ shoppingList.service('MyHttpInterceptor',['$location', '$q', '$injector', '$root
                             });
                     }else if($rootScope.authenticated && !sessionTimeOutCheck) {
                         sessionTimeoutCheckPromise = checkForSessionTimeout(rejection);
-                        sessionTimeoutCheckPromise
+                        return sessionTimeoutCheckPromise
                             .then(function(){
                                 var $http = $injector.get('$http');
                                 return $http(rejection.config);
                             }, function(){
                                 return handleSessionTimeout(rejection);
                             });
-                        return sessionTimeoutCheckPromise;
                     }else if(! $injector.get('authService').loggingIn) {
                         $location.path('/login').replace();
                     }
