@@ -101,8 +101,8 @@ shoppingList.controller('login',[ '$rootScope', '$scope', '$location', 'authServ
         });
 
         $scope.gtSm = function () {
-            return $mdMedia('gt-sm')
-        }
+            return $mdMedia('gt-sm');
+        };
 
         init();
     }

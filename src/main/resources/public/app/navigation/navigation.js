@@ -1,5 +1,5 @@
-shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'authService', '$route', '$mdComponentRegistry','$mdMedia','$window','$timeout',
-    function ($rootScope, $scope, $location, authService, $route, $mdComponentRegistry,$mdMedia, $window, $timeout) {
+shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'authService', '$route', '$mdComponentRegistry','$mdMedia','$window','$timeout','$mdToast',
+    function ($rootScope, $scope, $location, authService, $route, $mdComponentRegistry,$mdMedia, $window, $timeout, $mdToast) {
         $scope.lastPath = "";
         $scope.newVersionAvailable = false;
         $scope.initialLoad = true;
@@ -52,7 +52,7 @@ shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'aut
         };
 
         var redirectToLoginIfAuthenticationRequired = function(newUrl) {
-            $rootScope.loading = true;
+            $rootScope.routeIsLoading = true;
             authService.isAuthenticated()
                 .then(function (user) {
                     $rootScope.user = user;
@@ -62,29 +62,52 @@ shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'aut
                     redirectToLoginIfNotFreeRotue(newUrl);
                 })
                 .finally(function () {
-                    $rootScope.loading = false;
+                    $rootScope.routeIsLoading = false;
                 });
         };
 
+        var handleFinishedHistoryBackChain = function(){
+            $scope.historyBackTimeout = $timeout(function(){
+                $scope.processingHistoryBackChain = false;
+                $scope.routeIsLoading = false;
+                $mdToast.show(
+                    $mdToast.simple()
+                        .content("Zum Beenden erneut tippen")
+                        .position("bottom right")
+                        .hideDelay(3000)
+                );
+            }, 500);
+        };
+
         $rootScope.$on('$routeChangeStart', function (event, newUrl, oldUrl) {
-            if(!$rootScope.authenticated){
+            if($scope.processingHistoryBackChain) {
+
+                $timeout.cancel($scope.historyBackTimeout);
+                $timeout(function() {
+                    $window.history.back();
+                }).then(handleFinishedHistoryBackChain);
+
+            } else if(!$rootScope.authenticated){
+                $scope.routeIsLoading = true;
                 if(!isFreeRoute(newUrl)){
                     if(!$scope.initialLoad){
-                        event.preventDefault();
+                        $scope.processingHistoryBackChain = true;
                         $timeout(function() {
                             $window.history.back();
-                        });
+                        }).then(handleFinishedHistoryBackChain);
                     }else {
                         event.preventDefault();
                         redirectToLoginIfAuthenticationRequired(newUrl);
                     }
                 }
-
             }
         });
 
         $rootScope.$on('$routeChangeSuccess', function (event, newUrl, oldUrl) {
 
+            if(!$scope.processingHistoryBackChain){
+                $scope.routeIsLoading = false;
+            }
             if($scope.initialLoad){
                 $scope.initialLoad = false;
             }

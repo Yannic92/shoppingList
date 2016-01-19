@@ -50,6 +50,6 @@
             </div>
         </div>
     </md-toolbar>
-    <loading-cycle layout-padding flex ng-if="loading"></loading-cycle>
-    <div ng-view></div>
+    <loading-cycle layout-padding flex ng-if="loading || routeIsLoading"></loading-cycle>
+    <div ng-if="!routeIsLoading" ng-view></div>
 </md-content>
