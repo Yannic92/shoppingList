@@ -1,6 +1,15 @@
 shoppingList.service('MyHttpInterceptor',['$location', '$q', '$injector', '$rootScope','$window',
     function ($location ,$q, $injector, $rootScope,$window) {
 
+        var sessionTimeOutCheck = false;
+        var sessionTimeoutCheckPromise;
+
+        var init = function(){
+            var deferred = $q.defer();
+            sessionTimeoutCheckPromise = deferred.promise;
+            deferred.resolve("");
+        };
+
         var handleSessionTimeout = function (rejection) {
             $rootScope.authenticated = true;
             var $mdDialog = $injector.get('$mdDialog');
@@ -13,23 +22,23 @@ shoppingList.service('MyHttpInterceptor',['$location', '$q', '$injector', '$root
                     .ariaLabel('Sitzung abgelaufen')
                     .ok('OK')
             ).then(function(){
-                $rootScope.authenticated = false;
-                $location.path("/login");
-                $window.location.reload();
+                $injector.get('authService').logout()
+                    .then(function () {
+                        $location.path("/login");
+                    })
             }).finally(function(){
                 return $q.reject(rejection);
             });
         };
 
         var checkForSessionTimeout = function (rejection) {
-            $rootScope.sessionTimeOutCheck = true;
+            sessionTimeOutCheck = true;
             return $injector.get('authService').isAuthenticated()
                 .then(function(){
                     var $http = $injector.get('$http');
                     return $http(rejection.config);
                 }, function(){
-                    $rootScope.authenticated = false;
-                    return $q.reject(rejection);
+                    return handleSessionTimeout(rejection);
                 });
         };
 
@@ -37,12 +46,13 @@ shoppingList.service('MyHttpInterceptor',['$location', '$q', '$injector', '$root
             responseError: function(rejection) {
                 if(rejection.status == 401 || (rejection.status == 403 && rejection.data.message.indexOf("CSRF") > -1)) {
 
-                    if($rootScope.sessionTimeOutCheck) {
-                        return handleSessionTimeout();
-                    }else if($rootScope.authenticated) {
-                        return checkForSessionTimeout(rejection);
+                    if(sessionTimeOutCheck && ! (rejection.config.url == "sLUsers/current")) {
+                        return sessionTimeoutCheckPromise;
+                    }else if($rootScope.authenticated && !sessionTimeOutCheck) {
+                        sessionTimeoutCheckPromise = checkForSessionTimeout(rejection);
+                        return sessionTimeoutCheckPromise;
                     }else if(! $injector.get('authService').loggingIn) {
-                        $location.path('/login');
+                        $location.path('/login').replace();
                     }
                 }
                 return $q.reject(rejection);

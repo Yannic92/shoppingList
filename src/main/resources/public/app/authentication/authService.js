@@ -15,6 +15,7 @@ shoppingList.factory('authService',['$http', '$rootScope', 'userService', functi
         loggedOut: false,
         loggingIn: false,
         authenticate : function (credentials) {
+            authService.loggingIn = true;
             var headers = authService.getAuthenticationHeader(credentials);
             $rootScope.authenticationAlreadyChecked = true;
             return $http.get(USER_ENDPOINT, {

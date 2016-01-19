@@ -3,20 +3,28 @@ shoppingList.controller('login',[ '$rootScope', '$scope', '$location', 'authServ
 
         $scope.credentials = userService.getCredentials();
         $scope.loggingIn = false;
-        $rootScope.loading = false;
+        $rootScope.loading = true;
         $rootScope.title="Login";
 
-        if($routeParams.historyRoot){
-            $rootScope.usersHistoryLength = $routeParams.historyRoot;
-        }
+        var init = function() {
+            if ($routeParams.historyRoot) {
+                $rootScope.usersHistoryLength = $routeParams.historyRoot;
+            }
 
-        if(authService.loggedOut){
-            $window.location.reload();
-        }
+            if (authService.loggedOut) {
+                $window.location.reload();
+            }
 
-        if(authService.loggingOut){
-            $window.history.go(-1 * ($window.history.length - $rootScope.usersHistoryLength));
-        }
+            if (authService.loggingOut) {
+                $window.history.go(-1 * ($window.history.length - $rootScope.usersHistoryLength));
+            }
+
+            if (!$rootScope.authenticationAlreadyChecked) {
+                redirectIfLoggedIn();
+            }else{
+                $rootScope.loading = false;
+            }
+        };
 
         $scope.login = function () {
             loggingIn();
@@ -91,10 +99,6 @@ shoppingList.controller('login',[ '$rootScope', '$scope', '$location', 'authServ
             return $scope.loggingIn || ($scope.loginForm && !$scope.loginForm.$valid);
         };
 
-        if(!$rootScope.authenticationAlreadyChecked) {
-            redirectIfLoggedIn();
-        }
-
         $scope.$on('$destroy', function(){
 
             $rootScope.reset();
@@ -103,6 +107,8 @@ shoppingList.controller('login',[ '$rootScope', '$scope', '$location', 'authServ
         $scope.gtSm = function () {
             return $mdMedia('gt-sm')
         }
+
+        init();
     }
 ]);
 
