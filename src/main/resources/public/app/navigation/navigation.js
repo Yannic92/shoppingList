@@ -71,7 +71,9 @@ shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'aut
                 if(!isFreeRoute(newUrl)){
                     if(!$scope.initialLoad){
                         event.preventDefault();
-                        $window.history.back();
+                        $timeout(function() {
+                            $window.history.back();
+                        });
                     }else {
                         event.preventDefault();
                         redirectToLoginIfAuthenticationRequired(newUrl);
