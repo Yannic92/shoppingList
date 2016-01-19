@@ -11,7 +11,6 @@ shoppingList.factory('authService',['$http', '$rootScope', 'userService', functi
     };
 
     var authService = {
-        loggingOut: false,
         loggedOut: false,
         loggingIn: false,
         authenticate : function (credentials) {
@@ -51,12 +50,12 @@ shoppingList.factory('authService',['$http', '$rootScope', 'userService', functi
         },
 
         logout : function() {
-            authService.loggingOut = true;
             return $http.post('/logout', {}).finally(function(){
                 $rootScope.authenticated = false;
                 $rootScope.headers = {};
                 $rootScope.user = '';
                 userService.clearCredentials();
+                authService.loggedOut = true;
             });
         }
     };

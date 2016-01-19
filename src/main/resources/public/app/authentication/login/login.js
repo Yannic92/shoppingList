@@ -15,10 +15,6 @@ shoppingList.controller('login',[ '$rootScope', '$scope', '$location', 'authServ
                 $window.location.reload();
             }
 
-            if (authService.loggingOut) {
-                $window.history.go(-1 * ($window.history.length - $rootScope.usersHistoryLength));
-            }
-
             if (!$rootScope.authenticationAlreadyChecked) {
                 redirectIfLoggedIn();
             }else{

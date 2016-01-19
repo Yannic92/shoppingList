@@ -67,8 +67,12 @@ shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'aut
         };
 
         $rootScope.$on('$routeChangeStart', function (event, newUrl, oldUrl) {
-            if(!$rootScope.authenticated && !authService.loggingOut){
+            if(!$rootScope.authenticated){
                 if(!isFreeRoute(newUrl)){
+                    if(!$scope.initialLoad){
+                        history.back();
+                    }
+
                     event.preventDefault();
                     redirectToLoginIfAuthenticationRequired(newUrl);
                 }
@@ -77,25 +81,15 @@ shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'aut
         });
 
         $rootScope.$on('$routeChangeSuccess', function (event, newUrl, oldUrl) {
+
             if($scope.initialLoad){
                 $scope.initialLoad = false;
-                $timeout(function(){
-                    if(!$rootScope.usersHistoryLength) {
-                        $rootScope.usersHistoryLength = $window.history.length;
-                    }
-                });
-
             }
+
             $scope.closeNav();
             $rootScope.errorMessage = "";
             $rootScope.error = false;
             $rootScope.goToTop();
-
-            if(authService.loggingOut && !(newUrl.$$route.originalPath == "/login")){
-                $location.path("/login/" + $rootScope.usersHistoryLength).replace();
-                authService.loggingOut = false;
-                authService.loggedOut = true;
-            }
         });
 
         $rootScope.$watch('error', function(){
