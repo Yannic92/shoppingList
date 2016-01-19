@@ -58,9 +58,6 @@ shoppingList.factory('itemService',['$resource', 'HALResource','$filter','articl
         var persistedItems = [];
 
         var itemService = {
-            get: function(){
-                return persistedItems;
-            },
             create: function(item){
 
                 return articleService.create(item.article).then(function(createdArticle){
@@ -81,17 +78,6 @@ shoppingList.factory('itemService',['$resource', 'HALResource','$filter','articl
                         replaceExisting(responseEntity);
                         return responseEntity;
                     })
-            },
-            fetch: function () {
-                persistedItems.promise = Items.get().$promise
-                    .then(function(response){
-                        var entities = toEntities(HALResource.getContent(response));
-                        persistedItems.splice(0, persistedItems.length);
-                        persistedItems.push.apply(persistedItems, entities);
-                        return entities;
-                    });
-
-                return persistedItems.promise;
             },
             delete: function (item) {
                 return Items.delete({id: item.entityId}).$promise

@@ -53,7 +53,7 @@ shoppingList.factory('authService',['$http', '$rootScope', 'userService', functi
             return $http.post('/logout', {}).finally(function(){
                 $rootScope.authenticated = false;
                 $rootScope.headers = {};
-                $rootScope.user = '';
+                $rootScope.user = null;
                 userService.clearCredentials();
                 authService.loggedOut = true;
             });

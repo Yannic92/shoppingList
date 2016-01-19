@@ -70,6 +70,8 @@ shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'aut
             $scope.historyBackTimeout = $timeout(function(){
                 $scope.processingHistoryBackChain = false;
                 $scope.routeIsLoading = false;
+                $rootScope.loading = false;
+                $location.path("/login").replace();
                 $mdToast.show(
                     $mdToast.simple()
                         .content("Zum Beenden erneut tippen")

@@ -18,12 +18,7 @@ shoppingList.controller('lists', ['$scope', '$rootScope', '$mdDialog','listServi
 
         var lists = $scope.lists;
 
-        lists.promise.then(function(){
-            if(!$scope.listsAreEmpty()){
-                //$scope.$parent.goto("/lists/" + lists[0].entityId, true);
-            }
-
-            initOptions();
+        lists.promise.finally(function () {
             $rootScope.loading = false;
         });
 
@@ -86,5 +81,7 @@ shoppingList.controller('lists', ['$scope', '$rootScope', '$mdDialog','listServi
         $scope.$on('$destroy', function(){
             $rootScope.reset();
         });
+
+        initOptions();
     }
 ]);

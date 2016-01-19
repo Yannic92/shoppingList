@@ -1,5 +1,5 @@
-shoppingList.factory('articleService',['$resource', 'HALResource','$filter', '$q',
-    function($resource, HALResource,$filter, $q){
+shoppingList.factory('articleService',['$resource', 'HALResource','$filter', '$q','$rootScope',
+    function($resource, HALResource,$filter, $q, $rootScope){
 
         var articlesEndpoint = '/articles/:id';
         var methods = {
@@ -7,6 +7,10 @@ shoppingList.factory('articleService',['$resource', 'HALResource','$filter', '$q
             'delete': { method: 'DELETE'}
         };
         var Articles = $resource(articlesEndpoint, null, methods);
+
+        var deferred =$q.defer();
+        var rejectedPromise = deferred.promise;
+        deferred.reject("");
 
         var toResource = function (entity) {
 
@@ -57,6 +61,9 @@ shoppingList.factory('articleService',['$resource', 'HALResource','$filter', '$q
 
         var articleService = {
             get: function(){
+                if(!persistedArticles.fetching && !persistedArticles.fetched){
+                    articleService.fetch();
+                }
                 return persistedArticles;
             },
             create: function(article){
@@ -86,15 +93,21 @@ shoppingList.factory('articleService',['$resource', 'HALResource','$filter', '$q
                     })
             },
             fetch: function () {
-                persistedArticles.promise = Articles.get().$promise
-                    .then(function(response){
-                        var entities = toEntities(HALResource.getContent(response));
-                        persistedArticles.splice(0, persistedArticles.length);
-                        persistedArticles.push.apply(persistedArticles, entities);
-                        return entities;
-                    });
+                if($rootScope.authenticated) {
+                    persistedArticles.promise = Articles.get().$promise
+                        .then(function (response) {
+                            var entities = toEntities(HALResource.getContent(response));
+                            persistedArticles.splice(0, persistedArticles.length);
+                            persistedArticles.push.apply(persistedArticles, entities);
+                            return entities;
+                        });
 
-                return persistedArticles.promise;
+                    return persistedArticles.promise;
+                }else{
+                    persistedArticles.promise = rejectedPromise;
+                }
+
+                return rejectedPromise;
             },
             delete: function (article) {
                 return Articles.delete({id: article.entityId}).$promise

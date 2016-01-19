@@ -1,5 +1,5 @@
-shoppingList.factory('listService',['$resource', 'HALResource','$filter','$q',
-    function($resource, HALResource,$filter,$q){
+shoppingList.factory('listService',['$resource', 'HALResource','$filter','$q','$rootScope',
+    function($resource, HALResource,$filter,$q,$rootScope){
 
         var listsEndpoint = '/shoppingLists/:id';
         var listsNameOnlyEndpoint = 'shoppingLists/projections/name_only';
@@ -8,6 +8,10 @@ shoppingList.factory('listService',['$resource', 'HALResource','$filter','$q',
             'delete': { method: 'DELETE'}
         };
         var Lists = $resource(listsEndpoint, null, methods);
+
+        var deferred =$q.defer();
+        var rejectedPromise = deferred.promise;
+        deferred.reject("");
 
         var toResource = function (entity) {
             var resource = {};
@@ -68,6 +72,9 @@ shoppingList.factory('listService',['$resource', 'HALResource','$filter','$q',
 
         var listService = {
             get: function(){
+                if(!persistedLists.fetching && !persistedLists.fetched){
+                    listService.fetch();
+                }
                 return persistedLists;
             },
             getUpdated: function(list) {
@@ -97,15 +104,25 @@ shoppingList.factory('listService',['$resource', 'HALResource','$filter','$q',
                     })
             },
             fetch: function () {
-                persistedLists.promise = $resource(listsNameOnlyEndpoint).get().$promise
-                    .then(function(response){
-                        var entities = toEntities(HALResource.getContent(response));
-                        persistedLists.splice(0, persistedLists.length);
-                        persistedLists.push.apply(persistedLists, entities);
-                        return entities;
-                    });
+                if($rootScope.authenticated) {
+                    persistedLists.fetching = true;
+                    persistedLists.fetched = false;
+                    persistedLists.promise = $resource(listsNameOnlyEndpoint).get().$promise
+                        .then(function (response) {
+                            var entities = toEntities(HALResource.getContent(response));
+                            persistedLists.splice(0, persistedLists.length);
+                            persistedLists.push.apply(persistedLists, entities);
+                            persistedLists.fetching = false;
+                            persistedLists.fetched = true;
+                            return entities;
+                        });
 
-                return persistedLists.promise;
+                    return persistedLists.promise;
+                }else{
+                    persistedLists.promise = rejectedPromise;
+                }
+
+                return rejectedPromise;
             },
             delete: function (list) {
                 return Lists.delete({id: list.entityId}).$promise

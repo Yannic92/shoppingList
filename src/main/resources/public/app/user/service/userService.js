@@ -1,5 +1,5 @@
-shoppingList.factory('userService',['$resource', 'HALResource',
-    function($resource, HALResource){
+shoppingList.factory('userService',['$resource', 'HALResource','$q','$rootScope',
+    function($resource, HALResource, $q, $rootScope){
 
         var userendpoint = '/sLUsers/:username';
         var methods = {
@@ -8,6 +8,12 @@ shoppingList.factory('userService',['$resource', 'HALResource',
         };
         var USERS = $resource(userendpoint, null, methods);
         var USER_CONFIRMATION = $resource(userendpoint + "/confirmation", null, methods);
+
+        var deferred =$q.defer();
+        var rejectedPromise = deferred.promise;
+        deferred.reject("");
+
+
         var usersList = [];
 
         var userService = {
@@ -28,17 +34,23 @@ shoppingList.factory('userService',['$resource', 'HALResource',
                 localStorage.setItem("credentials", JSON.stringify({}));
             },
             fetch: function(){
-                usersList.fetching = true;
-                usersList.promise = USERS.get().$promise
-                    .then(function (response) {
-                        usersList.splice(0, usersList.length);
-                        usersList.push.apply(usersList, HALResource.getContent(response));
-                        usersList.loaded = true;
-                        usersList.fetching = false;
-                        return usersList;
-                    });
+                if($rootScope.authenticated) {
+                    usersList.fetching = true;
+                    usersList.promise = USERS.get().$promise
+                        .then(function (response) {
+                            usersList.splice(0, usersList.length);
+                            usersList.push.apply(usersList, HALResource.getContent(response));
+                            usersList.loaded = true;
+                            usersList.fetching = false;
+                            return usersList;
+                        });
 
-                return usersList.promise;
+                    return usersList.promise;
+                }else{
+                    usersList.promise = rejectedPromise;
+                }
+
+                return rejectedPromise;
             },
             create: function(user){
                 return USERS.save(user).$promise
