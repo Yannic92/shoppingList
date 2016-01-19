@@ -2,6 +2,7 @@ shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'aut
     function ($rootScope, $scope, $location, authService, $route, $mdComponentRegistry,$mdMedia, $window, $timeout) {
         $scope.lastPath = "";
         $scope.newVersionAvailable = false;
+        $scope.initialLoad = true;
 
         $scope.openNav = function(){
             $mdComponentRegistry.when('leftNav').then(function(it){
@@ -37,7 +38,7 @@ shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'aut
         };
 
         var isFreeRoute = function (url) {
-            return urlMatchesPath(url, '/login') || urlMatchesPath(url, '/logout') || urlStartsWithPath(url, '/register');
+            return urlStartsWithPath(url, '/login') || urlMatchesPath(url, '/logout') || urlStartsWithPath(url, '/register');
         };
 
         var redirectToLoginIfNotFreeRotue = function(newUrl) {
@@ -66,8 +67,8 @@ shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'aut
         };
 
         $rootScope.$on('$routeChangeStart', function (event, newUrl, oldUrl) {
-            if(!$rootScope.authenticated){
-                if(!isFreeRoute(newUrl) && !$scope.loggedOut){
+            if(!$rootScope.authenticated && !authService.loggingOut){
+                if(!isFreeRoute(newUrl)){
                     event.preventDefault();
                     redirectToLoginIfAuthenticationRequired(newUrl);
                 }
@@ -75,15 +76,25 @@ shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'aut
             }
         });
 
-        $rootScope.$on('$routeChangeSuccess', function () {
+        $rootScope.$on('$routeChangeSuccess', function (event, newUrl, oldUrl) {
+            if($scope.initialLoad){
+                $scope.initialLoad = false;
+                $timeout(function(){
+                    if(!$rootScope.usersHistoryLength) {
+                        $rootScope.usersHistoryLength = $window.history.length;
+                    }
+                });
+
+            }
             $scope.closeNav();
             $rootScope.errorMessage = "";
             $rootScope.error = false;
             $rootScope.goToTop();
 
-            if($scope.loggedOut){
-                $location.path("/login").replace();
-                $scope.loggedOut = false;
+            if(authService.loggingOut && !(newUrl.$$route.originalPath == "/login")){
+                $location.path("/login/" + $rootScope.usersHistoryLength).replace();
+                authService.loggingOut = false;
+                authService.loggedOut = true;
             }
         });
 
@@ -105,14 +116,7 @@ shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'aut
         $scope.logout = function () {
             authService.logout()
                 .then(function () {
-                    $scope.loggedOut = true;
-                    history.go(- (history.length - $rootScope.usersHistoryLength));
-                    $timeout(function(){
-                        if($scope.loggedOut){
-                            $location.path("/login").replace();
-                            $scope.loggedOut = false;
-                        }
-                    }, 100);
+                    $location.path("/login");
                 });
         };
 

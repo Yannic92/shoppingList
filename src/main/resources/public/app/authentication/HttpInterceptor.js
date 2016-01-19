@@ -41,7 +41,7 @@ shoppingList.service('MyHttpInterceptor',['$location', '$q', '$injector', '$root
                         return handleSessionTimeout();
                     }else if($rootScope.authenticated) {
                         return checkForSessionTimeout(rejection);
-                    }else {
+                    }else if(! $injector.get('authService').loggingIn) {
                         $location.path('/login');
                     }
                 }

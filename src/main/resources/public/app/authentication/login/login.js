@@ -1,10 +1,22 @@
-shoppingList.controller('login',[ '$rootScope', '$scope', '$location', 'authService','$mdToast','$mdMedia','userService',
-    function ($rootScope, $scope, $location, authService, $mdToast,$mdMedia, userService) {
+shoppingList.controller('login',[ '$rootScope', '$scope', '$location', 'authService','$mdToast','$mdMedia','userService','$window', '$routeParams',
+    function ($rootScope, $scope, $location, authService, $mdToast,$mdMedia, userService, $window, $routeParams) {
 
         $scope.credentials = userService.getCredentials();
         $scope.loggingIn = false;
         $rootScope.loading = false;
         $rootScope.title="Login";
+
+        if($routeParams.historyRoot){
+            $rootScope.usersHistoryLength = $routeParams.historyRoot;
+        }
+
+        if(authService.loggedOut){
+            $window.location.reload();
+        }
+
+        if(authService.loggingOut){
+            $window.history.go(-1 * ($window.history.length - $rootScope.usersHistoryLength));
+        }
 
         $scope.login = function () {
             loggingIn();
@@ -96,6 +108,9 @@ shoppingList.controller('login',[ '$rootScope', '$scope', '$location', 'authServ
 
 shoppingList.config(['$routeProvider', function ($routeProvider) {
     $routeProvider.when('/login', {
+        templateUrl: '/app/authentication/login/login.html',
+        controller: 'login'
+    }).when('/login/:historyRoot', {
         templateUrl: '/app/authentication/login/login.html',
         controller: 'login'
     });

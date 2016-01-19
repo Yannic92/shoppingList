@@ -17,7 +17,6 @@ shoppingList.run(['$rootScope', '$location', '$anchorScroll',
     function ($rootScope, $location, $anchorScroll) {
         $rootScope.authenticated = false;
         $rootScope.user = "";
-        $rootScope.usersHistoryLength = history.length;
         $rootScope.authenticationAlreadyChecked = false;
         $rootScope.reset = function(){
             $rootScope.options = [];

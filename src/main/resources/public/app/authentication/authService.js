@@ -11,6 +11,9 @@ shoppingList.factory('authService',['$http', '$rootScope', 'userService', functi
     };
 
     var authService = {
+        loggingOut: false,
+        loggedOut: false,
+        loggingIn: false,
         authenticate : function (credentials) {
             var headers = authService.getAuthenticationHeader(credentials);
             $rootScope.authenticationAlreadyChecked = true;
@@ -18,10 +21,14 @@ shoppingList.factory('authService',['$http', '$rootScope', 'userService', functi
                 headers: headers
             }).then(function(){
                 return $http.get(USER_ENDPOINT)
-                    .then(handleSuccessfulLogin);
+                    .then(handleSuccessfulLogin)
+                    .finally(function(){
+                        authService.loggingIn = false;
+                    });
             });
         },
         isAuthenticated : function(){
+            authService.loggingIn = true;
             $rootScope.authenticationAlreadyChecked = true;
             var credentials = userService.getCredentials();
             if(credentials && credentials.username){
@@ -29,7 +36,10 @@ shoppingList.factory('authService',['$http', '$rootScope', 'userService', functi
             }
 
             return $http.get(USER_ENDPOINT)
-                .then(handleSuccessfulLogin);
+                .then(handleSuccessfulLogin)
+                .finally(function () {
+                    authService.loggingIn = false;
+                });
         },
         getAuthenticationHeader : function(credentials){
             return credentials ? {
@@ -40,12 +50,8 @@ shoppingList.factory('authService',['$http', '$rootScope', 'userService', functi
         },
 
         logout : function() {
-            return $http.post('/logout', {}).success(function () {
-                $rootScope.authenticated = false;
-                $rootScope.headers = {};
-                $rootScope.user = '';
-                userService.clearCredentials();
-            }).error(function () {
+            authService.loggingOut = true;
+            return $http.post('/logout', {}).finally(function(){
                 $rootScope.authenticated = false;
                 $rootScope.headers = {};
                 $rootScope.user = '';
