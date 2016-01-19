@@ -150,7 +150,5 @@ shoppingList.factory('listService',['$resource', 'HALResource','$filter','$q','$
             }
         };
 
-        listService.fetch();
-
         return listService;
     }]);

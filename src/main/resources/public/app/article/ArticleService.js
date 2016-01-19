@@ -119,7 +119,5 @@ shoppingList.factory('articleService',['$resource', 'HALResource','$filter', '$q
             }
         };
 
-        articleService.fetch();
-
         return articleService;
     }]);

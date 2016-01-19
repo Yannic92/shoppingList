@@ -33,13 +33,7 @@ shoppingList.service('MyHttpInterceptor',['$location', '$q', '$injector', '$root
 
         var checkForSessionTimeout = function (rejection) {
             sessionTimeOutCheck = true;
-            return $injector.get('authService').isAuthenticated()
-                .then(function(){
-                    var $http = $injector.get('$http');
-                    return $http(rejection.config);
-                }, function(){
-                    return handleSessionTimeout(rejection);
-                });
+            return $injector.get('authService').isAuthenticated();
         };
 
         return {
@@ -47,9 +41,22 @@ shoppingList.service('MyHttpInterceptor',['$location', '$q', '$injector', '$root
                 if(rejection.status == 401 || (rejection.status == 403 && rejection.data.message.indexOf("CSRF") > -1)) {
 
                     if(sessionTimeOutCheck && ! (rejection.config.url == "sLUsers/current")) {
-                        return sessionTimeoutCheckPromise;
+                        return sessionTimeoutCheckPromise
+                            .then(function(){
+                                var $http = $injector.get('$http');
+                                return $http(rejection.config);
+                            }, function(){
+                                return handleSessionTimeout(rejection);
+                            });
                     }else if($rootScope.authenticated && !sessionTimeOutCheck) {
                         sessionTimeoutCheckPromise = checkForSessionTimeout(rejection);
+                        sessionTimeoutCheckPromise
+                            .then(function(){
+                                var $http = $injector.get('$http');
+                                return $http(rejection.config);
+                            }, function(){
+                                return handleSessionTimeout(rejection);
+                            });
                         return sessionTimeoutCheckPromise;
                     }else if(! $injector.get('authService').loggingIn) {
                         $location.path('/login').replace();
