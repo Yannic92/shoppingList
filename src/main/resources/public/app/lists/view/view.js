@@ -265,7 +265,7 @@ shoppingList.controller('listView', ['$scope', '$rootScope','listService','itemS
                     icon: "/img/icons/communication/ic_clear_all_24px.svg",
                     text: "Liste leeren",
                     action: $scope.clearList,
-                    disabled: $scope.listIsEmpty
+                    disabled: $scope.listDoesntContainsDoneItems
                 },{
                     icon: "img/icons/action/ic_settings_24px.svg",
                     text: "Liste bearbeiten",
