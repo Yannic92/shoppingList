@@ -1,7 +1,7 @@
 package de.yannicklem.shoppinglist.core.list.restapi.service;
 
 import de.yannicklem.shoppinglist.core.list.entity.ShoppingList;
-import de.yannicklem.shoppinglist.core.persistence.ShoppingListService;
+import de.yannicklem.shoppinglist.core.list.persistence.ShoppingListService;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.exception.BadRequestException;
 import de.yannicklem.shoppinglist.exception.PermissionDeniedException;

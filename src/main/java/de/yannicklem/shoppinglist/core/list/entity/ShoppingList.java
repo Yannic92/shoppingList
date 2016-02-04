@@ -36,7 +36,7 @@ public class ShoppingList extends OwnedRestEntity<Long> {
     @GeneratedValue(generator = "useExistingOrGenerate")
     @GenericGenerator(
         name = "useExistingOrGenerate",
-        strategy = "de.yannicklem.shoppinglist.core.persistence.UseExistingOrGenerateIdGenerator"
+        strategy = "de.yannicklem.shoppinglist.core.user.persistence.UseExistingOrGenerateIdGenerator"
     )
     private Long entityId;
 

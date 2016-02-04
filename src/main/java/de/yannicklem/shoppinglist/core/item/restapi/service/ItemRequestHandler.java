@@ -2,8 +2,8 @@ package de.yannicklem.shoppinglist.core.item.restapi.service;
 
 import de.yannicklem.shoppinglist.core.item.entity.Item;
 import de.yannicklem.shoppinglist.core.list.restapi.service.ShoppingListRequestHandler;
-import de.yannicklem.shoppinglist.core.persistence.ItemService;
-import de.yannicklem.shoppinglist.core.persistence.ShoppingListValidationService;
+import de.yannicklem.shoppinglist.core.item.persistence.ItemService;
+import de.yannicklem.shoppinglist.core.list.validation.ShoppingListValidationService;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.exception.BadRequestException;
 import de.yannicklem.shoppinglist.exception.PermissionDeniedException;

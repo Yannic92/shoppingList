@@ -1,6 +1,6 @@
 package de.yannicklem.shoppinglist.core.user.restapi.service;
 
-import de.yannicklem.shoppinglist.core.persistence.SLUserService;
+import de.yannicklem.shoppinglist.core.user.persistence.SLUserService;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.core.user.restapi.SLUserDetailed;
 import de.yannicklem.shoppinglist.restutils.service.MyResourceProcessor;

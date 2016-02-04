@@ -1,8 +1,13 @@
-package de.yannicklem.shoppinglist.core.persistence;
+package de.yannicklem.shoppinglist.core.user.persistence;
 
+import de.yannicklem.shoppinglist.core.OwnedRestEntity;
 import de.yannicklem.shoppinglist.core.article.entity.Article;
+import de.yannicklem.shoppinglist.core.article.persistence.ArticleService;
 import de.yannicklem.shoppinglist.core.item.entity.Item;
+import de.yannicklem.shoppinglist.core.item.persistence.ItemService;
 import de.yannicklem.shoppinglist.core.list.entity.ShoppingList;
+import de.yannicklem.shoppinglist.core.list.persistence.ShoppingListService;
+import de.yannicklem.shoppinglist.core.user.validation.SLUserValidationService;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.core.user.registration.entity.Confirmation;
 import de.yannicklem.shoppinglist.core.user.registration.service.ConfirmationMailService;
@@ -181,42 +186,32 @@ public class SLUserService implements UserDetailsService, EntityService<SLUser, 
         List<ShoppingList> listsOwnedByUserToDelete = shoppingListService.findListsOwnedBy(slUser);
 
         for (ShoppingList shoppingList : listsOwnedByUserToDelete) {
-            if (shoppingList.getOwners().contains(slUser)) {
-                shoppingList.getOwners().remove(slUser);
-
-                if (shoppingList.getOwners().isEmpty()) {
-                    shoppingListService.delete(shoppingList);
-                } else {
-                    shoppingListService.update(shoppingList);
-                }
-            }
+            removeOwner(shoppingList, shoppingListService, slUser);
         }
 
         List<Item> itemsOwnedByUserToDelete = itemService.findItemsOwnedBy(slUser);
 
         for (Item item : itemsOwnedByUserToDelete) {
-            if (item.getOwners().contains(slUser)) {
-                item.getOwners().remove(slUser);
-
-                if (item.getOwners().isEmpty()) {
-                    itemService.delete(item);
-                } else {
-                    itemService.update(item);
-                }
-            }
+            removeOwner(item, itemService, slUser);
         }
 
         List<Article> articlesOwnedByUserToDelete = articleService.findArticlesOwnedBy(slUser);
 
         for (Article article : articlesOwnedByUserToDelete) {
-            if (article.getOwners().contains(slUser)) {
-                article.getOwners().remove(slUser);
+            removeOwner(article, articleService, slUser);
+        }
+    }
 
-                if (article.getOwners().isEmpty()) {
-                    articleService.delete(article);
-                } else {
-                    articleService.update(article);
-                }
+    private void removeOwner(OwnedRestEntity entity, EntityService entityService, SLUser ownerToRemove){
+        if(entity.getOwners().contains(ownerToRemove)){
+            entity.getOwners().remove(ownerToRemove);
+
+            if( entity.getOwners().isEmpty()){
+
+                entityService.delete(entity);
+            }else {
+
+                entityService.update(entity);
             }
         }
     }

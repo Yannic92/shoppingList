@@ -1,7 +1,9 @@
-package de.yannicklem.shoppinglist.core.persistence;
+package de.yannicklem.shoppinglist.core.list.validation;
 
 import de.yannicklem.shoppinglist.core.item.entity.Item;
+import de.yannicklem.shoppinglist.core.item.validation.ItemValidationService;
 import de.yannicklem.shoppinglist.core.list.entity.ShoppingList;
+import de.yannicklem.shoppinglist.core.user.validation.SLUserValidationService;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.exception.EntityInvalidException;
 

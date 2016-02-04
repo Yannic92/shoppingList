@@ -1,4 +1,4 @@
-package de.yannicklem.shoppinglist.core.persistence;
+package de.yannicklem.shoppinglist.core.user.validation;
 
 import de.yannicklem.shoppinglist.core.user.entity.SLAuthority;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;

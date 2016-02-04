@@ -1,4 +1,4 @@
-package de.yannicklem.shoppinglist.core.persistence;
+package de.yannicklem.shoppinglist.core.article.persistence;
 
 import de.yannicklem.shoppinglist.core.article.entity.Article;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;

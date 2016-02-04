@@ -1,4 +1,4 @@
-package de.yannicklem.shoppinglist.core.persistence;
+package de.yannicklem.shoppinglist.core.user.persistence;
 
 import org.hibernate.HibernateException;
 

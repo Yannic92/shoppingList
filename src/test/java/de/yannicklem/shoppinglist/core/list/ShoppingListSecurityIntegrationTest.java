@@ -5,10 +5,10 @@ import de.yannicklem.shoppinglist.WebShoppingListApplication;
 import de.yannicklem.shoppinglist.core.article.entity.Article;
 import de.yannicklem.shoppinglist.core.item.entity.Item;
 import de.yannicklem.shoppinglist.core.list.entity.ShoppingList;
-import de.yannicklem.shoppinglist.core.persistence.ArticleService;
-import de.yannicklem.shoppinglist.core.persistence.ItemService;
-import de.yannicklem.shoppinglist.core.persistence.SLUserService;
-import de.yannicklem.shoppinglist.core.persistence.ShoppingListService;
+import de.yannicklem.shoppinglist.core.article.persistence.ArticleService;
+import de.yannicklem.shoppinglist.core.item.persistence.ItemService;
+import de.yannicklem.shoppinglist.core.user.persistence.SLUserService;
+import de.yannicklem.shoppinglist.core.list.persistence.ShoppingListService;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 
 import org.junit.Before;

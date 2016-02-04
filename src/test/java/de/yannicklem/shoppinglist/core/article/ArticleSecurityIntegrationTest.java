@@ -6,8 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.yannicklem.shoppinglist.TestUtils;
 import de.yannicklem.shoppinglist.WebShoppingListApplication;
 import de.yannicklem.shoppinglist.core.article.entity.Article;
-import de.yannicklem.shoppinglist.core.persistence.ArticleService;
-import de.yannicklem.shoppinglist.core.persistence.SLUserService;
+import de.yannicklem.shoppinglist.core.article.persistence.ArticleService;
+import de.yannicklem.shoppinglist.core.user.persistence.SLUserService;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 
 import org.junit.Before;

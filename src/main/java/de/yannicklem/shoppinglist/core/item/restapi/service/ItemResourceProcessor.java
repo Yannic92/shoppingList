@@ -2,8 +2,8 @@ package de.yannicklem.shoppinglist.core.item.restapi.service;
 
 import de.yannicklem.shoppinglist.core.article.entity.Article;
 import de.yannicklem.shoppinglist.core.item.entity.Item;
-import de.yannicklem.shoppinglist.core.persistence.ArticleService;
-import de.yannicklem.shoppinglist.core.persistence.ItemService;
+import de.yannicklem.shoppinglist.core.article.persistence.ArticleService;
+import de.yannicklem.shoppinglist.core.item.persistence.ItemService;
 import de.yannicklem.shoppinglist.restutils.service.MyResourceProcessor;
 
 import org.springframework.beans.factory.annotation.Autowired;
