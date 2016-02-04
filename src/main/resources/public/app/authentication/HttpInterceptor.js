@@ -42,7 +42,7 @@ shoppingList.service('MyHttpInterceptor',['$location', '$q', '$injector', '$root
             return $mdDialog.show(
                 $mdDialog.confirm()
                     .title("Verbindung fehlgeschlagen")
-                    .content("Entweder besteht aktuell, keine Verbindung zum Internet, oder der Dient wird gewartet. Möchtest du es erneut versuchen?")
+                    .content("Entweder besteht aktuell keine Verbindung zum Internet, oder der Dient wird gewartet. Möchtest du es erneut versuchen?")
                     .ok('Ja')
                     .cancel('Nein')
             ).then(function () {
