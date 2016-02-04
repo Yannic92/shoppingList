@@ -32,6 +32,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import org.springframework.stereotype.Service;
 
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -47,6 +48,7 @@ import static java.lang.invoke.MethodHandles.lookup;
 
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired ))
+@Transactional
 public class SLUserService implements UserDetailsService, EntityService<SLUser, String> {
 
     private static Logger LOGGER = getLogger(lookup().lookupClass());

@@ -30,6 +30,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.HashSet;
@@ -241,6 +242,7 @@ public class ItemSecurityIntegrationTest {
     // PUT-Tests
 
     @Test
+    @Transactional
     public void createItemWithArticleOfUserOneViaPutAsUserOneCreatesAndReturnsItem() throws Exception {
 
         Item newItem = new Item(articleOfUserOne, "23 x", new HashSet<>());
@@ -272,6 +274,7 @@ public class ItemSecurityIntegrationTest {
 
 
     @Test
+    @Transactional
     public void createItemWithArticleOfUserOneViaPutAsAdminCreatesAndReturnsItem() throws Exception {
 
         Item newItem = new Item(articleOfUserOne, "23 x", new HashSet<>());
@@ -311,6 +314,7 @@ public class ItemSecurityIntegrationTest {
 
 
     @Test
+    @Transactional
     public void updateItemOwnersOfUserOneAsUserOneHasNoEffectAndReturnsItem() throws Exception {
 
         Item updatedItem = new Item(itemOfUserOne);
