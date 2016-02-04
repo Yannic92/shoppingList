@@ -93,12 +93,15 @@ shoppingList.factory('articleService',['$resource', 'HALResource','$filter', '$q
                     })
             },
             fetch: function () {
-                if($rootScope.authenticated) {
+                if($rootScope.authenticated && !persistedArticles.fetching) {
+                    persistedArticles.fetching = true;
                     persistedArticles.promise = Articles.get().$promise
                         .then(function (response) {
                             var entities = toEntities(HALResource.getContent(response));
                             persistedArticles.splice(0, persistedArticles.length);
                             persistedArticles.push.apply(persistedArticles, entities);
+                            persistedArticles.fetching = false;
+                            persistedArticles.fetched = true;
                             return entities;
                         });
 
