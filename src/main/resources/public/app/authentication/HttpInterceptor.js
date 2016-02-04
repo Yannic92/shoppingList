@@ -27,6 +27,25 @@ shoppingList.service('MyHttpInterceptor',['$location', '$q', '$injector', '$root
                         $location.path("/login");
                     })
             }).finally(function(){
+                $rootScope.error = true;
+                $rootScope.errorMessage = "Verbindung fehlgeschlagen";
+                $rootScope.goToTop();
+                return $q.reject(rejection);
+            });
+        };
+
+        var handleOfflineRequest = function(rejection){
+            var $mdDialog = $injector.get('$mdDialog');
+            return $mdDialog.show(
+                $mdDialog.confirm()
+                    .title("Verbindung fehlgeschlagen")
+                    .content("Entweder besteht aktuell, keine Verbindung zum Internet, oder der Dient wird gewartet")
+                    .ok('Erneut versuchen')
+                    .cancel('Offline weiterarbeiten')
+            ).then(function(){
+                var $http = $injector.get('$http');
+                return $http(rejection.config);
+            }, function(){
                 return $q.reject(rejection);
             });
         };
@@ -38,7 +57,11 @@ shoppingList.service('MyHttpInterceptor',['$location', '$q', '$injector', '$root
 
         return {
             responseError: function(rejection) {
-                if(rejection.status == 401 || (rejection.status == 403 && rejection.data.message.indexOf("CSRF") > -1)) {
+
+                if(rejection.status <= 0){
+                    return handleOfflineRequest(rejection);
+                }
+                else if(rejection.status == 401 || (rejection.status == 403 && rejection.data.message.indexOf("CSRF") > -1)) {
 
                     if(sessionTimeOutCheck && ! (rejection.config.url == "sLUsers/current")) {
                         return sessionTimeoutCheckPromise
@@ -60,6 +83,14 @@ shoppingList.service('MyHttpInterceptor',['$location', '$q', '$injector', '$root
                     }else if(! $injector.get('authService').loggingIn) {
                         $location.path('/login').replace();
                     }
+                }else if(rejection.status == 400 || rejection.status == 404){
+                    $rootScope.error = true;
+                    $rootScope.errorMessage = rejection.data.message;
+                    $rootScope.goToTop();
+                }else {
+                    $rootScope.error = true;
+                    $rootScope.errorMessage = "Sorry! Etwas ging schief. Bitte versuche es später erneut";
+                    $rootScope.goToTop();
                 }
                 return $q.reject(rejection);
             }

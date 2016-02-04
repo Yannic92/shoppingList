@@ -16,8 +16,6 @@ shoppingList.controller('confirmation',[ '$scope', '$rootScope', 'userService', 
                     $scope.success = true;
                 },function(error){
                     $scope.success = false;
-                    $rootScope.error = true;
-                    $rootScope.errorMessage = error.data.message;
                 }).finally(function () {
                 $rootScope.loading = false;
             });

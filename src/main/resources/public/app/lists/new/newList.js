@@ -41,8 +41,6 @@ shoppingList.controller('newList', ['$scope','$rootScope','listService','$mdToas
 
         $scope.createList = function () {
             $rootScope.loading = true;
-            $rootScope.errorMessage = '';
-            $rootScope.error = false;
 
             listService.create($scope.list)
                 .then(function (createdList) {
@@ -53,9 +51,6 @@ shoppingList.controller('newList', ['$scope','$rootScope','listService','$mdToas
                             .hideDelay(3000)
                     );
                     $scope.$parent.goto("/lists/" +  createdList.entityId, true);
-                }, function(error){
-                    $rootScope.errorMessage = error.data.message;
-                    $rootScope.error = true;
                 })
                 .finally(function () {
                     $rootScope.loading = false;

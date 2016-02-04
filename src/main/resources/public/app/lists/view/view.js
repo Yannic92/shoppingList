@@ -76,9 +76,6 @@ shoppingList.controller('listView', ['$scope', '$rootScope','listService','itemS
 
         $scope.createNewItem = function (ev) {
 
-            $rootScope.errorMessage = '';
-            $rootScope.error = false;
-
             if($scope.selectedArticle){
 
                 $scope.newItem.article = $scope.selectedArticle;
@@ -108,9 +105,6 @@ shoppingList.controller('listView', ['$scope', '$rootScope','listService','itemS
                                     }, function () {
 
                                     });
-                            }, function(error){
-                                $rootScope.errorMessage = error.data.message;
-                                $rootScope.error = true;
                             })
                     }).finally(function () {
                     $scope.creating = false;

@@ -33,11 +33,10 @@ shoppingList.controller('login',[ '$rootScope', '$scope', '$location', 'authServ
                     showWelcomeToast();
                     $location.path('/lists').replace();
                 }, function(error){
-                    $rootScope.error = true;
                     if(error.status == 401){
+                        $rootScope.error = true;
                         $rootScope.errorMessage = "Zugangsdaten nicht korrekt";
-                    }else{
-                        $rootScope.errorMessage = "Dienst nicht erreichbar";
+                        $rootScope.goToTop();
                     }
                 }).finally(function(){
                     logginInFinished();

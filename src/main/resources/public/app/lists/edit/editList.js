@@ -19,8 +19,6 @@ shoppingList.controller('editList', ['$scope','$rootScope','listService','$filte
 
         $scope.updateList = function () {
             $rootScope.loading = true;
-            $rootScope.errorMessage = '';
-            $rootScope.error = false;
             return listService.update($scope.list)
                 .then(function (updatedList) {
                     $mdToast.show(
@@ -29,9 +27,6 @@ shoppingList.controller('editList', ['$scope','$rootScope','listService','$filte
                             .position("bottom right")
                             .hideDelay(3000)
                     );
-                }, function(error){
-                    $rootScope.errorMessage = error.data.message;
-                    $rootScope.error = true;
                 }).finally(function () {
                     $scope.hideSave();
                     $rootScope.loading = false;

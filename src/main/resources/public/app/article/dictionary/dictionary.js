@@ -5,13 +5,7 @@ shoppingList.controller('dictionary',[ '$rootScope', '$scope', 'articleService',
 
         $scope.deleteArticle = function (article) {
 
-            articleService.delete(article)
-                .then(function(){
-
-                }, function(error){
-                    $rootScope.error = true;
-                    $rootScope.errorMessage = error.data.message;
-                });
+            return articleService.delete(article);
         };
 
         $scope.dictionaryIsEmpty = function () {
