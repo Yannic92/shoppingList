@@ -74,8 +74,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .csrf()
             .csrfTokenRepository(csrfTokenRepository())
             .and()
-            .addFilterAfter(new SlCsrfHeaderFilter(), CsrfFilter.class)
-            .headers().cacheControl().disable();
+            .addFilterAfter(new SlCsrfHeaderFilter(), CsrfFilter.class);
     }
 
 
