@@ -58,7 +58,7 @@ shoppingList.service('MyHttpInterceptor',['$location', '$q', '$injector', '$root
         return {
             responseError: function(rejection) {
 
-                if(rejection.status <= 0 && ! connectionLossNotification){
+                if((rejection.status <= 0 || rejection.status == 502)&& ! connectionLossNotification){
                     connectionLossNotification = true;
                     connectionLossPromise = handleOfflineRequest(rejection);
                     connectionLossPromise
@@ -71,7 +71,7 @@ shoppingList.service('MyHttpInterceptor',['$location', '$q', '$injector', '$root
                             return $q.reject(rejection);
                         });
                     return connectionLossPromise;
-                }else if(rejection.status <= 0 && connectionLossNotification){
+                }else if((rejection.status <= 0 || rejection.status == 502) && connectionLossNotification){
                     return connectionLossPromise
                         .then(function(){
                             var $http = $injector.get('$http');
