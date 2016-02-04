@@ -21,7 +21,6 @@ CACHE:
 /app/item/item.html
 /app/article/dictionary/dictionary.html
 /app/article/dictionary/emptyDictionary.html
-
 /style/css/app-compact.css
 /lib/angular.js
 /lib/app-compact.js
