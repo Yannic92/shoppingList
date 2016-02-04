@@ -4,6 +4,9 @@ shoppingList.service('MyHttpInterceptor',['$location', '$q', '$injector', '$root
         var sessionTimeOutCheck = false;
         var sessionTimeoutCheckPromise;
 
+        var connectionLossNotification = false;
+        var connectionLossPromise;
+
         var init = function(){
             var deferred = $q.defer();
             sessionTimeoutCheckPromise = deferred.promise;
@@ -39,14 +42,11 @@ shoppingList.service('MyHttpInterceptor',['$location', '$q', '$injector', '$root
             return $mdDialog.show(
                 $mdDialog.confirm()
                     .title("Verbindung fehlgeschlagen")
-                    .content("Entweder besteht aktuell, keine Verbindung zum Internet, oder der Dient wird gewartet")
-                    .ok('Erneut versuchen')
-                    .cancel('Offline weiterarbeiten')
-            ).then(function(){
-                var $http = $injector.get('$http');
-                return $http(rejection.config);
-            }, function(){
-                return $q.reject(rejection);
+                    .content("Entweder besteht aktuell, keine Verbindung zum Internet, oder der Dient wird gewartet. Möchtest du es erneut versuchen?")
+                    .ok('Ja')
+                    .cancel('Nein')
+            ).then(function () {
+                connectionLossNotification = false;
             });
         };
 
@@ -58,8 +58,27 @@ shoppingList.service('MyHttpInterceptor',['$location', '$q', '$injector', '$root
         return {
             responseError: function(rejection) {
 
-                if(rejection.status <= 0){
-                    return handleOfflineRequest(rejection);
+                if(rejection.status <= 0 && ! connectionLossNotification){
+                    connectionLossNotification = true;
+                    connectionLossPromise = handleOfflineRequest(rejection);
+                    connectionLossPromise
+                        .then(function(){
+                            var $http = $injector.get('$http');
+                            connectionLossNotification = false;
+                            return $http(rejection.config);
+                        }, function(){
+                            connectionLossNotification = false;
+                            return $q.reject(rejection);
+                        });
+                    return connectionLossPromise;
+                }else if(rejection.status <= 0 && connectionLossNotification){
+                    return connectionLossPromise
+                        .then(function(){
+                            var $http = $injector.get('$http');
+                            return $http(rejection.config);
+                        }, function(){
+                            return $q.reject(rejection);
+                        })
                 }
                 else if(rejection.status == 401 || (rejection.status == 403 && rejection.data.message.indexOf("CSRF") > -1)) {
 
