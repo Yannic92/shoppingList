@@ -15,7 +15,10 @@
                 <md-button ng-if="shortCutAction.available" aria-label="{{shortCutAction.ariaLabel}}" class="md-icon-button" ng-click="shortCutAction.action()">
                     <md-icon md-svg-src="{{shortCutAction.icon}}"></md-icon>
                 </md-button>
-                <ng-include ng-if="authenticated && optionsAvailable()" ng-controller="navMenu" src="'app/navigation/navMenu/navMenu.html'"></ng-include>
+                <ng-include ng-if="authenticated && moreThanOneOptionAvailable()" ng-controller="navMenu" src="'app/navigation/navMenu/navMenu.html'"></ng-include>
+                <md-button ng-if="authenticated && optionsAvailable() && !moreThanOneOptionAvailable()" aria-label="{{options[0].text}}" class="md-icon-button" ng-click="options[0].action()">
+                    <md-icon md-svg-src="{{options[0].icon}}"></md-icon>
+                </md-button>
             </div>
         </div>
     </div>

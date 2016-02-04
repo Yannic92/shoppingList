@@ -180,6 +180,10 @@ shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'aut
         $scope.optionsAvailable = function () {
             return $rootScope.options && $rootScope.options.length && $rootScope.options.length > 0;
         };
+
+        $scope.moreThanOneOptionAvailable = function(){
+            return $rootScope.options && $rootScope.options.length && $rootScope.options.length > 1;
+        }
     }
 ]);
 

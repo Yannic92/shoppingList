@@ -29,7 +29,7 @@ shoppingList.controller('lists', ['$scope', '$rootScope', '$mdDialog','listServi
         var initOptions = function () {
             $rootScope.options = [
                 {
-                    icon: "img/icons/content/ic_remove_circle_24px.svg",
+                    icon: "/img/icons/communication/ic_clear_all_24px.svg",
                     text: "Alle Listen Löschen",
                     action: $scope.deleteAllLists,
                     disabled: $scope.listsAreEmpty

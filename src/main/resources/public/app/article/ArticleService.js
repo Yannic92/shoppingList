@@ -116,6 +116,12 @@ shoppingList.factory('articleService',['$resource', 'HALResource','$filter', '$q
                         var index = persistedArticles.indexOf(existingList);
                         persistedArticles.splice(index,1);
                     });
+            },
+            deleteUnused: function(){
+                return Articles.delete().$promise
+                    .then(function(){
+                        return articleService.fetch();
+                    });
             }
         };
 
