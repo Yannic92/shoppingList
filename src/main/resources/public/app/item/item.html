@@ -2,7 +2,7 @@
     <md-checkbox aria-label="item" ng-change="updateItem(item)" class="md-primary" md-no-ink ng-model="item.done"></md-checkbox>
     <div class="md-list-item-text" layout="column">
         <h3 ng-class="{ 'striked-out': item.done}">{{item.article.name}}</h3>
-        <p ng-class="{ 'striked-out': item.done}">{{item.count}} </p>
+        <p  class="shorten-long-text" ng-class="{ 'striked-out': item.done}">{{item.count}} </p>
     </div>
     <md-icon ng-if="!item.deleting" aria-label="delete item" ng-click="deleteItem(item)" class="md-secondary" md-svg-src="img/icons/action/ic_delete_24px.svg"></md-icon>
     <md-progress-circular ng-if="item.deleting" class="md-secondary" md-mode="indeterminate" md-diameter="20px"></md-progress-circular>

@@ -92,9 +92,11 @@ body {
 
 md-list-item.md-2-line .md-list-item-text h3, md-list-item.md-2-line>.md-no-style .md-list-item-text h3, md-list-item.md-3-line .md-list-item-text h3, md-list-item.md-3-line>.md-no-style .md-list-item-text h3{
     white-space: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-md-list-item.md-list-item-with-secondary .md-list-item-text{
+.md-with-secondary .md-list-item-text{
     overflow: hidden;
     padding-right: 40px;
 }
