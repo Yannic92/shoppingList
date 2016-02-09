@@ -95,7 +95,8 @@ md-list-item.md-2-line .md-list-item-text h3, md-list-item.md-2-line>.md-no-styl
 }
 
 md-list-item.md-list-item-with-secondary .md-list-item-text{
-    padding-right: 45px;
+    overflow: hidden;
+    padding-right: 40px;
 }
 
 .md-list-item-inner{
@@ -104,6 +105,20 @@ md-list-item.md-list-item-with-secondary .md-list-item-text{
 
 .titlebar{
     padding-right: 0;
+}
+
+.title-with-tools{
+    overflow: hidden;
+}
+
+.shorten-long-text{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.text-left-of-icon{
+    padding-right: 40px;
 }
 
 .md-headline{
