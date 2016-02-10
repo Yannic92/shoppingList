@@ -74,6 +74,13 @@ shoppingList.controller('listView', ['$scope', '$rootScope','listService','itemS
                 });
         };
 
+        $scope.selectedItemChanged = function(ev){
+
+            if($scope.selectedArticle){
+                $scope.createNewItem(ev);
+            }
+        };
+
         $scope.createNewItem = function (ev) {
 
             if($scope.selectedArticle){

@@ -151,7 +151,7 @@
 					<!--
 
 					unused until md-autocomplete is fixed or an alternative is found. md-autocomplete is currently a mess..
-					
+
 					<dependency>
 						<groupId>org.webjars</groupId>
 						<artifactId>angular-material</artifactId>

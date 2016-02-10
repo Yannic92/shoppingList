@@ -3,8 +3,8 @@
     <form id="createNewItemForm" role="form" class="md-padding" name="createNewItemForm" ng-submit="createNewItem()">
         <md-autocomplete id ="newItemAutocomplete"
                          md-no-cache="true"
-                         md-selected-item="selectedArticle"
-                         md-selected-item-change="createNewItem($event)"
+                         md-selected-item="ctrl.selectedArticle"
+                         md-selected-item-change="selectedItemChanged($event)"
                          md-search-text="ctrl.newItem.article.name"
                          md-items="article in articles | filter: {name: ctrl.newItem.article.name} | limitTo: 5"
                          md-item-text="article.name"
