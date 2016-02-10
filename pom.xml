@@ -147,11 +147,18 @@
 						<artifactId>angularjs</artifactId>
 						<version>1.4.7</version>
 					</dependency>
+
+					<!--
+
+					unused until md-autocomplete is fixed or an alternative is found. md-autocomplete is currently a mess..
+					
 					<dependency>
 						<groupId>org.webjars</groupId>
 						<artifactId>angular-material</artifactId>
 						<version>1.0.4</version>
 					</dependency>
+
+					-->
 				</dependencies>
 			</plugin>
 		</plugins>
