@@ -100,6 +100,10 @@ md-list-item.md-2-line .md-list-item-text h3, md-list-item.md-2-line>.md-no-styl
     padding-right: 40px;
 }
 
+.md-list-item-text{
+    overflow: hidden;
+}
+
 .md-list-item-inner{
     overflow: hidden;
 }
