@@ -1,4 +1,4 @@
-<md-list-item ng-if="!ctrl.optionActive" flex="nogrow" class="md-2-line" ng-class="{'md-list-item-with-secondary': optionsVisible}" role="listitem" on-long-press="showOptions()" md-swipe-left="showOptions()"
+<md-list-item ng-if="!ctrl.optionActive" flex="nogrow" class="md-2-line hide-overflow" ng-class="{'md-list-item-with-secondary': optionsVisible}" role="listitem" on-long-press="showOptions()" md-swipe-left="showOptions()"
 ng-mouseenter="showOptionsOnElement()" ng-mouseleave="hideOptionsOnElement()" on-touch-end="hideOptionsOnElement()">
     <md-checkbox aria-label="item" ng-change="updateItem(item)" class="md-primary" md-no-ink ng-model="item.done"></md-checkbox>
     <div class="md-list-item-text" layout="column">
