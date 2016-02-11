@@ -35,9 +35,12 @@ shoppingList.controller('itemController', ['$scope','listService','itemService',
         };
 
         $scope.$watch('optionsShown', function(newValue, oldValue){
+
             if(oldValue && !newValue){
-                $scope.optionActive = false;
-                $scope.hideOptionsOnElement();
+                $timeout(function(){
+                    $scope.optionActive = false;
+                    $scope.hideOptionsOnElement();
+                });
             }
         });
 
