@@ -96,7 +96,7 @@ md-list-item.md-2-line .md-list-item-text h3, md-list-item.md-2-line>.md-no-styl
     text-overflow: ellipsis;
 }
 
-.md-with-secondary .md-list-item-text{
+.md-list-item-with-secondary .md-list-item-text{
     overflow: hidden;
     padding-right: 40px;
 }
@@ -151,4 +151,8 @@ md-list-item {
     white-space: normal;
     line-height: 16px;
     font-size: 12px;
+}
+
+.hide-overflow{
+    overflow:hidden;
 }
