@@ -41,7 +41,7 @@ shoppingList.controller('itemController', ['$scope','listService','itemService',
             }
         });
 
-        $scope.deleteItem = function(item, event) {
+        $scope.deleteItem = function(item) {
 
             item.deleting = true;
             itemService.delete(item)

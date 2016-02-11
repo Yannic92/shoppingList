@@ -23,9 +23,11 @@ ng-mouseenter="showOptionsOnElement()" ng-mouseleave="hideOptionsOnElement()" on
                         {{item.article.name}}
                     </h1>
                     <span flex></span>
-                    <md-button aria-label="comment" ng-click="deleteItem(item)" class="md-icon-button">
-                        <md-icon aria-label="delete item" class="md-secondary" md-svg-src="img/icons/action/ic_delete_24px.svg"></md-icon>
-                    </md-button>
+                    <md-fab-actions>
+                        <md-button aria-label="comment" ng-click="deleteItem(item)" class="md-icon-button">
+                            <md-icon aria-label="delete item" class="md-secondary" md-svg-src="img/icons/action/ic_delete_24px.svg"></md-icon>
+                        </md-button>
+                    </md-fab-actions>
                 </div>
             </div>
         </md-toolbar>
