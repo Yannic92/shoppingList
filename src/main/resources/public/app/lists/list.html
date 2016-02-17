@@ -1,4 +1,4 @@
-<md-list-item ng-if="!ctrl.optionActive" ng-click="goto('/lists/'+ list.entityId)" on-long-press="showOptions()" md-swipe-left="showOptions()" ng-mouseenter="showOptionsOnElement()" ng-mouseleave="hideOptionsOnElement()" on-touch-end="hideOptionsOnElement()">
+<md-list-item ng-if="!ctrl.optionActive" class="gray-on-hover" ng-click="goto('/lists/'+ list.entityId)" on-long-press="showOptions()" md-swipe-left="showOptions()" ng-mouseenter="showOptionsOnElement()" ng-mouseleave="hideOptionsOnElement()" on-touch-end="hideOptionsOnElement()">
     <p class="shorten-long-text" ng-class="{'text-left-of-icon' : optionsVisible}">{{list.name}}</p>
     <md-icon ng-if="!list.deleting && optionsVisible" aria-label="delete list" class="md-secondary option" ng-click="deleteList(list, $event)"
              md-svg-src="img/icons/action/ic_delete_24px.svg">
