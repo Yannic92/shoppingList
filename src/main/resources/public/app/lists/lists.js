@@ -49,21 +49,6 @@ shoppingList.controller('lists', ['$scope', '$rootScope', '$mdDialog','listServi
             $scope.$parent.goto("/newList");
         };
 
-        $scope.deleteList = function(list, ev){
-
-            var confirm = $mdDialog.confirm()
-                .title("Möchtest du die Liste '" + list.name+ "' wirklich löschen?")
-                .content(listService.getDeleteMessage(list))
-                .targetEvent(ev)
-                .ok('Ja')
-                .cancel('Nein');
-
-            $mdDialog.show(confirm)
-                .then(function () {
-                    return listService.delete(list);
-                });
-        };
-
         $scope.deleteAllLists = function (ev) {
             var confirm = $mdDialog.confirm()
                 .title("Möchtest du wirklich alle Listen löschen?")

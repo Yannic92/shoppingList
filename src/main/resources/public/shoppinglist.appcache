@@ -32,6 +32,7 @@ CACHE:
 /app/navigation/leftSideNav/leftSideNav.html
 /app/user/delete/userDelete.html
 /app/user/edit/userData.html
+/app/lists/list.html
 /app/lists/lists.html
 /app/lists/view/view.html
 /app/lists/view/emptyList.html

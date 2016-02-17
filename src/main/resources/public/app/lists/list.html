@@ -1,0 +1,30 @@
+<md-list-item ng-if="!ctrl.optionActive" ng-click="goto('/lists/'+ list.entityId)" on-long-press="showOptions()" md-swipe-left="showOptions()" ng-mouseenter="showOptionsOnElement()" ng-mouseleave="hideOptionsOnElement()" on-touch-end="hideOptionsOnElement()">
+    <p class="shorten-long-text" ng-class="{'text-left-of-icon' : optionsVisible}">{{list.name}}</p>
+    <md-icon ng-if="!item.deleting && optionsVisible" aria-label="delete list" class="md-secondary option" ng-click="deleteList(list, $event)"
+             md-svg-src="img/icons/action/ic_delete_24px.svg">
+    </md-icon>
+</md-list-item>
+<md-list-item ng-show="optionActive" on-long-press="hideOptionsOnElement()" on-touch-end="hideOptionsOnElement()">
+    <md-fab-toolbar flex class="hide-overflow" md-open="ctrl.optionsShown" count="1" md-direction="left">
+        <md-fab-trigger class="align-with-text">
+            <md-button aria-label="menu" class="md-fab md-primary">
+            </md-button>
+        </md-fab-trigger>
+
+        <md-toolbar>
+            <div class="titlebar md-toolbar-tools">
+                <div layout="row" class="fill-height title-with-tools" flex>
+                    <h3 class="md-toolbar-item md-breadcrumb md-headline">
+                        {{list.name}}
+                    </h3>
+                    <span flex></span>
+                    <md-fab-actions>
+                        <md-button aria-label="comment" ng-click="deleteList(list, $event)" class="md-icon-button">
+                            <md-icon aria-label="delete list" class="md-secondary" md-svg-src="img/icons/action/ic_delete_24px.svg"></md-icon>
+                        </md-button>
+                    </md-fab-actions>
+                </div>
+            </div>
+        </md-toolbar>
+    </md-fab-toolbar>
+</md-list-item>
