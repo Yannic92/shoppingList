@@ -135,6 +135,10 @@ shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'aut
             }
         };
 
+        $scope.gotoExternal = function(path){
+            $window.location.href = path;
+        };
+
         $scope.logout = function () {
             authService.logout()
                 .then(function () {
