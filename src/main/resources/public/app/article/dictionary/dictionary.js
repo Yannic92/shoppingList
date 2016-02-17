@@ -3,11 +3,6 @@ shoppingList.controller('dictionary',[ '$rootScope', '$scope', 'articleService',
 
         $scope.articles = articleService.get();
 
-        $scope.deleteArticle = function (article) {
-
-            return articleService.delete(article);
-        };
-
         $scope.dictionaryIsEmpty = function () {
             return !$scope.articles || !$scope.articles.length || $scope.articles.length == 0;
         };
@@ -52,7 +47,7 @@ shoppingList.controller('dictionary',[ '$rootScope', '$scope', 'articleService',
                     $rootScope.loading = false;
                 });
         };
-        
+
         var init = function () {
 
             $rootScope.title = "Wörterbuch";

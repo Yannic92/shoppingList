@@ -1,4 +1,4 @@
-<md-list-item ng-if="!ctrl.optionActive" flex="nogrow" class="md-2-line" ng-class="{'md-list-item-with-secondary': optionsVisible}" role="listitem" on-long-press="showOptions()" md-swipe-left="showOptions()"
+<md-list-item ng-if="!ctrl.optionActive" class="md-2-line gray-on-hover" ng-class="{'md-list-item-with-secondary': optionsVisible}" role="listitem" on-long-press="showOptions()" md-swipe-left="showOptions()"
 ng-mouseenter="showOptionsOnElement()" ng-mouseleave="hideOptionsOnElement()" on-touch-end="hideOptionsOnElement()">
     <md-checkbox aria-label="item" ng-change="updateItem(item)" class="md-primary" md-no-ink ng-model="item.done"></md-checkbox>
     <div class="md-list-item-text" layout="column">
@@ -8,7 +8,7 @@ ng-mouseenter="showOptionsOnElement()" ng-mouseleave="hideOptionsOnElement()" on
     <md-icon ng-if="!item.deleting && optionsVisible" aria-label="delete item" ng-click="deleteItem(item)" class="md-secondary option" md-svg-src="img/icons/action/ic_delete_24px.svg"></md-icon>
     <md-progress-circular ng-if="item.deleting" class="md-secondary" md-mode="indeterminate" md-diameter="20px"></md-progress-circular>
 </md-list-item>
-<md-list-item ng-show="optionActive" flex="nogrow" class="md-2-line" role="listitem"
+<md-list-item ng-show="optionActive" class="md-2-line" role="listitem"
               on-long-press="hideOptionsOnElement()" on-touch-end="hideOptionsOnElement()">
     <md-fab-toolbar flex class="hide-overflow" md-open="ctrl.optionsShown" count="1" md-direction="left">
         <md-fab-trigger class="align-with-text">

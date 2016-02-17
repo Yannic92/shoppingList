@@ -44,6 +44,7 @@ CACHE:
 /app/authentication/register/confirmation/confirmation.html
 /app/item/new/newItem.html
 /app/item/item.html
+/app/article/article.html
 /app/article/dictionary/dictionary.html
 /app/article/dictionary/emptyDictionary.html
 /style/css/app-compact.css

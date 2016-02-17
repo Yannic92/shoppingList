@@ -159,3 +159,7 @@ md-list-item {
 .hide-overflow{
     overflow:hidden;
 }
+
+.gray-on-hover:hover{
+    background-color: rgba(158,158,158,0.2)
+}
