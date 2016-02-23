@@ -110,6 +110,13 @@ md-list-item.md-2-line .md-list-item-text h3, md-list-item.md-2-line>.md-no-styl
 
 .titlebar{
     padding-right: 0;
+    padding-left: 8px;
+}
+
+@media (min-width: 960px) {
+    .titlebar {
+        padding-left: 16px;
+    }
 }
 
 .title-with-tools{
@@ -134,16 +141,6 @@ md-list-item.md-2-line .md-list-item-text h3, md-list-item.md-2-line>.md-no-styl
 
 md-menu-content{
     overflow-y: hidden;
-}
-
-md-list-item {
-    margin-left: -8px;
-}
-
-@media (min-width: 960px) {
-    md-list-item {
-        margin-left: 0;
-    }
 }
 
 .rememberMeCheckBox{
