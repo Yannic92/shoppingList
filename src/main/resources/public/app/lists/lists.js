@@ -29,7 +29,7 @@ shoppingList.controller('lists', ['$scope', '$rootScope', '$mdDialog','listServi
         var initOptions = function () {
             $rootScope.options = [
                 {
-                    icon: "/img/icons/communication/ic_clear_all_24px.svg",
+                    icon: "/img/icons/icons.svg#clear_all",
                     text: "Alle Listen Löschen",
                     action: $scope.deleteAllLists,
                     disabled: $scope.listsAreEmpty
@@ -38,7 +38,7 @@ shoppingList.controller('lists', ['$scope', '$rootScope', '$mdDialog','listServi
 
             $rootScope.shortCutAction = {
                 parameters: "$mdOpenMenu, $event",
-                icon: "img/icons/action/ic_add_shopping_cart_24px.svg",
+                icon: "img/icons/icons.svg#add_shopping_cart",
                 action: $scope.newList,
                 available: true,
                 ariaLabel: "Neue Liste erstellen"

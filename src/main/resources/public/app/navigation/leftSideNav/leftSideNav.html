@@ -3,32 +3,43 @@
         <div class="md-toolbar-tools" layout="row" layout-align="start center">
             <span flex></span>
             <md-button  aria-label="close sidenav" ng-if="authenticated" class="md-icon-button" ng-click="closeNav()">
-                <md-icon md-svg-src="img/icons/hardware/ic_keyboard_arrow_left_24px.svg"></md-icon>
+                <md-icon>
+                    <sl-svg-icon src="/img/icons/icons.svg#keyboard_arrow_left" size="24"></sl-svg-icon>
+                </md-icon>
             </md-button>
         </div>
     </md-toolbar>
     <md-list ng-cloak>
         <md-list-item ng-click="goto('/userData')">
-            <md-icon md-svg-src="img/icons/social/ic_person_24px.svg"></md-icon>
+            <md-icon>
+                <sl-svg-icon src="/img/icons/icons.svg#person" size="24"></sl-svg-icon>
+            </md-icon>
             <p>{{user.username}}</p>
         </md-list-item>
         <md-list-item ng-click="goto('/lists')">
-            <md-icon md-svg-src="img/icons/action/ic_shopping_cart_24px.svg"></md-icon>
+            <md-icon>
+                <sl-svg-icon src="/img/icons/icons.svg#shopping_cart" size="24"></sl-svg-icon>
+            </md-icon>
             <p>Einkaufslisten</p>
         </md-list-item>
         <md-list-item ng-click="goto('/dictionary')">
-            <md-icon md-svg-src="img/icons/action/ic_chrome_reader_mode_24px.svg"></md-icon>
+            <md-icon>
+                <sl-svg-icon src="/img/icons/icons.svg#chrome_reader_mode" size="24"></sl-svg-icon>
+            </md-icon>
             <p>Wörterbuch</p>
         </md-list-item>
         <md-list-item ng-click="logout()">
-            <md-icon md-svg-src="img/icons/action/ic_lock_outline_24px.svg"></md-icon>
+            <md-icon>
+                <sl-svg-icon src="/img/icons/icons.svg#lock_outline" size="24"></sl-svg-icon>
+            </md-icon>
             <p>Logout</p>
         </md-list-item>
     </md-list>
     <span flex></span>
     <md-list>
         <md-list-item ng-click="gotoExternal('https://github.com/Yannic92/shoppingList')">
-            <md-icon md-svg-src="img/icons/platform/github.svg"></md-icon>
+            <md-icon md-svg-src="/img/icons/platform/github.svg">
+            </md-icon>
             <p>Quellcode</p>
         </md-list-item>
     </md-list>

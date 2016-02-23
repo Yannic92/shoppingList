@@ -253,26 +253,26 @@ shoppingList.controller('listView', ['$scope', '$rootScope','listService','itemS
             $rootScope.title = $scope.list.name;
             $rootScope.options = [
                 {
-                    icon: "/img/icons/Toggle/ic_check_box_24px.svg",
+                    icon: "/img/icons/icons.svg#check_box",
                     text: "Alles erledigt",
                     action: $scope.setAllDone,
                     disabled: $scope.listDoesntContainsUndoneItems
                 },{
-                    icon: "/img/icons/Toggle/ic_check_box_outline_blank_24px.svg",
+                    icon: "/img/icons/icons.svg#check_box_outline_blank",
                     text: "Nichts erledigt",
                     action: $scope.setAllUndone,
                     disabled: $scope.listDoesntContainsDoneItems
                 },{
-                    icon: "/img/icons/communication/ic_clear_all_24px.svg",
+                    icon: "/img/icons/icons.svg#clear_all",
                     text: "Liste leeren",
                     action: $scope.clearList,
                     disabled: $scope.listDoesntContainsDoneItems
                 },{
-                    icon: "img/icons/action/ic_settings_24px.svg",
+                    icon: "img/icons/icons.svg#settings",
                     text: "Liste bearbeiten",
                     link: "#/lists/" + $scope.list.entityId + "/edit"
                 },{
-                    icon: "img/icons/action/ic_delete_24px.svg",
+                    icon: "img/icons/icons.svg#delete",
                     text: "Liste löschen",
                     action: $scope.deleteList
                 }
@@ -280,7 +280,7 @@ shoppingList.controller('listView', ['$scope', '$rootScope','listService','itemS
 
             $rootScope.shortCutAction = {
                 parameters: "$mdOpenMenu, $event",
-                icon: "img/icons/notification/ic_sync_24px.svg",
+                icon: "img/icons/icons.svg#sync",
                 action: $scope.update,
                 available: true,
                 ariaLabel: "refetch current list from server"

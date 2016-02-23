@@ -1,10 +1,14 @@
 <md-toolbar>
     <div class="titlebar md-toolbar-tools">
         <md-button ng-if="authenticated && isOnRoot()" aria-label="toggle menu" class="md-icon-button" ng-click="toggleNav()" hide-gt-sm>
-            <md-icon md-svg-src="img/icons/navigation/ic_menu_24px.svg"></md-icon>
+            <md-icon>
+                <sl-svg-icon src="/img/icons/icons.svg#menu" size="24"></sl-svg-icon>
+            </md-icon>
         </md-button>
         <md-button ng-if="authenticated && !isOnRoot()" aria-label="toggle menu" class="md-icon-button" ng-click="back()" hide-gt-sm>
-            <md-icon md-svg-src="img/icons/navigation/ic_arrow_back_24px.svg"></md-icon>
+            <md-icon>
+                <sl-svg-icon src="/img/icons/icons.svg#arrow_back" size="24"></sl-svg-icon>
+            </md-icon>
         </md-button>
         <div layout="row" class="fill-height title-with-tools" flex>
             <h1 class="md-toolbar-item md-breadcrumb md-headline">
@@ -13,11 +17,15 @@
             <span flex></span>
             <div class="md-toolbar-item" layout="row">
                 <md-button ng-if="shortCutAction.available" aria-label="{{shortCutAction.ariaLabel}}" class="md-icon-button" ng-click="shortCutAction.action()">
-                    <md-icon md-svg-src="{{shortCutAction.icon}}"></md-icon>
+                    <md-icon>
+                        <sl-svg-icon src="{{shortCutAction.icon}}" size="24"></sl-svg-icon>
+                    </md-icon>
                 </md-button>
                 <ng-include ng-if="authenticated && moreThanOneOptionAvailable()" ng-controller="navMenu" src="'app/navigation/navMenu/navMenu.html'"></ng-include>
                 <md-button ng-if="authenticated && optionsAvailable() && !moreThanOneOptionAvailable()" aria-label="{{options[0].text}}" class="md-icon-button" ng-click="options[0].action()">
-                    <md-icon md-svg-src="{{options[0].icon}}"></md-icon>
+                    <md-icon>
+                        <sl-svg-icon src="{{options[0].icon}}" size="24"></sl-svg-icon>
+                    </md-icon>
                 </md-button>
             </div>
         </div>
@@ -33,7 +41,9 @@
             </span>
             <div class="md-toolbar-item" layout="row">
                 <md-button aria-label="close error" class="md-icon-button" ng-click="closeError()">
-                    <md-icon md-svg-src="/img/icons/navigation/ic_close_24px.svg"></md-icon>
+                    <md-icon>
+                        <sl-svg-icon src="/img/icons/icons.svg#close" size="24"></sl-svg-icon>
+                    </md-icon>
                 </md-button>
             </div>
         </div>
@@ -42,13 +52,17 @@
         <div class="titlebar md-toolbar-tools fill-height text-centered" layout="row" layout-align="center center">
             <div flex>
                 <md-button ng-click="reload()" class="update-notification">
-                    <md-icon md-svg-src="/img/icons/navigation/ic_refresh_24px.svg"></md-icon>
+                    <md-icon>
+                        <sl-svg-icon src="/img/icons/icons.svg#refresh" size="24"></sl-svg-icon>
+                    </md-icon>
                     Eine neue Version ist verfügbar: Jetzt aktualisieren!
                 </md-button>
             </div>
             <div class="md-toolbar-item" layout="row">
                 <md-button aria-label="close error" class="md-icon-button" ng-click="closeUpdateNotification()">
-                    <md-icon md-svg-src="/img/icons/navigation/ic_close_24px.svg"></md-icon>
+                    <md-icon>
+                        <sl-svg-icon src="/img/icons/icons.svg#close" size="24"></sl-svg-icon>
+                    </md-icon>
                 </md-button>
             </div>
         </div>

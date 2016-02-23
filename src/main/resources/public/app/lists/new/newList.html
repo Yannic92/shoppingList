@@ -1,14 +1,18 @@
 <div ng-hide="loading">
     <form id="createShoppingListForm" role="form" name="createShoppingListForm" class="md-padding" ng-submit="createList()">
         <md-input-container class="md-icon-float md-block">
-            <md-icon md-svg-src="img/icons/action/ic_list_24px.svg"></md-icon>
+            <md-icon>
+                <sl-svg-icon src="/img/icons/icons.svg#list" size="24"></sl-svg-icon>
+            </md-icon>
             <input id="name" name="name" ng-model="list.name" type="text" placeholder="Name der Liste" focus-me="true">
         </md-input-container>
     </form>
     <md-list>
         <md-subheader class="md-no-sticky">Berechtigte Nutzer:</md-subheader>
         <div class="md-padding" layout="row">
-            <md-icon class="autocompleteIcon" md-svg-src="img/icons/social/ic_person_add_24px.svg"></md-icon>
+            <md-icon class="autocompleteIcon">
+                <sl-svg-icon src="/img/icons/icons.svg#person_add" size="24"></sl-svg-icon>
+            </md-icon>
             <div flex>
                 <md-autocomplete
                                  md-selected-item="selectedUser"
@@ -28,12 +32,18 @@
             </div>
         </div>
         <md-list-item ng-cloak class="md-2-line md-list-item-with-secondary " ng-repeat="owner in list.owners track by $index">
-            <md-icon md-svg-src="img/icons/social/ic_person_24px.svg"></md-icon>
+            <md-icon>
+                <sl-svg-icon src="/img/icons/icons.svg#person" size="24"></sl-svg-icon>
+            </md-icon>
             <div class="md-list-item-text">
                 <h3>{{owner.username}}</h3>
                 <h4 ng-if="firstNameOrLastNameIsDefined(owner)">{{owner.firstName ? owner.firstName : ''}} {{owner.lastName ? owner.lastName : ''}}</h4>
             </div>
-            <md-icon aria-label="remove user from owners list" ng-if="!isLoggedInUser(owner)" class="md-secondary" ng-click="removeUserFromOwners($index, owner)" md-svg-src="img/icons/action/ic_delete_24px.svg"></md-icon>
+            <md-icon aria-label="remove user from owners list" ng-if="!isLoggedInUser(owner)" class="md-secondary" ng-click="removeUserFromOwners($index, owner)">
+                <md-icon>
+                    <sl-svg-icon src="/img/icons/icons.svg#delete" size="24"></sl-svg-icon>
+                </md-icon>
+            </md-icon>
         </md-list-item>
     </md-list>
 
