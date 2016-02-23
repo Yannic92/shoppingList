@@ -118,6 +118,10 @@ shoppingList.controller('navigation', ['$rootScope', '$scope', '$location', 'aut
             $rootScope.errorMessage = "";
             $rootScope.error = false;
             $rootScope.goToTop();
+
+            var isRoot = $scope.isOnRoot();
+            $scope.toggleButtonActive = isRoot && $rootScope.authenticated;
+            $scope.backButtonActive = !isRoot && $rootScope.authenticated;
         });
 
         $rootScope.$watch('error', function(){

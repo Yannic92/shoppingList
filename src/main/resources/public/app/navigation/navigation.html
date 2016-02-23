@@ -1,11 +1,11 @@
 <md-toolbar>
     <div class="titlebar md-toolbar-tools">
-        <md-button ng-if="authenticated && isOnRoot()" aria-label="toggle menu" class="md-icon-button" ng-click="toggleNav()" hide-gt-sm>
+        <md-button ng-if="toggleButtonActive" aria-label="toggle menu" class="md-icon-button" ng-click="toggleNav()" hide-gt-sm>
             <md-icon>
                 <sl-svg-icon src="/img/icons/icons.svg#menu" size="24"></sl-svg-icon>
             </md-icon>
         </md-button>
-        <md-button ng-if="authenticated && !isOnRoot()" aria-label="toggle menu" class="md-icon-button" ng-click="back()" hide-gt-sm>
+        <md-button ng-if="backButtonActive" aria-label="toggle menu" class="md-icon-button" ng-click="back()" hide-gt-sm>
             <md-icon>
                 <sl-svg-icon src="/img/icons/icons.svg#arrow_back" size="24"></sl-svg-icon>
             </md-icon>
