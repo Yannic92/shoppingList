@@ -15,3 +15,7 @@ md-list-item {
         margin-left: 0;
     }
 }
+
+md-list-item .md-list-item-inner > md-checkbox, md-list-item > md-checkbox{
+    margin-right: 10px;
+}
