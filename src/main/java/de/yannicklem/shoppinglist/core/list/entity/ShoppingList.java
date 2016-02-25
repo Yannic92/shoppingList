@@ -12,6 +12,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.hateoas.core.Relation;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -30,6 +31,7 @@ import javax.persistence.OneToMany;
 @ToString
 @EqualsAndHashCode(of = "entityId", callSuper = false)
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
+@Relation(collectionRelation = "shoppingLists")
 public class ShoppingList extends OwnedRestEntity<Long> {
 
     @Id
