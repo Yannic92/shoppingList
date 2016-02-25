@@ -1,9 +1,7 @@
 <div ng-if="!loading">
     <div ng-if="!dictionaryIsEmpty()">
         <md-input-container class="md-block">
-            <md-icon>
-                <sl-svg-icon src="/img/icons/icons.svg#search" size="24"></sl-svg-icon>
-            </md-icon>
+            <md-icon md-svg-src="img/icons/action/ic_search_24px.svg"></md-icon>
             <input id="filter" name="filter" ng-model="filter" type="text" placeholder="Filtern..">
         </md-input-container>
 

@@ -1,21 +1,15 @@
 <md-menu>
     <md-button aria-label="toggle nav menu" class="md-icon-button" ng-click="openMenu($mdOpenMenu, $event)">
-        <md-icon md-menu-origin>
-            <sl-svg-icon src="/img/icons/icons.svg#more_vert" size="24"></sl-svg-icon>
-        </md-icon>
+        <md-icon md-menu-origin md-svg-src="img/icons/navigation/ic_more_vert_24px.svg"></md-icon>
     </md-button>
     <md-menu-content width="4">
         <md-menu-item ng-repeat="option in options track by $index">
             <md-button ng-if="option.action" class="{{option.class}}" ng-click="option.action()" ng-disabled="option.disabled()">
-                <md-icon>
-                    <sl-svg-icon src="{{option.icon}}" size="24"></sl-svg-icon>
-                </md-icon>
+                <md-icon md-svg-src="{{option.icon}}"></md-icon>
                 <span md-menu-align-target>{{option.text}}</span>
             </md-button>
             <md-button ng-if="option.link" class="{{option.class}}" ng-href="{{option.link}}" ng-disabled="option.disabled()">
-                <md-icon>
-                    <sl-svg-icon src="{{option.icon}}" size="24"></sl-svg-icon>
-                </md-icon>
+                <md-icon md-svg-src="{{option.icon}}"></md-icon>
                 <span md-menu-align-target>{{option.text}}</span>
             </md-button>
         </md-menu-item>

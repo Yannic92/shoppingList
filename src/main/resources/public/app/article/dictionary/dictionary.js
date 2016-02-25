@@ -53,7 +53,7 @@ shoppingList.controller('dictionary',[ '$rootScope', '$scope', 'articleService',
             $rootScope.title = "Wörterbuch";
             $rootScope.options = [
                 {
-                    icon: "/img/icons/icons.svg#clear_all",
+                    icon: "/img/icons/communication/ic_clear_all_24px.svg",
                     text: "Wörterbuch leeren",
                     action: $scope.clearDictionary,
                     disabled: $scope.dictionaryIsEmpty

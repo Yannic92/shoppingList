@@ -5,9 +5,7 @@ ng-mouseenter="showOptionsOnElement()" ng-mouseleave="hideOptionsOnElement()" on
         <h3 ng-class="{ 'striked-out': item.done}">{{item.article.name}}</h3>
         <p  class="shorten-long-text" ng-class="{ 'striked-out': item.done}">{{item.count}} </p>
     </div>
-    <md-icon ng-if="!item.deleting && optionsVisible" aria-label="delete item" ng-click="deleteItem(item)" class="md-secondary option">
-        <sl-svg-icon src="/img/icons/icons.svg#delete" size="24"></sl-svg-icon>
-    </md-icon>
+    <md-icon ng-if="!item.deleting && optionsVisible" aria-label="delete item" ng-click="deleteItem(item)" class="md-secondary option" md-svg-src="img/icons/action/ic_delete_24px.svg"></md-icon>
     <md-progress-circular ng-if="item.deleting" class="md-secondary" md-mode="indeterminate" md-diameter="20px"></md-progress-circular>
 </md-list-item>
 <md-list-item ng-show="optionActive" class="md-2-line" role="listitem"
@@ -27,9 +25,7 @@ ng-mouseenter="showOptionsOnElement()" ng-mouseleave="hideOptionsOnElement()" on
                     <span flex></span>
                     <md-fab-actions>
                         <md-button aria-label="comment" ng-click="deleteItem(item)" class="md-icon-button">
-                            <md-icon aria-label="delete item" class="md-secondary">
-                                <sl-svg-icon src="/img/icons/icons.svg#delete" size="24"></sl-svg-icon>
-                            </md-icon>
+                            <md-icon aria-label="delete item" class="md-secondary" md-svg-src="img/icons/action/ic_delete_24px.svg"></md-icon>
                         </md-button>
                     </md-fab-actions>
                 </div>
