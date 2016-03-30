@@ -8,14 +8,9 @@ import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.core.user.security.service.CurrentUserService;
 import de.yannicklem.shoppinglist.exception.NotFoundException;
 import de.yannicklem.shoppinglist.restutils.service.EntityService;
-
 import lombok.RequiredArgsConstructor;
-
-
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Service;
-
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;

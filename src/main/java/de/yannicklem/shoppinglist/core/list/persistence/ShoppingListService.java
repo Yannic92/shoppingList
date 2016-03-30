@@ -9,13 +9,9 @@ import de.yannicklem.shoppinglist.exception.AlreadyExistsException;
 import de.yannicklem.shoppinglist.exception.EntityInvalidException;
 import de.yannicklem.shoppinglist.exception.NotFoundException;
 import de.yannicklem.shoppinglist.restutils.service.EntityService;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Service;
-
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;

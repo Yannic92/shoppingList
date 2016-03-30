@@ -2,41 +2,30 @@ package de.yannicklem.shoppinglist.core.list.restapi.controller;
 
 import de.yannicklem.shoppinglist.core.list.entity.ShoppingList;
 import de.yannicklem.shoppinglist.core.list.restapi.service.ShoppingListResourceProcessor;
-import de.yannicklem.shoppinglist.core.user.persistence.SLUserService;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
+import de.yannicklem.shoppinglist.core.user.persistence.SLUserService;
 import de.yannicklem.shoppinglist.restutils.controller.MyRestController;
 import de.yannicklem.shoppinglist.restutils.service.EntityService;
 import de.yannicklem.shoppinglist.restutils.service.MyResourceProcessor;
 import de.yannicklem.shoppinglist.restutils.service.RequestHandler;
-
 import org.apache.log4j.Logger;
-
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.hateoas.EntityLinks;
 import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.Resources;
-
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static org.apache.log4j.Logger.getLogger;
-
 import static java.lang.invoke.MethodHandles.lookup;
+import static org.apache.log4j.Logger.getLogger;
 
 
 @RestController

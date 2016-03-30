@@ -3,11 +3,8 @@ package de.yannicklem.shoppinglist.core.user.restapi.service;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.exception.PermissionDeniedException;
 import de.yannicklem.shoppinglist.restutils.service.RequestHandler;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Service;
 
 
@@ -23,7 +20,7 @@ public class SLUserRequestHandler implements RequestHandler<SLUser> {
         if (!slUserPermissionEvaluator.isAllowedToCreate(userToCreate, currentUser)) {
             throw new PermissionDeniedException();
         }
-        
+
         if(userToCreate != null && userToCreate.getEmail() != null){
             userToCreate.setEmail(userToCreate.getEmail().toLowerCase());
         }

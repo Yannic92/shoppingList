@@ -1,7 +1,6 @@
 package de.yannicklem.shoppinglist;
 
 
-import de.yannicklem.shoppinglist.core.user.entity.SLAuthority;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,7 +22,7 @@ public class SLUserTestEntity {
     private String email;
 
     private String password;
-    
+
     private Set<GrantedAuthority> authorities;
 
     public SLUserTestEntity(SLUser slUser){

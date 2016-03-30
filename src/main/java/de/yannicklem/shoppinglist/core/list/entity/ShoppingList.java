@@ -1,28 +1,19 @@
 package de.yannicklem.shoppinglist.core.list.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-
 import de.yannicklem.shoppinglist.core.OwnedRestEntity;
 import de.yannicklem.shoppinglist.core.item.entity.Item;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.hateoas.core.Relation;
 
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 
 
 @Entity

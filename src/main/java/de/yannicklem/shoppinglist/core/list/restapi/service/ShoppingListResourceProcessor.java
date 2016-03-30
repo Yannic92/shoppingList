@@ -1,18 +1,15 @@
 package de.yannicklem.shoppinglist.core.list.restapi.service;
 
 import de.yannicklem.shoppinglist.core.item.entity.Item;
+import de.yannicklem.shoppinglist.core.item.persistence.ItemService;
 import de.yannicklem.shoppinglist.core.list.entity.ShoppingList;
 import de.yannicklem.shoppinglist.core.list.entity.ShoppingListOnlyName;
-import de.yannicklem.shoppinglist.core.item.persistence.ItemService;
-import de.yannicklem.shoppinglist.core.user.persistence.SLUserService;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
+import de.yannicklem.shoppinglist.core.user.persistence.SLUserService;
 import de.yannicklem.shoppinglist.restutils.service.MyResourceProcessor;
-
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.hateoas.EntityLinks;
 import org.springframework.hateoas.Link;
-
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;

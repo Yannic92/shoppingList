@@ -2,14 +2,11 @@ package de.yannicklem.shoppinglist.core.item.validation;
 
 import de.yannicklem.shoppinglist.core.article.validation.ArticleValidationService;
 import de.yannicklem.shoppinglist.core.item.entity.Item;
-import de.yannicklem.shoppinglist.core.user.validation.SLUserValidationService;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
+import de.yannicklem.shoppinglist.core.user.validation.SLUserValidationService;
 import de.yannicklem.shoppinglist.exception.EntityInvalidException;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Service;
 
 import java.util.Set;

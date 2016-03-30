@@ -1,19 +1,15 @@
 package de.yannicklem.shoppinglist.core.mail;
 
 import org.apache.log4j.Logger;
-
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.mail.MailAuthenticationException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-
 import org.springframework.stereotype.Service;
-
-import java.lang.invoke.MethodHandles;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.lang.invoke.MethodHandles;
 
 import static org.apache.log4j.Logger.getLogger;
 

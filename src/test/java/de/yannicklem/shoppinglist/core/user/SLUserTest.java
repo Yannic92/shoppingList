@@ -1,26 +1,20 @@
 package de.yannicklem.shoppinglist.core.user;
 
 import de.yannicklem.shoppinglist.TestUtils;
+import de.yannicklem.shoppinglist.core.user.entity.SLAuthority;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.core.user.registration.entity.Confirmation;
-
-import de.yannicklem.shoppinglist.core.user.entity.SLAuthority;
 import org.junit.Before;
 import org.junit.Test;
-
 import org.junit.runner.RunWith;
-
 import org.mockito.runners.MockitoJUnitRunner;
-
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-
 import static org.hamcrest.collection.IsEmptyCollection.empty;
-
 import static org.hamcrest.core.Is.is;
 
 

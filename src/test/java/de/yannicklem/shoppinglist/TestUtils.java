@@ -3,7 +3,6 @@ package de.yannicklem.shoppinglist;
 import de.yannicklem.shoppinglist.core.user.entity.SLAuthority;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.core.user.registration.entity.Confirmation;
-
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.HashSet;

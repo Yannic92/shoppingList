@@ -1,7 +1,6 @@
 package de.yannicklem.shoppinglist.core.user.security.service;
 
 import java.math.BigInteger;
-
 import java.security.SecureRandom;
 
 

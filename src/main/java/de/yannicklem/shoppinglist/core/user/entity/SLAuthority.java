@@ -3,7 +3,6 @@ package de.yannicklem.shoppinglist.core.user.entity;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
-
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.Entity;

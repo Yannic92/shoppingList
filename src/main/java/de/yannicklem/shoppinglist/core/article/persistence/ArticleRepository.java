@@ -2,10 +2,6 @@ package de.yannicklem.shoppinglist.core.article.persistence;
 
 import de.yannicklem.shoppinglist.core.article.entity.Article;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
-
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.Cacheable;
-
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -13,11 +9,9 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 
-@CacheConfig(cacheNames = "articles")
 public interface ArticleRepository extends CrudRepository<Article, Long> {
 
     @Override
-    @Cacheable
     List<Article> findAll();
 
 
