@@ -3,6 +3,7 @@ package de.yannicklem.shoppinglist.core.list.persistence;
 import de.yannicklem.shoppinglist.core.item.entity.Item;
 import de.yannicklem.shoppinglist.core.list.entity.ShoppingList;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
+
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -16,14 +17,20 @@ public interface ShoppingListRepository extends CrudRepository<ShoppingList, Lon
     List<ShoppingList> findAll();
 
 
-    @Query("SELECT s FROM ShoppingList s WHERE :user MEMBER OF s.owners")
+    @Query(
+        "SELECT shoppingList FROM ShoppingList shoppingList INNER JOIN shoppingList.owners owner WHERE :user = owner"
+    )
     List<ShoppingList> findListsOwnedBy(@Param("user") SLUser slUser);
 
 
-    @Query("SELECT s FROM ShoppingList s WHERE :item MEMBER OF s.items")
+    @Query(
+        "SELECT shoppingList FROM ShoppingList shoppingList INNER JOIN shoppingList.items listItem WHERE :item = listItem"
+    )
     List<ShoppingList> findShoppingListsContainingItem(@Param("item") Item item);
 
 
-    @Query("SELECT COUNT(s) FROM ShoppingList s WHERE :user MEMBER OF s.owners")
+    @Query(
+        "SELECT COUNT(shoppingList) FROM ShoppingList shoppingList INNER JOIN shoppingList.owners owner WHERE :user = owner"
+    )
     Long countListsOfUser(@Param("user") SLUser currentUser);
 }
