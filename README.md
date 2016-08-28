@@ -42,18 +42,19 @@ If you want to add custom configuration you can do this [like explained in the S
 ## Database
 By default H2 database is used. If you want to use a mysql for example the application.properties should provide the following properties:
 ``` properties
-spring.datasource.driverClassName=com.mysql.jdbc.Driver
-spring.datasource.url=jdbc:mysql://localhost:3306/mySchema
-spring.datasource.username=YourUser
-spring.datasource.password=YourPassword
+spring.datasource.tomcat.driverClassName=com.mysql.jdbc.Driver
+spring.datasource.tomcat.url=jdbc:mysql://localhost:3306/mySchema
+spring.datasource.tomcat.username=YourUser
+spring.datasource.tomcat.password=YourPassword
 ```
 ## Mailing (Required)
 You have to configure the mail properties to make the shopping list work properly. Use the following properties:
 ``` properties
-spring.mail.host=YourSmptServer
-spring.mail.port=YourPort
-spring.mail.username=YourUserName
-spring.mail.password=YorPassword
-spring.mail.properties.mail.smtp.ssl.enable = true or false
-spring.mail.properties.mail.smtp.auth = true or false
+shopping-list.mail.host=Your SMTP server
+shopping-list.mail.port=Your Port
+shopping-list.mail.properties.mail.smtp.starttls.enable = true/false
+shopping-list.mail.properties.mail.smtp.starttls.required = true/false
+shopping-list.mail.properties.mail.smtp.auth = true/false
+shopping-list.mail.confirmation-mail-address= email address where confirmation mails should be sent
+shopping-list.mail.confirmation-mail-password=your password
 ```
