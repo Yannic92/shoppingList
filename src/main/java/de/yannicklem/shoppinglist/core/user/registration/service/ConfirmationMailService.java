@@ -1,9 +1,11 @@
 package de.yannicklem.shoppinglist.core.user.registration.service;
 
+import de.yannicklem.shoppinglist.core.ShoppingListConfigurationProperties;
 import de.yannicklem.shoppinglist.core.mail.MailService;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+
 import org.springframework.stereotype.Service;
 
 
@@ -14,10 +16,10 @@ public class ConfirmationMailService {
     private final MailService mailService;
 
     @Autowired
-    public ConfirmationMailService(@Value("${shoppingList.confirmation.uri}") String confirmationUri,
+    public ConfirmationMailService(ShoppingListConfigurationProperties configurationProperties,
         MailService mailService) {
 
-        this.confirmationUri = confirmationUri;
+        this.confirmationUri = configurationProperties.getUrl() + "/#/register/confirmation/{username}/{code}";
         this.mailService = mailService;
     }
 
@@ -25,7 +27,7 @@ public class ConfirmationMailService {
 
         String userConfirmationUri;
         userConfirmationUri = confirmationUri.replace("{username}", slUser.getUsername())
-                .replace("{code}", slUser.getConfirmation().getCode());
+            .replace("{code}", slUser.getConfirmation().getCode());
 
         String confirmationMessage = String.format("Hallo %s,\n\n"
                 + "es freut mich, dass du dich für die Verwendung der Einkaufsliste entschieden hast.\n"

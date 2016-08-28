@@ -1,14 +1,20 @@
 package de.yannicklem.shoppinglist.core.user.security.config;
 
+import de.yannicklem.shoppinglist.core.ShoppingListSecurityProperties;
 import de.yannicklem.shoppinglist.core.user.entity.SLAuthority;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.core.user.persistence.SLUserService;
-import de.yannicklem.shoppinglist.core.user.security.service.PasswordGenerator;
+
 import org.apache.log4j.Logger;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+
 import org.springframework.context.annotation.Configuration;
+
 import org.springframework.http.HttpMethod;
+
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -17,30 +23,36 @@ import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 
-import javax.sql.DataSource;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
+
+import javax.sql.DataSource;
+
+import static org.apache.log4j.Logger.getLogger;
 
 import static java.lang.invoke.MethodHandles.lookup;
-import static org.apache.log4j.Logger.getLogger;
 
 
 @Configuration
+@EnableConfigurationProperties(ShoppingListSecurityProperties.class)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final Logger LOGGER = getLogger(lookup().lookupClass());
 
-    @Autowired
-    private DataSource datasource;
+    private final DataSource datasource;
+
+    private final SLUserService slUserService;
+
+    private final ShoppingListSecurityProperties securityProperties;
 
     @Autowired
-    private SLUserService slUserService;
+    public SecurityConfig(DataSource datasource, SLUserService slUserService,
+        ShoppingListSecurityProperties securityProperties) {
 
-    @Value("${security.user.password:}")
-    private String password;
-
-    @Value("${adminMail}")
-    private String adminMail;
+        this.slUserService = slUserService;
+        this.datasource = datasource;
+        this.securityProperties = securityProperties;
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -89,21 +101,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private void createDefaultAdminUser() {
 
-        Set<SLAuthority> authorities = new HashSet<>();
-        authorities.add(new SLAuthority(SLAuthority.ADMIN));
-        authorities.add(new SLAuthority(SLAuthority.USER));
+        Set<SLAuthority> authorities = securityProperties.getAdmin()
+                .getRole()
+                .stream()
+                .map(SLAuthority::new)
+                .collect(Collectors.toSet());
 
-        String password;
-
-        if (this.password != null && !this.password.equals("")) {
-            password = this.password;
-        } else {
-            password = PasswordGenerator.generatePassword();
-        }
+        String password = securityProperties.getAdmin().getPassword();
 
         LOGGER.info("\n\nCreated initial admin password: \"" + password + "\"\n");
 
-        SLUser slUser = new SLUser("admin", "Yannic", "Klem", password, adminMail, true, null, authorities);
+        SLUser slUser = new SLUser("admin", "Yannic", "Klem", password, securityProperties.getAdmin().getMail(), true,
+                null, authorities);
 
         slUserService.create(slUser);
     }

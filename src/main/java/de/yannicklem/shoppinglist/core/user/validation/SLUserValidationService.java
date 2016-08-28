@@ -1,12 +1,16 @@
 package de.yannicklem.shoppinglist.core.user.validation;
 
+import de.yannicklem.shoppinglist.core.ShoppingListSecurityProperties;
 import de.yannicklem.shoppinglist.core.user.entity.SLAuthority;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.exception.EntityInvalidException;
+
 import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+
 import org.springframework.security.core.GrantedAuthority;
+
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -19,9 +23,9 @@ public class SLUserValidationService {
     private final int minPasswordLength;
 
     @Autowired
-    public SLUserValidationService(@Value("${slUser.password.length.min}") int minPasswordLength) {
+    public SLUserValidationService(ShoppingListSecurityProperties securityProperties) {
 
-        this.minPasswordLength = minPasswordLength;
+        this.minPasswordLength = securityProperties.getMinimalPasswordLength();
     }
 
     public void validate(SLUser slUser) throws EntityInvalidException {

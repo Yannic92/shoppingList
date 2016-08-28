@@ -1,32 +1,43 @@
 package de.yannicklem.shoppinglist.core.mail;
 
+import de.yannicklem.shoppinglist.core.ShoppingListConfigurationProperties;
+import de.yannicklem.shoppinglist.core.ShoppingListMailProperties;
+
 import org.apache.log4j.Logger;
+
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+
 import org.springframework.mail.MailAuthenticationException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+
 import org.springframework.stereotype.Service;
+
+import java.lang.invoke.MethodHandles;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import java.lang.invoke.MethodHandles;
 
 import static org.apache.log4j.Logger.getLogger;
 
 
 @Service
+@EnableConfigurationProperties(ShoppingListConfigurationProperties.class)
 public class MailService {
 
     private static final Logger LOGGER = getLogger(MethodHandles.lookup().lookupClass());
-    private static final String FROM = "shoppinglist.confirmation@gmail.com";
     private static final String SUBJECT = "Registrierung bestaetigen";
+    private final String from;
 
     private final JavaMailSender mailSender;
 
     @Autowired
-    public MailService(JavaMailSender mailSender) {
+    public MailService(JavaMailSender mailSender, ShoppingListMailProperties mailProperties) {
 
         this.mailSender = mailSender;
+        this.from = mailProperties.getConfirmationMailAddress();
     }
 
     public void sendMail(String mailTo, String message) {
@@ -47,7 +58,7 @@ public class MailService {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
 
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
-        helper.setFrom(FROM);
+        helper.setFrom(from);
         helper.setTo(to);
         helper.setSubject(SUBJECT);
         helper.setText(message);
