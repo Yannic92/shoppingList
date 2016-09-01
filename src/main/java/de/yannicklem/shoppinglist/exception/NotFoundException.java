@@ -1,6 +1,7 @@
 package de.yannicklem.shoppinglist.exception;
 
 import org.springframework.http.HttpStatus;
+
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 

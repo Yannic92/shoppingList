@@ -5,8 +5,11 @@ import de.yannicklem.shoppinglist.core.article.persistence.ArticleService;
 import de.yannicklem.shoppinglist.core.item.entity.Item;
 import de.yannicklem.shoppinglist.core.item.persistence.ItemService;
 import de.yannicklem.shoppinglist.restutils.service.MyResourceProcessor;
+
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.hateoas.EntityLinks;
+
 import org.springframework.stereotype.Service;
 
 

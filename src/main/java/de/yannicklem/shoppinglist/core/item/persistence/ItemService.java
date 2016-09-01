@@ -10,18 +10,24 @@ import de.yannicklem.shoppinglist.core.user.security.service.CurrentUserService;
 import de.yannicklem.shoppinglist.exception.AlreadyExistsException;
 import de.yannicklem.shoppinglist.exception.NotFoundException;
 import de.yannicklem.shoppinglist.restutils.service.EntityService;
+
 import lombok.RequiredArgsConstructor;
+
 import org.apache.log4j.Logger;
+
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
+
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static java.lang.invoke.MethodHandles.lookup;
 import static org.apache.log4j.Logger.getLogger;
+
+import static java.lang.invoke.MethodHandles.lookup;
 
 
 @Service

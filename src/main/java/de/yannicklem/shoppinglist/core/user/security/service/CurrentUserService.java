@@ -2,8 +2,10 @@ package de.yannicklem.shoppinglist.core.user.security.service;
 
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.exception.UnauthorizedException;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;

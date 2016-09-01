@@ -1,7 +1,9 @@
 package de.yannicklem.shoppinglist.core.user.restapi;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
+
 import org.springframework.hateoas.core.Relation;
 
 

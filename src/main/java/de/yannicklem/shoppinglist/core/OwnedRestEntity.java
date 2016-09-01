@@ -4,6 +4,7 @@ import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.restutils.entity.RestEntity;
 
 import java.io.Serializable;
+
 import java.util.Set;
 
 

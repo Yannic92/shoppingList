@@ -8,23 +8,35 @@ import de.yannicklem.shoppinglist.restutils.controller.MyRestController;
 import de.yannicklem.shoppinglist.restutils.service.EntityService;
 import de.yannicklem.shoppinglist.restutils.service.MyResourceProcessor;
 import de.yannicklem.shoppinglist.restutils.service.RequestHandler;
+
 import org.slf4j.Logger;
+
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.hateoas.EntityLinks;
 import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.Resources;
+
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
+
 import java.util.Collection;
 
-import static java.lang.invoke.MethodHandles.lookup;
 import static org.slf4j.LoggerFactory.getLogger;
+
+import static java.lang.invoke.MethodHandles.lookup;
 
 
 @RestController
@@ -54,6 +66,7 @@ public class ArticleController extends MyRestController<Article, Long> {
         return new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
     }
 
+
     @RequestMapping(method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUnused(Principal principal) {
@@ -68,7 +81,7 @@ public class ArticleController extends MyRestController<Article, Long> {
             try {
                 requestHandler.handleBeforeDelete(article, currentUser);
                 entityService.delete(article);
-            }catch (BadRequestException e){
+            } catch (BadRequestException e) {
                 LOGGER.info("Article '{}' not deleted because: {}", article.getName(), e.getMessage());
             }
         }

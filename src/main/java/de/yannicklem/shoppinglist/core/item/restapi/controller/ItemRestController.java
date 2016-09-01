@@ -6,11 +6,15 @@ import de.yannicklem.shoppinglist.restutils.controller.MyRestController;
 import de.yannicklem.shoppinglist.restutils.service.EntityService;
 import de.yannicklem.shoppinglist.restutils.service.MyResourceProcessor;
 import de.yannicklem.shoppinglist.restutils.service.RequestHandler;
+
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.hateoas.EntityLinks;
 import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.hateoas.MediaTypes;
+
 import org.springframework.http.MediaType;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 

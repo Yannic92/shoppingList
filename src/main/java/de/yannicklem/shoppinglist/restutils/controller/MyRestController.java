@@ -6,23 +6,36 @@ import de.yannicklem.shoppinglist.restutils.entity.RestEntity;
 import de.yannicklem.shoppinglist.restutils.service.EntityService;
 import de.yannicklem.shoppinglist.restutils.service.MyResourceProcessor;
 import de.yannicklem.shoppinglist.restutils.service.RequestHandler;
+
 import lombok.RequiredArgsConstructor;
+
 import org.apache.log4j.Logger;
+
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.hateoas.EntityLinks;
 import org.springframework.hateoas.Resources;
+
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.io.Serializable;
+
 import java.security.Principal;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.invoke.MethodHandles.lookup;
 import static org.apache.log4j.Logger.getLogger;
+
+import static java.lang.invoke.MethodHandles.lookup;
 
 
 @RequiredArgsConstructor(onConstructor = @__(@Autowired ))

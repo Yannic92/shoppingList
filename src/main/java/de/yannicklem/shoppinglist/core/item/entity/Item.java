@@ -1,20 +1,25 @@
 package de.yannicklem.shoppinglist.core.item.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import de.yannicklem.shoppinglist.core.OwnedRestEntity;
 import de.yannicklem.shoppinglist.core.article.entity.Article;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
+
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
 import org.hibernate.annotations.GenericGenerator;
+
 import org.springframework.hateoas.core.Relation;
 
-import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.persistence.*;
 
 
 @Entity

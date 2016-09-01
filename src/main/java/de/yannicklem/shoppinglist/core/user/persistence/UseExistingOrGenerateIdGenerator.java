@@ -1,7 +1,9 @@
 package de.yannicklem.shoppinglist.core.user.persistence;
 
 import org.hibernate.HibernateException;
+
 import org.hibernate.engine.spi.SessionImplementor;
+
 import org.hibernate.id.IncrementGenerator;
 
 import java.io.Serializable;
