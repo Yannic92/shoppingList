@@ -43,10 +43,10 @@ If you want to add custom configuration you can do this [like explained in the S
 ## Database
 By default H2 database is used. If you want to use a mysql for example the application.properties should provide the following properties:
 ``` properties
-spring.datasource.tomcat.driverClassName=com.mysql.jdbc.Driver
-spring.datasource.tomcat.url=jdbc:mysql://localhost:3306/mySchema
-spring.datasource.tomcat.username=YourUser
-spring.datasource.tomcat.password=YourPassword
+spring.datasource.driverClassName=com.mysql.jdbc.Driver
+spring.datasource.url=jdbc:mysql://localhost:3306/mySchema
+spring.datasource.username=YourUser
+spring.datasource.password=YourPassword
 ```
 ## Mailing (Required)
 You have to configure the mail properties to make the shopping list work properly. Use the following properties:
