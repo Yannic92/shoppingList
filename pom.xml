@@ -9,7 +9,7 @@
     <packaging>jar</packaging>
 
     <name>Web Shopping List</name>
-    <description>Shopping List as responsive webapp</description>
+    <description>Shopping List as responsive webapp that allows to create and share shopping lists</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>

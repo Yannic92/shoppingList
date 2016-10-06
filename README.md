@@ -1,5 +1,6 @@
 # shoppingList
-A shopping list with a RESTful API and an Angular 1 Frontend supported by Angular-Material
+A shopping list with a RESTful API and an Angular 1 Frontend supported by Angular-Material.
+This application allows you to manage your shopping lists and share them with your friends, roommates, ..
 
 # Requirements
 
@@ -13,7 +14,7 @@ Clone the repository:
 `git clone https://github.com/Yannic92/shoppingList.git`
 
 **With SSH:**
-`git@github.com:Yannic92/shoppingList.git`
+`git clone git@github.com:Yannic92/shoppingList.git`
 
 Have a look at the `Configuration - Mailing` section.
 
