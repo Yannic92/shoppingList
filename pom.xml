@@ -5,7 +5,7 @@
 
     <groupId>de.yannicklem</groupId>
     <artifactId>shoppinglist</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>Web Shopping List</name>
@@ -14,7 +14,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.4.0.RELEASE</version>
+        <version>1.4.1.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
