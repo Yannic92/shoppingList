@@ -150,31 +150,11 @@
                     </wroManagerFactory>
                     <cssDestinationFolder>${project.build.directory}/generated-resources/public/style/css
                     </cssDestinationFolder>
-                    <jsDestinationFolder>${project.build.directory}/generated-resources/public/lib</jsDestinationFolder>
                     <wroFile>${project.build.directory}/wro/wro.xml</wroFile>
                     <extraConfigFile>${basedir}/src/main/wro/wro.properties</extraConfigFile>
                     <contextFolder>${basedir}/src/main/wro</contextFolder>
                     <ignoreMissingResources>false</ignoreMissingResources>
                 </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.webjars</groupId>
-                        <artifactId>angularjs</artifactId>
-                        <version>1.4.7</version>
-                    </dependency>
-
-                    <!--
-
-                    unused until md-autocomplete is fixed or an alternative is found. md-autocomplete is currently a mess..
-
-                    <dependency>
-                        <groupId>org.webjars</groupId>
-                        <artifactId>angular-material</artifactId>
-                        <version>1.0.4</version>
-                    </dependency>
-
-                    -->
-                </dependencies>
             </plugin>
         </plugins>
     </build>

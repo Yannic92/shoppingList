@@ -1,0 +1,32 @@
+{
+  "license": "APACHE-2.0",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Yannic92/shoppingList.git"
+  },
+  "devDependencies": {
+    "babel-core": "^6.14.0",
+    "babel-loader": "^6.2.5",
+    "babel-preset-es2015": "^6.14.0",
+    "babel-register": "^6.14.0",
+    "webpack": "^1.13.2",
+    "eslint": "^3.1.1"
+  },
+  "dependencies": {
+    "angular": "1.4.7",
+    "angular-route": "1.4.7",
+    "angular-resource": "1.4.7",
+    "angular-animate": "1.4.7",
+    "angular-aria": "1.4.7",
+    "angular-messages": "1.4.7",
+    "angular-material": "1.1.1"
+  },
+  "scripts": {
+    "watch": "./node_modules/.bin/webpack --config ./webpack.config.js --watch",
+    "lint": "./node_modules/.bin/eslint src/main/js",
+    "webpack": "./node_modules/.bin/webpack --config ./webpack.config.js",
+    "build" : "npm run webpack && npm run lint",
+    "all": "npm install && npm run build"
+  }
+}

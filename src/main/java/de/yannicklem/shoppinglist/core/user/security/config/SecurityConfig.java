@@ -66,7 +66,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .permitAll()
             .antMatchers(HttpMethod.POST, "/logout")
             .permitAll()
-            .antMatchers("/app/**", "/lib/**", "/style/**", "/img/**", "/index.html", "/index-debug.html", "/",
+            .antMatchers("/templates/**", "/lib/**", "/style/**", "/img/**", "/index.html", "/index-debug.html", "/",
                     "/shoppinglist.appcache")
             .permitAll()
             .anyRequest()

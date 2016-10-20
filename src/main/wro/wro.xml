@@ -1,16 +1,6 @@
 <groups xmlns="http://www.isdc.ro/wro">
-    <group name="angular">
-        <js>webjar:angularjs/1.4.7/angular.min.js</js>
-        <js>webjar:angularjs/1.4.7/angular-resource.min.js</js>
-        <js>webjar:angularjs/1.4.7/angular-route.min.js</js>
-        <js>webjar:angularjs/1.4.7/angular-animate.min.js</js>
-        <js>webjar:angularjs/1.4.7/angular-aria.min.js</js>
-        <js>webjar:angularjs/1.4.7/angular-messages.min.js</js>
-        <js>file:@project.basedir@/src/main/resources/public/lib/angular-material.min.js</js>
-    </group>
     <group name="app-compact">
-        <js>file:@project.basedir@/src/main/resources/public/app/**.js</js>
-        <css>file:@project.basedir@/src/main/resources/public/style/css/angular-material.min.css</css>
+        <css>file:@project.basedir@/node_modules/angular-material/angular-material.min.css</css>
         <css>file:@project.basedir@/src/main/resources/public/style/css/angular-material-fixes.css</css>
         <css>file:@project.basedir@/src/main/resources/public/style/css/common.css</css>
         <css>file:@project.basedir@/src/main/resources/public/style/css/font.css</css>

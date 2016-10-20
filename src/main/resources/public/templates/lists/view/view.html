@@ -1,0 +1,29 @@
+<div ng-if="!loading">
+    <div flex>
+    <form id="createNewItemForm" role="form" class="md-padding" name="createNewItemForm" ng-submit="createNewItem()">
+        <md-autocomplete id ="newItemAutocomplete"
+                         md-no-cache="true"
+                         md-selected-item="ctrl.selectedArticle"
+                         md-selected-item-change="selectedItemChanged($event)"
+                         md-search-text="ctrl.newItem.article.name"
+                         md-items="article in articles | filter: {name: ctrl.newItem.article.name} | limitTo: 5"
+                         md-item-text="article.name"
+                         md-min-length="1"
+                         ng-disabled="creating"
+                         placeholder="Neuer Posten">
+            <md-item-template>
+                <span md-highlight-text="ctrl.newItem.article.name" md-highlight-flags="^i">{{article.name}}</span>
+            </md-item-template>
+        </md-autocomplete>
+    </form>
+        <md-content>
+            <md-list ng-cloak role="list">
+                <ng-include ng-repeat="item in list.items | orderBy: ['-deleting', 'done', 'article.name'] track by $index"
+                     src="'/templates/item/item.html'"
+                     ng-controller="itemController">
+                </ng-include>
+            </md-list>
+        </md-content>
+    <ng-include ng-if="list.items.length == 0" src="'/templates/lists/view/emptyList.html'"></ng-include>
+    </div>
+</div>

@@ -1,0 +1,16 @@
+<div ng-if="!loading">
+    <div ng-if="!dictionaryIsEmpty()">
+        <md-input-container class="md-block">
+            <md-icon md-svg-src="img/icons/action/ic_search_24px.svg"></md-icon>
+            <input id="filter" name="filter" ng-model="filter" type="text" placeholder="Filtern..">
+        </md-input-container>
+
+        <md-list ng-cloak>
+            <ng-include ng-repeat="article in articles | filter: filter track by $index"
+                        src="'/templates/article/article.html'"
+                        ng-controller="articleController">
+            </ng-include>
+        </md-list>
+    </div>
+    <ng-include ng-if="dictionaryIsEmpty()" src="'/templates/article/dictionary/emptyDictionary.html'"></ng-include>
+</div>

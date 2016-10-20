@@ -1,0 +1,78 @@
+<form ng-if="!loading" name="ctrl.registerForm" class="md-padding">
+    <md-input-container class="md-icon-float md-block">
+        <label for="firstName">Vorname</label>
+        <md-icon md-svg-src="img/icons/social/ic_person_24px.svg"></md-icon>
+        <input id="firstName" name="firstName" ng-model="ctrl.user.firstName" type="text">
+    </md-input-container>
+    <md-input-container class="md-icon-float md-block">
+        <label for="lastName">Nachname</label>
+        <md-icon md-svg-src="img/icons/social/ic_person_24px.svg"></md-icon>
+        <input id="lastName" name="lastName" type="text" ng-model="ctrl.user.lastName">
+    </md-input-container>
+    <md-input-container class="md-icon-float md-block">
+        <label for="username">Benutzername</label>
+        <md-icon md-svg-src="img/icons/social/ic_person_24px.svg"></md-icon>
+        <input id="username" name="username" type="text" pattern="[a-zA-Z0-9]*" ng-model="ctrl.user.username" required>
+        <div ng-messages="ctrl.registerForm.username.$error" ng-if="ctrl.registerForm.username.$touched">
+            <div ng-message="pattern">
+                Der Benutzername ist keine alphanumerische Zeichenfolge. Es sind ausschließlich die Zeichen a-z, a-Z und 0-9 erlaubt.
+            </div>
+            <div ng-message="required">
+                Bitte geben Sie einen Benutzernamen an.
+            </div>
+        </div>
+    </md-input-container>
+    <md-input-container class="md-icon-float md-block">
+        <label for="email">E-Mail</label>
+        <md-icon md-svg-src="img/icons/communication/ic_email_24px.svg"></md-icon>
+        <input id="email" name="email" type="email" ng-model="ctrl.user.email" required>
+        <div ng-messages="ctrl.registerForm.email.$error" ng-if="ctrl.registerForm.email.$touched">
+            <div ng-message="email">
+                Das ist keine gültige E-Mailadresse.
+            </div>
+            <div ng-message="required">
+                Bitte geben Sie eine E-Mailadresse an. Sie erhalten im Anschluss einen Bestätigungscode per E-Mail, um die Registrierung abzuschließen.
+            </div>
+        </div>
+    </md-input-container>
+    <md-input-container class="md-icon-float md-block">
+        <label for="password">Passwort</label>
+        <md-icon md-svg-src="img/icons/communication/ic_vpn_key_24px.svg"></md-icon>
+        <input id="password" name="password" type="password" ng-model="ctrl.user.password" minlength="8" required>
+        <div ng-messages="ctrl.registerForm.password.$error" ng-if="ctrl.registerForm.password.$touched">
+            <div ng-message="minlength">
+                Das Passwort muss mindestens 8 Zeichen lang sein.
+            </div>
+            <div ng-message="required">
+                Bitte legen Sie ein Passwort fest.
+            </div>
+        </div>
+    </md-input-container>
+    <md-input-container class="md-icon-float md-block">
+        <label for="passwordRepeat">Passwort wiederholen</label>
+        <md-icon md-svg-src="img/icons/communication/ic_vpn_key_24px.svg"></md-icon>
+        <input id="passwordRepeat" name="passwordRepeat" type="password" ng-model="ctrl.passwordRepeat"
+               compare-to="ctrl.user.password" required>
+        <div ng-messages="ctrl.registerForm.passwordRepeat.$error" ng-if="ctrl.registerForm.passwordRepeat.$touched">
+            <div ng-message="required">
+                Bitte bestätigen Sie Ihr Passwort.
+            </div>
+            <div ng-message="compareTo">
+                Das Passwort entspricht nicht Ihrem angegebenen Passwort.
+            </div>
+        </div>
+    </md-input-container>
+    <span class="md-caption">
+        * Alle mit einem Stern gekennzeichneten Felder sind Pflichtfelder. Die Angabe Ihres Vor- und Nachnamens ist optional. Sowohl Ihr Vorname als auch Ihr Nachname, dienen
+        lediglich dazu, dass Ihre Freunde Sie später leichter finden können, um Einkaufslisten zu teilen
+    </span>
+    <section layout="row" layout-sm="column" layout-align="center center" >
+        <md-button class="md-primary" ng-disabled="ctrl.submitIsDisabled()" ng-click="ctrl.register()">
+            Registrieren
+        </md-button>
+        <md-tooltip ng-if="ctrl.submitIsDisabled()">
+            Bitten füllen Sie zunächst alle erfolderlichen Felder aus
+        </md-tooltip>
+    </section>
+</form>
+

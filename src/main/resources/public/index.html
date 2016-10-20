@@ -16,11 +16,10 @@
 
     <title>Einkaufsliste</title>
 </head>
-<body ng-controller="navigation" layout="row">
-    <ng-include ng-if="authenticated" ng-controller="leftSideNav" src="'app/navigation/leftSideNav/leftSideNav.html'" layout="row"></ng-include>
-    <ng-include layout="column" flex src="'app/navigation/navigation.html'"></ng-include>
+<body ng-controller="navigationController as ctrl" layout="row">
+    <ng-include ng-if="authenticated" ng-controller="leftSideNavController" src="'/templates/navigation/leftSideNav/leftSideNav.html'" layout="row"></ng-include>
+    <ng-include layout="column" flex src="'/templates/navigation/navigation.html'"></ng-include>
 
-    <script type="text/javascript" src="lib/angular.js"></script>
-    <script type="text/javascript" src="lib/app-compact.js"></script>
+    <script type="text/javascript" src="/js/ShoppingList.js"></script>
 </body>
 </html>
