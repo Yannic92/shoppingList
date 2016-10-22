@@ -1,4 +1,5 @@
 export default function FocusMeDirective($timeout) {
+    'ngInject';
     return {
         link: function(scope, element, attrs) {
             scope.$watch(attrs.focusMe, function(value) {

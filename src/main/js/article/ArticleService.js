@@ -1,6 +1,7 @@
 import HALResource from '../services/HALResource';
 export default class ArticleService {
 
+    /*@ngInject*/
     constructor($resource, $filter, $q, $rootScope) {
 
         this.$filter = $filter;

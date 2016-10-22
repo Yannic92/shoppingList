@@ -1,5 +1,6 @@
 export default class ArticleController {
 
+    /*@ngInject*/
     constructor($scope, articleService, $timeout) {
 
         this.articleService = articleService;

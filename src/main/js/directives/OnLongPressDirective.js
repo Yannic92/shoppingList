@@ -1,4 +1,5 @@
 export default function OnLongPressDirective($timeout) {
+    'ngInject';
     return {
         restrict: 'A',
         link: function($scope, $elm, $attrs) {

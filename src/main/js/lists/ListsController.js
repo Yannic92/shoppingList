@@ -1,5 +1,6 @@
 export default class ListsController {
 
+    /*@ngInject*/
     constructor($scope, $rootScope, $mdDialog, listService, navigationService) {
         $rootScope.title = 'Einkaufslisten';
         $rootScope.loading = true;

@@ -3,6 +3,7 @@ import {NewItemController} from '../../item/new/NewItemController';
 import ListService from '../service/ListService';
 export default class ListViewController {
 
+    /*@ngInject*/
     constructor($scope, $rootScope, listService, itemService, $routeParams, $filter, articleService, $mdDialog, $q, navigationService) {
 
         this.$q = $q;

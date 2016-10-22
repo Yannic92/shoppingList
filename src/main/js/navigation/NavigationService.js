@@ -1,4 +1,6 @@
 export default class NavigationService {
+
+    /*@ngInject*/
     constructor($window, $location, $anchorScroll) {
         this.$window = $window;
         this.$location = $location;

@@ -1,5 +1,6 @@
 export default class NavigationController {
 
+    /*@ngInject*/
     constructor($rootScope, $scope, authService, $route, $mdComponentRegistry, $mdMedia, $timeout, $mdToast, navigationService) {
         this.lastPath = '';
         this.newVersionAvailable = false;

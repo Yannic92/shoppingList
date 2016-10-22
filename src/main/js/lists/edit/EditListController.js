@@ -1,6 +1,8 @@
 import angular from 'angular';
 
 export default class EditListController {
+
+    /*@ngInject*/
     constructor($scope, $rootScope, listService, $filter, $routeParams, $mdToast, $mdDialog, userService, $timeout) {
 
         this.listService = listService;

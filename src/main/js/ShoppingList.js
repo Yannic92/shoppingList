@@ -1,4 +1,5 @@
 import angular from 'angular';
+import ngRoute from 'angular-route';
 import ngResource from 'angular-resource';
 import ngMaterial from 'angular-material';
 import ngAnimate from 'angular-animate';
@@ -33,16 +34,13 @@ import ArticleController from './article/ArticleController';
 import DictionaryController from './article/dictionary/DictionaryController';
 import NavigationService from './navigation/NavigationService';
 
-/*global require*/
-require('angular-route');
-
-angular.module('shoppingList', ['ngRoute', ngResource, ngMaterial, ngAnimate, ngAria, ngMessages])
-    .config(($routeProvider, $httpProvider) => {
+angular.module('shoppingList', [ngRoute, ngResource, ngMaterial, ngAnimate, ngAria, ngMessages])
+    .config(/*@ngInject*/($routeProvider, $httpProvider) => {
         $routeProvider.otherwise({redirectTo: '/lists'});
         $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
         $httpProvider.interceptors.push('MyHttpInterceptor');
     })
-    .run(($rootScope) => {
+    .run(/*@ngInject*/($rootScope) => {
         $rootScope.authenticated = false;
         $rootScope.user = '';
         $rootScope.authenticationAlreadyChecked = false;
@@ -70,7 +68,7 @@ angular.module('shoppingList', ['ngRoute', ngResource, ngMaterial, ngAnimate, ng
     .controller('navMenuController', NavMenuController)
     .controller('leftSideNavController', LeftSideNavController)
     .controller('userDataController', UserDataController)
-    .config(($routeProvider) => {
+    .config(/*@ngInject*/($routeProvider) => {
         $routeProvider.when('/userData', {
             templateUrl: '/templates/user/edit/userData.html',
             controller: 'userDataController',
@@ -78,7 +76,7 @@ angular.module('shoppingList', ['ngRoute', ngResource, ngMaterial, ngAnimate, ng
         });
     })
     .controller('deleteUserController', DeleteUserController)
-    .config(($routeProvider) => {
+    .config(/*@ngInject*/($routeProvider) => {
         $routeProvider.when('/deleteAccount', {
             templateUrl: '/templates/user/delete/userDelete.html',
             controller: 'deleteUserController',
@@ -87,7 +85,7 @@ angular.module('shoppingList', ['ngRoute', ngResource, ngMaterial, ngAnimate, ng
     })
     .controller('listController', ListController)
     .controller('listsController', ListsController)
-    .config(($routeProvider) => {
+    .config(/*@ngInject*/($routeProvider) => {
         $routeProvider.when('/lists', {
             templateUrl: '/templates/lists/lists.html',
             controller: 'listsController',
@@ -95,7 +93,7 @@ angular.module('shoppingList', ['ngRoute', ngResource, ngMaterial, ngAnimate, ng
         });
     })
     .controller('listViewController', ListViewController)
-    .config(($routeProvider) => {
+    .config(/*@ngInject*/($routeProvider) => {
         $routeProvider.when('/lists/:listId', {
             templateUrl: '/templates/lists/view/view.html',
             controller: 'listViewController',
@@ -103,7 +101,7 @@ angular.module('shoppingList', ['ngRoute', ngResource, ngMaterial, ngAnimate, ng
         });
     })
     .controller('newListController', NewListController)
-    .config(($routeProvider) => {
+    .config(/*@ngInject*/($routeProvider) => {
         $routeProvider.when('/newList', {
             templateUrl: '/templates/lists/new/newList.html',
             controller: 'newListController',
@@ -111,7 +109,7 @@ angular.module('shoppingList', ['ngRoute', ngResource, ngMaterial, ngAnimate, ng
         });
     })
     .controller('editListController', EditListController)
-    .config(($routeProvider) => {
+    .config(/*@ngInject*/($routeProvider) => {
         $routeProvider.when('/lists/:id/edit', {
             templateUrl: '/templates/lists/edit/editList.html',
             controller: 'editListController',
@@ -120,7 +118,7 @@ angular.module('shoppingList', ['ngRoute', ngResource, ngMaterial, ngAnimate, ng
     })
     .controller('itemController', ItemController)
     .controller('registerController', RegisterController)
-    .config(($routeProvider) => {
+    .config(/*@ngInject*/($routeProvider) => {
         $routeProvider.when('/register', {
             templateUrl: '/templates/authentication/register/register.html',
             controller: 'registerController',
@@ -128,7 +126,7 @@ angular.module('shoppingList', ['ngRoute', ngResource, ngMaterial, ngAnimate, ng
         });
     })
     .controller('confirmationNotificationController', ConfirmationNotificationController)
-    .config(($routeProvider) => {
+    .config(/*@ngInject*/($routeProvider) => {
         $routeProvider.when('/register/confirmation', {
             templateUrl: '/templates/authentication/register/confirmation/confirmationNotification.html',
             controller: 'confirmationNotificationController',
@@ -136,7 +134,7 @@ angular.module('shoppingList', ['ngRoute', ngResource, ngMaterial, ngAnimate, ng
         });
     })
     .controller('confirmationController', ConfirmationController)
-    .config(($routeProvider) => {
+    .config(/*@ngInject*/($routeProvider) => {
         $routeProvider.when('/register/confirmation/:username/:code', {
             templateUrl: '/templates/authentication/register/confirmation/confirmation.html',
             controller: 'confirmationController',
@@ -144,7 +142,7 @@ angular.module('shoppingList', ['ngRoute', ngResource, ngMaterial, ngAnimate, ng
         });
     })
     .controller('loginController', LoginController)
-    .config(($routeProvider) => {
+    .config(/*@ngInject*/($routeProvider) => {
         $routeProvider.when('/login', {
             templateUrl: '/templates/authentication/login/login.html',
             controller: 'loginController',
@@ -157,7 +155,7 @@ angular.module('shoppingList', ['ngRoute', ngResource, ngMaterial, ngAnimate, ng
     })
     .controller('articleController', ArticleController)
     .controller('dictionaryController', DictionaryController)
-    .config(($routeProvider) => {
+    .config(/*@ngInject*/($routeProvider) => {
         $routeProvider.when('/dictionary', {
             templateUrl: '/templates/article/dictionary/dictionary.html',
             controller: 'dictionaryController'

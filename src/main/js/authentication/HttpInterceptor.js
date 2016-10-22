@@ -1,6 +1,8 @@
 import angular from 'angular';
 import HttpInterceptorBase from './HttpInterceptorBase';
 export default class HttpInterceptor extends HttpInterceptorBase{
+
+    /*@ngInject*/
     constructor($q, $injector, $rootScope, navigationService) {
 
 
@@ -13,7 +15,6 @@ export default class HttpInterceptor extends HttpInterceptorBase{
         this.connectionLossNotification = false;
 
         this.sessionTimeoutCheckPromise = {};
-
     }
 
     responseError(rejection) {

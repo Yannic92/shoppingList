@@ -1,5 +1,6 @@
 export default class NewListController {
 
+    /*@ngInject*/
     constructor($scope, $rootScope, listService, $mdToast, userService, navigationService) {
 
         this.userService = userService;

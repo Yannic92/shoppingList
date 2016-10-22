@@ -2,6 +2,7 @@ import HALResource from '../../services/HALResource';
 
 export default class UserService {
 
+    /*@ngInject*/
     constructor($resource, $q, $rootScope) {
         var userEndpoint = '/sLUsers/:username';
         var methods = {

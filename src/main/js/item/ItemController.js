@@ -1,5 +1,6 @@
 export default class ItemController {
 
+    /*@ngInject*/
     constructor($scope, itemService, $timeout) {
 
         this.$timeout = $timeout;

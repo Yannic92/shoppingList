@@ -1,5 +1,6 @@
 export default class DeleteUserController {
 
+    /*@ngInject*/
     constructor($rootScope, userService, authService, navigationService) {
 
         this.userService = userService;

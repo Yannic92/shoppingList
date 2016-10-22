@@ -1,5 +1,6 @@
 export default class LeftSideNavController {
 
+    /*@ngInject*/
     constructor($mdMedia, $mdComponentRegistry, $rootScope, navigationService){
 
         this.$mdMedia = $mdMedia;

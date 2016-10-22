@@ -1,5 +1,6 @@
 export default class LoginController {
 
+    /*@ngInject*/
     constructor($rootScope, $scope, authService, $mdToast, $mdMedia, userService, $routeParams, navigationService) {
 
         this.$rootScope = $rootScope;

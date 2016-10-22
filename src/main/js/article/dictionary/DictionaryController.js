@@ -1,6 +1,9 @@
 export default class DictionaryController {
 
+    /*@ngInject*/
     constructor($rootScope, $scope, articleService, $mdDialog, $mdToast) {
+
+        this.$rootScope = $rootScope;
         this.articleService = articleService;
         this.$mdDialog = $mdDialog;
         this.$mdToast = $mdToast;
@@ -52,8 +55,8 @@ export default class DictionaryController {
     }
 
     _initDestroyListener($scope) {
-        $scope.$on('$destroy', () => {
 
+        $scope.$on('$destroy', () => {
             this.$rootScope.reset();
         });
     }

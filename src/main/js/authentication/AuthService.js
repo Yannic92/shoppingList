@@ -1,5 +1,6 @@
 export default class AuthService {
 
+    /*@ngInject*/
     constructor($http, $rootScope, userService) {
         this.$http = $http;
         this.$rootScope = $rootScope;

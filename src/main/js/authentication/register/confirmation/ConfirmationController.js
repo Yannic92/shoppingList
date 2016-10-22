@@ -1,5 +1,6 @@
 export default class ConfirmationController {
 
+    /*@ngInject*/
     constructor($scope, $rootScope, userService, $routeParams) {
 
         this.$rootScope = $rootScope;

@@ -1,5 +1,6 @@
 export default class ItemService {
 
+    /*@ngInject*/
     constructor($resource, $filter, articleService) {
 
         this.$filter = $filter;

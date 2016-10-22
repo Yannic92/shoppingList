@@ -1,4 +1,5 @@
 export default class HttpInterceptor {
+
     constructor() {
         ['request', 'requestError', 'response', 'responseError']
             .forEach((method) => {

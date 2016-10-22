@@ -1,5 +1,6 @@
 export default class RegisterController {
 
+    /*@ngInject*/
     constructor($scope, $rootScope, userService, navigationService) {
 
         this.$rootScope = $rootScope;

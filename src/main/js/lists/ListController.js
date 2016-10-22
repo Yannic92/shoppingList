@@ -1,6 +1,7 @@
 import ListService from './service/ListService';
 export default class ListController {
 
+    /*@ngInject*/
     constructor($scope, $timeout, listService, navigationService, $mdDialog) {
         this.optionsShown = false;
         this.optionsVisible = false;

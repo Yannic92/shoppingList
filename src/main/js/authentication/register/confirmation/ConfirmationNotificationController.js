@@ -1,5 +1,6 @@
 export default class ConfirmationNotificationController {
 
+    /*@ngInject*/
     constructor($scope, $rootScope) {
 
         $rootScope.title = 'Registrierung bestätigen';

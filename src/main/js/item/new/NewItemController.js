@@ -2,6 +2,7 @@ import angular from 'angular';
 
 export class NewItemController {
 
+    /*@ngInject*/
     constructor($mdDialog, newItem) {
 
         this.newItem = angular.copy(newItem);
