@@ -1,10 +1,11 @@
 import HALResource from '../services/HALResource';
 export default class ArticleService {
 
-    constructor($resource, $filter, $q) {
+    constructor($resource, $filter, $q, $rootScope) {
 
         this.$filter = $filter;
         this.$q = $q;
+        this.$rootScope = $rootScope;
 
         this.articlesResource = $resource('/articles/:id', null, {
             'update': {method: 'PUT'},

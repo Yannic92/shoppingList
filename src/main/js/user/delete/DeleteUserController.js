@@ -1,10 +1,10 @@
 export default class DeleteUserController {
 
-    constructor($rootScope, userService, authService, $location) {
+    constructor($rootScope, userService, authService, navigationService) {
 
         this.userService = userService;
         this.authService = authService;
-        this.$location = $location;
+        this.navigationService = navigationService;
         this.$rootScope = $rootScope;
         this.$rootScope.title = 'Konto löschen';
     }
@@ -20,7 +20,7 @@ export default class DeleteUserController {
     _logout() {
         this.authService.logout()
             .finally(() => {
-                this.$location.path('/login');
+                this.navigationService.goto('/login');
             });
     }
 }

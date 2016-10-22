@@ -1,10 +1,13 @@
+import ListService from './service/ListService';
 export default class ListController {
 
-    constructor($scope, $timeout, listService) {
+    constructor($scope, $timeout, listService, navigationService, $mdDialog) {
         this.optionsShown = false;
         this.optionsVisible = false;
         this.optionsVisibleStopped = false;
+        this.navigationService = navigationService;
 
+        this.$mdDialog = $mdDialog;
         this.$timeout = $timeout;
         this.listService = listService;
 
@@ -45,10 +48,14 @@ export default class ListController {
         });
     }
 
+    goto(path) {
+        this.navigationService.goto(path);
+    }
+
     _showDeleteConfirmationDialog(list, ev) {
         let dialog = this.$mdDialog.confirm()
             .title('Möchtest du die Liste ' + list.name + ' wirklich löschen?')
-            .content(this.listService.getDeleteMessage(list))
+            .content(ListService.getDeleteMessage(list))
             .targetEvent(ev)
             .ok('Ja')
             .cancel('Nein');

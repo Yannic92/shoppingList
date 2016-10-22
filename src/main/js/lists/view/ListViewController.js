@@ -1,15 +1,16 @@
 import angular from 'angular';
 import {NewItemController} from '../../item/new/NewItemController';
+import ListService from '../service/ListService';
 export default class ListViewController {
 
-    constructor($scope, $rootScope, listService, itemService, $routeParams, $filter, articleService, $mdDialog, $q) {
+    constructor($scope, $rootScope, listService, itemService, $routeParams, $filter, articleService, $mdDialog, $q, navigationService) {
 
-        this.$scope = $scope;
         this.$q = $q;
-        this.listSerivce = listService;
+        this.listService = listService;
         this.$rootScope = $rootScope;
         this.$mdDialog = $mdDialog;
         this.itemService = itemService;
+        this.navigationService = navigationService;
         this.articles = articleService.get();
         this.list = {
             name: '',
@@ -19,7 +20,7 @@ export default class ListViewController {
         this.creating = false;
         this._initNewItem();
         this._initLists($routeParams, $filter, $scope);
-        this._initDestroyListener();
+        this._initDestroyListener($scope);
     }
 
     update() {
@@ -50,22 +51,22 @@ export default class ListViewController {
         if (this.newItem.article.name != '') {
 
             this._showNewItemDialog(ev)
-                .then(this._createItem)
-                .then(this._addItemToList)
-                .then(this._initNewItem)
-                .finally(this._finishCreating);
+                .then((item) => this._createItem(item))
+                .then((createdItem) => this._addItemToList(createdItem))
+                .then(() => this._initNewItem())
+                .finally(() => this._finishCreating());
         }
     }
 
     clearList(ev) {
 
-        return this._showClearListConfirmationDialog(ev).then(this._deleteDoneItems);
+        return this._showClearListConfirmationDialog(ev).then(() => this._deleteDoneItems());
     }
 
     deleteList(ev) {
         this._showDeleteListConfirmationDialog(ev)
-            .then(this._deleteList)
-            .then(this._goToPreviousList);
+            .then(() => this.listService.delete(this.list))
+            .then(() => this._goToPreviousList());
     }
 
     listIsEmpty() {
@@ -110,12 +111,6 @@ export default class ListViewController {
         return this.itemService.create(item);
     }
 
-    _deleteList() {
-        const index = this.lists.indexOf(this.list);
-        this.listService.delete(this.list);
-        return index;
-    }
-
     _deleteDoneItems() {
         var promises = [];
         var notDoneItems = [];
@@ -142,9 +137,9 @@ export default class ListViewController {
     _goToPreviousList(lastIndex) {
         if (this.lists && this.lists.length && this.lists.length > 0) {
             const newIndex = lastIndex < this.lists.length ? lastIndex : lastIndex - 1;
-            this.$scope.$parent.goto('/lists/' + this.lists[newIndex].entityId, true);
+            this.navigationService.goto('/lists/' + this.lists[newIndex].entityId, true);
         } else {
-            this.$scope.$parent.goto('/lists', true);
+            this.navigationService.goto('/lists', true);
         }
     }
 
@@ -156,6 +151,8 @@ export default class ListViewController {
     _showNewItemDialog(ev) {
         return this.$mdDialog.show({
             controller: NewItemController,
+            controllerAs: 'ctrl',
+            locals: {newItem: this.newItem},
             templateUrl: 'templates/item/new/newItem.html',
             parent: angular.element(document.body),
             targetEvent: ev,
@@ -167,7 +164,7 @@ export default class ListViewController {
     _showDeleteListConfirmationDialog(ev) {
         var dialog = this.$mdDialog.confirm()
             .title('Möchtest du die Liste ' + this.list.name + ' wirklich löschen?')
-            .content(this.listService.getDeleteMessage())
+            .content(ListService.getDeleteMessage())
             .targetEvent(ev)
             .ok('Ja')
             .cancel('Nein');
@@ -197,8 +194,8 @@ export default class ListViewController {
         };
     }
 
-    _initLists($routeParams, $filter, $scope) {
-        this.lists = this.listSerivce.get();
+    _initLists($routeParams, $filter) {
+        this.lists = this.listService.get();
 
         this.lists.promise
             .then(() => {
@@ -206,12 +203,12 @@ export default class ListViewController {
                     this.list = $filter('filter')(this.lists, {entityId: $routeParams.listId})[0];
 
                     if (!this.list) {
-                        $scope.$parent.goto('/lists', true);
+                        this.navigationService.goto('/lists', true);
                         return;
                     }
 
                     if (!this.list.updated) {
-                        return this.update().then(this._init);
+                        return this.update().then(() => this._init());
                     } else {
                         this._init();
                     }
@@ -229,18 +226,18 @@ export default class ListViewController {
             {
                 icon: '/img/icons/Toggle/ic_check_box_24px.svg',
                 text: 'Alles erledigt',
-                action: this.setAllDone,
-                disabled: this.listDoesntContainsUndoneItems
+                action: () => this.setAllDone(),
+                disabled: () => this.listDoesntContainsUndoneItems()
             }, {
                 icon: '/img/icons/Toggle/ic_check_box_outline_blank_24px.svg',
                 text: 'Nichts erledigt',
-                action: this.setAllUndone,
-                disabled: this.listDoesntContainsDoneItems
+                action: () => this.setAllUndone(),
+                disabled: () => this.listIsEmpty() || !this.listDoesntContainsUndoneItems()
             }, {
                 icon: '/img/icons/communication/ic_clear_all_24px.svg',
                 text: 'Liste leeren',
-                action: this.clearList,
-                disabled: this.listDoesntContainsDoneItems
+                action: () => this.clearList(),
+                disabled: () => this.listIsEmpty() || !this.listDoesntContainsUndoneItems()
             }, {
                 icon: 'img/icons/action/ic_settings_24px.svg',
                 text: 'Liste bearbeiten',
@@ -248,22 +245,22 @@ export default class ListViewController {
             }, {
                 icon: 'img/icons/action/ic_delete_24px.svg',
                 text: 'Liste löschen',
-                action: this.deleteList
+                action: () => this.deleteList()
             }
         ];
 
         this.$rootScope.shortCutAction = {
             parameters: '$mdOpenMenu, $event',
             icon: 'img/icons/notification/ic_sync_24px.svg',
-            action: this.update,
+            action: () => this.update(),
             available: true,
             ariaLabel: 'refetch current list from server'
         };
     }
 
-    _initDestroyListener() {
+    _initDestroyListener($scope) {
 
-        this.$scope.$on('$destroy', () => {
+        $scope.$on('$destroy', () => {
             this.$rootScope.reset();
         });
     }

@@ -1,24 +1,24 @@
-<md-dialog aria-label="create new item ({{newItem.article.name}})"  ng-cloak>
+<md-dialog aria-label="create new item ({{ctrl.newItem.article.name}})">
     <form>
         <md-toolbar>
             <div class="md-toolbar-tools">
-                <h2 class="md-headline md-toolbar-item">{{newItem.article.name}}</h2>
+                <h2 class="md-headline md-toolbar-item">{{ctrl.newItem.article.name}}</h2>
             </div>
         </md-toolbar>
         <md-dialog-content layout="column">
             <div class="md-dialog-content">
                 <md-input-container>
                     <label md-autofocus>Menge</label>
-                    <input ng-model="newItem.count">
+                    <input ng-model="ctrl.newItem.count">
                 </md-input-container>
             </div>
         </md-dialog-content>
         <md-dialog-actions layout="row">
             <span flex></span>
-            <md-button ng-click="cancel()">
+            <md-button ng-click="ctrl.cancel()">
                 Abbrechen
             </md-button>
-            <md-button type="submit" ng-click="create()" style="margin-right:20px;">
+            <md-button type="submit" ng-click="ctrl.create()" style="margin-right:20px;">
                 Erstellen
             </md-button>
         </md-dialog-actions>

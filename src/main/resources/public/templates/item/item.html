@@ -1,15 +1,15 @@
-<md-list-item ng-if="!ctrl.optionActive" class="md-2-line gray-on-hover" ng-class="{'md-list-item-with-secondary': optionsVisible}" role="listitem" on-long-press="showOptions()" md-swipe-left="showOptions()"
-ng-mouseenter="showOptionsOnElement()" ng-mouseleave="hideOptionsOnElement()" on-touch-end="hideOptionsOnElement()">
-    <md-checkbox aria-label="item" ng-change="updateItem(item)" class="md-primary" md-no-ink ng-model="item.done"></md-checkbox>
+<md-list-item ng-if="!ctrl.optionActive" class="md-2-line gray-on-hover" ng-class="{'md-list-item-with-secondary': ctrl.optionsVisible}" role="listitem" on-long-press="ctrl.showOptions()" md-swipe-left="ctrl.showOptions()"
+ng-mouseenter="ctrl.showOptionsOnElement()" ng-mouseleave="ctrl.hideOptionsOnElement()" on-touch-end="ctrl.hideOptionsOnElement()">
+    <md-checkbox aria-label="item" ng-change="ctrl.updateItem(item)" class="md-primary" md-no-ink ng-model="item.done"></md-checkbox>
     <div class="md-list-item-text" layout="column">
         <h3 ng-class="{ 'striked-out': item.done}">{{item.article.name}}</h3>
         <p  class="shorten-long-text" ng-class="{ 'striked-out': item.done}">{{item.count}} </p>
     </div>
-    <md-icon ng-if="!item.deleting && optionsVisible" aria-label="delete item" ng-click="deleteItem(item)" class="md-secondary option" md-svg-src="img/icons/action/ic_delete_24px.svg"></md-icon>
+    <md-icon ng-if="!item.deleting && ctrl.optionsVisible" aria-label="delete item" ng-click="ctrl.deleteItem(item)" class="md-secondary option" md-svg-src="img/icons/action/ic_delete_24px.svg"></md-icon>
     <md-progress-circular ng-if="item.deleting" class="md-secondary" md-mode="indeterminate" md-diameter="20px"></md-progress-circular>
 </md-list-item>
-<md-list-item ng-show="optionActive" class="md-2-line" role="listitem"
-              on-long-press="hideOptionsOnElement()" on-touch-end="hideOptionsOnElement()">
+<md-list-item ng-show="ctrl.optionActive" class="md-2-line" role="listitem"
+              on-long-press="ctrl.hideOptionsOnElement()" on-touch-end="ctrl.hideOptionsOnElement()">
     <md-fab-toolbar flex class="hide-overflow" md-open="ctrl.optionsShown" count="1" md-direction="left">
         <md-fab-trigger class="align-with-text">
             <md-button aria-label="menu" class="md-fab md-primary">
@@ -24,7 +24,7 @@ ng-mouseenter="showOptionsOnElement()" ng-mouseleave="hideOptionsOnElement()" on
                     </h3>
                     <span flex></span>
                     <md-fab-actions>
-                        <md-button aria-label="comment" ng-click="deleteItem(item)" class="md-icon-button">
+                        <md-button aria-label="comment" ng-click="ctrl.deleteItem(item)" class="md-icon-button">
                             <md-icon aria-label="delete item" class="md-secondary" md-svg-src="img/icons/action/ic_delete_24px.svg"></md-icon>
                         </md-button>
                     </md-fab-actions>

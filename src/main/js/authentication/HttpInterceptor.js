@@ -1,13 +1,13 @@
 import angular from 'angular';
 import HttpInterceptorBase from './HttpInterceptorBase';
 export default class HttpInterceptor extends HttpInterceptorBase{
-    constructor($location, $q, $injector, $rootScope) {
+    constructor($q, $injector, $rootScope, navigationService) {
 
 
         super();
         this.$rootScope = $rootScope;
         this.$injector = $injector;
-        this.$location = $location;
+        this.navigationService = navigationService;
         this.$q = $q;
         this.sessionTimeOutCheck = false;
         this.connectionLossNotification = false;
@@ -59,16 +59,16 @@ export default class HttpInterceptor extends HttpInterceptorBase{
                         return this._handleSessionTimeout(rejection);
                     });
             } else if (!this.$injector.get('authService').loggingIn) {
-                this.$location.path('/login').replace();
+                this.navigationService.goto('/login', true);
             }
         } else if (rejection.status == 400 || rejection.status == 404) {
             this.$rootScope.error = true;
             this.$rootScope.errorMessage = rejection.data.message;
-            this.$rootScope.goToTop();
+            this.navigationService.goToTopOfThePage();
         } else {
             this.$rootScope.error = true;
             this.$rootScope.errorMessage = 'Sorry! Etwas ging schief. Bitte versuche es später erneut';
-            this.$rootScope.goToTop();
+            this.navigationService.goToTopOfThePage();
         }
         return this.$q.reject(rejection);
     }
@@ -87,11 +87,11 @@ export default class HttpInterceptor extends HttpInterceptorBase{
         ).then(() => {
             this.$injector.get('authService').logout();
         }).then(() => {
-            this.$location.path('/login');
+            this.navigationService.goto('/login');
         }).finally(() => {
             this.$rootScope.error = true;
             this.$rootScope.errorMessage = 'Verbindung fehlgeschlagen';
-            this.$rootScope.goToTop();
+            this.navigationService.goToTopOfThePage();
             return this.$q.reject(rejection);
         });
     }

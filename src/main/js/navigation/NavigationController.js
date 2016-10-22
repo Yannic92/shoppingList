@@ -1,20 +1,19 @@
 export default class NavigationController {
 
-    constructor($rootScope, $scope, $location, authService, $route, $mdComponentRegistry, $mdMedia, $window, $timeout, $mdToast) {
+    constructor($rootScope, $scope, authService, $route, $mdComponentRegistry, $mdMedia, $timeout, $mdToast, navigationService) {
         this.lastPath = '';
         this.newVersionAvailable = false;
         this.initialLoad = true;
 
         this.$mdComponentRegistry = $mdComponentRegistry;
         this.$mdMedia = $mdMedia;
-        this.$location = $location;
         this.$rootScope = $rootScope;
         this.authService = authService;
         this.$route = $route;
         this.$timeout = $timeout;
         this.$mdToast = $mdToast;
-        this.$window = $window;
         this.$scope = $scope;
+        this.navigationService = navigationService;
 
         this._initRouteChangeStartListener();
         this._initRouteChangeSuccessListener();
@@ -22,25 +21,11 @@ export default class NavigationController {
         this._initUpdateReadyListener();
     }
 
-    openNav() {
-        this.$mdComponentRegistry.when('leftNav').then(function (it) {
-            it.open();
-        });
-    }
-
     toggleNav() {
 
         this.$mdComponentRegistry.when('leftNav').then(function (it) {
             it.toggle();
         });
-    }
-
-    closeNav() {
-        if (!this.$mdMedia('gt-sm')) {
-            this.$mdComponentRegistry.when('leftNav').then(function (it) {
-                it.close();
-            });
-        }
     }
 
     static _urlIsDefined(url) {
@@ -62,7 +47,7 @@ export default class NavigationController {
     }
 
     isOnRoot() {
-        var currentPath = this.$location.path();
+        var currentPath = this.navigationService.getCurrentPath();
 
         return currentPath && currentPath == '/lists';
     }
@@ -73,7 +58,7 @@ export default class NavigationController {
             if (NavigationController._urlIsDefined(newUrl)) {
                 this.lastPath = newUrl;
             }
-            this.goto('/login', true);
+            this.navigationService.goto('/login', true);
         }
     }
 
@@ -97,7 +82,7 @@ export default class NavigationController {
             this.processingHistoryBackChain = false;
             this.routeIsLoading = false;
             this.$rootScope.loading = false;
-            this.goto('/login', true);
+            this.navigationService.goto('/login', true);
             this.$mdToast.show(
                 this.$mdToast.simple()
                     .content('Zum Beenden erneut tippen')
@@ -143,10 +128,9 @@ export default class NavigationController {
                 this.initialLoad = false;
             }
 
-            this.closeNav();
             this.$rootScope.errorMessage = '';
             this.$rootScope.error = false;
-            this.$rootScope.goToTop();
+            this.navigationService.goToTopOfThePage();
 
             const isRoot = this.isOnRoot();
             this.toggleButtonActive = isRoot && this.$rootScope.authenticated;
@@ -157,7 +141,7 @@ export default class NavigationController {
     _initErrorListener() {
         this.$rootScope.$watch('error', () => {
             if (this.$rootScope.error) {
-                this.$rootScope.goToTop();
+                this.navigationService.goToTopOfThePage();
             }
         });
     }
@@ -171,23 +155,10 @@ export default class NavigationController {
         }
     }
 
-    goto(path, replace) {
-
-        this.closeNav();
-        this.$location.path(path);
-        if (replace) {
-            this.$location.replace();
-        }
-    }
-
-    gotoExternal(path) {
-        this.$window.location.href = path;
-    }
-
     logout() {
         this.authService.logout()
             .then(() => {
-                this.goto('/login');
+                this.navigationService.goto('/login');
             });
     }
 
@@ -202,11 +173,11 @@ export default class NavigationController {
     }
 
     reload() {
-        this.$window.location.reload();
+        this.navigationService.reload();
     }
 
     back() {
-        this.$window.history.back();
+        this.navigationService.back();
     }
 
     isXs() {

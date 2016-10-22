@@ -5,7 +5,7 @@ export default class ItemController {
         this.$timeout = $timeout;
         this.itemService = itemService;
 
-        this.list = $scope.$parent.list;
+        this.list = $scope.$parent.$parent.$parent.ctrl.list;
         this.optionsVisible = false;
         this.optionsVisibleStopped = false;
         this._initOptionsShownListener($scope);

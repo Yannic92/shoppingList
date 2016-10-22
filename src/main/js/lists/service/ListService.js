@@ -73,6 +73,7 @@ export default class ListService {
                 let existingList = this.$filter('filter')(this.lists, {entityId: list.entityId})[0];
                 let index = this.lists.indexOf(existingList);
                 this.lists.splice(index, 1);
+                return index;
             });
     }
 
@@ -135,7 +136,7 @@ export default class ListService {
         }
 
         for (let i = 0; i < resources.length; i++) {
-            let entity = ListService.toEntity(resources[i]);
+            let entity = ListService._toEntity(resources[i]);
             entities.push(entity);
         }
 

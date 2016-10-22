@@ -1,4 +1,4 @@
-<div ng-if="listsAreEmpty() && !loading" layout="column" layout-align="center center">
+<div ng-if="ctrl.listsAreEmpty() && !loading" layout="column" layout-align="center center">
     <h2 class="md-display-1 text-centered">
         Du hast noch keine Einkaufsliste
         <md-icon md-svg-src="img/icons/social/ic_mood_bad_48px.svg"></md-icon>
@@ -10,8 +10,8 @@
 </div>
 
 <md-list ng-cloak>
-    <ng-include ng-repeat="list in lists | orderBy: 'name' track by $index"
+    <ng-include ng-repeat="list in ctrl.lists | orderBy: 'name' track by $index"
                 src="'/templates/lists/list.html'"
-                ng-controller="listController">
+                ng-controller="listController as ctrl">
     </ng-include>
 </md-list>

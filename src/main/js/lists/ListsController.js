@@ -1,10 +1,10 @@
 export default class ListsController {
 
-    constructor($scope, $rootScope, $mdDialog, listService) {
+    constructor($scope, $rootScope, $mdDialog, listService, navigationService) {
         $rootScope.title = 'Einkaufslisten';
         $rootScope.loading = true;
-        this.$scope = $scope;
         this.listService = listService;
+        this.navigationService = navigationService;
 
         this._initOptions($rootScope);
         this._initLists($rootScope);
@@ -17,7 +17,7 @@ export default class ListsController {
     }
 
     newList() {
-        this.$scope.$parent.goto('/newList');
+        this.navigationService.goto('/newList');
     }
 
     deleteAllLists(ev) {
@@ -39,15 +39,15 @@ export default class ListsController {
             {
                 icon: '/img/icons/communication/ic_clear_all_24px.svg',
                 text: 'Alle Listen Löschen',
-                action: this.deleteAllLists,
-                disabled: this.listsAreEmpty
+                action: () => this.deleteAllLists(),
+                disabled: () => this.listsAreEmpty()
             }
         ];
 
         $rootScope.shortCutAction = {
             parameters: '$mdOpenMenu, $event',
             icon: 'img/icons/action/ic_add_shopping_cart_24px.svg',
-            action: this.newList,
+            action: () => this.newList(),
             available: true,
             ariaLabel: 'Neue Liste erstellen'
         };

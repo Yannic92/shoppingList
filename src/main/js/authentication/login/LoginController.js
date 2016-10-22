@@ -1,13 +1,12 @@
 export default class LoginController {
 
-    constructor($rootScope, $scope, $location, authService, $mdToast, $mdMedia, userService, $window, $routeParams) {
+    constructor($rootScope, $scope, authService, $mdToast, $mdMedia, userService, $routeParams, navigationService) {
 
         this.$rootScope = $rootScope;
         this.$routeParams = $routeParams;
         this.authService = authService;
         this.userService = userService;
-        this.$window = $window;
-        this.$location = $location;
+        this.navigationService = navigationService;
         this.$mdToast = $mdToast;
         this.$mdMedia = $mdMedia;
 
@@ -33,12 +32,12 @@ export default class LoginController {
                     this.userService.storeCredentials(this.credentials);
                 }
                 this._showWelcomeToast();
-                this.$location.path('/lists').replace();
+                this.navigationService.goto('/lists', true);
             }, (error) => {
                 if (error.status == 401) {
                     this.$rootScope.error = true;
                     this.$rootScope.errorMessage = 'Zugangsdaten nicht korrekt';
-                    this.$rootScope.goToTop();
+                    this.navigationService.goToTopOfThePage();
                 }
             }).finally(() => {
                 this._loggingInFinished();
@@ -55,7 +54,7 @@ export default class LoginController {
         }
 
         if (this.authService.loggedOut) {
-            this.$window.location.reload();
+            this.navigationService.reload();
         }
 
         if (!this.$rootScope.authenticationAlreadyChecked) {
@@ -70,7 +69,7 @@ export default class LoginController {
         this.authService.isAuthenticated()
             .then((user) => {
                 this.$rootScope.user = user;
-                this.$location.path('/lists').replace();
+                this.navigationService.goto('/lists', true);
             }).finally(() => {
                 this._loggingInFinished();
             });

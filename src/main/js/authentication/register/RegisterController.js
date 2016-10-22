@@ -1,10 +1,10 @@
 export default class RegisterController {
 
-    constructor($scope, $rootScope, userService, $location) {
+    constructor($scope, $rootScope, userService, navigationService) {
 
         this.$rootScope = $rootScope;
         this.userService = userService;
-        this.$location = $location;
+        this.navigationService = navigationService;
 
         this.$rootScope.title = 'Registrieren';
         this.$rootScope.loading = false;
@@ -18,7 +18,7 @@ export default class RegisterController {
         this.$rootScope.loading = true;
         this.userService.create(this.user)
             .then(() => {
-                this.$location.path('/register/confirmation');
+                this.navigationService.goto('/register/confirmation');
             })
             .finally(() => {
                 this.$rootScope.loading = false;

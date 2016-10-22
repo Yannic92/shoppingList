@@ -1,9 +1,9 @@
 <md-toolbar>
     <div class="titlebar md-toolbar-tools">
-        <md-button ng-if="toggleButtonActive" aria-label="toggle menu" class="md-icon-button" ng-click="toggleNav()" hide-gt-sm>
+        <md-button ng-if="ctrl.toggleButtonActive" aria-label="toggle menu" class="md-icon-button" ng-click="ctrl.toggleNav()" hide-gt-sm>
             <md-icon md-svg-src="img/icons/navigation/ic_menu_24px.svg"></md-icon>
         </md-button>
-        <md-button ng-if="backButtonActive" aria-label="toggle menu" class="md-icon-button" ng-click="back()" hide-gt-sm>
+        <md-button ng-if="ctrl.backButtonActive" aria-label="toggle menu" class="md-icon-button" ng-click="ctrl.back()" hide-gt-sm>
             <md-icon md-svg-src="img/icons/navigation/ic_arrow_back_24px.svg"></md-icon>
         </md-button>
         <div layout="row" class="fill-height title-with-tools" flex>
@@ -15,8 +15,8 @@
                 <md-button ng-if="shortCutAction.available" aria-label="{{shortCutAction.ariaLabel}}" class="md-icon-button" ng-click="shortCutAction.action()">
                     <md-icon md-svg-src="{{shortCutAction.icon}}"></md-icon>
                 </md-button>
-                <ng-include ng-if="authenticated && moreThanOneOptionAvailable()" ng-controller="navMenu" src="'templates/navigation/navMenu/navMenu.html'"></ng-include>
-                <md-button ng-if="authenticated && optionsAvailable() && !moreThanOneOptionAvailable()" aria-label="{{options[0].text}}" class="md-icon-button" ng-click="options[0].action()">
+                <ng-include ng-if="authenticated && ctrl.moreThanOneOptionAvailable()" ng-controller="navMenuController as ctrl" src="'templates/navigation/navMenu/navMenu.html'"></ng-include>
+                <md-button ng-if="authenticated && ctrl.optionsAvailable() && !ctrl.moreThanOneOptionAvailable()" aria-label="{{options[0].text}}" class="md-icon-button" ng-click="options[0].action()">
                     <md-icon md-svg-src="{{options[0].icon}}"></md-icon>
                 </md-button>
             </div>
@@ -32,27 +32,27 @@
                 {{errorMessage}}
             </span>
             <div class="md-toolbar-item" layout="row">
-                <md-button aria-label="close error" class="md-icon-button" ng-click="closeError()">
+                <md-button aria-label="close error" class="md-icon-button" ng-click="ctrl.closeError()">
                     <md-icon md-svg-src="/img/icons/navigation/ic_close_24px.svg"></md-icon>
                 </md-button>
             </div>
         </div>
     </md-toolbar>
-    <md-toolbar class="md-hue-3" ng-class="{'md-tall' : isXs()}" ng-if="newVersionAvailable" layout="row" layout-align="center center">
+    <md-toolbar class="md-hue-3" ng-class="{'md-tall' : ctrl.isXs()}" ng-if="ctrl.newVersionAvailable" layout="row" layout-align="center center">
         <div class="titlebar md-toolbar-tools fill-height text-centered" layout="row" layout-align="center center">
             <div flex>
-                <md-button ng-click="reload()" class="update-notification">
+                <md-button ng-click="ctrl.reload()" class="update-notification">
                     <md-icon md-svg-src="/img/icons/navigation/ic_refresh_24px.svg"></md-icon>
                     Eine neue Version ist verfügbar: Jetzt aktualisieren!
                 </md-button>
             </div>
             <div class="md-toolbar-item" layout="row">
-                <md-button aria-label="close error" class="md-icon-button" ng-click="closeUpdateNotification()">
+                <md-button aria-label="close error" class="md-icon-button" ng-click="ctrl.closeUpdateNotification()">
                     <md-icon md-svg-src="/img/icons/navigation/ic_close_24px.svg"></md-icon>
                 </md-button>
             </div>
         </div>
     </md-toolbar>
-    <loading-cycle layout-padding flex ng-if="loading || routeIsLoading"></loading-cycle>
-    <div ng-if="!routeIsLoading" ng-view></div>
+    <loading-cycle layout-padding flex ng-if="loading || ctrl.routeIsLoading"></loading-cycle>
+    <div ng-if="!ctrl.routeIsLoading" ng-view></div>
 </md-content>

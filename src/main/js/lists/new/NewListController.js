@@ -1,9 +1,10 @@
 export default class NewListController {
 
-    constructor($scope, $rootScope, listService, $mdToast, userService) {
-        this.$scope = $scope;
+    constructor($scope, $rootScope, listService, $mdToast, userService, navigationService) {
+
         this.userService = userService;
         this.listService = listService;
+        this.navigationService = navigationService;
         this.$rootScope = $rootScope;
         this.$mdToast = $mdToast;
         this.$rootScope.title = 'Neue Einkaufsliste';
@@ -20,6 +21,8 @@ export default class NewListController {
             .content('Neue Liste erstellt')
             .position('bottom right')
             .hideDelay(3000);
+
+        this._initDestroyListener($scope);
     }
 
     hasProperty(user) {
@@ -55,7 +58,7 @@ export default class NewListController {
         this.listService.create(this.list)
             .then((createdList) => {
                 this._showListCreatedToast();
-                this.$scope.$parent.goto('/lists/' + createdList.entityId, true);
+                this.navigationService.goto('/lists/' + createdList.entityId, true);
             })
             .finally(() => {
                 this.$rootScope.loading = false;

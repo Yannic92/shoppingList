@@ -31,43 +31,35 @@ import LoginController from './authentication/login/LoginController';
 import ArticleService from './article/ArticleService';
 import ArticleController from './article/ArticleController';
 import DictionaryController from './article/dictionary/DictionaryController';
+import NavigationService from './navigation/NavigationService';
 
 /*global require*/
 require('angular-route');
 
 angular.module('shoppingList', ['ngRoute', ngResource, ngMaterial, ngAnimate, ngAria, ngMessages])
-    .config(['$routeProvider', '$httpProvider',
-        ($routeProvider, $httpProvider) => {
-            $routeProvider.otherwise({redirectTo: '/lists'});
-            $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-            $httpProvider.interceptors.push('MyHttpInterceptor');
-        }
-    ])
-    .run(['$rootScope', '$location', '$anchorScroll',
-        ($rootScope, $location, $anchorScroll) => {
-            $rootScope.authenticated = false;
-            $rootScope.user = '';
-            $rootScope.authenticationAlreadyChecked = false;
-            $rootScope.reset = () => {
-                $rootScope.options = [];
-                $rootScope.title = '';
-                $rootScope.shortCutAction = {
-                    available: false
-                };
-                $rootScope.loading = false;
+    .config(($routeProvider, $httpProvider) => {
+        $routeProvider.otherwise({redirectTo: '/lists'});
+        $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+        $httpProvider.interceptors.push('MyHttpInterceptor');
+    })
+    .run(($rootScope) => {
+        $rootScope.authenticated = false;
+        $rootScope.user = '';
+        $rootScope.authenticationAlreadyChecked = false;
+        $rootScope.reset = () => {
+            $rootScope.options = [];
+            $rootScope.title = '';
+            $rootScope.shortCutAction = {
+                available: false
             };
-            $rootScope.goToTop = () => {
-                $location.hash('top');
-                $anchorScroll();
-                $location.hash('');
-
-            };
-        }
-    ])
+            $rootScope.loading = false;
+        };
+    })
     .directive('onLongPress', OnLongPressDirective)
     .directive('loadingCycle', LoadingCycle)
     .directive('focusMe', FocusMeDirective)
     .directive('compareTo', CompareToDirective)
+    .service('navigationService', NavigationService)
     .service('MyHttpInterceptor', HttpInterceptor)
     .service('userService', UserService)
     .service('listService', ListService)
@@ -78,81 +70,81 @@ angular.module('shoppingList', ['ngRoute', ngResource, ngMaterial, ngAnimate, ng
     .controller('navMenuController', NavMenuController)
     .controller('leftSideNavController', LeftSideNavController)
     .controller('userDataController', UserDataController)
-    .config(['$routeProvider', ($routeProvider) => {
+    .config(($routeProvider) => {
         $routeProvider.when('/userData', {
             templateUrl: '/templates/user/edit/userData.html',
             controller: 'userDataController',
             controllerAs: 'ctrl'
         });
-    }])
+    })
     .controller('deleteUserController', DeleteUserController)
-    .config(['$routeProvider', ($routeProvider) => {
+    .config(($routeProvider) => {
         $routeProvider.when('/deleteAccount', {
             templateUrl: '/templates/user/delete/userDelete.html',
             controller: 'deleteUserController',
             controllerAs: 'ctrl'
         });
-    }])
+    })
     .controller('listController', ListController)
     .controller('listsController', ListsController)
-    .config(['$routeProvider', ($routeProvider) => {
+    .config(($routeProvider) => {
         $routeProvider.when('/lists', {
             templateUrl: '/templates/lists/lists.html',
             controller: 'listsController',
             controllerAs: 'ctrl'
         });
-    }])
+    })
     .controller('listViewController', ListViewController)
-    .config(['$routeProvider', ($routeProvider) => {
+    .config(($routeProvider) => {
         $routeProvider.when('/lists/:listId', {
             templateUrl: '/templates/lists/view/view.html',
             controller: 'listViewController',
             controllerAs: 'ctrl'
         });
-    }])
+    })
     .controller('newListController', NewListController)
-    .config(['$routeProvider', ($routeProvider) => {
+    .config(($routeProvider) => {
         $routeProvider.when('/newList', {
             templateUrl: '/templates/lists/new/newList.html',
             controller: 'newListController',
             controllerAs: 'ctrl'
         });
-    }])
+    })
     .controller('editListController', EditListController)
-    .config(['$routeProvider', ($routeProvider) => {
+    .config(($routeProvider) => {
         $routeProvider.when('/lists/:id/edit', {
             templateUrl: '/templates/lists/edit/editList.html',
             controller: 'editListController',
             controllerAs: 'ctrl'
         });
-    }])
+    })
     .controller('itemController', ItemController)
     .controller('registerController', RegisterController)
-    .config(['$routeProvider', ($routeProvider) => {
+    .config(($routeProvider) => {
         $routeProvider.when('/register', {
             templateUrl: '/templates/authentication/register/register.html',
             controller: 'registerController',
             controllerAs: 'ctrl'
         });
-    }])
+    })
     .controller('confirmationNotificationController', ConfirmationNotificationController)
-    .config(['$routeProvider', ($routeProvider) => {
+    .config(($routeProvider) => {
         $routeProvider.when('/register/confirmation', {
             templateUrl: '/templates/authentication/register/confirmation/confirmationNotification.html',
             controller: 'confirmationNotificationController',
             controllerAs: 'ctrl'
         });
-    }])
+    })
     .controller('confirmationController', ConfirmationController)
-    .config(['$routeProvider', ($routeProvider) => {
+    .config(($routeProvider) => {
         $routeProvider.when('/register/confirmation/:username/:code', {
             templateUrl: '/templates/authentication/register/confirmation/confirmation.html',
             controller: 'confirmationController',
             controllerAs: 'ctrl'
         });
-    }])
+    })
     .controller('loginController', LoginController)
-    .config(['$routeProvider', ($routeProvider) => {
+    .config(($routeProvider) => {
         $routeProvider.when('/login', {
             templateUrl: '/templates/authentication/login/login.html',
             controller: 'loginController',
@@ -162,12 +154,12 @@ angular.module('shoppingList', ['ngRoute', ngResource, ngMaterial, ngAnimate, ng
             controller: 'loginController',
             controllerAs: 'ctrl'
         });
-    }])
+    })
     .controller('articleController', ArticleController)
     .controller('dictionaryController', DictionaryController)
-    .config(['$routeProvider', ($routeProvider) => {
+    .config(($routeProvider) => {
         $routeProvider.when('/dictionary', {
             templateUrl: '/templates/article/dictionary/dictionary.html',
             controller: 'dictionaryController'
         });
-    }]);
+    });
