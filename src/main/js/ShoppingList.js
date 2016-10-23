@@ -23,7 +23,7 @@ import OnLongPressDirective from './directives/OnLongPressDirective';
 import LoadingCycle from './directives/LoadingCycle';
 import FocusMeDirective from './directives/FocusMeDirective';
 import CompareToDirective from './directives/CompareToDirective';
-import HttpInterceptor from './authentication/HttpInterceptor';
+import HttpInterceptor from './authentication/AuthenticationInterceptor';
 import AuthService from './authentication/AuthService';
 import RegisterController from './authentication/register/RegisterController';
 import ConfirmationNotificationController from './authentication/register/confirmation/ConfirmationNotificationController';
@@ -38,7 +38,7 @@ angular.module('shoppingList', [ngRoute, ngResource, ngMaterial, ngAnimate, ngAr
     .config(/*@ngInject*/($routeProvider, $httpProvider) => {
         $routeProvider.otherwise({redirectTo: '/lists'});
         $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-        $httpProvider.interceptors.push('MyHttpInterceptor');
+        $httpProvider.interceptors.push('authenticationInterceptor');
     })
     .run(/*@ngInject*/($rootScope) => {
         $rootScope.authenticated = false;
@@ -58,7 +58,7 @@ angular.module('shoppingList', [ngRoute, ngResource, ngMaterial, ngAnimate, ngAr
     .directive('focusMe', FocusMeDirective)
     .directive('compareTo', CompareToDirective)
     .service('navigationService', NavigationService)
-    .service('MyHttpInterceptor', HttpInterceptor)
+    .service('authenticationInterceptor', HttpInterceptor)
     .service('userService', UserService)
     .service('listService', ListService)
     .service('itemService', ItemService)
