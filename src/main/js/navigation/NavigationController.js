@@ -156,13 +156,6 @@ export default class NavigationController {
         }
     }
 
-    logout() {
-        this.authService.logout()
-            .then(() => {
-                this.navigationService.goto('/login');
-            });
-    }
-
     closeError() {
         this.$rootScope.error = false;
         this.$rootScope.errorMessage = '';

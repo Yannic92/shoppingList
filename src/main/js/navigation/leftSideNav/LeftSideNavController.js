@@ -1,11 +1,12 @@
 export default class LeftSideNavController {
 
     /*@ngInject*/
-    constructor($mdMedia, $mdComponentRegistry, $rootScope, navigationService){
+    constructor($mdMedia, $mdComponentRegistry, $rootScope, navigationService, authService){
 
         this.$mdMedia = $mdMedia;
         this.$mdComponentRegistry = $mdComponentRegistry;
         this.navigationService = navigationService;
+        this.authService = authService;
         this._initRouteChangeSuccessListener($rootScope);
     }
 
@@ -27,6 +28,13 @@ export default class LeftSideNavController {
 
     isLockedOpen() {
         return this.$mdMedia('gt-sm');
+    }
+
+    logout() {
+        this.authService.logout()
+            .then(() => {
+                this.navigationService.goto('/login');
+            });
     }
 
     _initRouteChangeSuccessListener($rootScope) {
