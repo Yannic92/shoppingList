@@ -33,6 +33,8 @@ import ArticleService from './article/ArticleService';
 import ArticleController from './article/ArticleController';
 import DictionaryController from './article/dictionary/DictionaryController';
 import NavigationService from './navigation/NavigationService';
+import {UserPropertyFilter} from './lists/owners/UserPropertyFilter';
+import {UserAlreadyContainedFilter} from './lists/owners/UserAlreadyContainedFilter';
 
 angular.module('shoppingList', [ngRoute, ngResource, ngMaterial, ngAnimate, ngAria, ngMessages])
     .config(/*@ngInject*/($routeProvider, $httpProvider) => {
@@ -100,6 +102,8 @@ angular.module('shoppingList', [ngRoute, ngResource, ngMaterial, ngAnimate, ngAr
             controllerAs: 'ctrl'
         });
     })
+    .filter('userPropertyFilter', UserPropertyFilter)
+    .filter('userAlreadyContainedFilter', UserAlreadyContainedFilter)
     .controller('newListController', NewListController)
     .config(/*@ngInject*/($routeProvider) => {
         $routeProvider.when('/newList', {

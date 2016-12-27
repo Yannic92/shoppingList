@@ -43,8 +43,8 @@ export default class EditListController {
     updateList() {
         this.$rootScope.loading = true;
         return this.listService.update(this.list)
-            .then(this._showListUpdatedToast)
-            .finally(this._resetForm);
+            .then(() => this._showListUpdatedToast)
+            .finally(() => this._resetForm);
     }
 
     _showListUpdatedToast() {
@@ -67,7 +67,7 @@ export default class EditListController {
         if (selectedUser) {
             this.list.owners.push(selectedUser);
             this.updateList()
-                .then(this._initUserTextField);
+                .then(() => this._initUserTextField);
         }
     }
 
@@ -75,7 +75,7 @@ export default class EditListController {
         if (this.isLoggedInUser(user)) {
 
             this._showWarningBeforeRemovingOwnPermissions()
-                .then(this._removeUserAtIndexFromOwnersList(index));
+                .then(() => this._removeUserAtIndexFromOwnersList(index));
         } else {
             this._removeUserAtIndexFromOwnersList(index);
         }
@@ -100,27 +100,6 @@ export default class EditListController {
     _removeUserAtIndexFromOwnersList(index) {
         this.list.owners.splice(index, 1);
         this.updateList();
-    }
-
-    hasProperty(user) {
-        var filter = this.userSearchText;
-        var concatenatedFirstAndLastName = null;
-        if (user.firstName && user.lastName) {
-            concatenatedFirstAndLastName = user.firstName + ' ' + user.lastName;
-        }
-        return user.username.toUpperCase().indexOf(filter.toUpperCase()) >= 0 ||
-            (user.firstName && user.firstName.toUpperCase().indexOf(filter.toUpperCase()) >= 0) ||
-            (user.lastName && user.lastName.toUpperCase().indexOf(filter.toUpperCase()) >= 0) ||
-            (concatenatedFirstAndLastName && concatenatedFirstAndLastName.toUpperCase().indexOf(filter.toUpperCase()) >= 0);
-    }
-
-    notContained(user) {
-        for (let index = 0; index < this.list.owners.length; index++) {
-            if (user.username == this.list.owners[index].username) {
-                return false;
-            }
-        }
-        return true;
     }
 
     nameChanged(createShoppingListForm) {

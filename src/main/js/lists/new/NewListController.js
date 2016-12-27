@@ -3,7 +3,6 @@ export default class NewListController {
     /*@ngInject*/
     constructor($scope, $rootScope, listService, $mdToast, userService, navigationService) {
 
-        this.userService = userService;
         this.listService = listService;
         this.navigationService = navigationService;
         this.$rootScope = $rootScope;
@@ -16,7 +15,7 @@ export default class NewListController {
             owners: [$rootScope.user]
         };
 
-        this.users = this.userService.get();
+        this._initUsers(userService);
 
         this.listCreatedToast = this.$mdToast.simple()
             .content('Neue Liste erstellt')
@@ -24,28 +23,6 @@ export default class NewListController {
             .hideDelay(3000);
 
         this._initDestroyListener($scope);
-    }
-
-    hasProperty(user) {
-        let filter = this.userSearchText;
-        let concatenatedFirstAndLastName = null;
-        if (user.firstName && user.lastName) {
-            concatenatedFirstAndLastName = user.firstName + ' ' + user.lastName;
-        }
-        return user.username.toUpperCase().indexOf(filter.toUpperCase()) >= 0 ||
-            (user.firstName && user.firstName.toUpperCase().indexOf(filter.toUpperCase()) >= 0) ||
-            (user.lastName && user.lastName.toUpperCase().indexOf(filter.toUpperCase()) >= 0) ||
-            (concatenatedFirstAndLastName && concatenatedFirstAndLastName.toUpperCase().indexOf(filter.toUpperCase()) >= 0);
-    }
-
-    notContained(user) {
-        for (let i = 0; i < this.list.owners.length; i++) {
-            if (user.username == this.list.owners[i].username) {
-                return false;
-            }
-        }
-
-        return true;
     }
 
     static firstNameOrLastNameIsDefined(user) {
@@ -69,9 +46,8 @@ export default class NewListController {
     addUserToOwners(selectedUser) {
         if (selectedUser) {
             this.list.owners.push(selectedUser);
+            this._initUserTextField();
         }
-
-        this.userSearchText = '';
     }
 
     removeUserFromOwners(index) {
@@ -86,6 +62,14 @@ export default class NewListController {
         return this.$mdToast.show(this.listCreatedToast);
     }
 
+    _initUsers(userService) {
+        this._initUserTextField();
+        this.users = userService.get();
+    }
+
+    _initUserTextField() {
+        this.userSearchText = '';
+    }
     _initDestroyListener($scope) {
         $scope.$on('$destroy', () => {
             this.$rootScope.reset();

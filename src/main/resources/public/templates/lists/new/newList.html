@@ -7,19 +7,19 @@
     </form>
     <md-list>
         <md-subheader class="md-no-sticky">Berechtigte Nutzer:</md-subheader>
-        <div class="md-padding" layout="row">
+        <div id="addUserField" layout="row" class="md-padding">
             <md-icon class="autocompleteIcon" md-svg-src="img/icons/social/ic_person_add_24px.svg"></md-icon>
             <div flex>
                 <md-autocomplete
-                                 md-selected-item="selectedUser"
-                                 md-selected-item-change="ctrl.addUserToOwners(ctrl.selectedUser)"
-                                 md-search-text="userSearchText"
-                                 md-items="user in ctrl.users | filter: ctrl.hasProperty | filter: ctrl.notContained | limitTo: 5"
-                                 md-item-text="user.username"
-                                 md-min-length="1"
-                                 placeholder="Nutzer hinzufügen">
+                        md-selected-item="selectedUser"
+                        md-selected-item-change="ctrl.addUserToOwners(selectedUser)"
+                        md-search-text="ctrl.userSearchText"
+                        md-items="user in ctrl.users | userPropertyFilter: ctrl.userSearchText | userAlreadyContainedFilter: ctrl.list.owners | limitTo: 5"
+                        md-item-text="user.username"
+                        md-min-length="1"
+                        placeholder="Nutzer hinzufügen">
                     <md-item-template>
-                        <span md-highlight-text="ctrl.userSearchText" md-highlight-flags="^i">{{user.username}}</span>
+                        <span md-highlight-text="userSearchText" md-highlight-flags="^i">{{user.username}}</span>
                     </md-item-template>
                     <md-not-found>
                         Kein Treffer gefunden.
@@ -27,7 +27,7 @@
                 </md-autocomplete>
             </div>
         </div>
-        <md-list-item ng-cloak class="md-2-line md-list-item-with-secondary " ng-repeat="owner in ctrl.list.owners track by $index">
+        <md-list-item class="md-2-line md-list-item-with-secondary" ng-repeat="owner in ctrl.list.owners track by $index">
             <md-icon md-svg-src="img/icons/social/ic_person_24px.svg"></md-icon>
             <div class="md-list-item-text">
                 <h3>{{owner.username}}</h3>
