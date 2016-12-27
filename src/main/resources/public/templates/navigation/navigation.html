@@ -54,5 +54,5 @@
         </div>
     </md-toolbar>
     <loading-cycle layout-padding flex ng-if="loading || ctrl.routeIsLoading"></loading-cycle>
-    <div layout-padding flex ng-if="!loading && !ctrl.routeIsLoading" ng-view></div>
+    <div ng-hide="loading" ng-if="!ctrl.routeIsLoading" ng-view></div>
 </md-content>
