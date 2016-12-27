@@ -14,10 +14,22 @@ export default class UserDataController {
     }
 
     updateUserData() {
-        this.updating = true;
+        this.$rootScope.loading = true;
         this.userService.update(this.user)
-            .then(this._signInWIthNewCredentials)
-            .finally(this._finishUpdating);
+            .then(() => this._signInWIthNewCredentials())
+            .finally(() => this._finishUpdating());
+    }
+
+    formIsReadyToUpdate() {
+        return this.updateUserDataForm.$valid && !this.updateUserDataForm.$pristine;
+    }
+
+    fieldWasTouched(fieldName) {
+        return this.updateUserDataForm[fieldName] && this.updateUserDataForm[fieldName].$touched;
+    }
+
+    fieldHasError(fieldName) {
+        return this.updateUserDataForm[fieldName] && this.updateUserDataForm[fieldName].$error;
     }
 
     _signInWIthNewCredentials() {
@@ -34,7 +46,7 @@ export default class UserDataController {
     }
 
     _finishUpdating() {
-        this.updating = false;
+        this.$rootScope.loading = true;
         this._showUpdateFinishedToast();
     }
 
