@@ -14,6 +14,11 @@ export default class DictionaryController {
         this._initDestroyListener($scope);
     }
 
+    test() {
+        let article = this.articles[0];
+        return article;
+    }
+
     dictionaryIsEmpty() {
         return !this.articles || !this.articles.length || this.articles.length == 0;
     }
@@ -56,9 +61,7 @@ export default class DictionaryController {
 
     _initDestroyListener($scope) {
 
-        $scope.$on('$destroy', () => {
-            this.$rootScope.reset();
-        });
+        $scope.$on('$destroy', () => this.$rootScope.reset());
     }
 
     _init() {
@@ -68,8 +71,8 @@ export default class DictionaryController {
             {
                 icon: '/img/icons/communication/ic_clear_all_24px.svg',
                 text: 'Wörterbuch leeren',
-                action: this.clearDictionary,
-                disabled: this.dictionaryIsEmpty
+                action: () => this.clearDictionary(),
+                disabled: () => this.dictionaryIsEmpty()
             }
         ];
     }

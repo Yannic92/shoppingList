@@ -13,20 +13,20 @@ export default class EditListController {
 
         this.$rootScope.title = 'Einkaufsliste bearbeiten';
         this.$rootScope.loading = true;
-        this.saveIsVisible = false;
 
+        this.saveIsVisible = true;
+        this.hideSave(0);
         this._initLists($filter, $routeParams);
         this._initUsers(userService);
         this._initDestroyListener($scope);
     }
 
     _initLists($filter, $routeParams) {
-        this.lists = this.listService.get();
         this.list = {name: ''};
 
-        this.lists.promise
-            .then(() => {
-                this.list = angular.copy($filter('filter')(this.lists, {entityId: $routeParams.id})[0]);
+        this.listService.get($routeParams.id)
+            .then((list) => {
+                this.list = angular.copy(list);
                 this.$rootScope.loading = false;
             });
     }
@@ -43,8 +43,8 @@ export default class EditListController {
     updateList() {
         this.$rootScope.loading = true;
         return this.listService.update(this.list)
-            .then(() => this._showListUpdatedToast)
-            .finally(() => this._resetForm);
+            .then(() => this._showListUpdatedToast())
+            .finally(() => this._resetForm());
     }
 
     _showListUpdatedToast() {
@@ -58,9 +58,9 @@ export default class EditListController {
     }
 
     _resetForm() {
-        this.hideSave();
         this.$rootScope.loading = false;
-        this.$scope.updateShoppingListForm.$setPristine();
+        this.hideSave(0);
+        this.updateShoppingListForm.$setPristine();
     }
 
     addUserToOwners(selectedUser) {
@@ -72,13 +72,22 @@ export default class EditListController {
     }
 
     removeUserFromOwners(index, user) {
-        if (this.isLoggedInUser(user)) {
+        if (this._isCurrentUser(user)) {
 
             this._showWarningBeforeRemovingOwnPermissions()
                 .then(() => this._removeUserAtIndexFromOwnersList(index));
         } else {
             this._removeUserAtIndexFromOwnersList(index);
         }
+    }
+
+    triggerUpdateTimer() {
+
+        if(this.updateTimer){
+            this.$timeout.cancel(this.updateTimer);
+        }
+
+        this.updateTimer = this.$timeout(() => this.updateList(), 500);
     }
 
     _isCurrentUser(user) {
@@ -102,8 +111,8 @@ export default class EditListController {
         this.updateList();
     }
 
-    nameChanged(createShoppingListForm) {
-        return createShoppingListForm && createShoppingListForm.$valid && !createShoppingListForm.$pristine;
+    nameChanged() {
+        return this.updateShoppingListForm && this.updateShoppingListForm.$valid && !this.updateShoppingListForm.$pristine;
     }
 
     firstNameOrLastNameIsDefined(user) {
@@ -114,10 +123,10 @@ export default class EditListController {
         this.saveIsVisible = true;
     }
 
-    hideSave() {
+    hideSave(hideAfter = 350) {
         this.$timeout(() => {
             this.saveIsVisible = false;
-        }, 100);
+        }, hideAfter);
     }
 
     _initDestroyListener($scope) {

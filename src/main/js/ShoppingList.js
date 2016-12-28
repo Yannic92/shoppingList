@@ -17,7 +17,6 @@ import ListViewController from './lists/view/ListViewController';
 import ListService from './lists/service/ListService';
 import NewListController from './lists/new/NewListController';
 import EditListController from './lists/edit/EditListController';
-import ItemController from './item/ItemController';
 import ItemService from './item/service/ItemService';
 import OnLongPressDirective from './directives/OnLongPressDirective';
 import LoadingCycle from './directives/LoadingCycle';
@@ -30,11 +29,12 @@ import ConfirmationNotificationController from './authentication/register/confir
 import ConfirmationController from './authentication/register/confirmation/ConfirmationController';
 import LoginController from './authentication/login/LoginController';
 import ArticleService from './article/ArticleService';
-import ArticleController from './article/ArticleController';
 import DictionaryController from './article/dictionary/DictionaryController';
 import NavigationService from './navigation/NavigationService';
 import {UserPropertyFilter} from './lists/owners/UserPropertyFilter';
 import {UserAlreadyContainedFilter} from './lists/owners/UserAlreadyContainedFilter';
+import ItemComponent from './item/ItemComponent';
+import ArticleComponent from './article/ArticleComponent';
 
 angular.module('shoppingList', [ngRoute, ngResource, ngMaterial, ngAnimate, ngAria, ngMessages])
     .config(/*@ngInject*/($routeProvider, $httpProvider) => {
@@ -120,7 +120,7 @@ angular.module('shoppingList', [ngRoute, ngResource, ngMaterial, ngAnimate, ngAr
             controllerAs: 'ctrl'
         });
     })
-    .controller('itemController', ItemController)
+    .component('shoppingListItem', new ItemComponent())
     .controller('registerController', RegisterController)
     .config(/*@ngInject*/($routeProvider) => {
         $routeProvider.when('/register', {
@@ -157,11 +157,12 @@ angular.module('shoppingList', [ngRoute, ngResource, ngMaterial, ngAnimate, ngAr
             controllerAs: 'ctrl'
         });
     })
-    .controller('articleController', ArticleController)
+    .component('shoppingArticle', new ArticleComponent())
     .controller('dictionaryController', DictionaryController)
     .config(/*@ngInject*/($routeProvider) => {
         $routeProvider.when('/dictionary', {
             templateUrl: '/templates/article/dictionary/dictionary.html',
-            controller: 'dictionaryController'
+            controller: 'dictionaryController',
+            controllerAs: 'ctrl'
         });
     });

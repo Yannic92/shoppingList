@@ -1,4 +1,6 @@
 import HALResource from '../services/HALResource';
+import Article from './Article';
+
 export default class ArticleService {
 
     /*@ngInject*/
@@ -23,59 +25,79 @@ export default class ArticleService {
         return this.articles;
     }
 
-    create(article) {
-        if (article) {
-            let persistedArticlesWithSameName = this.$filter('filter')(this.articles, {name: article.name}, true);
-            if (persistedArticlesWithSameName && persistedArticlesWithSameName[0]) {
-                article.entityId = persistedArticlesWithSameName[0].entityId;
-                return this.$q((resolve) => {
-                    resolve(article);
-                });
-            }
+    findByName(articleName) {
+        const persistedArticlesWithSameName = this.$filter('filter')(this.articles, {name: articleName}, true);
+
+        if(persistedArticlesWithSameName && persistedArticlesWithSameName[0]) {
+            return persistedArticlesWithSameName[0];
         }
 
-        return this.articlesResource.save(ArticleService.toResource(article)).$promise
+        return undefined;
+    }
+
+    findById(entityId) {
+        const persistedArticlesWithSameId = this.$filter('filter')(this.articles, {entityId: entityId}, true);
+
+        if(persistedArticlesWithSameId && persistedArticlesWithSameId[0]) {
+            return persistedArticlesWithSameId[0];
+        }
+
+        return undefined;
+    }
+
+    create(article) {
+
+        let persistedArticleWithSameName = this.findByName(article.name);
+
+        if (persistedArticleWithSameName) {
+            article.entityId = persistedArticleWithSameName.entityId;
+            article._links = persistedArticleWithSameName._links;
+            return this.$q((resolve) => resolve(article));
+        }
+
+        return this.articlesResource.save(article.toResource()).$promise
             .then((response) => {
-                var responseEntity = ArticleService.toEntity(response);
-                this.articles.push(responseEntity);
-                return responseEntity;
+                const article = Article.ofResource(response);
+                this.articles.push(article);
+                return article;
             });
     }
 
     update(article) {
-        return this.articlesResource.update({id: article.entityId}, ArticleService.toResource(article)).$promise
+        return this.articlesResource.update({id: article.entityId}, article.toResource()).$promise
             .then((response) => {
-                var responseEntity = ArticleService.toEntity(response);
-                this._replaceExisting(responseEntity);
-                return responseEntity;
+                const article = Article.ofResource(response);
+                this._replaceExisting(article);
+                return article;
             });
     }
 
     fetch() {
-        if (this.$rootScope.authenticated && !this.articles.fetching) {
+        if(!this.$rootScope.authenticated) {
+            this.articles.promise = this._getRejectedPromise('Not authenticated');
+        }else if (!this.articles.fetching) {
             this.articles.fetching = true;
             this.articles.promise = this.articlesResource.get().$promise
                 .then((response) => {
-                    var entities = ArticleService.toEntities(HALResource.getContent(response));
+                    const articles = ArticleService.toEntities(HALResource.getContent(response));
                     this.articles.splice(0, this.articles.length);
-                    this.articles.push.apply(this.articles, entities);
+                    this.articles.push.apply(this.articles, articles);
                     this.articles.fetching = false;
                     this.articles.fetched = true;
-                    return entities;
+                    return this.articles;
                 });
-        } else {
-            this.articles.promise = this._getRejectedPromise('Not authenticated');
         }
-
         return this.articles.promise;
     }
 
     delete(article) {
         return this.articlesResource.delete({id: article.entityId}).$promise
             .then(() => {
-                var existingList = this.$filter('filter')(this.articles, {entityId: article.entityId})[0];
-                var index = this.articles.indexOf(existingList);
-                this.articles.splice(index, 1);
+                const existingArticle = this.findById(article.entityId);
+                if(existingArticle) {
+                    const index = this.articles.indexOf(existingArticle);
+                    this.articles.splice(index, 1);
+                }
             });
     }
 
@@ -96,46 +118,19 @@ export default class ArticleService {
 
     _replaceExisting(article) {
 
-        var existingArticle = this.this.$filter('filter')(this.articles, {entityId: article.entityId})[0];
-        var index = this.articles.indexOf(existingArticle);
-        this.articles.splice(index, 1, article);
-    }
-
-    static toResource(entity) {
-
-        var resource = {};
-
-        resource._links = entity._links;
-        resource.entityId = entity.entityId;
-        resource.name = entity.name;
-        resource.priceInEuro = entity.priceInEuro;
-
-        return resource;
-    }
-
-    static toEntity(resource) {
-        var entity = {};
-
-        entity.entityId = resource.entityId;
-        entity._links = resource._links;
-        entity.name = resource.name;
-        entity.priceInEuro = resource.priceInEuro;
-
-        return entity;
-    }
-
-    static toEntities(resources) {
-
-        var entities = [];
-        if (!resources || !resources.length) {
-            return entities;
+        const existingArticle = this.findById(article.entityId);
+        if(existingArticle) {
+            const index = this.articles.indexOf(existingArticle);
+            this.articles.splice(index, 1, article);
+        }else {
+            this.articles.push(article);
         }
+    }
 
-        for (var i = 0; i < resources.length; i++) {
-            var entity = this.toEntity(resources[i]);
-            entities.push(entity);
-        }
+    static toEntities(resources = []) {
 
-        return entities;
+        return resources.map((resource) => {
+            return Article.ofResource(resource);
+        });
     }
 }

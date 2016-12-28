@@ -1,6 +1,7 @@
 import angular from 'angular';
 import {NewItemController} from '../../item/new/NewItemController';
 import ListService from '../service/ListService';
+import Article from '../../article/Article';
 export default class ListViewController {
 
     /*@ngInject*/
@@ -47,7 +48,7 @@ export default class ListViewController {
             this.newItem.article = this.selectedArticle;
         }
 
-        this.newItem.article.name = this.newItem.article.name.trim();
+        this.newItem.article = new Article(this.newItem.article.name.trim(), 0);
 
         if (this.newItem.article.name != '') {
 
@@ -196,7 +197,7 @@ export default class ListViewController {
     }
 
     _initLists($routeParams, $filter) {
-        this.lists = this.listService.get();
+        this.lists = this.listService.getAll();
 
         this.lists.promise
             .then(() => {

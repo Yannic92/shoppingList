@@ -12,11 +12,25 @@ export default class ListService {
         this._initResources($resource);
     }
 
-    get() {
+    getAll() {
         if (!this.lists.fetching && !this.lists.fetched) {
             this.fetch();
         }
         return this.lists;
+    }
+
+    get(listId) {
+        const existingList = this._findExistingList(listId);
+
+        if(!existingList) {
+            return this.getUpdated({entityId:listId});
+        }
+
+        if(!existingList.updated) {
+            return this.getUpdated(existingList);
+        }
+
+        return this._getResolvedPromise(existingList);
     }
 
     getUpdated(list) {
@@ -71,10 +85,11 @@ export default class ListService {
     delete(list) {
         return this.listsResource.delete({id: list.entityId}).$promise
             .then(() => {
-                let existingList = this.$filter('filter')(this.lists, {entityId: list.entityId})[0];
-                let index = this.lists.indexOf(existingList);
-                this.lists.splice(index, 1);
-                return index;
+                let existingList = this._findExistingList(list.entityId);
+                if(existingList) {
+                    let index = this.lists.indexOf(existingList);
+                    this.lists.splice(index, 1);
+                }
             });
     }
 
@@ -145,9 +160,12 @@ export default class ListService {
     }
 
     _replaceExistingList(list) {
-        const existingList = this.$filter('filter')(this.lists, {entityId: list.entityId})[0];
+        const existingList = this._findExistingList(list.entityId);
         let index = this.lists.indexOf(existingList);
-        this.lists.splice(index, 1, list);
+
+        if(index >= 0) {
+            this.lists.splice(index, 1, list);
+        }
     }
 
     _getRejectedPromise(message) {
@@ -158,6 +176,15 @@ export default class ListService {
         return rejectedPromise;
     }
 
+    _getResolvedPromise(resolvedData) {
+
+        const deferred = this.$q.defer();
+        const resolvedPromise = deferred.promise;
+        deferred.reject(resolvedData);
+
+        return resolvedPromise;
+    }
+
     _initResources($resource) {
         let methods = {
             'update': {method: 'PUT'},
@@ -165,5 +192,9 @@ export default class ListService {
         };
         this.listsResource = $resource('/shoppingLists/:id', null, methods);
         this.listsNameOnlyResource = $resource('shoppingLists/projections/name_only');
+    }
+
+    _findExistingList(listId) {
+        return this.$filter('filter')(this.lists, {entityId: listId})[0];
     }
 }

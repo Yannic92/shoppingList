@@ -4,7 +4,7 @@
             <md-icon md-svg-src="img/icons/action/ic_list_24px.svg"></md-icon>
             <input id="name" name="name" ng-model="ctrl.list.name" ng-focus="ctrl.showSave()" ng-blur="ctrl.hideSave()" type="text" placeholder="Name der Liste">
             <md-icon ng-if="ctrl.saveIsVisible && !ctrl.nameChanged(updateShoppingListForm)" class="disabled" md-svg-src="img/icons/content/ic_save_24px.svg"></md-icon>
-            <md-icon ng-if="ctrl.saveIsVisible && ctrl.nameChanged(updateShoppingListForm)" md-svg-src="img/icons/content/ic_save_24px.svg" type="submit" ng-click="ctrl.updateList()"></md-icon>
+            <md-icon ng-if="ctrl.saveIsVisible && ctrl.nameChanged(updateShoppingListForm)" md-svg-src="img/icons/content/ic_save_24px.svg" ng-click="ctrl.updateList()"></md-icon>
         </md-input-container>
     </form>
     <md-list>
@@ -33,7 +33,7 @@
             <md-icon md-svg-src="img/icons/social/ic_person_24px.svg"></md-icon>
             <div class="md-list-item-text">
                 <h3>{{owner.username}}</h3>
-                <h4 ng-if="firstNameOrLastNameIsDefined(owner)">{{owner.firstName ? owner.firstName : ''}} {{owner.lastName ? owner.lastName : ''}}</h4>
+                <h4 ng-if="ctrl.firstNameOrLastNameIsDefined(owner)">{{owner.firstName ? owner.firstName : ''}} {{owner.lastName ? owner.lastName : ''}}</h4>
             </div>
             <md-icon aria-label="remove user from owners list" class="md-secondary" ng-click="ctrl.removeUserFromOwners($index, owner)" md-svg-src="img/icons/action/ic_delete_24px.svg"></md-icon>
         </md-list-item>

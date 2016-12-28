@@ -1,12 +1,15 @@
-<md-list-item  ng-if="!ctrl.optionActive" class="md-list-item-with-secondary gray-on-hover" on-long-press="ctrl.showOptions()" md-swipe-left="ctrl.showOptions()" ng-mouseenter="ctrl.showOptionsOnElement()" ng-mouseleave="ctrl.hideOptionsOnElement()" on-touch-end="ctrl.hideOptionsOnElement()">
+<md-list-item  ng-if="!ctrl.touchOptionsActive" class="md-list-item-with-secondary gray-on-hover" on-long-press="ctrl.showTouchOptions()"
+               md-swipe-left="ctrl.showTouchOptions()" ng-mouseenter="ctrl.showDesktopOptions()" ng-mouseleave="ctrl.hideDesktopOptions()"
+               on-touch-end="ctrl.hideDesktopOptions()">
     <div class="md-list-item-text">
         <p>{{ctrl.article.name}}</p>
     </div>
-    <md-icon ng-if="!ctrl.article.deleting && ctrl.optionsVisible" class="md-secondary option" aria-label="delete entry" ng-click="ctrl.deleteArticle(article)" md-svg-src="img/icons/action/ic_delete_24px.svg"></md-icon>
+    <md-icon ng-if="!ctrl.article.deleting && ctrl.desktopOptionsVisible" class="md-secondary option" aria-label="delete entry"
+             ng-click="ctrl.deleteArticle(article)" md-svg-src="img/icons/action/ic_delete_24px.svg"></md-icon>
 </md-list-item>
-<md-list-item ng-show="ctrl.optionActive" class="md-2-line" role="listitem"
-              on-long-press="ctrl.hideOptionsOnElement()" on-touch-end="ctrl.hideOptionsOnElement()">
-    <md-fab-toolbar flex class="hide-overflow" md-open="ctrl.optionsShown" count="1" md-direction="left">
+<md-divider ng-if="!ctrl.touchOptionsActive"></md-divider>
+<md-list-item ng-show="ctrl.touchOptionsActive" class="md-2-line" role="listitem">
+    <md-fab-toolbar flex class="hide-overflow" md-open="ctrl.touchOptionsOpen" count="1" md-direction="left">
         <md-fab-trigger class="align-with-text">
             <md-button aria-label="menu" class="md-fab md-primary">
             </md-button>
@@ -20,8 +23,8 @@
                     </h3>
                     <span flex></span>
                     <md-fab-actions>
-                        <md-button aria-label="comment" ng-click="ctrl.deleteArticle(article)" class="md-icon-button">
-                            <md-icon aria-label="delete item" class="md-secondary" md-svg-src="img/icons/action/ic_delete_24px.svg"></md-icon>
+                        <md-button aria-label="Artikel löschen" ng-click="ctrl.deleteArticle()" class="md-icon-button">
+                            <md-icon md-svg-src="img/icons/action/ic_delete_24px.svg"></md-icon>
                         </md-button>
                     </md-fab-actions>
                 </div>
@@ -29,4 +32,3 @@
         </md-toolbar>
     </md-fab-toolbar>
 </md-list-item>
-<md-divider ></md-divider>

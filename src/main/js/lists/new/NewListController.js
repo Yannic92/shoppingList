@@ -25,7 +25,7 @@ export default class NewListController {
         this._initDestroyListener($scope);
     }
 
-    static firstNameOrLastNameIsDefined(user) {
+    firstNameOrLastNameIsDefined(user) {
 
         return user.firstName || user.lastName;
     }

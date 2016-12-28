@@ -28,7 +28,7 @@ export default class ListsController {
     }
 
     _initLists($rootScope) {
-        this.lists = this.listService.get();
+        this.lists = this.listService.getAll();
 
         this.lists.promise.finally(() => {
             $rootScope.loading = false;
