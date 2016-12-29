@@ -5,6 +5,7 @@ import ngMaterial from 'angular-material';
 import ngAnimate from 'angular-animate';
 import ngAria from 'angular-aria';
 import ngMessages from 'angular-messages';
+import ngTouch from 'angular-touch';
 import UserService from './user/service/UserService';
 import UserDataController from './user/edit/UserDataController';
 import DeleteUserController from './user/delete/DeleteUserController';
@@ -36,7 +37,7 @@ import {UserAlreadyContainedFilter} from './lists/owners/UserAlreadyContainedFil
 import ItemComponent from './item/ItemComponent';
 import ArticleComponent from './article/ArticleComponent';
 
-angular.module('shoppingList', [ngRoute, ngResource, ngMaterial, ngAnimate, ngAria, ngMessages])
+angular.module('shoppingList', [ngRoute, ngResource, ngMaterial, ngAnimate, ngAria, ngMessages, ngTouch])
     .config(/*@ngInject*/($routeProvider, $httpProvider) => {
         $routeProvider.otherwise({redirectTo: '/lists'});
         $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';

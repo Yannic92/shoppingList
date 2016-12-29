@@ -1,4 +1,4 @@
-<md-list-item ng-if="!ctrl.touchOptionsActive" class="md-2-line gray-on-hover" ng-class="{'md-list-item-with-secondary': ctrl.desktopOptionsVisible}" role="listitem" on-long-press="ctrl.showTouchOptions()" md-swipe-left="ctrl.showTouchOptions()"
+<md-list-item ng-if="!ctrl.touchOptionsActive" class="md-2-line gray-on-hover" ng-class="{'md-list-item-with-secondary': ctrl.desktopOptionsVisible}" role="listitem" on-long-press="ctrl.showTouchOptions()" ng-swipe-left="ctrl.showTouchOptions()"
 ng-mouseenter="ctrl.showDesktopOptions()" ng-mouseleave="ctrl.hideDesktopOptions()" on-touch-end="ctrl.hideDesktopOptions()">
     <md-checkbox aria-label="item" ng-change="ctrl.updateItem()" class="md-primary" md-no-ink ng-model="ctrl.item.done"></md-checkbox>
     <div class="md-list-item-text" layout="column">
@@ -13,7 +13,6 @@ ng-mouseenter="ctrl.showDesktopOptions()" ng-mouseleave="ctrl.hideDesktopOptions
         <md-fab-trigger class="align-with-text">
             <md-button aria-label="menu" class="md-fab md-primary"></md-button>
         </md-fab-trigger>
-
         <md-toolbar>
             <div class="titlebar md-toolbar-tools">
                 <div layout="row" class="fill-height title-with-tools" flex>

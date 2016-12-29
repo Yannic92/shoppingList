@@ -16,13 +16,14 @@
     "webpack-uglify-js-plugin": "^1.1.9"
   },
   "dependencies": {
+    "angular-material": "1.1.1",
     "angular": "1.5.9",
     "angular-animate": "1.5.9",
     "angular-aria": "1.5.9",
-    "angular-material": "1.1.1",
     "angular-messages": "1.5.9",
     "angular-resource": "1.5.9",
-    "angular-route": "1.5.9"
+    "angular-route": "1.5.9",
+    "angular-touch": "1.5.9"
   },
   "scripts": {
     "watch": "./node_modules/.bin/webpack --config ./webpack.config.js --watch",

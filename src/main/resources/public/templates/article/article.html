@@ -1,5 +1,5 @@
 <md-list-item  ng-if="!ctrl.touchOptionsActive" class="md-list-item-with-secondary gray-on-hover" on-long-press="ctrl.showTouchOptions()"
-               md-swipe-left="ctrl.showTouchOptions()" ng-mouseenter="ctrl.showDesktopOptions()" ng-mouseleave="ctrl.hideDesktopOptions()"
+               ng-swipe-left="ctrl.showTouchOptions()" ng-mouseenter="ctrl.showDesktopOptions()" ng-mouseleave="ctrl.hideDesktopOptions()"
                on-touch-end="ctrl.hideDesktopOptions()">
     <div class="md-list-item-text">
         <p>{{ctrl.article.name}}</p>
