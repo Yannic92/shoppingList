@@ -102,7 +102,7 @@ export default class AuthenticationInterceptor extends HttpInterceptor{
         return $mdDialog.show(
             $mdDialog.confirm()
                 .title('Verbindung fehlgeschlagen')
-                .content('Entweder besteht aktuell keine Verbindung zum Internet, oder der Dient wird gewartet. Möchtest du es erneut versuchen?')
+                .content('Entweder besteht aktuell keine Verbindung zum Internet, oder der Dienst wird gewartet. Möchtest du es erneut versuchen?')
                 .ok('Ja')
                 .cancel('Nein')
         ).then(() => {

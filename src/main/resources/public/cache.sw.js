@@ -1,7 +1,8 @@
-var CACHE_VERSION =  2;
+var CACHE_VERSION =  3;
 var CACHE_NAME = 'shopping-list-cache-v' + CACHE_VERSION;
 
 var urlsToCache = [
+    '/',
     '/index.html',
     '/sw.js',
     '/manifest.json',
