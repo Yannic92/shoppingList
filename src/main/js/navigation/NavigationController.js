@@ -48,7 +48,7 @@ export default class NavigationController {
     }
 
     isOnRoot() {
-        var currentPath = this.navigationService.getCurrentPath();
+        const currentPath = this.navigationService.getCurrentPath();
 
         return currentPath && currentPath == '/lists';
     }

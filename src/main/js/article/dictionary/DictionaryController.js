@@ -14,20 +14,15 @@ export default class DictionaryController {
         this._initDestroyListener($scope);
     }
 
-    test() {
-        let article = this.articles[0];
-        return article;
-    }
-
     dictionaryIsEmpty() {
         return !this.articles || !this.articles.length || this.articles.length == 0;
     }
 
     clearDictionary(ev) {
 
-        var lengthBefore = this.articles.length;
+        const lengthBefore = this.articles.length;
 
-        var confirm = this.$mdDialog.confirm()
+        const confirm = this.$mdDialog.confirm()
             .title('Möchtest du dein Wörterbuch wirklich leeren?')
             .content('Alle ungenutzten Einträge werden unwideruflich gelöscht.')
             .targetEvent(ev)

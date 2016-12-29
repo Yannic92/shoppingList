@@ -1,10 +1,10 @@
 <div ng-if="!ctrl.dictionaryIsEmpty()">
     <md-input-container class="md-block">
         <md-icon md-svg-src="img/icons/action/ic_search_24px.svg"></md-icon>
-        <input id="filter" name="filter" ng-model="ctrl.filter" type="text" placeholder="Filtern.." ng-change="ctrl.test()">
+        <input id="filter" name="filter" ng-model="ctrl.filter" type="text" placeholder="Filtern..">
     </md-input-container>
 
-    <md-list ng-cloak>
+    <md-list>
         <shopping-article ng-repeat="article in ctrl.articles | filter: ctrl.filter track by $index" article="article"></shopping-article>
     </md-list>
 </div>
