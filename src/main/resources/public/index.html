@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html manifest="cache.manifest" ng-app="shoppingList">
+<html ng-app="shoppingList">
 <head lang="de">
     <meta charset="UTF-8">
     <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
@@ -20,6 +20,7 @@
     <ng-include ng-if="authenticated" ng-controller="leftSideNavController as ctrl" src="'/templates/navigation/leftSideNav/leftSideNav.html'" layout="row"></ng-include>
     <ng-include layout="column" flex src="'/templates/navigation/navigation.html'"></ng-include>
 
+    <script type="text/javascript" src="/sw.js"></script>
     <script type="text/javascript" src="/js/ShoppingList.min.js"></script>
 </body>
 </html>
