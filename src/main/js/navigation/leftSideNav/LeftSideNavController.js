@@ -19,6 +19,7 @@ export default class LeftSideNavController {
     }
 
     goto(path, replace) {
+        this.closeNav();
         this.navigationService.goto(path, replace);
     }
 
