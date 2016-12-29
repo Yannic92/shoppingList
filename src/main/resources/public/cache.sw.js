@@ -1,7 +1,10 @@
-var CACHE_VERSION =  1;
+var CACHE_VERSION =  2;
 var CACHE_NAME = 'shopping-list-cache-v' + CACHE_VERSION;
 
 var urlsToCache = [
+    '/index.html',
+    '/sw.js',
+    '/manifest.json',
     '/style/fonts/roboto_100_italic_latin-ext.woff2',
     '/style/fonts/roboto_300_italic_latin-ext.woff2',
     '/style/fonts/roboto_400_italic_latin-ext.woff2',
@@ -48,7 +51,7 @@ var urlsToCache = [
     '/templates/article/dictionary/dictionary.html',
     '/templates/article/dictionary/emptyDictionary.html',
     '/style/css/app-compact.css',
-    '/js/ShoppingList.js',
+    '/js/ShoppingList.min.js',
     '/img/icons/action/ic_add_shopping_cart_24px.svg',
     '/img/icons/action/ic_lock_outline_24px.svg',
     '/img/icons/action/ic_shopping_cart_24px.svg',

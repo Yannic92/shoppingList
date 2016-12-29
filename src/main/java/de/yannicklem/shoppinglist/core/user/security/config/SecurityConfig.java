@@ -67,7 +67,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers(HttpMethod.POST, "/logout")
             .permitAll()
             .antMatchers("/templates/**", "/lib/**", "/style/**", "/img/**", "/index.html", "/index-debug.html", "/",
-                    "/**sw.js")
+                    "/**sw.js", "/manifest.json")
             .permitAll()
             .anyRequest()
             .authenticated()
