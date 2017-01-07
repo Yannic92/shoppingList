@@ -1,4 +1,4 @@
-var CACHE_VERSION =  3;
+var CACHE_VERSION =  5;
 var CACHE_NAME = 'shopping-list-cache-v' + CACHE_VERSION;
 
 var urlsToCache = [

@@ -68,7 +68,7 @@ export default class ListViewController {
     deleteList(ev) {
         this._showDeleteListConfirmationDialog(ev)
             .then(() => this.listService.delete(this.list))
-            .then(() => this._goToPreviousList());
+            .then((indexOfDeletedList) => this._goToPreviousList(indexOfDeletedList));
     }
 
     listIsEmpty() {
@@ -136,9 +136,9 @@ export default class ListViewController {
         this.creating = false;
     }
 
-    _goToPreviousList(lastIndex) {
+    _goToPreviousList(indexOfCurrentList) {
         if (this.lists && this.lists.length && this.lists.length > 0) {
-            const newIndex = lastIndex < this.lists.length ? lastIndex : lastIndex - 1;
+            const newIndex = indexOfCurrentList < this.lists.length ? indexOfCurrentList : indexOfCurrentList - 1;
             this.navigationService.goto('/lists/' + this.lists[newIndex].entityId, true);
         } else {
             this.navigationService.goto('/lists', true);
@@ -241,11 +241,11 @@ export default class ListViewController {
                 action: () => this.clearList(),
                 disabled: () => this.listIsEmpty() || !this.listDoesntContainsUndoneItems()
             }, {
-                icon: 'img/icons/action/ic_settings_24px.svg',
+                icon: '/img/icons/action/ic_settings_24px.svg',
                 text: 'Liste bearbeiten',
                 link: '#/lists/' + this.list.entityId + '/edit'
             }, {
-                icon: 'img/icons/action/ic_delete_24px.svg',
+                icon: '/img/icons/action/ic_delete_24px.svg',
                 text: 'Liste löschen',
                 action: () => this.deleteList()
             }

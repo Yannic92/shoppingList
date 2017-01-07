@@ -89,6 +89,7 @@ export default class ListService {
                 if(existingList) {
                     let index = this.lists.indexOf(existingList);
                     this.lists.splice(index, 1);
+                    return index;
                 }
             });
     }
