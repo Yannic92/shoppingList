@@ -1,7 +1,7 @@
 import angular from 'angular';
 import {NewItemController} from '../../item/new/NewItemController';
 import ListService from '../service/ListService';
-import Article from '../../article/Article';
+import Item from '../../item/Item';
 export default class ListViewController {
 
     /*@ngInject*/
@@ -13,7 +13,7 @@ export default class ListViewController {
         this.$mdDialog = $mdDialog;
         this.itemService = itemService;
         this.navigationService = navigationService;
-        this.articles = articleService.get();
+        this.articles = articleService.getAllArticles();
         this.list = {
             name: '',
             items: []
@@ -45,10 +45,9 @@ export default class ListViewController {
     createNewItem(ev) {
 
         if (this.selectedArticle) {
+
             this.newItem.article = this.selectedArticle;
         }
-
-        this.newItem.article = new Article(this.newItem.article.name.trim(), 0);
 
         if (this.newItem.article.name != '') {
 
@@ -114,10 +113,10 @@ export default class ListViewController {
     }
 
     _deleteDoneItems() {
-        var promises = [];
-        var notDoneItems = [];
+        const promises = [];
+        const notDoneItems = [];
 
-        for (var i = 0; i < this.list.items.length; i++) {
+        for (let i = 0; i < this.list.items.length; i++) {
             if (this.list.items[i].done) {
                 promises.push(this.itemService.deleteItem(this.list.items[i]));
             } else {
@@ -187,13 +186,7 @@ export default class ListViewController {
     }
 
     _initNewItem() {
-        this.newItem = {
-            count: '',
-            article: {
-                name: '',
-                priceInEuro: 0
-            }
-        };
+        this.newItem = new Item();
     }
 
     _initLists($routeParams, $filter) {

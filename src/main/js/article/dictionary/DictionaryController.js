@@ -8,7 +8,7 @@ export default class DictionaryController {
         this.$mdDialog = $mdDialog;
         this.$mdToast = $mdToast;
 
-        this.articles = this.articleService.get();
+        this.articles = this.articleService.getAllArticles();
 
         this._init();
         this._initDestroyListener($scope);
@@ -32,7 +32,7 @@ export default class DictionaryController {
         return this.$mdDialog.show(confirm)
             .then(() => {
                 this.$rootScope.loading = true;
-                return this.articleService.deleteUnused();
+                return this.articleService.deleteUnusedArticles();
             }).then(() => {
                 if (lengthBefore != this.articles.length) {
                     this.$mdToast.show(

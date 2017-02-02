@@ -30,7 +30,7 @@ import RegisterController from './authentication/register/RegisterController';
 import ConfirmationNotificationController from './authentication/register/confirmation/ConfirmationNotificationController';
 import ConfirmationController from './authentication/register/confirmation/ConfirmationController';
 import LoginController from './authentication/login/LoginController';
-import ArticleService from './article/ArticleService';
+import ArticleService from './article/service/ArticleService';
 import DictionaryController from './article/dictionary/DictionaryController';
 import NavigationService from './navigation/NavigationService';
 import {UserPropertyFilter} from './lists/owners/UserPropertyFilter';
@@ -38,6 +38,7 @@ import {UserAlreadyContainedFilter} from './lists/owners/UserAlreadyContainedFil
 import ItemComponent from './item/ItemComponent';
 import ArticleComponent from './article/ArticleComponent';
 import ItemResourceConverter from './item/service/ItemResourceConverter';
+import ArticleResourceConverter from './article/service/ArticleResourceConverter';
 
 angular.module('shoppingList', [ngRoute, ngResource, ngMaterial, ngAnimate, ngAria, ngMessages, ngTouch])
     .config(/*@ngInject*/($routeProvider, $httpProvider) => {
@@ -69,6 +70,7 @@ angular.module('shoppingList', [ngRoute, ngResource, ngMaterial, ngAnimate, ngAr
     .service('itemResourceConverter', ItemResourceConverter)
     .service('itemService', ItemService)
     .service('authService', AuthService)
+    .service('articleResourceConverter', ArticleResourceConverter)
     .service('articleService', ArticleService)
     .controller('navigationController', NavigationController)
     .controller('navMenuController', NavMenuController)

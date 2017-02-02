@@ -12,6 +12,6 @@ export default class ArticleController extends ResponsiveListItemController{
 
     deleteArticle() {
 
-        return this.articleService.delete(this.article);
+        return this.articleService.deleteArticle(this.article);
     }
 }
