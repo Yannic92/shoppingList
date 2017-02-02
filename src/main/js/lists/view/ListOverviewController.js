@@ -1,3 +1,5 @@
+import angular from 'angular';
+
 export default class ListOverviewController {
 
     /*@ngInject*/
@@ -113,7 +115,7 @@ export default class ListOverviewController {
 
         return allItems.promise
             .then(() => {
-                this.list.items = allItems;
+                this.list.items = angular.copy(allItems);
             }).finally(() => {
                 this.$rootScope.loading = false;
             });
