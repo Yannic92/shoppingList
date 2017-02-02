@@ -13,4 +13,13 @@ export default class CollectionUtils {
 
         return existingElement;
     }
+
+    static remove(filter, container, filterParameters) {
+
+        const existingElement = filter(container, filterParameters)[0];
+        const index = container.indexOf(existingElement);
+        container.splice(index, 1);
+
+        return existingElement;
+    }
 }

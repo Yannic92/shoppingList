@@ -53,7 +53,7 @@ export default class RESTService {
 
         return this.resource.delete(pathVariablePattern).$promise
             .then(() => {
-                return CollectionUtils.replaceExisting(this.filter, undefined, this.container, pathVariablePattern);
+                return CollectionUtils.remove(this.filter, this.container, pathVariablePattern);
             });
     }
 }

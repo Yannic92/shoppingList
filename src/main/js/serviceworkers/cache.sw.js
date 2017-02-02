@@ -1,6 +1,6 @@
 import ShoppingListCache from '../cache/ShoppingListCache';
 
-const CACHE_VERSION = 12;
+const CACHE_VERSION = 13;
 const URLS_TO_CACHE = [
     '/',
     '/index.html',
@@ -38,6 +38,7 @@ const URLS_TO_CACHE = [
     '/templates/user/edit/userData.html',
     '/templates/lists/list.html',
     '/templates/lists/lists.html',
+    '/templates/lists/view/overview.html',
     '/templates/lists/view/view.html',
     '/templates/lists/view/emptyList.html',
     '/templates/lists/new/newList.html',
