@@ -7,14 +7,14 @@
             </shopping-list-item>
         </md-list>
     </md-content>
-    <div ng-if="ctrl.listIsEmpty()" class="md-padding" >
+    <div ng-if="ctrl.listIsEmpty()" class="md-padding" layout="column">
         <h2 class="md-display-1 text-centered" >Liste ist Leer
             <md-icon md-svg-src="img/icons/social/ic_mood_bad_48px.svg"></md-icon>
         </h2>
         <p class="md-title info text-centered">
             Du hast aktuell keine Einträge in einer deiner Listen. Hier werden lediglich die Einträge aller Listen
-            gesammelt. Wenn du neue Einträge zu einer Liste hinzufügen möchtest, gehe bitte zu einer deiner
-            <a ng-href="#/lists">Listen</a>.
+            gesammelt.
         </p>
+        <md-button class="md-primary" ng-click="ctrl.gotoLists()">Fülle zunächst eine deiner Listen</md-button>
     </div>
 </div>

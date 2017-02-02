@@ -3,12 +3,13 @@ import angular from 'angular';
 export default class ListOverviewController {
 
     /*@ngInject*/
-    constructor($scope, $rootScope, itemService, $mdDialog, $q) {
+    constructor($scope, $rootScope, itemService, navigationService, $mdDialog, $q) {
 
         this.$q = $q;
         this.$rootScope = $rootScope;
         this.$mdDialog = $mdDialog;
         this.itemService = itemService;
+        this.navigationService = navigationService;
 
         this.$rootScope.loading = true;
         this._initList();
@@ -150,6 +151,10 @@ export default class ListOverviewController {
             available: true,
             ariaLabel: 'refetch current list from server'
         };
+    }
+
+    gotoLists() {
+        this.navigationService.goto('/lists', true);
     }
 
     _initDestroyListener($scope) {
