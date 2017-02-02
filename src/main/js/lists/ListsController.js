@@ -21,6 +21,10 @@ export default class ListsController {
         this.navigationService.goto('/newList');
     }
 
+    goto(path) {
+        this.navigationService.goto(path);
+    }
+
     deleteAllLists(ev) {
         this.deleteConfirmationDialog.show(ev).then(() => {
             return this.listService.deleteAll();

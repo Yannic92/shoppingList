@@ -1,93 +1,52 @@
+import RESTService from '../../global/RESTService';
 export default class ItemService {
 
     /*@ngInject*/
-    constructor($resource, $filter, articleService) {
+    constructor($resource, $filter, articleService, itemResourceConverter) {
 
-        this.$filter = $filter;
         this.articleService = articleService;
 
-        this.itemsResource = $resource('/items/:id', null, {
+        const itemsResource = $resource('/items/:entityId', null, {
             'update': {method: 'PUT'},
             'delete': {method: 'DELETE'}
         });
 
         this.items = [];
+
+        this.restService = new RESTService(itemsResource, itemResourceConverter, this.items, $filter('filter'));
     }
 
-    create(item) {
+    /**
+     * Returns all items.
+     *
+     * @param {Boolean} refetch If true a request to the backend will be performed. If false the last fetched lists are
+     *                  returned.
+     * @returns {Array} All Items
+     */
+    getAllItems(refetch = false) {
+        if (refetch || this.itemsAlreadyFetched()) {
+            this.restService.fetch();
+        }
+        return this.items;
+    }
+
+    itemsAlreadyFetched() {
+        return !this.items.fetching && !this.items.fetched;
+    }
+
+    createItem(item) {
         return this.articleService.create(item.article)
             .then((createdArticle) => {
                 item.article.entityId = createdArticle.entityId;
-                return this.itemsResource.save(ItemService._toResource(item)).$promise;
-            }).then((response) => {
-                var responseEntity = ItemService._toEntity(response);
-                this.items.push(responseEntity);
-                return responseEntity;
+                return this.restService.create(item);
             });
     }
 
-    update(item) {
-        return this.itemsResource.update({id: item.entityId}, ItemService._toResource(item)).$promise
-            .then((response) => {
-                var responseEntity = ItemService._toEntity(response);
-                this._replaceExisting(responseEntity);
-                return responseEntity;
-            });
+    updateItem(item) {
+        return this.restService.update(item, {entityId: item.entityId});
     }
 
-    delete(item) {
-        return this.itemsResource.delete({id: item.entityId}).$promise
-            .then(() => {
-                var existingList = this.$filter('filter')(this.items, {entityId: item.entityId})[0];
-                var index = this.items.indexOf(existingList);
-                this.items.splice(index, 1);
-                return item;
-            });
-    }
-
-    static _toResource(entity) {
-        let resource = {};
-
-        resource._links = entity._links;
-        resource.entityId = entity.entityId;
-        resource.count = entity.count;
-        resource.article = {entityId: entity.article.entityId};
-        resource.done = entity.done;
-
-        return resource;
-    }
-
-    static _toEntity(resource) {
-        var entity = {};
-
-        entity.entityId = resource.entityId;
-        entity._links = resource._links;
-        entity.count = resource.count;
-        entity.article = resource.article;
-        entity.done = resource.done;
-
-        return entity;
-    }
-
-    static _toEntities(resources) {
-
-        var entities = [];
-        if (!resources || !resources.length) {
-            return entities;
-        }
-
-        for (var i = 0; i < resources.length; i++) {
-            var entity = this._toEntity(resources[i]);
-            entities.push(entity);
-        }
-
-        return entities;
-    }
-
-    _replaceExisting(item) {
-
-        var existingItem = this.$filter('filter')(this.items, {entityId: item.entityId})[0];
-        var index = this.items.indexOf(existingItem);
-        this.items.splice(index, 1, item);
+    deleteItem(item) {
+        return this.restService.delete({entityId: item.entityId});
     }
 }

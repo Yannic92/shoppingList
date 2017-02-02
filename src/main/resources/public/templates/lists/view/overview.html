@@ -1,0 +1,20 @@
+<div flex>
+    <md-content>
+        <md-list ng-cloak role="list">
+            <shopping-list-item
+                    ng-repeat="item in ctrl.list.items | orderBy: ['-deleting', 'done', 'article.name'] track by $index"
+                    item="item" list="ctrl.list">
+            </shopping-list-item>
+        </md-list>
+    </md-content>
+    <div class="md-padding" >
+        <h2 class="md-display-1 text-centered" >Liste ist Leer
+            <md-icon md-svg-src="img/icons/social/ic_mood_bad_48px.svg"></md-icon>
+        </h2>
+        <p class="md-title info text-centered">
+            Du hast aktuell keine Einträge in einer deiner Listen. Hier werden lediglich die Einträge aller Listen
+            gesammelt. Wenn du neue Einträge zu einer Liste hinzufügen möchtest, gehe bitte zu einer deiner
+            <a ng-href="#/lists">Listen</a>.
+        </p>
+    </div>
+</div>

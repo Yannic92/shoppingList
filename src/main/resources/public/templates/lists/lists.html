@@ -9,7 +9,11 @@
     </md-button>
 </div>
 
-<md-list ng-cloak>
+<md-list ng-if="!ctrl.listsAreEmpty()" ng-cloak>
+    <md-list-item class="gray-on-hover" ng-click="ctrl.goto('/lists/overview')">
+        <p class="shorten-long-text">Zusammenfassung</p>
+    </md-list-item>
+    <md-divider></md-divider>
     <ng-include ng-repeat="list in ctrl.lists | orderBy: 'name' track by $index"
                 src="'/templates/lists/list.html'"
                 ng-controller="listController as ctrl">
