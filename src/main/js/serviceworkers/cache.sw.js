@@ -1,7 +1,7 @@
-var CACHE_VERSION =  5;
-var CACHE_NAME = 'shopping-list-cache-v' + CACHE_VERSION;
+import ShoppingListCache from '../cache/ShoppingListCache';
 
-var urlsToCache = [
+const CACHE_VERSION = 9;
+const URLS_TO_CACHE = [
     '/',
     '/index.html',
     '/sw.js',
@@ -82,38 +82,6 @@ var urlsToCache = [
     '/img/icons/Toggle/ic_check_box_outline_blank_24px.svg'
 ];
 
-self.addEventListener('install', (event) => {
-    event.waitUntil(
-        caches.open(CACHE_NAME)
-            .then(function (cache) {
-                return cache.addAll(urlsToCache);
-            })
-    );
-});
+const shoppingListCache = new ShoppingListCache(self, CACHE_VERSION, URLS_TO_CACHE);
 
-self.addEventListener('activate', (event) => {
-    event.waitUntil(
-        caches.keys().then(cacheNames => {
-            return Promise.all(
-                cacheNames.map(cacheName => {
-                    if(cacheName !== CACHE_NAME) {
-                        return caches.delete(cacheName);
-                    }
-                })
-            );
-        })
-    );
-});
-
-self.addEventListener('fetch', function(event) {
-    event.respondWith(
-        caches.match(event.request)
-            .then(function(response) {
-                // Cache hit - return response
-                if (response) {
-                    return response;
-                }
-                return fetch(event.request);
-            })
-    );
-});
+shoppingListCache.initListeners();

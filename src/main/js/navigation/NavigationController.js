@@ -148,10 +148,13 @@ export default class NavigationController {
     }
 
     _initUpdateReadyListener() {
-        if (window.applicationCache) {
-            window.applicationCache.addEventListener('updateready', () => {
-                this.newVersionAvailable = true;
-                this.$scope.$apply();
+
+        if('serviceWorker' in navigator) {
+            navigator.serviceWorker.addEventListener('message', (event) => {
+                if(event.data === 'updateFound') {
+                    this.newVersionAvailable = true;
+                    this.$scope.$apply();
+                }
             });
         }
     }

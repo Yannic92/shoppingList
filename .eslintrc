@@ -23,6 +23,9 @@
     "es6": true,
     "browser": true
   },
+  "globals": {
+    "clients": true
+  },
   "extends": [
     "eslint:recommended"
   ],

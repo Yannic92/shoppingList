@@ -5,10 +5,11 @@ const WebpackUglifyJsPlugin = require('webpack-uglify-js-plugin');
 
 const defaultConfig =  {
     entry: {
-        ShoppingList: path.resolve(__dirname + '/src/main/js/ShoppingList.js')
+        '/js/ShoppingList': path.resolve(__dirname + '/src/main/js/ShoppingList.js'),
+        '/ServiceWorkers': path.resolve(__dirname + '/src/main/js/serviceworkers/cache.sw.js')
     },
     output: {
-        path: path.resolve(__dirname + '/target/generated-resources/public/js'),
+        path: path.resolve(__dirname + '/target/generated-resources/public'),
         filename: '[name].js'
     },
     devtool: 'source-map',
