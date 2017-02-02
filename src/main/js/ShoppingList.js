@@ -15,6 +15,7 @@ import LeftSideNavController from './navigation/leftSideNav/LeftSideNavControlle
 import ListsController from './lists/ListsController';
 import ListController from './lists/ListController';
 import ListViewController from './lists/view/ListViewController';
+import ListOverviewController from './lists/view/ListOverviewController';
 import ListService from './lists/service/ListService';
 import NewListController from './lists/new/NewListController';
 import EditListController from './lists/edit/EditListController';
@@ -36,6 +37,7 @@ import {UserPropertyFilter} from './lists/owners/UserPropertyFilter';
 import {UserAlreadyContainedFilter} from './lists/owners/UserAlreadyContainedFilter';
 import ItemComponent from './item/ItemComponent';
 import ArticleComponent from './article/ArticleComponent';
+import ItemResourceConverter from './item/service/ItemResourceConverter';
 
 angular.module('shoppingList', [ngRoute, ngResource, ngMaterial, ngAnimate, ngAria, ngMessages, ngTouch])
     .config(/*@ngInject*/($routeProvider, $httpProvider) => {
@@ -64,6 +66,7 @@ angular.module('shoppingList', [ngRoute, ngResource, ngMaterial, ngAnimate, ngAr
     .service('authenticationInterceptor', HttpInterceptor)
     .service('userService', UserService)
     .service('listService', ListService)
+    .service('itemResourceConverter', ItemResourceConverter)
     .service('itemService', ItemService)
     .service('authService', AuthService)
     .service('articleService', ArticleService)
@@ -92,6 +95,14 @@ angular.module('shoppingList', [ngRoute, ngResource, ngMaterial, ngAnimate, ngAr
         $routeProvider.when('/lists', {
             templateUrl: '/templates/lists/lists.html',
             controller: 'listsController',
+            controllerAs: 'ctrl'
+        });
+    })
+    .controller('listOverviewController', ListOverviewController)
+    .config(/*@ngInject*/($routeProvider) => {
+        $routeProvider.when('/lists/overview', {
+            templateUrl: '/templates/lists/view/overview.html',
+            controller: 'listOverviewController',
             controllerAs: 'ctrl'
         });
     })

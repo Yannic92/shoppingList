@@ -12,7 +12,7 @@ export default class ItemController extends ResponsiveListItemController{
 
     deleteItem() {
         this.item.deleting = true;
-        this.itemService.delete(this.item)
+        this.itemService.deleteItem(this.item)
             .then(() => this._removeItemFromList())
             .finally(() => {
                 this.item.deleting = false;
@@ -26,6 +26,6 @@ export default class ItemController extends ResponsiveListItemController{
     }
 
     updateItem() {
-        this.itemService.update(this.item);
+        this.itemService.updateItem(this.item);
     }
 }

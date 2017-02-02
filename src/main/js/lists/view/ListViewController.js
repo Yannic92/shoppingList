@@ -94,7 +94,7 @@ export default class ListViewController {
         for (let i = 0; i < this.list.items.length; i++) {
             if (this.list.items[i].done) {
                 this.list.items[i].done = false;
-                this.itemService.update(this.list.items[i]);
+                this.itemService.updateItem(this.list.items[i]);
             }
         }
     }
@@ -103,14 +103,14 @@ export default class ListViewController {
         for (let i = 0; i < this.list.items.length; i++) {
             if (!this.list.items[i].done) {
                 this.list.items[i].done = true;
-                this.itemService.update(this.list.items[i]);
+                this.itemService.updateItem(this.list.items[i]);
             }
         }
     }
 
     _createItem(item) {
         this.creating = true;
-        return this.itemService.create(item);
+        return this.itemService.createItem(item);
     }
 
     _deleteDoneItems() {
@@ -119,7 +119,7 @@ export default class ListViewController {
 
         for (var i = 0; i < this.list.items.length; i++) {
             if (this.list.items[i].done) {
-                promises.push(this.itemService.delete(this.list.items[i]));
+                promises.push(this.itemService.deleteItem(this.list.items[i]));
             } else {
                 notDoneItems.push(this.list.items[i]);
             }
