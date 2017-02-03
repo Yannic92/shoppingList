@@ -3,35 +3,30 @@ package de.yannicklem.shoppinglist.core.user.security.config;
 import de.yannicklem.shoppinglist.core.ShoppingListSecurityProperties;
 import de.yannicklem.shoppinglist.core.user.entity.SLAuthority;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
+import de.yannicklem.shoppinglist.core.user.persistence.SLUserReadOnlyService;
 import de.yannicklem.shoppinglist.core.user.persistence.SLUserService;
-
 import org.apache.log4j.Logger;
-
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-
 import org.springframework.context.annotation.Configuration;
-
 import org.springframework.http.HttpMethod;
-
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 
+import javax.sql.DataSource;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.sql.DataSource;
-
-import static org.apache.log4j.Logger.getLogger;
-
 import static java.lang.invoke.MethodHandles.lookup;
+import static org.apache.log4j.Logger.getLogger;
 
 
 @Configuration
@@ -42,16 +37,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final DataSource datasource;
 
+    private final UserDetailsService slUserDetailsService;
+
     private final SLUserService slUserService;
 
     private final ShoppingListSecurityProperties securityProperties;
 
     @Autowired
-    public SecurityConfig(DataSource datasource, SLUserService slUserService,
-        ShoppingListSecurityProperties securityProperties) {
+    public SecurityConfig(DataSource datasource, UserDetailsService slUserDetailsService,
+                          SLUserService slUserService,
+                          ShoppingListSecurityProperties securityProperties) {
 
         this.slUserService = slUserService;
         this.datasource = datasource;
+        this.slUserDetailsService = slUserDetailsService;
         this.securityProperties = securityProperties;
     }
 
@@ -87,7 +86,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 
-        auth.userDetailsService(slUserService).passwordEncoder(new BCryptPasswordEncoder());
+        auth.userDetailsService(slUserDetailsService).passwordEncoder(new BCryptPasswordEncoder());
         auth.jdbcAuthentication().dataSource(datasource);
 
         Optional<SLUser> currentAdminOptional = slUserService.findById("admin");

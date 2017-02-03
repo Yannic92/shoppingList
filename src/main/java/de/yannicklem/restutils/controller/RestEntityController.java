@@ -14,6 +14,7 @@ import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
@@ -25,7 +26,7 @@ import java.util.Optional;
 import static java.lang.invoke.MethodHandles.lookup;
 import static org.apache.log4j.Logger.getLogger;
 
-
+@Transactional
 @RequiredArgsConstructor(onConstructor = @__(@Autowired ))
 public abstract class RestEntityController<Type extends RestEntity<ID>, ID extends Serializable> {
 

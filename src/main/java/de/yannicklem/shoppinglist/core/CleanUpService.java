@@ -4,26 +4,19 @@ import de.yannicklem.shoppinglist.core.item.entity.Item;
 import de.yannicklem.shoppinglist.core.item.persistence.ItemService;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.core.user.persistence.SLUserService;
-
 import lombok.RequiredArgsConstructor;
-
 import org.apache.log4j.Logger;
-
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.scheduling.annotation.Scheduled;
-
 import org.springframework.stereotype.Service;
-
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static org.apache.log4j.Logger.getLogger;
-
 import static java.lang.invoke.MethodHandles.lookup;
+import static org.apache.log4j.Logger.getLogger;
 
 
 @Transactional
