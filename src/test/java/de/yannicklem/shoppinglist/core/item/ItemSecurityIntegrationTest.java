@@ -2,7 +2,6 @@ package de.yannicklem.shoppinglist.core.item;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import de.yannicklem.shoppinglist.TestUtils;
 import de.yannicklem.shoppinglist.WebShoppingListApplication;
 import de.yannicklem.shoppinglist.core.article.entity.Article;
@@ -11,50 +10,31 @@ import de.yannicklem.shoppinglist.core.item.entity.Item;
 import de.yannicklem.shoppinglist.core.item.persistence.ItemService;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.core.user.persistence.SLUserService;
-
 import org.junit.Before;
 import org.junit.Test;
-
 import org.junit.runner.RunWith;
-
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.boot.test.context.SpringBootTest;
-
 import org.springframework.http.MediaType;
-
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
 import org.springframework.transaction.annotation.Transactional;
-
 import org.springframework.web.context.WebApplicationContext;
 
+import javax.servlet.Filter;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.servlet.Filter;
-
-import static de.yannicklem.shoppinglist.restutils.entity.SlMediaTypes.HAL_JSON_UTF8;
-
+import static de.yannicklem.restutils.entity.SlMediaTypes.HAL_JSON_UTF8;
 import static org.hamcrest.MatcherAssert.assertThat;
-
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
-
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
 @RunWith(SpringRunner.class)
@@ -255,7 +235,7 @@ public class ItemSecurityIntegrationTest {
             .andExpect(jsonPath("count", is(newItem.getCount())));
 
         assertThat(itemService.exists(1337L), is(true));
-        assertThat(itemService.findById(1337L).getArticle().getOwners(), is(newItem.getOwners()));
+        assertThat(itemService.findById(1337L).get().getArticle().getOwners(), is(newItem.getOwners()));
     }
 
 
@@ -291,7 +271,7 @@ public class ItemSecurityIntegrationTest {
         newOwners.add(admin);
 
         assertThat(itemService.exists(1337L), is(true));
-        assertThat(itemService.findById(1337L).getArticle().getOwners(), is(newOwners));
+        assertThat(itemService.findById(1337L).get().getArticle().getOwners(), is(newOwners));
     }
 
 
@@ -328,7 +308,7 @@ public class ItemSecurityIntegrationTest {
             .andExpect(status().isOk())
             .andExpect(jsonPath("count", is(updatedItem.getCount())));
 
-        Set<SLUser> updatedOwners = itemService.findById(updatedItem.getEntityId()).getOwners();
+        Set<SLUser> updatedOwners = itemService.findById(updatedItem.getEntityId()).get().getOwners();
 
         assertThat(updatedOwners, hasSize(1));
         assertThat(updatedOwners.iterator().next(), is(userOne));

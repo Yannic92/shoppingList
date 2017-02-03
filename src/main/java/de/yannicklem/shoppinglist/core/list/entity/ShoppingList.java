@@ -2,7 +2,7 @@ package de.yannicklem.shoppinglist.core.list.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import de.yannicklem.shoppinglist.core.OwnedRestEntity;
+import de.yannicklem.restutils.entity.owned.OwnedRestEntity;
 import de.yannicklem.shoppinglist.core.item.entity.Item;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 

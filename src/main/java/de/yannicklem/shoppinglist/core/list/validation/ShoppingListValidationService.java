@@ -5,7 +5,7 @@ import de.yannicklem.shoppinglist.core.item.validation.ItemValidationService;
 import de.yannicklem.shoppinglist.core.list.entity.ShoppingList;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.core.user.validation.SLUserValidationService;
-import de.yannicklem.shoppinglist.exception.EntityInvalidException;
+import de.yannicklem.shoppinglist.core.exception.EntityInvalidException;
 
 import lombok.RequiredArgsConstructor;
 

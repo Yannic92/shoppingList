@@ -23,6 +23,7 @@ import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -89,11 +90,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(slUserService).passwordEncoder(new BCryptPasswordEncoder());
         auth.jdbcAuthentication().dataSource(datasource);
 
-        SLUser currentAdmin = slUserService.findById("admin");
+        Optional<SLUser> currentAdminOptional = slUserService.findById("admin");
 
-        if (currentAdmin != null) {
-            slUserService.delete(currentAdmin);
-        }
+        currentAdminOptional.ifPresent(slUserService::delete);
 
         createDefaultAdminUser();
     }

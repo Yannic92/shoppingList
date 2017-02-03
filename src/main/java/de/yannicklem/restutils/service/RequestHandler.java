@@ -1,7 +1,7 @@
-package de.yannicklem.shoppinglist.restutils.service;
+package de.yannicklem.restutils.service;
 
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
-import de.yannicklem.shoppinglist.restutils.entity.RestEntity;
+import de.yannicklem.restutils.entity.RestEntity;
 
 
 public interface RequestHandler<Type extends RestEntity> {

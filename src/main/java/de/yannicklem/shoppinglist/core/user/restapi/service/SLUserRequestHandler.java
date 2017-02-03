@@ -1,8 +1,8 @@
 package de.yannicklem.shoppinglist.core.user.restapi.service;
 
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
-import de.yannicklem.shoppinglist.exception.PermissionDeniedException;
-import de.yannicklem.shoppinglist.restutils.service.RequestHandler;
+import de.yannicklem.shoppinglist.core.exception.PermissionDeniedException;
+import de.yannicklem.restutils.service.RequestHandler;
 
 import lombok.RequiredArgsConstructor;
 

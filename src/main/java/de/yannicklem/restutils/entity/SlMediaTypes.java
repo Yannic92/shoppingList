@@ -1,4 +1,4 @@
-package de.yannicklem.shoppinglist.restutils.entity;
+package de.yannicklem.restutils.entity;
 
 import org.springframework.hateoas.MediaTypes;
 

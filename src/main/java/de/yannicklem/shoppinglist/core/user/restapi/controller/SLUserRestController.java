@@ -4,10 +4,10 @@ import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.core.user.persistence.SLUserService;
 import de.yannicklem.shoppinglist.core.user.registration.entity.Confirmation;
 import de.yannicklem.shoppinglist.core.user.security.service.CurrentUserService;
-import de.yannicklem.shoppinglist.restutils.controller.MyRestController;
-import de.yannicklem.shoppinglist.restutils.service.EntityService;
-import de.yannicklem.shoppinglist.restutils.service.MyResourceProcessor;
-import de.yannicklem.shoppinglist.restutils.service.RequestHandler;
+import de.yannicklem.restutils.controller.RestEntityController;
+import de.yannicklem.restutils.entity.service.EntityService;
+import de.yannicklem.restutils.service.MyResourceProcessor;
+import de.yannicklem.restutils.service.RequestHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityLinks;
 import org.springframework.hateoas.ExposesResourceFor;
@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 )
 @RestController
 @ExposesResourceFor(SLUser.class)
-public class SLUserRestController extends MyRestController<SLUser, String> {
+public class SLUserRestController extends RestEntityController<SLUser, String> {
 
     private final CurrentUserService currentUserService;
 

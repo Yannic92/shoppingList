@@ -1,4 +1,4 @@
-package de.yannicklem.shoppinglist.restutils.service;
+package de.yannicklem.restutils.entity.service;
 
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 

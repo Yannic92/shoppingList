@@ -4,10 +4,11 @@ import de.yannicklem.shoppinglist.core.list.entity.ShoppingList;
 import de.yannicklem.shoppinglist.core.list.restapi.service.ShoppingListResourceProcessor;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.core.user.persistence.SLUserService;
-import de.yannicklem.shoppinglist.restutils.controller.MyRestController;
-import de.yannicklem.shoppinglist.restutils.service.EntityService;
-import de.yannicklem.shoppinglist.restutils.service.MyResourceProcessor;
-import de.yannicklem.shoppinglist.restutils.service.RequestHandler;
+import de.yannicklem.shoppinglist.core.exception.NotFoundException;
+import de.yannicklem.restutils.controller.RestEntityController;
+import de.yannicklem.restutils.entity.service.EntityService;
+import de.yannicklem.restutils.service.MyResourceProcessor;
+import de.yannicklem.restutils.service.RequestHandler;
 
 import org.apache.log4j.Logger;
 
@@ -46,7 +47,7 @@ import static java.lang.invoke.MethodHandles.lookup;
         MediaTypes.HAL_JSON_VALUE, MediaType.APPLICATION_JSON_VALUE
     }
 )
-public class ShoppingListRestController extends MyRestController<ShoppingList, Long> {
+public class ShoppingListRestController extends RestEntityController<ShoppingList, Long> {
 
     private static Logger LOGGER = getLogger(lookup().lookupClass());
 
@@ -64,7 +65,9 @@ public class ShoppingListRestController extends MyRestController<ShoppingList, L
 
         HttpEntity<? extends Resources<? extends ShoppingList>> allEntities = this.getAllEntities(principal);
         Collection<? extends ShoppingList> content = allEntities.getBody().getContent();
-        SLUser currentUser = principal == null ? null : slUserService.findById(principal.getName());
+        SLUser currentUser = principal == null ? null : slUserService.findById(principal.getName()).orElseThrow(
+                () -> new NotFoundException("User not found")
+        );
 
         for (ShoppingList shoppingList : content) {
             requestHandler.handleBeforeDelete(shoppingList, currentUser);
@@ -81,7 +84,9 @@ public class ShoppingListRestController extends MyRestController<ShoppingList, L
         Collection<? extends ShoppingList> allLists = allEntities.getBody().getContent();
 
         if (projectionName.equals("name_only")) {
-            SLUser currentUser = principal == null ? null : slUserService.findById(principal.getName());
+            SLUser currentUser = principal == null ? null : slUserService.findById(principal.getName()).orElseThrow(
+                    () -> new NotFoundException("User not found")
+            );
             List<ShoppingList> projections = new ArrayList<>();
 
             for (ShoppingList shoppingList : allLists) {

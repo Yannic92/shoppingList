@@ -4,7 +4,8 @@ import de.yannicklem.shoppinglist.core.article.entity.Article;
 import de.yannicklem.shoppinglist.core.article.persistence.ArticleService;
 import de.yannicklem.shoppinglist.core.item.entity.Item;
 import de.yannicklem.shoppinglist.core.item.persistence.ItemService;
-import de.yannicklem.shoppinglist.restutils.service.MyResourceProcessor;
+import de.yannicklem.shoppinglist.core.exception.NotFoundException;
+import de.yannicklem.restutils.service.MyResourceProcessor;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -34,12 +35,21 @@ public class ItemResourceProcessor extends MyResourceProcessor<Item> {
             Article article = entity.getArticle();
 
             if (article != null && article.getEntityId() != null) {
-                entity.setArticle(articleService.findById(article.getEntityId()));
+
+                Article existingArticle = articleService.findById(article.getEntityId()).orElseThrow(
+                        () -> new NotFoundException("Article not found")
+                );
+
+                entity.setArticle(existingArticle );
             }
         }
 
         if (entity != null && itemService.exists(entity.getEntityId())) {
-            Item existingItem = itemService.findById(entity.getEntityId());
+
+            Item existingItem = itemService.findById(entity.getEntityId()).orElseThrow(
+                    () -> new NotFoundException("Item not found")
+            );
+
             entity.setOwners(existingItem.getOwners());
             entity.setCreatedAt(existingItem.getCreatedAt());
         }

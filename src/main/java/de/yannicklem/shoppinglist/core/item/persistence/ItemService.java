@@ -1,135 +1,38 @@
 package de.yannicklem.shoppinglist.core.item.persistence;
 
+import de.yannicklem.restutils.entity.owned.service.AbstractOwnedEntityService;
 import de.yannicklem.shoppinglist.core.article.entity.Article;
 import de.yannicklem.shoppinglist.core.item.entity.Item;
-import de.yannicklem.shoppinglist.core.item.validation.ItemValidationService;
-import de.yannicklem.shoppinglist.core.list.entity.ShoppingList;
-import de.yannicklem.shoppinglist.core.list.persistence.ShoppingListService;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.core.user.security.service.CurrentUserService;
-import de.yannicklem.shoppinglist.exception.AlreadyExistsException;
-import de.yannicklem.shoppinglist.exception.NotFoundException;
-import de.yannicklem.shoppinglist.restutils.service.EntityService;
-
-import lombok.RequiredArgsConstructor;
-
-import org.apache.log4j.Logger;
-
+import de.yannicklem.shoppinglist.core.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Service;
-
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static org.apache.log4j.Logger.getLogger;
-
-import static java.lang.invoke.MethodHandles.lookup;
-
 
 @Service
-@RequiredArgsConstructor(onConstructor = @__(@Autowired ))
 @Transactional
-public class ItemService implements EntityService<Item, Long> {
+public class ItemService extends AbstractOwnedEntityService<Item, Long> implements ItemReadOnlyService {
 
-    private static final Logger LOGGER = getLogger(lookup().lookupClass());
-
-    private final ItemValidationService itemValidationService;
-    private final ShoppingListService shoppingListService;
     private final ItemRepository itemRepository;
     private final CurrentUserService currentUserService;
+    private final ItemPersistenceHandler itemPersistenceHandler;
+    private final ItemReadOnlyService itemReadOnlyService;
 
-    public void handleBeforeCreate(Item item) {
+    @Autowired
+    public ItemService(ItemRepository itemRepository, CurrentUserService currentUserService,
+                       ItemPersistenceHandler itemPersistenceHandler, ItemReadOnlyService itemReadOnlyService) {
 
-        if (item != null && item.getArticle() != null) {
-            item.getArticle().getOwners().addAll(item.getOwners());
-        }
-
-        if (item != null && exists(item.getEntityId())) {
-            throw new AlreadyExistsException("Item already exists");
-        }
-
-        itemValidationService.validate(item);
+        super(itemRepository, itemPersistenceHandler, currentUserService);
+        this.itemRepository = itemRepository;
+        this.currentUserService = currentUserService;
+        this.itemPersistenceHandler = itemPersistenceHandler;
+        this.itemReadOnlyService = itemReadOnlyService;
     }
-
-
-    public void handleBeforeUpdate(Item item) {
-
-        if (item != null && item.getArticle() != null) {
-            item.getArticle().getOwners().addAll(item.getOwners());
-        }
-
-        if (item == null || !exists(item.getEntityId())) {
-            throw new NotFoundException("Item not found");
-        }
-
-        itemValidationService.validate(item);
-    }
-
-
-    @Override
-    public Item findById(Long id) {
-
-        if (id == null) {
-            return null;
-        }
-
-        return itemRepository.findOne(id);
-    }
-
-
-    @Override
-    public List<Item> findAll(SLUser currentUser) {
-
-        if (currentUser == null || currentUser.isAdmin()) {
-            return itemRepository.findAll();
-        } else {
-            return itemRepository.findItemsOwnedBy(currentUser);
-        }
-    }
-
-
-    @Override
-    public boolean exists(Long id) {
-
-        if (id == null) {
-            return false;
-        }
-
-        return itemRepository.exists(id);
-    }
-
-
-    @Override
-    public Item create(Item entity) {
-
-        handleBeforeCreate(entity);
-
-        Item createdItem = itemRepository.save(entity);
-
-        String articleName = createdItem.getArticle() == null ? null : createdItem.getArticle().getName();
-        LOGGER.info(String.format("Created item: %d (%s)", createdItem.getEntityId(), articleName));
-
-        return createdItem;
-    }
-
-
-    @Override
-    public Item update(Item entity) {
-
-        handleBeforeUpdate(entity);
-
-        Item updatedItem = itemRepository.save(entity);
-
-        String articleName = updatedItem.getArticle() == null ? null : updatedItem.getArticle().getName();
-        LOGGER.info(String.format("Updated item: %d (%s)", updatedItem.getEntityId(), articleName));
-
-        return updatedItem;
-    }
-
 
     @Override
     public void delete(Item entity) {
@@ -141,71 +44,34 @@ public class ItemService implements EntityService<Item, Long> {
         SLUser currentUser = currentUserService.getCurrentUser();
         entity.getOwners().remove(currentUser);
 
-        handleBeforeDelete(entity);
+        itemPersistenceHandler.handleBeforeDelete(entity);
 
         itemRepository.delete(entity);
 
-        String articleName = entity.getArticle() == null ? null : entity.getArticle().getName();
-        LOGGER.info(String.format("Deleted item: %d (%s)", entity.getEntityId(), articleName));
+        itemPersistenceHandler.handleAfterDelete(entity);
     }
-
-
-    private void handleBeforeDelete(Item entity) {
-
-        if (entity == null || !exists(entity.getEntityId())) {
-            throw new NotFoundException("Item not found");
-        }
-
-        List<ShoppingList> shoppingListsContainingItem = shoppingListService.findShoppingListsContainingItem(entity);
-
-        for (ShoppingList shoppingList : shoppingListsContainingItem) {
-            shoppingList.getItems().remove(entity);
-            shoppingListService.update(shoppingList);
-        }
-    }
-
 
     @Override
-    public void deleteAll() {
-
-        List<Item> all = findAll(currentUserService.getCurrentUser());
-
-        for (Item item : all) {
-            delete(item);
-        }
-    }
-
-
     public List<Item> findItemsOwnedBy(SLUser slUser) {
 
-        if (slUser == null) {
-            return new ArrayList<>();
-        }
-
-        return itemRepository.findItemsOwnedBy(slUser);
+        return itemReadOnlyService.findItemsOwnedBy(slUser);
     }
 
-
+    @Override
     public List<Item> findItemsByArticle(Article article) {
 
-        if (article == null) {
-            return new ArrayList<>();
-        }
-
-        return itemRepository.findByArticle(article);
+        return itemReadOnlyService.findItemsByArticle(article);
     }
 
-
+    @Override
     public List<Item> findUnusedItems(Date date) {
 
-        return itemRepository.findUnusedItems(date);
+        return itemReadOnlyService.findUnusedItems(date);
     }
 
-
+    @Override
     public Long countItemsOfOwner(SLUser user) {
 
-        Long count = itemRepository.countItemsOfUser(user);
-
-        return count == null ? 0 : count;
+        return itemReadOnlyService.countItemsOfOwner(user);
     }
 }

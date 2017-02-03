@@ -3,7 +3,7 @@ package de.yannicklem.shoppinglist.core.user.restapi.service;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.core.user.persistence.SLUserService;
 import de.yannicklem.shoppinglist.core.user.restapi.SLUserDetailed;
-import de.yannicklem.shoppinglist.restutils.service.MyResourceProcessor;
+import de.yannicklem.restutils.service.MyResourceProcessor;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -11,6 +11,8 @@ import org.springframework.hateoas.EntityLinks;
 import org.springframework.hateoas.Link;
 
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 
 @Service
@@ -60,18 +62,20 @@ public class SLUserResourceProcessor extends MyResourceProcessor<SLUser> {
     @Override
     public SLUser initializeNestedEntities(SLUser entity) {
 
-        SLUser persistedUser = slUserService.findById(entity.getEntityId());
+        Optional<SLUser> persistedUserOptional = slUserService.findById(entity.getEntityId());
 
-        if (persistedUser != null) {
-            entity.setAuthorities(persistedUser.getAuthorities());
-            entity.setConfirmation(persistedUser.getConfirmation());
-            entity.setAccountNonExpired(persistedUser.isAccountNonExpired());
-            entity.setAccountNonLocked(persistedUser.isAccountNonLocked());
-            entity.setCredentialsNonExpired(persistedUser.isCredentialsNonExpired());
-            entity.setEnabled(persistedUser.isEnabled());
-            entity.setCreatedAt(persistedUser.getCreatedAt());
-        }
+        persistedUserOptional.ifPresent(slUser -> initAttributesWithValuesOfPersistedUser(slUser, entity));
 
         return entity;
+    }
+
+    private void initAttributesWithValuesOfPersistedUser(SLUser persistedUser, SLUser toInitialize) {
+        toInitialize.setAuthorities(persistedUser.getAuthorities());
+        toInitialize.setConfirmation(persistedUser.getConfirmation());
+        toInitialize.setAccountNonExpired(persistedUser.isAccountNonExpired());
+        toInitialize.setAccountNonLocked(persistedUser.isAccountNonLocked());
+        toInitialize.setCredentialsNonExpired(persistedUser.isCredentialsNonExpired());
+        toInitialize.setEnabled(persistedUser.isEnabled());
+        toInitialize.setCreatedAt(persistedUser.getCreatedAt());
     }
 }

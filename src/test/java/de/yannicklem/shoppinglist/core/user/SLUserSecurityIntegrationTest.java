@@ -29,7 +29,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import javax.servlet.Filter;
 
-import static de.yannicklem.shoppinglist.restutils.entity.SlMediaTypes.HAL_JSON_UTF8;
+import static de.yannicklem.restutils.entity.SlMediaTypes.HAL_JSON_UTF8;
 
 import static org.hamcrest.CoreMatchers.not;
 
@@ -119,7 +119,7 @@ public class SLUserSecurityIntegrationTest {
         mockMvc.perform(get(sLUsersEndpoint).with(user(slUserAdmin)))
             .andExpect(status().isOk())
             .andExpect(content().contentType(HAL_JSON_UTF8))
-            .andExpect(jsonPath("_embedded.sLUsers", hasSize(slUserService.findAll(slUserAdmin).size())));
+            .andExpect(jsonPath("_embedded.sLUsers", hasSize(slUserService.findAll().size())));
     }
 
 
@@ -564,7 +564,7 @@ public class SLUserSecurityIntegrationTest {
                 .with(csrf()))
             .andExpect(status().isForbidden());
 
-        assertThat(slUserService.findById(slUserTest.getUsername()).getEmail(), is(not("changed@hska.de")));
+        assertThat(slUserService.findById(slUserTest.getUsername()).get().getEmail(), is(not("changed@hska.de")));
     }
 
 
@@ -581,7 +581,7 @@ public class SLUserSecurityIntegrationTest {
                 .with(user(slUserTest)))
             .andExpect(status().isOk());
 
-        assertThat(slUserService.findById(slUserTest.getUsername()).isAdmin(), is(false));
+        assertThat(slUserService.findById(slUserTest.getUsername()).get().isAdmin(), is(false));
     }
 
 
@@ -598,7 +598,7 @@ public class SLUserSecurityIntegrationTest {
                 .with(user(slUserTest2)))
             .andExpect(status().isForbidden());
 
-        assertThat(slUserService.findById(slUserTest.getUsername()).getEmail(), is(not("changed@hska.de")));
+        assertThat(slUserService.findById(slUserTest.getUsername()).get().getEmail(), is(not("changed@hska.de")));
     }
 
 
@@ -621,7 +621,7 @@ public class SLUserSecurityIntegrationTest {
             .andExpect(jsonPath("authorities").doesNotExist())
             .andExpect(jsonPath("password").doesNotExist());
 
-        assertThat(slUserService.findById(slUserTest.getUsername()).getEmail(), is("changed@hska.de"));
+        assertThat(slUserService.findById(slUserTest.getUsername()).get().getEmail(), is("changed@hska.de"));
     }
 
 
@@ -644,7 +644,7 @@ public class SLUserSecurityIntegrationTest {
             .andExpect(jsonPath("authorities").doesNotExist())
             .andExpect(jsonPath("password").doesNotExist());
 
-        assertThat(slUserService.findById(slUserTest.getUsername()).getEmail(), is("changed@hska.de"));
+        assertThat(slUserService.findById(slUserTest.getUsername()).get().getEmail(), is("changed@hska.de"));
     }
 
 

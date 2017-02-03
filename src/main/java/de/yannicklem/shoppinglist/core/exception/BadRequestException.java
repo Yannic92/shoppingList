@@ -1,4 +1,4 @@
-package de.yannicklem.shoppinglist.exception;
+package de.yannicklem.shoppinglist.core.exception;
 
 import org.springframework.http.HttpStatus;
 

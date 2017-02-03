@@ -1,118 +1,40 @@
 package de.yannicklem.shoppinglist.core.article.persistence;
 
+import de.yannicklem.restutils.entity.owned.service.AbstractOwnedEntityService;
 import de.yannicklem.shoppinglist.core.article.entity.Article;
-import de.yannicklem.shoppinglist.core.article.validation.ArticleValidationService;
-import de.yannicklem.shoppinglist.core.item.entity.Item;
 import de.yannicklem.shoppinglist.core.item.persistence.ItemService;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.core.user.security.service.CurrentUserService;
-import de.yannicklem.shoppinglist.exception.NotFoundException;
-import de.yannicklem.shoppinglist.restutils.service.EntityService;
-
-import lombok.RequiredArgsConstructor;
-
+import de.yannicklem.shoppinglist.core.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Service;
-
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
 @Transactional
-@RequiredArgsConstructor(onConstructor = @__(@Autowired ))
-public class ArticleService implements EntityService<Article, Long> {
+public class ArticleService extends AbstractOwnedEntityService<Article, Long> {
 
-    private final ArticleValidationService articleValidationService;
     private final ArticleRepository articleRepository;
+    private final ArticlePersistenceHandler articlePersistenceHandler;
     private final ItemService itemService;
     private final CurrentUserService currentUserService;
 
-    public void handleBeforeCreate(Article article) {
+    @Autowired
+    public ArticleService(ArticleRepository articleRepository, ArticlePersistenceHandler articlePersistenceHandler,
+                          ItemService itemService, CurrentUserService currentUserService) {
 
-        articleValidationService.validate(article);
+        super(articleRepository, articlePersistenceHandler, currentUserService);
+        this.articleRepository = articleRepository;
+        this.articlePersistenceHandler = articlePersistenceHandler;
+        this.itemService = itemService;
+        this.currentUserService = currentUserService;
+
     }
-
-
-    public void handleBeforeUpdate(Article article) {
-
-        articleValidationService.validate(article);
-    }
-
-
-    public void handleAfterCreate(Article article) {
-    }
-
-
-    public void handleAfterDelete(Article article) {
-    }
-
-
-    public void handleAfterUpdate(Article article) {
-    }
-
-
-    @Override
-    public Article findById(Long id) {
-
-        if (id == null) {
-            return null;
-        }
-
-        return articleRepository.findOne(id);
-    }
-
-
-    @Override
-    public List<Article> findAll(SLUser currentUser) {
-
-        if (currentUser == null || currentUser.isAdmin()) {
-            return articleRepository.findAll();
-        } else {
-            return articleRepository.findArticlesOwnedBy(currentUser);
-        }
-    }
-
-
-    @Override
-    public boolean exists(Long id) {
-
-        if (id == null) {
-            return false;
-        }
-
-        return articleRepository.exists(id);
-    }
-
-
-    @Override
-    public Article create(Article article) {
-
-        handleBeforeCreate(article);
-
-        Article createdArticle = articleRepository.save(article);
-
-        handleAfterCreate(article);
-
-        return createdArticle;
-    }
-
-
-    @Override
-    public Article update(Article article) {
-
-        handleBeforeUpdate(article);
-
-        Article updatedArticle = articleRepository.save(article);
-
-        handleAfterUpdate(article);
-
-        return updatedArticle;
-    }
-
 
     @Override
     public void delete(Article article) {
@@ -121,38 +43,17 @@ public class ArticleService implements EntityService<Article, Long> {
             throw new NotFoundException("Article not found");
         }
 
-        SLUser currentUser = currentUserService.getCurrentUser();
+        SLUser currentUser = this.currentUserService.getCurrentUser();
         article.getOwners().remove(currentUser);
 
         if (article.getOwners().isEmpty()) {
-            handleBeforeDelete(article);
+            articlePersistenceHandler.handleBeforeDelete(article);
 
             articleRepository.delete(article);
 
-            handleAfterDelete(article);
+            articlePersistenceHandler.handleAfterDelete(article);
         } else {
             update(article);
-        }
-    }
-
-
-    private void handleBeforeDelete(Article article) {
-
-        List<Item> itemsByArticle = itemService.findItemsByArticle(article);
-
-        for (Item item : itemsByArticle) {
-            itemService.delete(item);
-        }
-    }
-
-
-    @Override
-    public void deleteAll() {
-
-        List<Article> all = findAll(currentUserService.getCurrentUser());
-
-        for (Article article : all) {
-            delete(article);
         }
     }
 
@@ -163,14 +64,14 @@ public class ArticleService implements EntityService<Article, Long> {
             return new ArrayList<>();
         }
 
-        return articleRepository.findArticlesOwnedBy(slUser);
+        return articleRepository.findEntitiesOwnedBy(slUser);
     }
 
 
-    public Article findByName(String name) {
+    public Optional<Article> findByName(String name) {
 
         if (name == null) {
-            return null;
+            return Optional.empty();
         }
 
         return articleRepository.findByName(name);

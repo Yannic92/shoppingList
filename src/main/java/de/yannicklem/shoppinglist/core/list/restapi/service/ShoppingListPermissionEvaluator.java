@@ -1,9 +1,9 @@
 package de.yannicklem.shoppinglist.core.list.restapi.service;
 
-import de.yannicklem.shoppinglist.core.OwnedRestEntityPermissionEvaluator;
+import de.yannicklem.restutils.entity.owned.service.OwnedRestEntityPermissionEvaluator;
 import de.yannicklem.shoppinglist.core.list.entity.ShoppingList;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
-import de.yannicklem.shoppinglist.restutils.service.PermissionEvaluator;
+import de.yannicklem.restutils.entity.service.PermissionEvaluator;
 
 import lombok.RequiredArgsConstructor;
 

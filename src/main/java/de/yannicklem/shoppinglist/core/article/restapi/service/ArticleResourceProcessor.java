@@ -3,7 +3,8 @@ package de.yannicklem.shoppinglist.core.article.restapi.service;
 import de.yannicklem.shoppinglist.core.article.entity.Article;
 import de.yannicklem.shoppinglist.core.article.persistence.ArticleService;
 import de.yannicklem.shoppinglist.core.user.persistence.SLUserService;
-import de.yannicklem.shoppinglist.restutils.service.MyResourceProcessor;
+import de.yannicklem.shoppinglist.core.exception.NotFoundException;
+import de.yannicklem.restutils.service.MyResourceProcessor;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -31,7 +32,10 @@ public class ArticleResourceProcessor extends MyResourceProcessor<Article> {
     public Article initializeNestedEntities(Article entity) {
 
         if (entity != null && articleService.exists(entity.getEntityId())) {
-            entity.setOwners(articleService.findById(entity.getEntityId()).getOwners());
+            Article existingArticle = articleService.findById(entity.getEntityId())
+                    .orElseThrow(() -> new NotFoundException("Article not found"));
+
+            entity.setOwners(existingArticle.getOwners());
         }
 
         return entity;

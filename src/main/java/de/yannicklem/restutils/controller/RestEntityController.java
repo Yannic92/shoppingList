@@ -1,45 +1,33 @@
-package de.yannicklem.shoppinglist.restutils.controller;
+package de.yannicklem.restutils.controller;
 
+import de.yannicklem.restutils.entity.RestEntity;
+import de.yannicklem.restutils.entity.service.EntityService;
+import de.yannicklem.restutils.service.MyResourceProcessor;
+import de.yannicklem.restutils.service.RequestHandler;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.core.user.persistence.SLUserService;
-import de.yannicklem.shoppinglist.restutils.entity.RestEntity;
-import de.yannicklem.shoppinglist.restutils.service.EntityService;
-import de.yannicklem.shoppinglist.restutils.service.MyResourceProcessor;
-import de.yannicklem.shoppinglist.restutils.service.RequestHandler;
-
 import lombok.RequiredArgsConstructor;
-
 import org.apache.log4j.Logger;
-
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.hateoas.EntityLinks;
 import org.springframework.hateoas.Resources;
-
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
-
 import java.security.Principal;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.apache.log4j.Logger.getLogger;
+import java.util.Optional;
 
 import static java.lang.invoke.MethodHandles.lookup;
+import static org.apache.log4j.Logger.getLogger;
 
 
 @RequiredArgsConstructor(onConstructor = @__(@Autowired ))
-public abstract class MyRestController<Type extends RestEntity<ID>, ID extends Serializable> {
+public abstract class RestEntityController<Type extends RestEntity<ID>, ID extends Serializable> {
 
     private static final Logger LOGGER = getLogger(lookup().lookupClass());
 
@@ -54,15 +42,13 @@ public abstract class MyRestController<Type extends RestEntity<ID>, ID extends S
     protected final EntityLinks entityLinks;
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public HttpEntity<? extends Type> getSpecificEntity(@PathVariable ID id, Principal principal) {
+    public HttpEntity<? extends Type> getSpecificEntity(@PathVariable("id") ID id, Principal principal) {
 
-        Type specificEntity = entityService.findById(id);
+        Optional<Type> specificEntityOptional = entityService.findById(id);
 
-        if (specificEntity == null) {
-            return null;
-        }
+        Type specificEntity = specificEntityOptional.orElse(null);
 
-        SLUser currentUser = principal == null ? null : slUserService.findById(principal.getName());
+        SLUser currentUser = principal == null ? null : slUserService.findById(principal.getName()).orElse(null);
 
         requestHandler.handleRead(specificEntity, currentUser);
 
@@ -73,8 +59,9 @@ public abstract class MyRestController<Type extends RestEntity<ID>, ID extends S
     @RequestMapping(method = RequestMethod.GET)
     public HttpEntity<? extends Resources<? extends Type>> getAllEntities(Principal principal) {
 
-        SLUser currentUser = principal == null ? null : slUserService.findById(principal.getName());
-        List<Type> all = entityService.findAll(currentUser);
+        SLUser currentUser = principal == null ? null : slUserService.findById(principal.getName()).orElse(null);
+
+        List<Type> all = entityService.findAll();
         List<Type> resourcesList = new ArrayList<>();
 
         for (Type entity : all) {
@@ -104,7 +91,7 @@ public abstract class MyRestController<Type extends RestEntity<ID>, ID extends S
 
         resourceProcessor.initializeNestedEntities(entity);
 
-        SLUser currentUser = principal == null ? null : slUserService.findById(principal.getName());
+        SLUser currentUser = principal == null ? null : slUserService.findById(principal.getName()).orElse(null);
 
         if (!entityService.exists(id)) {
             return createEntity(entity, currentUser);
@@ -119,7 +106,7 @@ public abstract class MyRestController<Type extends RestEntity<ID>, ID extends S
 
         resourceProcessor.initializeNestedEntities(entity);
 
-        SLUser currentUser = principal == null ? null : slUserService.findById(principal.getName());
+        SLUser currentUser = principal == null ? null : slUserService.findById(principal.getName()).orElse(null);
 
         return createEntity(entity, currentUser);
     }
@@ -141,7 +128,8 @@ public abstract class MyRestController<Type extends RestEntity<ID>, ID extends S
 
     protected HttpEntity<? extends Type> updateEntity(Type entity, SLUser currentUser) {
 
-        Type currentEntity = entityService.findById(entity.getEntityId());
+        Type currentEntity = entityService.findById(entity.getEntityId()).orElse(null);
+
         requestHandler.handleBeforeUpdate(currentEntity, entity, currentUser);
 
         Type updatedEntity = entityService.update(entity);
@@ -158,9 +146,9 @@ public abstract class MyRestController<Type extends RestEntity<ID>, ID extends S
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteEntity(@PathVariable ID id, Principal principal) {
 
-        SLUser currentUser = principal == null ? null : slUserService.findById(principal.getName());
+        SLUser currentUser = principal == null ? null : slUserService.findById(principal.getName()).orElse(null);
 
-        Type toDelete = entityService.findById(id);
+        Type toDelete = entityService.findById(id).orElse(null);
 
         requestHandler.handleBeforeDelete(toDelete, currentUser);
 

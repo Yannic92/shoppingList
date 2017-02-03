@@ -3,15 +3,17 @@ package de.yannicklem.shoppinglist.core.article.restapi.service;
 import de.yannicklem.shoppinglist.core.article.entity.Article;
 import de.yannicklem.shoppinglist.core.article.persistence.ArticleService;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
-import de.yannicklem.shoppinglist.exception.BadRequestException;
-import de.yannicklem.shoppinglist.exception.PermissionDeniedException;
-import de.yannicklem.shoppinglist.restutils.service.RequestHandler;
+import de.yannicklem.shoppinglist.core.exception.BadRequestException;
+import de.yannicklem.shoppinglist.core.exception.PermissionDeniedException;
+import de.yannicklem.restutils.service.RequestHandler;
 
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 
 @Service
@@ -27,9 +29,10 @@ public class ArticleRequestHandler implements RequestHandler<Article> {
     public void handleBeforeCreate(Article entity, SLUser currentUser) {
 
         if (entity != null) {
-            Article articleWithSameName = articleService.findByName(entity.getName());
+            Optional<Article> articleWithSameNameOptional = articleService.findByName(entity.getName());
 
-            if (articleWithSameName != null) {
+            if (articleWithSameNameOptional.isPresent()) {
+                Article articleWithSameName = articleWithSameNameOptional.get();
                 entity.setEntityId(articleWithSameName.getEntityId());
                 entity.setOwners(articleWithSameName.getOwners());
                 entity.setPriceInEuro(articleWithSameName.getPriceInEuro());

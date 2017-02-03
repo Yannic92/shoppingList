@@ -1,7 +1,7 @@
-package de.yannicklem.shoppinglist.core;
+package de.yannicklem.restutils.entity.owned;
 
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
-import de.yannicklem.shoppinglist.restutils.entity.RestEntity;
+import de.yannicklem.restutils.entity.RestEntity;
 
 import java.io.Serializable;
 

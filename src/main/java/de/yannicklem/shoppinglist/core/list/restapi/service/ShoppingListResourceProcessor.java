@@ -6,7 +6,8 @@ import de.yannicklem.shoppinglist.core.list.entity.ShoppingList;
 import de.yannicklem.shoppinglist.core.list.entity.ShoppingListOnlyName;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.core.user.persistence.SLUserService;
-import de.yannicklem.shoppinglist.restutils.service.MyResourceProcessor;
+import de.yannicklem.shoppinglist.core.exception.NotFoundException;
+import de.yannicklem.restutils.service.MyResourceProcessor;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -61,7 +62,12 @@ public class ShoppingListResourceProcessor extends MyResourceProcessor<ShoppingL
 
         for (SLUser owner : owners) {
             if (owner.getEntityId() != null) {
-                persistedOwners.add(slUserService.findById(owner.getEntityId()));
+
+                SLUser slUser = slUserService.findById(owner.getEntityId()).orElseThrow(
+                        () -> new NotFoundException("User not found")
+                );
+
+                persistedOwners.add(slUser);
             }
         }
 
@@ -72,7 +78,12 @@ public class ShoppingListResourceProcessor extends MyResourceProcessor<ShoppingL
 
         for (Item item : items) {
             if (item.getEntityId() != null) {
-                persistedItems.add(itemService.findById(item.getEntityId()));
+
+                Item existingItem = itemService.findById(item.getEntityId()).orElseThrow(
+                        () -> new NotFoundException("Item not found")
+                );
+
+                persistedItems.add(existingItem);
             }
         }
 

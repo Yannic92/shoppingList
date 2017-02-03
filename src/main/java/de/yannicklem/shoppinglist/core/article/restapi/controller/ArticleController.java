@@ -3,11 +3,12 @@ package de.yannicklem.shoppinglist.core.article.restapi.controller;
 import de.yannicklem.shoppinglist.core.article.entity.Article;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.core.user.persistence.SLUserService;
-import de.yannicklem.shoppinglist.exception.BadRequestException;
-import de.yannicklem.shoppinglist.restutils.controller.MyRestController;
-import de.yannicklem.shoppinglist.restutils.service.EntityService;
-import de.yannicklem.shoppinglist.restutils.service.MyResourceProcessor;
-import de.yannicklem.shoppinglist.restutils.service.RequestHandler;
+import de.yannicklem.shoppinglist.core.exception.BadRequestException;
+import de.yannicklem.shoppinglist.core.exception.NotFoundException;
+import de.yannicklem.restutils.controller.RestEntityController;
+import de.yannicklem.restutils.entity.service.EntityService;
+import de.yannicklem.restutils.service.MyResourceProcessor;
+import de.yannicklem.restutils.service.RequestHandler;
 
 import org.slf4j.Logger;
 
@@ -46,7 +47,7 @@ import static java.lang.invoke.MethodHandles.lookup;
     }
 )
 @ExposesResourceFor(Article.class)
-public class ArticleController extends MyRestController<Article, Long> {
+public class ArticleController extends RestEntityController<Article, Long> {
 
     private static final Logger LOGGER = getLogger(lookup().lookupClass());
 
@@ -59,8 +60,8 @@ public class ArticleController extends MyRestController<Article, Long> {
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.PUT, value = ArticleEndpoints.ARTICLE_ENDPOINT)
-    public HttpEntity<? extends Article> putEntity(@RequestBody Article entity, @PathVariable Long aLong,
+    @RequestMapping(method = RequestMethod.PUT, value = ArticleEndpoints.ARTICLE_SPECIFIC_ENDPOINT)
+    public HttpEntity<? extends Article> putEntity(@RequestBody Article entity, @PathVariable("id") Long id,
         Principal principal) {
 
         return new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
@@ -73,7 +74,8 @@ public class ArticleController extends MyRestController<Article, Long> {
 
         HttpEntity<? extends Resources<? extends Article>> allEntities = this.getAllEntities(principal);
         Collection<? extends Article> content = allEntities.getBody().getContent();
-        SLUser currentUser = principal == null ? null : slUserService.findById(principal.getName());
+        SLUser currentUser = principal == null ? null : slUserService.findById(principal.getName())
+                .orElseThrow(() -> new NotFoundException("User not found"));
 
         LOGGER.info("{} removes all unused articles", currentUser == null ? "anonymous" : currentUser.getUsername());
 
