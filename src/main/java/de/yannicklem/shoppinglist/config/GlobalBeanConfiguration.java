@@ -1,14 +1,17 @@
 package de.yannicklem.shoppinglist.config;
 
 import de.yannicklem.restutils.entity.owned.service.OwnedRestEntityPermissionEvaluator;
+
 import org.h2.tools.Server;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.sql.SQLException;
 
+
 /**
- * @author Yannic Klem - yann.klem@gmail.com
+ * @author  Yannic Klem - yann.klem@gmail.com
  */
 @Configuration
 public class GlobalBeanConfiguration {

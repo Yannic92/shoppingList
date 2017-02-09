@@ -3,6 +3,7 @@ package de.yannicklem.shoppinglist.core.user.persistence;
 import de.yannicklem.restutils.entity.owned.OwnedRestEntity;
 import de.yannicklem.restutils.entity.service.EntityPersistenceHandler;
 import de.yannicklem.restutils.entity.service.EntityService;
+
 import de.yannicklem.shoppinglist.core.article.entity.Article;
 import de.yannicklem.shoppinglist.core.article.persistence.ArticleService;
 import de.yannicklem.shoppinglist.core.exception.AlreadyExistsException;
@@ -16,11 +17,15 @@ import de.yannicklem.shoppinglist.core.user.registration.entity.Confirmation;
 import de.yannicklem.shoppinglist.core.user.registration.service.ConfirmationMailService;
 import de.yannicklem.shoppinglist.core.user.security.service.CurrentUserService;
 import de.yannicklem.shoppinglist.core.user.validation.SLUserValidationService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Qualifier;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,8 +33,9 @@ import java.util.UUID;
 
 import static java.lang.invoke.MethodHandles.lookup;
 
+
 /**
- * @author Yannic Klem - yann.klem@gmail.com
+ * @author  Yannic Klem - yann.klem@gmail.com
  */
 @Service
 public class SLUserPersistenceHandler implements EntityPersistenceHandler<SLUser> {
@@ -44,10 +50,9 @@ public class SLUserPersistenceHandler implements EntityPersistenceHandler<SLUser
     private final CurrentUserService currentUserService;
 
     public SLUserPersistenceHandler(SLUserValidationService slUserValidationService,
-                                    @Qualifier("readOnlySLUserService") SLUserReadOnlyService slUserReadOnlyService,
-                                    ConfirmationMailService confirmationMailService,
-                                    ShoppingListService shoppingListService, ItemService itemService,
-                                    ArticleService articleService, CurrentUserService currentUserService) {
+        @Qualifier("readOnlySLUserService") SLUserReadOnlyService slUserReadOnlyService,
+        ConfirmationMailService confirmationMailService, ShoppingListService shoppingListService,
+        ItemService itemService, ArticleService articleService, CurrentUserService currentUserService) {
 
         this.slUserValidationService = slUserValidationService;
         this.slUserReadOnlyService = slUserReadOnlyService;
@@ -79,6 +84,7 @@ public class SLUserPersistenceHandler implements EntityPersistenceHandler<SLUser
         slUser.setConfirmation(confirmation);
     }
 
+
     @Override
     public void handleAfterCreate(SLUser slUser) {
 
@@ -89,6 +95,7 @@ public class SLUserPersistenceHandler implements EntityPersistenceHandler<SLUser
         LOGGER.info("Created user: " + slUser.getUsername());
     }
 
+
     @Override
     public void handleBeforeUpdate(SLUser slUser) {
 
@@ -98,11 +105,11 @@ public class SLUserPersistenceHandler implements EntityPersistenceHandler<SLUser
             throw new NotFoundException(String.format("User '%s' not found", slUser.getUsername()));
         }
 
-        SLUser existinguser = slUserReadOnlyService.findById(slUser.getUsername()).orElseThrow(
-                () -> new NotFoundException("User not found")
-        );
+        SLUser existinguser = slUserReadOnlyService.findById(slUser.getUsername()).orElseThrow(() ->
+                    new NotFoundException("User not found"));
 
-        if (slUserReadOnlyService.emailExists(slUser.getEmail()) && !existinguser.getEmail().equals(slUser.getEmail())) {
+        if (slUserReadOnlyService.emailExists(slUser.getEmail())
+                && !existinguser.getEmail().equals(slUser.getEmail())) {
             throw new AlreadyExistsException(String.format("E-mail address '%s' already exists", slUser.getEmail()));
         }
 
@@ -110,11 +117,13 @@ public class SLUserPersistenceHandler implements EntityPersistenceHandler<SLUser
         slUser.setPassword(encoder.encode(slUser.getPassword()));
     }
 
+
     @Override
     public void handleAfterUpdate(SLUser entity) {
 
         LOGGER.info("Updated user: " + entity.getUsername());
     }
+
 
     @Override
     public void handleBeforeDelete(SLUser slUser) {
@@ -145,6 +154,7 @@ public class SLUserPersistenceHandler implements EntityPersistenceHandler<SLUser
         }
     }
 
+
     private void removeOwner(OwnedRestEntity entity, EntityService entityService, SLUser ownerToRemove) {
 
         if (entity.getOwners().contains(ownerToRemove)) {
@@ -157,6 +167,7 @@ public class SLUserPersistenceHandler implements EntityPersistenceHandler<SLUser
             }
         }
     }
+
 
     @Override
     public void handleAfterDelete(SLUser slUser) {

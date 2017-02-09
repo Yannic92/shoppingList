@@ -1,6 +1,7 @@
 package de.yannicklem.shoppinglist.core.list.restapi.service;
 
 import de.yannicklem.restutils.service.MyResourceProcessor;
+
 import de.yannicklem.shoppinglist.core.exception.NotFoundException;
 import de.yannicklem.shoppinglist.core.item.entity.Item;
 import de.yannicklem.shoppinglist.core.item.persistence.ItemService;
@@ -8,9 +9,12 @@ import de.yannicklem.shoppinglist.core.list.entity.ShoppingList;
 import de.yannicklem.shoppinglist.core.list.entity.ShoppingListOnlyName;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.core.user.persistence.SLUserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.hateoas.EntityLinks;
 import org.springframework.hateoas.Link;
+
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -59,10 +63,8 @@ public class ShoppingListResourceProcessor extends MyResourceProcessor<ShoppingL
 
         for (SLUser owner : owners) {
             if (owner.getEntityId() != null) {
-
-                SLUser slUser = slUserService.findById(owner.getEntityId()).orElseThrow(
-                        () -> new NotFoundException("User not found")
-                );
+                SLUser slUser = slUserService.findById(owner.getEntityId()).orElseThrow(() ->
+                            new NotFoundException("User not found"));
 
                 persistedOwners.add(slUser);
             }
@@ -75,10 +77,8 @@ public class ShoppingListResourceProcessor extends MyResourceProcessor<ShoppingL
 
         for (Item item : items) {
             if (item.getEntityId() != null) {
-
-                Item existingItem = itemService.findById(item.getEntityId()).orElseThrow(
-                        () -> new NotFoundException("Item not found")
-                );
+                Item existingItem = itemService.findById(item.getEntityId()).orElseThrow(() ->
+                            new NotFoundException("Item not found"));
 
                 persistedItems.add(existingItem);
             }

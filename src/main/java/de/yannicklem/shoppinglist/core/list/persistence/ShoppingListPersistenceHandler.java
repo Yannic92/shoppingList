@@ -1,20 +1,24 @@
 package de.yannicklem.shoppinglist.core.list.persistence;
 
 import de.yannicklem.restutils.entity.service.EntityPersistenceHandler;
-import de.yannicklem.shoppinglist.core.item.entity.Item;
-import de.yannicklem.shoppinglist.core.list.entity.ShoppingList;
-import de.yannicklem.shoppinglist.core.list.validation.ShoppingListValidationService;
+
 import de.yannicklem.shoppinglist.core.exception.AlreadyExistsException;
 import de.yannicklem.shoppinglist.core.exception.EntityInvalidException;
 import de.yannicklem.shoppinglist.core.exception.NotFoundException;
+import de.yannicklem.shoppinglist.core.item.entity.Item;
+import de.yannicklem.shoppinglist.core.list.entity.ShoppingList;
+import de.yannicklem.shoppinglist.core.list.validation.ShoppingListValidationService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
 
+
 /**
- * @author Yannic Klem - yann.klem@gmail.com
+ * @author  Yannic Klem - yann.klem@gmail.com
  */
 @Service
 public class ShoppingListPersistenceHandler implements EntityPersistenceHandler<ShoppingList> {
@@ -24,7 +28,7 @@ public class ShoppingListPersistenceHandler implements EntityPersistenceHandler<
 
     @Autowired
     public ShoppingListPersistenceHandler(ShoppingListValidationService shoppingListValidationService,
-                                          @Qualifier("readOnlyShoppingListService") ShoppingListReadOnlyService shoppingListReadOnlyService) {
+        @Qualifier("readOnlyShoppingListService") ShoppingListReadOnlyService shoppingListReadOnlyService) {
 
         this.shoppingListValidationService = shoppingListValidationService;
         this.shoppingListReadOnlyService = shoppingListReadOnlyService;
@@ -51,6 +55,7 @@ public class ShoppingListPersistenceHandler implements EntityPersistenceHandler<
         }
     }
 
+
     @Override
     public void handleBeforeUpdate(ShoppingList shoppingList) {
 
@@ -67,6 +72,7 @@ public class ShoppingListPersistenceHandler implements EntityPersistenceHandler<
             item.getArticle().setOwners(shoppingList.getOwners());
         }
     }
+
 
     @Override
     public void handleBeforeDelete(ShoppingList shoppingList) {

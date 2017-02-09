@@ -1,16 +1,20 @@
 package de.yannicklem.shoppinglist.core.item.persistence;
 
 import de.yannicklem.restutils.entity.service.EntityPersistenceHandler;
+
 import de.yannicklem.shoppinglist.core.exception.AlreadyExistsException;
 import de.yannicklem.shoppinglist.core.exception.NotFoundException;
 import de.yannicklem.shoppinglist.core.item.entity.Item;
 import de.yannicklem.shoppinglist.core.item.validation.ItemValidationService;
 import de.yannicklem.shoppinglist.core.list.entity.ShoppingList;
 import de.yannicklem.shoppinglist.core.list.persistence.ShoppingListService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,7 +23,7 @@ import static java.lang.invoke.MethodHandles.lookup;
 
 
 /**
- * @author Yannic Klem - yann.klem@gmail.com
+ * @author  Yannic Klem - yann.klem@gmail.com
  */
 @Service
 public class ItemPersistenceHandler implements EntityPersistenceHandler<Item> {
@@ -32,7 +36,7 @@ public class ItemPersistenceHandler implements EntityPersistenceHandler<Item> {
 
     @Autowired
     public ItemPersistenceHandler(ItemValidationService itemValidationService, ShoppingListService shoppingListService,
-                                  @Qualifier("readOnlyItemService") ItemReadOnlyService itemReadOnlyService) {
+        @Qualifier("readOnlyItemService") ItemReadOnlyService itemReadOnlyService) {
 
         this.itemValidationService = itemValidationService;
         this.itemReadOnlyService = itemReadOnlyService;
@@ -53,12 +57,14 @@ public class ItemPersistenceHandler implements EntityPersistenceHandler<Item> {
         itemValidationService.validate(item);
     }
 
+
     @Override
     public void handleAfterCreate(Item createdItem) {
 
         String articleName = createdItem.getArticle() == null ? null : createdItem.getArticle().getName();
         LOGGER.info(String.format("Created item: %d (%s)", createdItem.getEntityId(), articleName));
     }
+
 
     @Override
     public void handleBeforeUpdate(Item item) {
@@ -74,12 +80,14 @@ public class ItemPersistenceHandler implements EntityPersistenceHandler<Item> {
         itemValidationService.validate(item);
     }
 
+
     @Override
     public void handleAfterUpdate(Item updatedItem) {
 
         String articleName = updatedItem.getArticle() == null ? null : updatedItem.getArticle().getName();
         LOGGER.info(String.format("Updated item: %d (%s)", updatedItem.getEntityId(), articleName));
     }
+
 
     @Override
     public void handleBeforeDelete(Item entity) {
@@ -95,6 +103,7 @@ public class ItemPersistenceHandler implements EntityPersistenceHandler<Item> {
             shoppingListService.update(shoppingList);
         }
     }
+
 
     @Override
     public void handleAfterDelete(Item entity) {

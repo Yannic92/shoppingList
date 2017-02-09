@@ -3,6 +3,7 @@ package de.yannicklem.shoppinglist.core.article.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import de.yannicklem.restutils.entity.owned.OwnedRestEntity;
+
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 
 import lombok.EqualsAndHashCode;

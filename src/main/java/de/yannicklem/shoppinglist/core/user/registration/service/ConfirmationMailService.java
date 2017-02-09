@@ -27,7 +27,7 @@ public class ConfirmationMailService {
 
         String userConfirmationUri;
         userConfirmationUri = confirmationUri.replace("{username}", slUser.getUsername())
-            .replace("{code}", slUser.getConfirmation().getCode());
+                .replace("{code}", slUser.getConfirmation().getCode());
 
         String confirmationMessage = String.format("Hallo %s,\n\n"
                 + "es freut mich, dass du dich für die Verwendung der Einkaufsliste entschieden hast.\n"

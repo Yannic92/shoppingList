@@ -1,7 +1,8 @@
 package de.yannicklem.restutils.service;
 
-import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.restutils.entity.RestEntity;
+
+import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 
 import lombok.RequiredArgsConstructor;
 

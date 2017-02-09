@@ -1,14 +1,18 @@
 package de.yannicklem.shoppinglist.core.item.persistence;
 
 import de.yannicklem.restutils.entity.owned.service.AbstractOwnedEntityService;
+
 import de.yannicklem.shoppinglist.core.article.entity.Article;
+import de.yannicklem.shoppinglist.core.exception.NotFoundException;
 import de.yannicklem.shoppinglist.core.item.entity.Item;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.core.user.security.service.CurrentUserService;
-import de.yannicklem.shoppinglist.core.exception.NotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+
 import org.springframework.stereotype.Service;
+
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
@@ -26,8 +30,8 @@ public class ItemServiceImpl extends AbstractOwnedEntityService<Item, Long> impl
 
     @Autowired
     public ItemServiceImpl(ItemRepository itemRepository, CurrentUserService currentUserService,
-                           ItemPersistenceHandler itemPersistenceHandler,
-                           @Qualifier("readOnlyItemService") ItemReadOnlyService itemReadOnlyService) {
+        ItemPersistenceHandler itemPersistenceHandler,
+        @Qualifier("readOnlyItemService") ItemReadOnlyService itemReadOnlyService) {
 
         super(itemRepository, itemPersistenceHandler, currentUserService);
         this.itemRepository = itemRepository;
@@ -50,11 +54,13 @@ public class ItemServiceImpl extends AbstractOwnedEntityService<Item, Long> impl
         itemPersistenceHandler.handleAfterDelete(entity);
     }
 
+
     @Override
     public List<Item> findItemsOwnedBy(SLUser slUser) {
 
         return itemReadOnlyService.findItemsOwnedBy(slUser);
     }
+
 
     @Override
     public List<Item> findItemsByArticle(Article article) {
@@ -62,11 +68,13 @@ public class ItemServiceImpl extends AbstractOwnedEntityService<Item, Long> impl
         return itemReadOnlyService.findItemsByArticle(article);
     }
 
+
     @Override
     public List<Item> findUnusedItems(Date date) {
 
         return itemReadOnlyService.findUnusedItems(date);
     }
+
 
     @Override
     public Long countItemsOfOwner(SLUser user) {

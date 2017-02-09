@@ -36,7 +36,7 @@ export default class ListService {
     getUpdated(list) {
         return this.listsResource.get({id: list.entityId}).$promise
             .then((response) => {
-                let responseEntity = ListService._toEntity(response);
+                const responseEntity = ListService._toEntity(response);
                 this._replaceExistingList(responseEntity);
                 list.updated = true;
                 responseEntity.updated = true;
@@ -47,7 +47,7 @@ export default class ListService {
     create(list) {
         return this.listsResource.save(ListService._toResource(list)).$promise
             .then((response) => {
-                let responseEntity = ListService._toEntity(response);
+                const responseEntity = ListService._toEntity(response);
                 this.lists.push(responseEntity);
                 return responseEntity;
             });
@@ -56,7 +56,7 @@ export default class ListService {
     update(list) {
         return this.listsResource.update({id: list.entityId}, ListService._toResource(list)).$promise
             .then((response) => {
-                let responseEntity = ListService._toEntity(response);
+                const responseEntity = ListService._toEntity(response);
                 this._replaceExistingList(responseEntity);
                 return responseEntity;
             });

@@ -1,8 +1,10 @@
 package de.yannicklem.restutils.entity.owned.service;
 
 import de.yannicklem.restutils.entity.owned.OwnedRestEntity;
-import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.restutils.entity.service.PermissionEvaluator;
+
+import de.yannicklem.shoppinglist.core.user.entity.SLUser;
+
 import org.springframework.stereotype.Service;
 
 

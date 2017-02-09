@@ -1,19 +1,24 @@
 package de.yannicklem.shoppinglist.core.item.persistence;
 
 import de.yannicklem.restutils.entity.service.AbstractEntityReadOnlyService;
+
 import de.yannicklem.shoppinglist.core.article.entity.Article;
 import de.yannicklem.shoppinglist.core.item.entity.Item;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
+
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
+
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+
 /**
- * @author Yannic Klem - yann.klem@gmail.com
+ * @author  Yannic Klem - yann.klem@gmail.com
  */
 @Transactional
 @Service("readOnlyItemService")

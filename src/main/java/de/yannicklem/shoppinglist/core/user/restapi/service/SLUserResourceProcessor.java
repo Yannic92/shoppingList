@@ -1,12 +1,16 @@
 package de.yannicklem.shoppinglist.core.user.restapi.service;
 
 import de.yannicklem.restutils.service.MyResourceProcessor;
+
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.core.user.persistence.SLUserService;
 import de.yannicklem.shoppinglist.core.user.restapi.SLUserDetailed;
+
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.hateoas.EntityLinks;
 import org.springframework.hateoas.Link;
+
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -66,7 +70,9 @@ public class SLUserResourceProcessor extends MyResourceProcessor<SLUser> {
         return entity;
     }
 
+
     private void initAttributesWithValuesOfPersistedUser(SLUser persistedUser, SLUser toInitialize) {
+
         toInitialize.setAuthorities(persistedUser.getAuthorities());
         toInitialize.setConfirmation(persistedUser.getConfirmation());
         toInitialize.setAccountNonExpired(persistedUser.isAccountNonExpired());

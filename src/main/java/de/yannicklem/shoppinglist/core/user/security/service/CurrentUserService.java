@@ -1,15 +1,19 @@
 package de.yannicklem.shoppinglist.core.user.security.service;
 
-import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.core.exception.UnauthorizedException;
+import de.yannicklem.shoppinglist.core.user.entity.SLUser;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+
 import org.springframework.stereotype.Service;
+
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.HttpSession;
 import java.util.HashSet;
+
+import javax.servlet.http.HttpSession;
 
 
 @Service
@@ -55,6 +59,7 @@ public class CurrentUserService {
 
         return new SLUser("anonymousUser", "", "", "", "", true, null, new HashSet<>());
     }
+
 
     public void invalidateCurrentUsersSession() {
 

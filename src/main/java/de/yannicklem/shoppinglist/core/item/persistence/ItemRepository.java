@@ -1,9 +1,11 @@
 package de.yannicklem.shoppinglist.core.item.persistence;
 
+import de.yannicklem.restutils.entity.owned.service.OwnedRestEntityRepository;
+
 import de.yannicklem.shoppinglist.core.article.entity.Article;
 import de.yannicklem.shoppinglist.core.item.entity.Item;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
-import de.yannicklem.restutils.entity.owned.service.OwnedRestEntityRepository;
+
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -12,7 +14,6 @@ import java.util.List;
 
 
 public interface ItemRepository extends OwnedRestEntityRepository<Item, Long> {
-
 
     List<Item> findByArticle(Article article);
 

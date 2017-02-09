@@ -1,20 +1,25 @@
 package de.yannicklem.shoppinglist.core.user.persistence;
 
 import de.yannicklem.restutils.entity.service.AbstractEntityReadOnlyService;
+
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
+
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+
 /**
- * @author Yannic Klem - yann.klem@gmail.com
+ * @author  Yannic Klem - yann.klem@gmail.com
  */
 @Service("readOnlySLUserService")
-public class SLUserReadOnlyServiceImpl extends AbstractEntityReadOnlyService<SLUser, String> implements SLUserReadOnlyService {
+public class SLUserReadOnlyServiceImpl extends AbstractEntityReadOnlyService<SLUser, String>
+    implements SLUserReadOnlyService {
 
     private final SLUserRepository slUserRepository;
 
     public SLUserReadOnlyServiceImpl(SLUserRepository entityRepository) {
+
         super(entityRepository);
 
         this.slUserRepository = entityRepository;
@@ -41,20 +46,22 @@ public class SLUserReadOnlyServiceImpl extends AbstractEntityReadOnlyService<SLU
         return slUserRepository.findByEmail(email).isPresent();
     }
 
+
     @Override
     public Optional<SLUser> findByName(String name) {
 
-        if(name == null) {
+        if (name == null) {
             return Optional.empty();
         }
 
         return slUserRepository.findOne(name);
     }
 
+
     @Override
     public Optional<SLUser> findByEmail(String email) {
 
-        if(email == null) {
+        if (email == null) {
             return Optional.empty();
         }
 

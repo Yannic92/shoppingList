@@ -1,13 +1,17 @@
 package de.yannicklem.shoppinglist.core.article.persistence;
 
 import de.yannicklem.restutils.entity.owned.service.AbstractOwnedEntityService;
+
 import de.yannicklem.shoppinglist.core.article.entity.Article;
+import de.yannicklem.shoppinglist.core.exception.NotFoundException;
 import de.yannicklem.shoppinglist.core.item.persistence.ItemService;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.core.user.security.service.CurrentUserService;
-import de.yannicklem.shoppinglist.core.exception.NotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
+
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -26,14 +30,13 @@ public class ArticleServiceImpl extends AbstractOwnedEntityService<Article, Long
 
     @Autowired
     public ArticleServiceImpl(ArticleRepository articleRepository, ArticlePersistenceHandler articlePersistenceHandler,
-                              ItemService itemService, CurrentUserService currentUserService) {
+        ItemService itemService, CurrentUserService currentUserService) {
 
         super(articleRepository, articlePersistenceHandler, currentUserService);
         this.articleRepository = articleRepository;
         this.articlePersistenceHandler = articlePersistenceHandler;
         this.itemService = itemService;
         this.currentUserService = currentUserService;
-
     }
 
     @Override

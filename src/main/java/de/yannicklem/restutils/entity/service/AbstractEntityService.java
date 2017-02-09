@@ -1,22 +1,28 @@
 package de.yannicklem.restutils.entity.service;
 
 import de.yannicklem.restutils.entity.RestEntity;
+
 import de.yannicklem.shoppinglist.core.exception.NotFoundException;
+
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
+
 import java.util.List;
 
+
 /**
- * @author Yannic Klem - yann.klem@gmail.com
+ * @author  Yannic Klem - yann.klem@gmail.com
  */
 @Transactional
-public abstract class AbstractEntityService<Type extends RestEntity<ID>, ID extends Serializable> extends AbstractEntityReadOnlyService<Type, ID> implements EntityService<Type, ID> {
+public abstract class AbstractEntityService<Type extends RestEntity<ID>, ID extends Serializable>
+    extends AbstractEntityReadOnlyService<Type, ID> implements EntityService<Type, ID> {
 
     private final RestEntityRepository<Type, ID> entityRepository;
     private final EntityPersistenceHandler<Type> persistenceHandler;
 
-    public AbstractEntityService(RestEntityRepository<Type, ID> entityRepository, EntityPersistenceHandler<Type> persistenceHandler) {
+    public AbstractEntityService(RestEntityRepository<Type, ID> entityRepository,
+        EntityPersistenceHandler<Type> persistenceHandler) {
 
         super(entityRepository);
         this.entityRepository = entityRepository;
@@ -35,6 +41,7 @@ public abstract class AbstractEntityService<Type extends RestEntity<ID>, ID exte
         return createdEntity;
     }
 
+
     @Override
     public Type update(Type entity) {
 
@@ -46,6 +53,7 @@ public abstract class AbstractEntityService<Type extends RestEntity<ID>, ID exte
 
         return updatedEntity;
     }
+
 
     @Override
     public void delete(Type entity) {
@@ -60,6 +68,7 @@ public abstract class AbstractEntityService<Type extends RestEntity<ID>, ID exte
 
         persistenceHandler.handleAfterDelete(entity);
     }
+
 
     @Override
     public void deleteAll() {
