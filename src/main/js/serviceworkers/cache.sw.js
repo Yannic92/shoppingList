@@ -1,6 +1,6 @@
 import ShoppingListCache from '../cache/ShoppingListCache';
 
-const CACHE_VERSION = 17;
+const CACHE_VERSION = 18;
 const URLS_TO_CACHE = [
     '/',
     '/index.html',
