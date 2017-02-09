@@ -5,12 +5,13 @@ import Item from '../../item/Item';
 export default class ListViewController {
 
     /*@ngInject*/
-    constructor($scope, $rootScope, listService, itemService, $routeParams, $filter, articleService, $mdDialog, $q, navigationService) {
+    constructor($scope, $rootScope, listService, itemService, $routeParams, $filter, articleService, $mdDialog, $q, navigationService, $timeout) {
 
         this.$q = $q;
         this.listService = listService;
         this.$rootScope = $rootScope;
         this.$mdDialog = $mdDialog;
+        this.$timeout = $timeout;
         this.itemService = itemService;
         this.navigationService = navigationService;
         this.articles = articleService.getAllArticles();
@@ -21,8 +22,9 @@ export default class ListViewController {
         this.$rootScope.loading = true;
         this.creating = false;
         this._initNewItem();
-        this._initLists($routeParams, $filter, $scope);
+        this._initLists($routeParams, $filter);
         this._initDestroyListener($scope);
+        this._setFocusToNewItemInput();
     }
 
     update() {
@@ -133,6 +135,21 @@ export default class ListViewController {
 
     _finishCreating() {
         this.creating = false;
+        this._setFocusToNewItemInput();
+    }
+
+    _setFocusToNewItemInput() {
+        this.$timeout(() => {
+            const itemInputElement = document.querySelector('#new-item-input');
+            itemInputElement.focus();
+        });
+    }
+
+    clearFocusOnNewItemInput() {
+        this.$timeout(() => {
+            const itemInputElement = document.querySelector('#new-item-input');
+            itemInputElement.blur();
+        });
     }
 
     _goToPreviousList(indexOfCurrentList) {

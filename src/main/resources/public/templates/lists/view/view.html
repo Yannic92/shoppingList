@@ -1,6 +1,7 @@
 <div flex>
     <form id="createNewItemForm" role="form" class="md-padding" name="ctrl.createNewItemForm" ng-submit="ctrl.createNewItem()">
         <md-autocomplete id ="newItemAutocomplete"
+                         md-input-id="new-item-input"
                          md-no-cache="true"
                          md-selected-item="ctrl.selectedArticle"
                          md-selected-item-change="ctrl.selectedItemChanged($event)"
@@ -15,13 +16,13 @@
             </md-item-template>
         </md-autocomplete>
     </form>
-        <md-content>
-            <md-list ng-cloak role="list">
-                <shopping-list-item
-                        ng-repeat="item in ctrl.list.items | orderBy: ['-deleting', 'done', 'article.name'] track by $index"
-                        item="item" list="ctrl.list">
-                </shopping-list-item>
-            </md-list>
-        </md-content>
+    <md-content ng-click="ctrl.clearFocusOnNewItemInput()">
+        <md-list ng-cloak role="list">
+            <shopping-list-item
+                    ng-repeat="item in ctrl.list.items | orderBy: ['-deleting', 'done', 'article.name'] track by item.entityId"
+                    item="item" list="ctrl.list">
+            </shopping-list-item>
+        </md-list>
+    </md-content>
     <ng-include ng-if="ctrl.list.items.length == 0" src="'/templates/lists/view/emptyList.html'"></ng-include>
 </div>
