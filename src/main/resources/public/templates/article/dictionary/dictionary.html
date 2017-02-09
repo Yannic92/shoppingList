@@ -5,7 +5,7 @@
     </md-input-container>
 
     <md-list>
-        <shopping-article ng-repeat="article in ctrl.articles | filter: ctrl.filter track by $index" article="article"></shopping-article>
+        <shopping-article ng-repeat="article in ctrl.articles | filter: ctrl.filter track by article.entityId" article="article"></shopping-article>
     </md-list>
 </div>
 <ng-include ng-if="ctrl.dictionaryIsEmpty()" src="'/templates/article/dictionary/emptyDictionary.html'"></ng-include>

@@ -2,7 +2,7 @@
     <md-content>
         <md-list ng-cloak role="list">
             <shopping-list-item
-                    ng-repeat="item in ctrl.list.items | orderBy: ['-deleting', 'done', 'article.name'] track by $index"
+                    ng-repeat="item in ctrl.list.items | orderBy: ['-deleting', 'done', 'article.name'] track by item.entityId"
                     item="item" list="ctrl.list">
             </shopping-list-item>
         </md-list>
