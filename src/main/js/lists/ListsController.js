@@ -27,12 +27,12 @@ export default class ListsController {
 
     deleteAllLists(ev) {
         this.deleteConfirmationDialog.show(ev).then(() => {
-            return this.listService.deleteAll();
+            return this.listService.deleteAllShoppingLists();
         });
     }
 
     _initLists($rootScope) {
-        this.lists = this.listService.getAll();
+        this.lists = this.listService.getAllShoppingLists();
 
         this.lists.promise.finally(() => {
             $rootScope.loading = false;

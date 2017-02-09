@@ -23,6 +23,14 @@ export default class RESTService {
             });
     }
 
+    fetchOne(pathVariablePattern) {
+        return this.resource.get(pathVariablePattern).$promise
+            .then((response) => {
+                const responseEntity = this.resourceConverter.toEntity(response);
+                CollectionUtils.replaceExisting(this.filter, responseEntity, this.container, pathVariablePattern);
+                return responseEntity;
+            });
+    }
 
     fetch() {
 

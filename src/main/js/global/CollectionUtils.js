@@ -9,17 +9,23 @@ export default class CollectionUtils {
 
         const existingElement = filter(container, filterParameters)[0];
         const index = container.indexOf(existingElement);
-        container.splice(index, 1, element);
+        if(index >= 0) {
+            container.splice(index, 1, element);
+        }else {
+            container.push(element);
+        }
 
-        return existingElement;
+        return index;
     }
 
     static remove(filter, container, filterParameters) {
 
         const existingElement = filter(container, filterParameters)[0];
         const index = container.indexOf(existingElement);
-        container.splice(index, 1);
+        if(index >= 0) {
+            container.splice(index, 1);
+        }
 
-        return existingElement;
+        return index;
     }
 }

@@ -1,105 +1,80 @@
-import HALResource from '../../services/HALResource';
+import RESTService from '../../global/RESTService';
 export default class ListService {
 
     /*@ngInject*/
-    constructor($resource, $filter, $q, $rootScope) {
+    constructor($resource, $filter, $q, $rootScope, shoppingListResourceConverter) {
 
         this.$q = $q;
-        this.$filter = $filter;
-        this.$rootScope = $rootScope;
+        this.filter = $filter('filter');
         this.lists = [];
 
-        this._initResources($resource);
+        const methods = {
+            'update': {method: 'PUT'},
+            'delete': {method: 'DELETE'}
+        };
+        const listsResource = $resource('/shoppingLists/:entityId', null, methods);
+        this.restService = new RESTService($rootScope, $resource, listsResource, shoppingListResourceConverter,
+            this.lists, this.filter);
     }
 
-    getAll() {
-        if (!this.lists.fetching && !this.lists.fetched) {
-            this.fetch();
+    /**
+     * Returns all {ShoppingList}s.
+     *
+     * @param {Boolean} refetch If true a request to the backend will be performed. If false the last fetched lists are
+     *                  returned.
+     * @returns {Array} All fetched {ShoppingLists}.
+     */
+    getAllShoppingLists(refetch = false) {
+        if (refetch || this.shoppingListsAlreadyFetched()) {
+            this.restService.fetch();
         }
         return this.lists;
     }
 
-    get(listId) {
+    shoppingListsAlreadyFetched() {
+        return !this.lists.fetching && !this.lists.fetched;
+    }
+
+    findShoppingListById(listId, refetch = false) {
+
         const existingList = this._findExistingList(listId);
 
         if(!existingList) {
-            return this.getUpdated({entityId:listId});
+            return this.getUpdatedShoppingList({entityId:listId});
         }
 
-        if(!existingList.updated) {
-            return this.getUpdated(existingList);
+        if(!existingList.updated || refetch) {
+            return this.getUpdatedShoppingList(existingList);
         }
 
         return this._getResolvedPromise(existingList);
+
     }
 
-    getUpdated(list) {
-        return this.listsResource.get({id: list.entityId}).$promise
-            .then((response) => {
-                const responseEntity = ListService._toEntity(response);
-                this._replaceExistingList(responseEntity);
-                list.updated = true;
-                responseEntity.updated = true;
-                return responseEntity;
+    getUpdatedShoppingList(list) {
+
+        return this.restService.fetchOne({entityId: list.entityId})
+            .then((shoppingList) => {
+                shoppingList.updated = true;
+                return shoppingList;
             });
     }
 
-    create(list) {
-        return this.listsResource.save(ListService._toResource(list)).$promise
-            .then((response) => {
-                const responseEntity = ListService._toEntity(response);
-                this.lists.push(responseEntity);
-                return responseEntity;
-            });
+    createShoppingList(list) {
+        return this.restService.create(list);
     }
 
-    update(list) {
-        return this.listsResource.update({id: list.entityId}, ListService._toResource(list)).$promise
-            .then((response) => {
-                const responseEntity = ListService._toEntity(response);
-                this._replaceExistingList(responseEntity);
-                return responseEntity;
-            });
+    updateShoppingList(list) {
+        return this.restService.update(list, {entityId: list.entityId});
     }
 
-    fetch() {
-        if (this.$rootScope.authenticated) {
-            this.lists.fetching = true;
-            this.lists.fetched = false;
-            this.lists.promise = this.listsNameOnlyResource.get().$promise
-                .then((response) => {
-                    let entities = ListService._toEntities(HALResource.getContent(response));
-                    this.lists.splice(0, this.lists.length);
-                    this.lists.push.apply(this.lists, entities);
-                    this.lists.fetching = false;
-                    this.lists.fetched = true;
-                    return entities;
-                });
-        } else {
-            this.lists.promise = this._getRejectedPromise('Not authenticated');
-        }
-
-        return this.lists.promise;
+    deleteShoppingList(list) {
+        return this.restService.delete({entityId: list.entityId});
     }
 
-    delete(list) {
-        return this.listsResource.delete({id: list.entityId}).$promise
-            .then(() => {
-                let existingList = this._findExistingList(list.entityId);
-                if(existingList) {
-                    let index = this.lists.indexOf(existingList);
-                    this.lists.splice(index, 1);
-                    return index;
-                }
-            });
-    }
+    deleteAllShoppingLists() {
 
-    deleteAll() {
-        return this.listsResource.delete().$promise
-            .then(() => {
-                this.lists.splice(0, this.lists.length);
-                return this.lists;
-            });
+        return this.restService.deleteAll();
     }
 
     static getDeleteMessage(list) {
@@ -111,72 +86,6 @@ export default class ListService {
         }
     }
 
-    static _toResource(entity) {
-        const resource = {};
-        resource._links = entity._links;
-        resource.entityId = entity.entityId;
-        resource.name = entity.name;
-        resource.owners = [];
-        resource.items = [];
-
-        if (entity.owners) {
-            for (let i = 0; i < entity.owners.length; i++) {
-                resource.owners.push({username: entity.owners[i].username});
-            }
-        }
-
-        if (entity.items) {
-            for (let i = 0; i < entity.items.length; i++) {
-                resource.items.push({entityId: entity.items[i].entityId});
-            }
-        }
-
-        return resource;
-    }
-
-    static _toEntity(resource) {
-        let entity = {};
-        entity.entityId = resource.entityId;
-        entity._links = resource._links;
-        entity.name = resource.name;
-        entity.owners = resource.owners ? resource.owners : [];
-        entity.items = resource.items ? resource.items : [];
-
-        return entity;
-    }
-
-    static _toEntities(resources) {
-
-        let entities = [];
-        if (!resources || !resources.length) {
-            return entities;
-        }
-
-        for (let i = 0; i < resources.length; i++) {
-            let entity = ListService._toEntity(resources[i]);
-            entities.push(entity);
-        }
-
-        return entities;
-    }
-
-    _replaceExistingList(list) {
-        const existingList = this._findExistingList(list.entityId);
-        let index = this.lists.indexOf(existingList);
-
-        if(index >= 0) {
-            this.lists.splice(index, 1, list);
-        }
-    }
-
-    _getRejectedPromise(message) {
-        const deferred = this.$q.defer();
-        const rejectedPromise = deferred.promise;
-        deferred.reject(message);
-
-        return rejectedPromise;
-    }
-
     _getResolvedPromise(resolvedData) {
 
         const deferred = this.$q.defer();
@@ -186,16 +95,7 @@ export default class ListService {
         return resolvedPromise;
     }
 
-    _initResources($resource) {
-        let methods = {
-            'update': {method: 'PUT'},
-            'delete': {method: 'DELETE'}
-        };
-        this.listsResource = $resource('/shoppingLists/:id', null, methods);
-        this.listsNameOnlyResource = $resource('shoppingLists/projections/name_only');
-    }
-
     _findExistingList(listId) {
-        return this.$filter('filter')(this.lists, {entityId: listId})[0];
+        return this.filter(this.lists, {entityId: listId})[0];
     }
 }

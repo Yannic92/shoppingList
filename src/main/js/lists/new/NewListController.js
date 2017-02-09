@@ -1,3 +1,4 @@
+import ShoppingList from '../ShoppingList';
 export default class NewListController {
 
     /*@ngInject*/
@@ -10,10 +11,7 @@ export default class NewListController {
         this.$rootScope.title = 'Neue Einkaufsliste';
         this.$rootScope.loading = false;
         this.userSearchText = '';
-        this.list = {
-            name: '',
-            owners: [$rootScope.user]
-        };
+        this.list = new ShoppingList({name: '', owners: [$rootScope.user]});
 
         this._initUsers(userService);
 
@@ -33,7 +31,7 @@ export default class NewListController {
     createList() {
         this.$rootScope.loading = true;
 
-        this.listService.create(this.list)
+        this.listService.createShoppingList(this.list)
             .then((createdList) => {
                 this._showListCreatedToast();
                 this.navigationService.goto('/lists/' + createdList.entityId, true);

@@ -39,6 +39,7 @@ import ItemComponent from './item/ItemComponent';
 import ArticleComponent from './article/ArticleComponent';
 import ItemResourceConverter from './item/service/ItemResourceConverter';
 import ArticleResourceConverter from './article/service/ArticleResourceConverter';
+import ShoppingListResourceConverter from './lists/service/ShoppingListResourceConverter';
 
 angular.module('shoppingList', [ngRoute, ngResource, ngMaterial, ngAnimate, ngAria, ngMessages, ngTouch])
     .config(/*@ngInject*/($routeProvider, $httpProvider) => {
@@ -66,6 +67,7 @@ angular.module('shoppingList', [ngRoute, ngResource, ngMaterial, ngAnimate, ngAr
     .service('navigationService', NavigationService)
     .service('authenticationInterceptor', HttpInterceptor)
     .service('userService', UserService)
+    .service('shoppingListResourceConverter', ShoppingListResourceConverter)
     .service('listService', ListService)
     .service('itemResourceConverter', ItemResourceConverter)
     .service('itemService', ItemService)

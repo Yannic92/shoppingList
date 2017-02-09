@@ -15,7 +15,7 @@ export default class ListController extends  ResponsiveListItemController{
 
     deleteList(list, ev) {
         this._showDeleteConfirmationDialog(list, ev).then(() => {
-            return this.listService.delete(list);
+            return this.listService.deleteShoppingList(list);
         });
     }
 

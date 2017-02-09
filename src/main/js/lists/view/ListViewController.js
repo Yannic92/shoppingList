@@ -29,7 +29,7 @@ export default class ListViewController {
 
     update() {
         this.$rootScope.loading = true;
-        return this.listService.getUpdated(this.list)
+        return this.listService.getUpdatedShoppingList(this.list)
             .then((updatedList) => {
                 this.list = updatedList;
             }).finally(() => {
@@ -68,7 +68,7 @@ export default class ListViewController {
 
     deleteList(ev) {
         this._showDeleteListConfirmationDialog(ev)
-            .then(() => this.listService.delete(this.list))
+            .then(() => this.listService.deleteShoppingList(this.list))
             .then((indexOfDeletedList) => this._goToPreviousList(indexOfDeletedList));
     }
 
@@ -128,7 +128,7 @@ export default class ListViewController {
 
         this.list.items.splice(0, this.list.items.length);
         this.list.items.push.apply(this.list.items, notDoneItems);
-        promises.push(this.listService.update(this.list));
+        promises.push(this.listService.updateShoppingList(this.list));
 
         return this.$q.all(promises);
     }
@@ -163,7 +163,7 @@ export default class ListViewController {
 
     _addItemToList(item) {
         this.list.items.push(item);
-        return this.listService.update(this.list);
+        return this.listService.updateShoppingList(this.list);
     }
 
     _showNewItemDialog(ev) {
@@ -207,7 +207,7 @@ export default class ListViewController {
     }
 
     _initLists($routeParams, $filter) {
-        this.lists = this.listService.getAll();
+        this.lists = this.listService.getAllShoppingLists();
 
         this.lists.promise
             .then(() => {

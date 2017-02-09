@@ -24,7 +24,7 @@ export default class EditListController {
     _initLists($filter, $routeParams) {
         this.list = {name: ''};
 
-        this.listService.get($routeParams.id)
+        this.listService.findShoppingListById($routeParams.id)
             .then((list) => {
                 this.list = angular.copy(list);
                 this.$rootScope.loading = false;
@@ -42,7 +42,7 @@ export default class EditListController {
 
     updateList() {
         this.$rootScope.loading = true;
-        return this.listService.update(this.list)
+        return this.listService.updateShoppingList(this.list)
             .then(() => this._showListUpdatedToast())
             .finally(() => this._resetForm());
     }
