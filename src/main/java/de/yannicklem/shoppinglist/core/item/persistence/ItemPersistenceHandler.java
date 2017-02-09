@@ -3,6 +3,7 @@ package de.yannicklem.shoppinglist.core.item.persistence;
 import de.yannicklem.restutils.entity.service.EntityPersistenceHandler;
 
 import de.yannicklem.shoppinglist.core.exception.AlreadyExistsException;
+import de.yannicklem.shoppinglist.core.exception.EntityInvalidException;
 import de.yannicklem.shoppinglist.core.exception.NotFoundException;
 import de.yannicklem.shoppinglist.core.item.entity.Item;
 import de.yannicklem.shoppinglist.core.item.validation.ItemValidationService;
@@ -90,17 +91,32 @@ public class ItemPersistenceHandler implements EntityPersistenceHandler<Item> {
 
 
     @Override
-    public void handleBeforeDelete(Item entity) {
+    public void handleBeforeDelete(Item item) {
 
-        if (entity == null || !itemReadOnlyService.exists(entity.getEntityId())) {
+        if (item == null || !itemReadOnlyService.exists(item.getEntityId())) {
             throw new NotFoundException("Item not found");
         }
 
-        List<ShoppingList> shoppingListsContainingItem = shoppingListService.findShoppingListsContainingItem(entity);
+        deleteItemOutOfContainingLists(item);
+    }
 
-        for (ShoppingList shoppingList : shoppingListsContainingItem) {
-            shoppingList.getItems().remove(entity);
-            shoppingListService.update(shoppingList);
+
+    private void deleteItemOutOfContainingLists(Item item) {
+
+        try {
+            List<ShoppingList> shoppingListsContainingItem = shoppingListService.findShoppingListsContainingItem(item);
+
+            for (ShoppingList shoppingList : shoppingListsContainingItem) {
+                shoppingList.getItems().remove(item);
+                shoppingListService.update(shoppingList);
+            }
+        } catch (EntityInvalidException entityInvalidException) {
+            LOGGER.warn(
+                "An error occurred while deleting item ('{}') out of shopping lists containing the item that should be "
+                + "deleted", item.getArticle().getName());
+            LOGGER.debug("The following exception occurred while handling before delete of item '{}'",
+                entityInvalidException);
+            throw entityInvalidException;
         }
     }
 

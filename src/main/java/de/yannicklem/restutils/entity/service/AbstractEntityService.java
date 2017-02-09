@@ -4,8 +4,6 @@ import de.yannicklem.restutils.entity.RestEntity;
 
 import de.yannicklem.shoppinglist.core.exception.NotFoundException;
 
-import org.springframework.transaction.annotation.Transactional;
-
 import java.io.Serializable;
 
 import java.util.List;
@@ -14,7 +12,6 @@ import java.util.List;
 /**
  * @author  Yannic Klem - yann.klem@gmail.com
  */
-@Transactional
 public abstract class AbstractEntityService<Type extends RestEntity<ID>, ID extends Serializable>
     extends AbstractEntityReadOnlyService<Type, ID> implements EntityService<Type, ID> {
 

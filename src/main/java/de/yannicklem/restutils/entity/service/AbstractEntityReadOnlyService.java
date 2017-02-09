@@ -6,8 +6,6 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.transaction.annotation.Transactional;
-
 import java.io.Serializable;
 
 import java.util.List;
@@ -17,7 +15,6 @@ import java.util.Optional;
 /**
  * @author  Yannic Klem - yann.klem@gmail.com
  */
-@Transactional
 @RequiredArgsConstructor(onConstructor = @__(@Autowired ))
 public abstract class AbstractEntityReadOnlyService<Type extends RestEntity<ID>, ID extends Serializable>
     implements EntityReadOnlyService<Type, ID> {

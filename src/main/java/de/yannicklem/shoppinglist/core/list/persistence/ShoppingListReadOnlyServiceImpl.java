@@ -10,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
 
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +17,6 @@ import java.util.List;
 /**
  * @author  Yannic Klem - yann.klem@gmail.com
  */
-@Transactional
 @Service("readOnlyShoppingListService")
 public class ShoppingListReadOnlyServiceImpl extends AbstractEntityReadOnlyService<ShoppingList, Long>
     implements ShoppingListReadOnlyService {

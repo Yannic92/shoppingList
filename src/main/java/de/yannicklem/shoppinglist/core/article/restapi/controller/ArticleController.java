@@ -25,8 +25,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-import org.springframework.transaction.annotation.Transactional;
-
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,7 +47,6 @@ import static java.lang.invoke.MethodHandles.lookup;
         MediaTypes.HAL_JSON_VALUE, MediaType.APPLICATION_JSON_VALUE
     }
 )
-@Transactional
 @ExposesResourceFor(Article.class)
 public class ArticleController extends RestEntityController<Article, Long> {
 

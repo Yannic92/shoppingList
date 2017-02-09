@@ -19,7 +19,13 @@ import org.springframework.hateoas.core.Relation;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 
 @Entity
@@ -39,7 +45,7 @@ public class ShoppingList extends OwnedRestEntity<Long> {
     )
     private Long entityId;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private final Set<SLUser> owners;
 
     private String name;

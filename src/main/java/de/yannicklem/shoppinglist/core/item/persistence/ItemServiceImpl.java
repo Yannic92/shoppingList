@@ -13,14 +13,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 import org.springframework.stereotype.Service;
 
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.Date;
 import java.util.List;
 
 
 @Service
-@Transactional
 public class ItemServiceImpl extends AbstractOwnedEntityService<Item, Long> implements ItemService {
 
     private final ItemRepository itemRepository;

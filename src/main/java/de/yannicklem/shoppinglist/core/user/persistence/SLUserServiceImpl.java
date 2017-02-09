@@ -14,15 +14,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import org.springframework.stereotype.Service;
 
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 
 @Service
-@Transactional
 public class SLUserServiceImpl extends AbstractEntityService<SLUser, String> implements SLUserService {
 
     private final SLUserRepository slUserRepository;

@@ -8,17 +8,24 @@ import de.yannicklem.shoppinglist.core.user.validation.SLUserValidationService;
 
 import lombok.RequiredArgsConstructor;
 
+import org.slf4j.Logger;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
+import static java.lang.invoke.MethodHandles.lookup;
+
 
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired ))
 public class ItemValidationService {
 
+    private static final Logger LOGGER = getLogger(lookup().lookupClass());
     private final ArticleValidationService articleValidationService;
     private final SLUserValidationService slUserValidationService;
 
@@ -28,11 +35,19 @@ public class ItemValidationService {
             throw new EntityInvalidException("Item must not be null");
         }
 
-        validateOwners(item.getOwners());
+        try {
+            validateOwners(item.getOwners());
 
-        validateCount(item.getCount());
+            validateCount(item.getCount());
 
-        articleValidationService.validate(item.getArticle());
+            articleValidationService.validate(item.getArticle());
+        } catch (EntityInvalidException entityInvalidException) {
+            LOGGER.info("Validation of item (entityId: {}) failed: {}", item.getEntityId(),
+                entityInvalidException.getMessage());
+            LOGGER.debug("The following exception occurred, during validation of item (entityId: {})",
+                entityInvalidException);
+            throw entityInvalidException;
+        }
     }
 
 
