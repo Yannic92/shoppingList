@@ -1,19 +1,19 @@
-import HALResource from '../../services/HALResource';
+import RESTService from '../../global/RESTService';
 
 export default class UserService {
 
     /*@ngInject*/
-    constructor($resource, $q, $rootScope) {
-        var userEndpoint = '/sLUsers/:username';
-        var methods = {
+    constructor($resource, $q, $rootScope, userResourceConverter, $filter) {
+        const userEndpoint = '/sLUsers/:username';
+        const methods = {
             'update': {method: 'PUT'},
             'delete': {method: 'DELETE'}
         };
-        this.usersResource = $resource(userEndpoint, null, methods);
-        this.usersConfirmationResource = $resource(userEndpoint + '/confirmation', null, methods);
+        const usersResource = $resource(userEndpoint, null, methods);
         this.users = [];
-        this.$q = $q;
-        this.$rootScope = $rootScope;
+
+        this.restService = new RESTService($rootScope, $q, usersResource, userResourceConverter, this.users, $filter('filter'));
+        this.usersConfirmationResource = $resource(userEndpoint + '/confirmation', null, methods);
     }
 
     _getRejectedPromise(message) {
@@ -24,28 +24,27 @@ export default class UserService {
         return rejectedPromise;
     }
 
-    get() {
-        if (!this.users.fetching && !this.users.loaded) {
-            this.fetch();
+    /**
+     * Returns all {User}s.
+     *
+     * @param {Boolean} refetch If true a request to the backend will be performed. If false the last fetched lists are
+     *                  returned.
+     * @returns {Array} All fetched {User}s.
+     */
+    getAllUsers(refetch = false) {
+        if (refetch || this.usersAlreadyFetched()) {
+            this.restService.fetch();
         }
-        return this.users;
+        return this.lists;
     }
 
-    fetch() {
-        if (this.$rootScope.authenticated) {
-            this.users.fetching = true;
-            this.users.promise = this.usersResource.get().$promise
-                .then((response) => {
-                    this._setUsers(HALResource.getContent(response));
-                    this.users.loaded = true;
-                    this.users.fetching = false;
-                    return this.users;
-                });
-        } else {
-            this.users.promise = this._getRejectedPromise('Not authenticated');
-        }
+    findByUsername(username) {
 
-        return this.users.promise;
+        return this.restService.fetchOne({username: username});
+    }
+
+    usersAlreadyFetched() {
+        return !this.users.fetching && !this.users.fetched;
     }
 
     storeCredentials(credentials) {
@@ -62,30 +61,20 @@ export default class UserService {
     }
 
 
-    create(user) {
-        return this.usersResource.save(user).$promise
-            .then(function (response) {
-                return HALResource.getContent(response);
-            });
+    createUser(user) {
+
+        return this.restService.create(user);
     }
 
-    update(user) {
-        return this.usersResource.update({username: user.username}, user).$promise
-            .then(function (updatedUser) {
-                return HALResource.getContent(updatedUser);
-            });
+    updateUser(user) {
+        return this.restService.update(user);
     }
 
-    delete(user) {
-        return this.usersResource.delete({username: user.username}).$promise;
+    deleteUser(user) {
+        return this.restService.delete({username: user.username});
     }
 
     confirmRegistrationFor(username, confirmation) {
         return this.usersConfirmationResource.update({username: username}, confirmation).$promise;
-    }
-
-    _setUsers(users) {
-        this.users.splice(0, this.users.length);
-        this.users.push.apply(this.users, users);
     }
 }

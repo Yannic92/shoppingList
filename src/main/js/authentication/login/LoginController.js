@@ -27,8 +27,7 @@ export default class LoginController {
     login() {
         this._loggingIn();
         this.authService.authenticate(this.credentials)
-            .then((user) => {
-                this.$rootScope.user = user;
+            .then(() => {
                 if (this.credentials.rememberMe) {
                     this.userService.storeCredentials(this.credentials);
                 }

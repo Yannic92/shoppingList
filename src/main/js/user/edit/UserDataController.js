@@ -1,4 +1,3 @@
-import angular from 'angular';
 export default class UserDataController {
 
     /*@ngInject*/
@@ -6,7 +5,7 @@ export default class UserDataController {
 
         this.$rootScope = $rootScope;
         this.$rootScope.title = 'Benutzerdaten';
-        this.user = angular.copy($rootScope.user);
+        this.user = $rootScope.user.copy();
         this.userService = userService;
         this.authService = authService;
         this.$mdToast = $mdToast;
@@ -15,7 +14,7 @@ export default class UserDataController {
 
     updateUserData() {
         this.$rootScope.loading = true;
-        this.userService.update(this.user)
+        this.userService.updateUser(this.user)
             .then(() => this._signInWIthNewCredentials())
             .finally(() => this._finishUpdating());
     }

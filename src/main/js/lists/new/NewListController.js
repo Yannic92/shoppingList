@@ -62,7 +62,7 @@ export default class NewListController {
 
     _initUsers(userService) {
         this._initUserTextField();
-        this.users = userService.get();
+        this.users = userService.getAllUsers();
     }
 
     _initUserTextField() {

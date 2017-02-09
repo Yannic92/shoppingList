@@ -3,3 +3,7 @@ target
 .idea
 node_modules
 cached_uglify
+
+# Spring configuration files (only toplevel)
+/application*.properties
+/application*.yml

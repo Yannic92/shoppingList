@@ -1,3 +1,5 @@
+import User from '../../user/User';
+import Authority from '../../user/authority/Authority';
 export default class RegisterController {
 
     /*@ngInject*/
@@ -10,14 +12,14 @@ export default class RegisterController {
         this.$rootScope.title = 'Registrieren';
         this.$rootScope.loading = false;
 
-        this.user = {authorities: [{authority: 'USER'}]};
+        this.user = new User({authorities: [new Authority(Authority.USER_ROLE)]});
 
         this._initDestroyListener($scope);
     }
 
     register() {
         this.$rootScope.loading = true;
-        this.userService.create(this.user)
+        this.userService.createUser(this.user)
             .then(() => {
                 this.navigationService.goto('/register/confirmation');
             })

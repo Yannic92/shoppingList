@@ -18,13 +18,7 @@ export default class AuthService {
         this.$rootScope.authenticationAlreadyChecked = true;
         return this.$http.get(this.userEndpoint, {
             headers: headers
-        }).then(() => {
-            return this.$http.get(this.userEndpoint)
-                .then((response) => this._handleSuccessfulLogin(response))
-                .finally(() => {
-                    this.loggingIn = false;
-                });
-        });
+        }).then((response) => this._handleSuccessfulLogin(response.data.username));
     }
 
     isAuthenticated() {
@@ -36,7 +30,7 @@ export default class AuthService {
         }
 
         return this.$http.get(this.userEndpoint)
-            .then((response) => this._handleSuccessfulLogin(response))
+            .then((response) => this._handleSuccessfulLogin(response.data.username))
             .finally(() => {
                 this.loggingIn = false;
             });
@@ -61,12 +55,15 @@ export default class AuthService {
             });
     }
 
-    _handleSuccessfulLogin(response) {
-        if (response.data && response.data.username) {
-            this.$rootScope.authenticated = true;
-            return response.data;
-        } else {
-            this.$rootScope.authenticated = false;
-        }
+    _handleSuccessfulLogin(username) {
+        return this.userService.findByUsername(username)
+            .then((currentUser) => {
+                this.$rootScope.authenticated = true;
+                this.$rootScope.user = currentUser;
+                return currentUser;
+            })
+            .finally(() => {
+                this.loggingIn = false;
+            });
     }
 }

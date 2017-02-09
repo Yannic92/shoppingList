@@ -12,8 +12,7 @@ export default class DeleteUserController {
     }
 
     deleteAccount() {
-        this.userService
-            .delete(this.user)
+        this.userService.deleteUser(this.user)
             .then(() => this._logout());
     }
 

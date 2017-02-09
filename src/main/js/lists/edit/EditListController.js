@@ -33,7 +33,7 @@ export default class EditListController {
 
     _initUsers(userService) {
         this._initUserTextField();
-        this.users = userService.get();
+        this.users = userService.getAllUsers();
     }
 
     _initUserTextField() {

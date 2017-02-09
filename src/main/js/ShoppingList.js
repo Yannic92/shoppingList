@@ -40,6 +40,7 @@ import ArticleComponent from './article/ArticleComponent';
 import ItemResourceConverter from './item/service/ItemResourceConverter';
 import ArticleResourceConverter from './article/service/ArticleResourceConverter';
 import ShoppingListResourceConverter from './lists/service/ShoppingListResourceConverter';
+import UserResourceConverter from './user/service/UserResourceConverter';
 
 angular.module('shoppingList', [ngRoute, ngResource, ngMaterial, ngAnimate, ngAria, ngMessages, ngTouch])
     .config(/*@ngInject*/($routeProvider, $httpProvider) => {
@@ -74,6 +75,7 @@ angular.module('shoppingList', [ngRoute, ngResource, ngMaterial, ngAnimate, ngAr
     .service('authService', AuthService)
     .service('articleResourceConverter', ArticleResourceConverter)
     .service('articleService', ArticleService)
+    .service('userResourceConverter', UserResourceConverter)
     .controller('navigationController', NavigationController)
     .controller('navMenuController', NavMenuController)
     .controller('leftSideNavController', LeftSideNavController)
