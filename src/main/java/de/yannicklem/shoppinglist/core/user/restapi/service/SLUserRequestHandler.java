@@ -45,22 +45,22 @@ public class SLUserRequestHandler implements RequestHandler<SLUser> {
 
 
     @Override
-    public void handleRead(SLUser object, SLUser currentUser) {
+    public void handleRead(SLUser userToRead, SLUser currentUser) {
 
-        if (object.isAdmin() && !currentUser.isAdmin()) {
+        if (userToRead.isAdmin() && !currentUser.isAdmin()) {
             throw new PermissionDeniedException();
         }
 
-        if (!object.isEnabled()) {
+        if (!userToRead.isEnabled()) {
             throw new PermissionDeniedException();
         }
     }
 
 
     @Override
-    public void handleBeforeDelete(SLUser slUser, SLUser currentUser) {
+    public void handleBeforeDelete(SLUser userToDelete, SLUser currentUser) {
 
-        if (!slUserPermissionEvaluator.isAllowedToDelete(slUser, currentUser)) {
+        if (!slUserPermissionEvaluator.isAllowedToDelete(userToDelete, currentUser)) {
             throw new PermissionDeniedException();
         }
     }

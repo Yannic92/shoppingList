@@ -4,7 +4,7 @@ export default class UserService {
 
     /*@ngInject*/
     constructor($resource, $q, $rootScope, userResourceConverter, $filter) {
-        const userEndpoint = '/sLUsers/:username';
+        const userEndpoint = '/api/sLUsers/:username';
         const methods = {
             'update': {method: 'PUT'},
             'delete': {method: 'DELETE'}

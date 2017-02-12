@@ -1,6 +1,6 @@
 import ShoppingListCache from '../cache/ShoppingListCache';
 
-const CACHE_VERSION = 18;
+const CACHE_VERSION = 20;
 const URLS_TO_CACHE = [
     '/',
     '/index.html',
@@ -54,6 +54,7 @@ const URLS_TO_CACHE = [
     '/templates/article/dictionary/emptyDictionary.html',
     '/style/css/app-compact.css',
     '/js/ShoppingList.min.js',
+    '/img/icons/platform/github.svg',
     '/img/icons/action/ic_add_shopping_cart_24px.svg',
     '/img/icons/action/ic_lock_outline_24px.svg',
     '/img/icons/action/ic_shopping_cart_24px.svg',

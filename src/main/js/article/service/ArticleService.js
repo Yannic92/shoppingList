@@ -8,7 +8,7 @@ export default class ArticleService {
         this.$q = $q;
         this.filter = $filter('filter');
 
-        const articlesResource = $resource('/articles/:entityId', null, {
+        const articlesResource = $resource('/api/articles/:entityId', null, {
             'update': {method: 'PUT'},
             'delete': {method: 'DELETE'}
         });

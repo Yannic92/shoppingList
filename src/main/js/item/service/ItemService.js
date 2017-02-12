@@ -8,7 +8,7 @@ export default class ItemService {
         this.$rootScope = $rootScope;
         this.articleService = articleService;
 
-        const itemsResource = $resource('/items/:entityId', null, {
+        const itemsResource = $resource('/api/items/:entityId', null, {
             'update': {method: 'PUT'},
             'delete': {method: 'DELETE'}
         });

@@ -12,7 +12,7 @@ export default class ListService {
             'update': {method: 'PUT'},
             'delete': {method: 'DELETE'}
         };
-        const listsResource = $resource('/shoppingLists/:entityId', null, methods);
+        const listsResource = $resource('/api/shoppingLists/:entityId', null, methods);
         this.restService = new RESTService($rootScope, $resource, listsResource, shoppingListResourceConverter,
             this.lists, this.filter);
     }

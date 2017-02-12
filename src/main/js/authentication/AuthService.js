@@ -9,7 +9,7 @@ export default class AuthService {
         this.loggedOut = false;
         this.loggingIn = false;
 
-        this.userEndpoint = 'sLUsers/current';
+        this.userEndpoint = '/api/sLUsers/current';
     }
 
     authenticate(credentials) {
