@@ -90,7 +90,7 @@ export default class ListService {
 
         const deferred = this.$q.defer();
         const resolvedPromise = deferred.promise;
-        deferred.reject(resolvedData);
+        deferred.resolve(resolvedData);
 
         return resolvedPromise;
     }
