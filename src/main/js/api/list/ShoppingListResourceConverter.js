@@ -1,6 +1,6 @@
-import ResourceConverter from '../../global/ResourceConverter';
-import ShoppingList from '../ShoppingList';
-import ShoppingListResource from '../ShoppingListResource';
+import ResourceConverter from '../ResourceConverter';
+import ShoppingList from '../../lists/ShoppingList';
+import ShoppingListResource from './ShoppingListResource';
 
 /**
  *  Converts a JSON Object to a {ShoppingList} and converts a {ShoppingList} to an {ShoppingListResource}.

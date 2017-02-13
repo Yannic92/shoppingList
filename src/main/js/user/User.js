@@ -2,6 +2,7 @@ export default class User {
 
     constructor({links = [], username = '', firstName = '', lastName = '', email = '', authorities = [], password= ''} = {}) {
 
+        this.key = 'username';
         this.links = links;
         this.username = username;
         this.firstName = firstName;

@@ -1,19 +1,23 @@
-import RESTService from '../../global/RESTService';
+import RESTService from '../RESTService';
+import Endpoints from '../Endpoints';
+import User from '../../user/User';
 
 export default class UserService {
 
     /*@ngInject*/
-    constructor($resource, $q, $rootScope, userResourceConverter, $filter) {
-        const userEndpoint = '/api/sLUsers/:username';
+    constructor($resource, $q, $rootScope, userResourceConverter, $filter, $timeout) {
+
+        const userEndpoint = Endpoints.user + '/:username';
         const methods = {
             'update': {method: 'PUT'},
             'delete': {method: 'DELETE'}
         };
-        const usersResource = $resource(userEndpoint, null, methods);
+        this.usersConfirmationResource = $resource(userEndpoint + '/confirmation', null, methods);
+
         this.users = [];
 
-        this.restService = new RESTService($rootScope, $q, usersResource, userResourceConverter, this.users, $filter('filter'));
-        this.usersConfirmationResource = $resource(userEndpoint + '/confirmation', null, methods);
+        this.restService = new RESTService($rootScope,$q, $resource, userResourceConverter,
+            this.users, $filter('filter'), $timeout, 'user-cache-updated', Endpoints.user);
     }
 
     _getRejectedPromise(message) {
@@ -40,7 +44,7 @@ export default class UserService {
 
     findByUsername(username) {
 
-        return this.restService.fetchOne({username: username});
+        return this.restService.fetchOne(new User({username: username}));
     }
 
     usersAlreadyFetched() {
@@ -71,7 +75,7 @@ export default class UserService {
     }
 
     deleteUser(user) {
-        return this.restService.delete({username: user.username});
+        return this.restService.delete(user);
     }
 
     confirmRegistrationFor(username, confirmation) {

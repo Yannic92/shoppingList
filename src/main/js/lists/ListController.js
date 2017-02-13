@@ -1,4 +1,4 @@
-import ListService from './service/ListService';
+import ListService from '../api/list/ListService';
 import ResponsiveListItemController from '../global/ResponsiveListItemController';
 
 export default class ListController extends  ResponsiveListItemController{

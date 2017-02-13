@@ -1,7 +1,8 @@
 import angular from 'angular';
 import {NewItemController} from '../../item/new/NewItemController';
-import ListService from '../service/ListService';
+import ListService from '../../api/list/ListService';
 import Item from '../../item/Item';
+import ShoppingList from '../ShoppingList';
 export default class ListViewController {
 
     /*@ngInject*/
@@ -15,10 +16,7 @@ export default class ListViewController {
         this.itemService = itemService;
         this.navigationService = navigationService;
         this.articles = articleService.getAllArticles();
-        this.list = {
-            name: '',
-            items: []
-        };
+        this.list = new ShoppingList({name: ''});
         this.$rootScope.loading = true;
         this.creating = false;
         this._initNewItem();
@@ -233,6 +231,7 @@ export default class ListViewController {
 
     _init() {
 
+        this.listService.onListUpdate(this.list, (updatedList) => {this.list = updatedList;});
         this.$rootScope.title = this.list.name;
         this.$rootScope.options = [
             {

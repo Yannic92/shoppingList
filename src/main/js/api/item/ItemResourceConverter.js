@@ -1,6 +1,6 @@
-import ResourceConverter from '../../global/ResourceConverter';
-import Item from '../Item';
-import ItemResource from '../ItemResource';
+import ResourceConverter from '../ResourceConverter';
+import Item from '../../item/Item';
+import ItemResource from './ItemResource';
 
 /**
  *  Converts a JSON Object to an {Item} and converts an {Item} to an {ItemResource}.

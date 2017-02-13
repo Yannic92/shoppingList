@@ -1,4 +1,4 @@
-export default class ShoppingListCache {
+export default class StaticResourceCache {
 
     constructor(self, cacheVersion, urlsToCache) {
 
@@ -53,7 +53,7 @@ export default class ShoppingListCache {
                 }
             })).then(() => {
                 if (updateFound) {
-                    ShoppingListCache.updateFound();
+                    StaticResourceCache.updateFound();
                 }
             }
         );
