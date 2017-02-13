@@ -16,6 +16,7 @@
       2,
       "always"
     ],
+    "no-console": "off",
     "no-class-assign": 0,
     "no-trailing-spaces":  2
   },

@@ -1,7 +1,9 @@
-import ShoppingListCache from '../cache/ShoppingListCache';
+import StaticResourceCache from '../cache/StaticResourceCache';
+import toolbox from 'sw-toolbox';
+import CachingStrategies from '../cache/strategy/CachingStrategies';
 
-const CACHE_VERSION = 20;
-const URLS_TO_CACHE = [
+const CACHE_VERSION = 21;
+const STATIC_RESOURCES_TO_CACHE = [
     '/',
     '/index.html',
     '/sw.js',
@@ -84,6 +86,18 @@ const URLS_TO_CACHE = [
     '/img/icons/Toggle/ic_check_box_outline_blank_24px.svg'
 ];
 
-const shoppingListCache = new ShoppingListCache(self, CACHE_VERSION, URLS_TO_CACHE);
+const staticResourceCache = new StaticResourceCache(self, CACHE_VERSION, STATIC_RESOURCES_TO_CACHE);
 
-shoppingListCache.initListeners();
+staticResourceCache.initListeners();
+toolbox.options.cache.name = 'shopping-list-dynamic-data-cache';
+toolbox.options.networkTimeoutSeconds = 5;
+
+toolbox.router.get('/api/(.*)', handleDataCache);
+
+function handleDataCache(request, values, options) {
+    if (request.url.includes('sLUsers/current')) {
+        return toolbox.networkOnly(request, values, options);
+    }
+
+    return CachingStrategies.fastest(request);
+}

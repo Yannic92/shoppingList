@@ -42,6 +42,8 @@ import ArticleResourceConverter from './article/service/ArticleResourceConverter
 import ShoppingListResourceConverter from './lists/service/ShoppingListResourceConverter';
 import UserResourceConverter from './user/service/UserResourceConverter';
 
+/* global BroadcastChannel */
+
 angular.module('shoppingList', [ngRoute, ngResource, ngMaterial, ngAnimate, ngAria, ngMessages, ngTouch])
     .config(/*@ngInject*/($routeProvider, $httpProvider) => {
         $routeProvider.otherwise({redirectTo: '/lists'});
@@ -184,3 +186,8 @@ angular.module('shoppingList', [ngRoute, ngResource, ngMaterial, ngAnimate, ngAr
             controllerAs: 'ctrl'
         });
     });
+
+const updateChannel = new BroadcastChannel('cache-updates');
+updateChannel.addEventListener('message', () => {
+    //TODO: react to new cache version
+});
