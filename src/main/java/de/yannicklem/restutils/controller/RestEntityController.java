@@ -4,40 +4,26 @@ import de.yannicklem.restutils.entity.RestEntity;
 import de.yannicklem.restutils.entity.service.EntityService;
 import de.yannicklem.restutils.service.MyResourceProcessor;
 import de.yannicklem.restutils.service.RequestHandler;
-
+import de.yannicklem.shoppinglist.core.exception.NotFoundException;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.core.user.persistence.SLUserService;
-
 import lombok.RequiredArgsConstructor;
-
 import org.apache.log4j.Logger;
-
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.hateoas.EntityLinks;
 import org.springframework.hateoas.Resources;
-
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
-
 import java.security.Principal;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
-import static org.apache.log4j.Logger.getLogger;
 
 import static java.lang.invoke.MethodHandles.lookup;
+import static org.apache.log4j.Logger.getLogger;
 
 
 @RequiredArgsConstructor(onConstructor = @__(@Autowired ))
@@ -58,9 +44,7 @@ public abstract class RestEntityController<Type extends RestEntity<ID>, ID exten
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public HttpEntity<? extends Type> getSpecificEntity(@PathVariable("id") ID id, Principal principal) {
 
-        Optional<Type> specificEntityOptional = entityService.findById(id);
-
-        Type specificEntity = specificEntityOptional.orElse(null);
+        Type specificEntity = entityService.findById(id).orElseThrow(() -> new NotFoundException("Entity not found"));
 
         SLUser currentUser = principal == null ? null : slUserService.findById(principal.getName()).orElse(null);
 
@@ -142,7 +126,9 @@ public abstract class RestEntityController<Type extends RestEntity<ID>, ID exten
 
     protected HttpEntity<? extends Type> updateEntity(Type entity, SLUser currentUser) {
 
-        Type currentEntity = entityService.findById(entity.getEntityId()).orElse(null);
+        Type currentEntity = entityService.findById(entity.getEntityId()).orElseThrow(
+                () -> new NotFoundException("Entity Not Found")
+        );
 
         requestHandler.handleBeforeUpdate(currentEntity, entity, currentUser);
 
@@ -162,7 +148,7 @@ public abstract class RestEntityController<Type extends RestEntity<ID>, ID exten
 
         SLUser currentUser = principal == null ? null : slUserService.findById(principal.getName()).orElse(null);
 
-        Type toDelete = entityService.findById(id).orElse(null);
+        Type toDelete = entityService.findById(id).orElseThrow(() -> new NotFoundException("Entity Not Found"));
 
         requestHandler.handleBeforeDelete(toDelete, currentUser);
 

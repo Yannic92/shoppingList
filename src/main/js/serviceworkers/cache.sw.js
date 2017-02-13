@@ -2,7 +2,7 @@ import StaticResourceCache from '../cache/StaticResourceCache';
 import toolbox from 'sw-toolbox';
 import CachingStrategies from '../cache/strategy/CachingStrategies';
 
-const CACHE_VERSION = 21;
+const CACHE_VERSION = 22;
 const STATIC_RESOURCES_TO_CACHE = [
     '/',
     '/index.html',
@@ -94,10 +94,7 @@ toolbox.options.networkTimeoutSeconds = 5;
 
 toolbox.router.get('/api/(.*)', handleDataCache);
 
-function handleDataCache(request, values, options) {
-    if (request.url.includes('sLUsers/current')) {
-        return toolbox.networkOnly(request, values, options);
-    }
+function handleDataCache(request) {
 
     return CachingStrategies.fastest(request);
 }

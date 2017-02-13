@@ -1,21 +1,18 @@
-import RESTService from '../../global/RESTService';
+import RESTService from '../RESTService';
+import Endpoints from '../Endpoints';
 export default class ItemService {
 
     /*@ngInject*/
-    constructor($q, $rootScope, $resource, $filter, articleService, itemResourceConverter) {
+    constructor($q, $rootScope, $resource, $filter, articleService, itemResourceConverter, $timeout) {
 
         this.$q = $q;
         this.$rootScope = $rootScope;
         this.articleService = articleService;
 
-        const itemsResource = $resource('/api/items/:entityId', null, {
-            'update': {method: 'PUT'},
-            'delete': {method: 'DELETE'}
-        });
-
         this.items = [];
 
-        this.restService = new RESTService($rootScope, $q, itemsResource, itemResourceConverter, this.items, $filter('filter'));
+        this.restService = new RESTService($rootScope,$q, $resource, itemResourceConverter, this.items,
+            $filter('filter'), $timeout, 'item-cache-updated', Endpoints.item);
     }
 
     /**
@@ -45,11 +42,11 @@ export default class ItemService {
     }
 
     updateItem(item) {
-        return this.restService.update(item, {entityId: item.entityId});
+        return this.restService.update(item);
     }
 
     deleteItem(item) {
-        return this.restService.delete({entityId: item.entityId});
+        return this.restService.delete(item);
     }
 
     _fetch() {

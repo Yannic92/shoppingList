@@ -1,21 +1,18 @@
-import RESTService from '../../global/RESTService';
+import RESTService from '../RESTService';
+import Endpoints from '../Endpoints';
 
 export default class ArticleService {
 
     /*@ngInject*/
-    constructor($resource, $filter, $q, $rootScope, articleResourceConverter) {
+    constructor($resource, $filter, $q, $rootScope, articleResourceConverter, $timeout) {
 
         this.$q = $q;
         this.filter = $filter('filter');
 
-        const articlesResource = $resource('/api/articles/:entityId', null, {
-            'update': {method: 'PUT'},
-            'delete': {method: 'DELETE'}
-        });
-
         this.articles = [];
 
-        this.restService = new RESTService($rootScope, $q, articlesResource, articleResourceConverter, this.articles, this.filter);
+        this.restService = new RESTService($rootScope,$q, $resource, articleResourceConverter, this.articles,
+            this.filter, $timeout, 'article-cache-updated', Endpoints.article);
     }
 
     getAllArticles(refetch = false) {
@@ -54,7 +51,7 @@ export default class ArticleService {
 
     deleteArticle(article) {
 
-        return this.restService.delete({entityId: article.entityId});
+        return this.restService.delete(article);
     }
 
     deleteUnusedArticles() {

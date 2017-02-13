@@ -2,6 +2,7 @@ export default class Article {
 
     constructor({ name, priceInEuro = 0, entityId, links = [] } = {} ) {
 
+        this.key = 'entityId';
         this._links = links;
         this.entityId = entityId;
         this.name = name;

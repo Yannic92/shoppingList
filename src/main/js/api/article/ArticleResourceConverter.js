@@ -1,6 +1,6 @@
-import ResourceConverter from '../../global/ResourceConverter';
-import Article from '../Article';
-import ArticleResource from '../ArticleResource';
+import ResourceConverter from '../ResourceConverter';
+import Article from '../../article/Article';
+import ArticleResource from './ArticleResource';
 
 /**
  *  Converts a JSON Object to an {Article} and converts an {Article} to an {ArticleResource}.

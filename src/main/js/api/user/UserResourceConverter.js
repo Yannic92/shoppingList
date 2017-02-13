@@ -1,6 +1,6 @@
-import ResourceConverter from '../../global/ResourceConverter';
-import User from '../User';
-import UserResource from '../UserResource';
+import ResourceConverter from '../ResourceConverter';
+import User from '../../user/User';
+import UserResource from './UserResource';
 
 /**
  *  Converts a JSON Object to a {User} and converts a {User} to an {UserResource}.

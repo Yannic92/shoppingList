@@ -6,7 +6,7 @@ import ngAnimate from 'angular-animate';
 import ngAria from 'angular-aria';
 import ngMessages from 'angular-messages';
 import ngTouch from 'angular-touch';
-import UserService from './user/service/UserService';
+import UserService from './api/user/UserService';
 import UserDataController from './user/edit/UserDataController';
 import DeleteUserController from './user/delete/DeleteUserController';
 import NavigationController from './navigation/NavigationController';
@@ -16,10 +16,10 @@ import ListsController from './lists/ListsController';
 import ListController from './lists/ListController';
 import ListViewController from './lists/view/ListViewController';
 import ListOverviewController from './lists/view/ListOverviewController';
-import ListService from './lists/service/ListService';
+import ListService from './api/list/ListService';
 import NewListController from './lists/new/NewListController';
 import EditListController from './lists/edit/EditListController';
-import ItemService from './item/service/ItemService';
+import ItemService from './api/item/ItemService';
 import OnLongPressDirective from './directives/OnLongPressDirective';
 import LoadingCycle from './directives/LoadingCycle';
 import FocusMeDirective from './directives/FocusMeDirective';
@@ -30,19 +30,17 @@ import RegisterController from './authentication/register/RegisterController';
 import ConfirmationNotificationController from './authentication/register/confirmation/ConfirmationNotificationController';
 import ConfirmationController from './authentication/register/confirmation/ConfirmationController';
 import LoginController from './authentication/login/LoginController';
-import ArticleService from './article/service/ArticleService';
+import ArticleService from './api/article/ArticleService';
 import DictionaryController from './article/dictionary/DictionaryController';
 import NavigationService from './navigation/NavigationService';
 import {UserPropertyFilter} from './lists/owners/UserPropertyFilter';
 import {UserAlreadyContainedFilter} from './lists/owners/UserAlreadyContainedFilter';
 import ItemComponent from './item/ItemComponent';
 import ArticleComponent from './article/ArticleComponent';
-import ItemResourceConverter from './item/service/ItemResourceConverter';
-import ArticleResourceConverter from './article/service/ArticleResourceConverter';
-import ShoppingListResourceConverter from './lists/service/ShoppingListResourceConverter';
-import UserResourceConverter from './user/service/UserResourceConverter';
-
-/* global BroadcastChannel */
+import ItemResourceConverter from './api/item/ItemResourceConverter';
+import ArticleResourceConverter from './api/article/ArticleResourceConverter';
+import ShoppingListResourceConverter from './api/list/ShoppingListResourceConverter';
+import UserResourceConverter from './api/user/UserResourceConverter';
 
 angular.module('shoppingList', [ngRoute, ngResource, ngMaterial, ngAnimate, ngAria, ngMessages, ngTouch])
     .config(/*@ngInject*/($routeProvider, $httpProvider) => {
@@ -186,8 +184,3 @@ angular.module('shoppingList', [ngRoute, ngResource, ngMaterial, ngAnimate, ngAr
             controllerAs: 'ctrl'
         });
     });
-
-const updateChannel = new BroadcastChannel('cache-updates');
-updateChannel.addEventListener('message', () => {
-    //TODO: react to new cache version
-});

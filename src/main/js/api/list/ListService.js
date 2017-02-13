@@ -1,20 +1,18 @@
-import RESTService from '../../global/RESTService';
+import RESTService from '../RESTService';
+import Endpoints from '../Endpoints';
+
 export default class ListService {
 
     /*@ngInject*/
-    constructor($resource, $filter, $q, $rootScope, shoppingListResourceConverter) {
+    constructor($resource, $filter, $q, $rootScope, shoppingListResourceConverter, $timeout) {
 
         this.$q = $q;
         this.filter = $filter('filter');
         this.lists = [];
 
-        const methods = {
-            'update': {method: 'PUT'},
-            'delete': {method: 'DELETE'}
-        };
-        const listsResource = $resource('/api/shoppingLists/:entityId', null, methods);
-        this.restService = new RESTService($rootScope, $resource, listsResource, shoppingListResourceConverter,
-            this.lists, this.filter);
+        this.restService = new RESTService($rootScope,$q, $resource, shoppingListResourceConverter,
+            this.lists, this.filter, $timeout, 'list-cache-updated', Endpoints.list);
+        this.timeout = $timeout;
     }
 
     /**
@@ -53,7 +51,7 @@ export default class ListService {
 
     getUpdatedShoppingList(list) {
 
-        return this.restService.fetchOne({entityId: list.entityId})
+        return this.restService.fetchOne(list)
             .then((shoppingList) => {
                 shoppingList.updated = true;
                 return shoppingList;
@@ -65,16 +63,24 @@ export default class ListService {
     }
 
     updateShoppingList(list) {
-        return this.restService.update(list, {entityId: list.entityId});
+        return this.restService.update(list);
     }
 
     deleteShoppingList(list) {
-        return this.restService.delete({entityId: list.entityId});
+        return this.restService.delete(list);
     }
 
     deleteAllShoppingLists() {
 
         return this.restService.deleteAll();
+    }
+
+    onListUpdate(list, callback) {
+        this.restService.onEntityUpdate(list, callback);
+    }
+
+    onListsUpdate(callback) {
+        this.restService.onEntitiesUpdate(callback);
     }
 
     static getDeleteMessage(list) {

@@ -4,6 +4,7 @@ export default class Item {
 
     constructor({links, article = new Article(), entityId, count, done = false} = {}) {
 
+        this.key = 'entityId';
         this.links = links;
         this.entityId = entityId;
         this.article = article;
