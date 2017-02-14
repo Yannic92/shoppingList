@@ -10,10 +10,11 @@ import ItemResource from './ItemResource';
 export default class ItemResourceConverter extends ResourceConverter {
 
     /*@ngInject*/
-    constructor() {
+    constructor(articleResourceConverter) {
         super();
-        this.ofJsonConverter = ItemResourceConverter.ofJson;
+        this.ofJsonConverter = this.ofJson;
         this.toJsonConverter = ItemResourceConverter.toJson;
+        this.articleResourceConverter = articleResourceConverter;
     }
 
     /**
@@ -27,9 +28,13 @@ export default class ItemResourceConverter extends ResourceConverter {
      *
      * @returns {Item} An {Item} created out of the given JSON Object.
      */
-    static ofJson({_links, entityId, article, count, done}) {
+    ofJson({_links, entityId, article, count, done}) {
 
-        return new Item({links:_links, entityId: entityId, article: article, count: count, done: done});
+        return new Item({links:_links,
+            entityId: entityId,
+            article: this.articleResourceConverter.toEntity(article),
+            count: count,
+            done: done});
     }
 
     /**

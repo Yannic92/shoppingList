@@ -1,6 +1,6 @@
-import HALResource from '../services/HALResource';
+import HALResource from './HALResource';
 import CollectionUtils from './CollectionUtils';
-import EventTypes from '../cache/event/EventTypes';
+import EventTypes from './cache/event/EventTypes';
 
 /* global BroadcastChannel */
 

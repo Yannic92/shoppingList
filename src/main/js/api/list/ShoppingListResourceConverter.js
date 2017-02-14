@@ -10,9 +10,10 @@ import ShoppingListResource from './ShoppingListResource';
 export default class ShoppingListResourceConverter extends ResourceConverter {
 
     /*@ngInject*/
-    constructor() {
+    constructor(itemResourceConverter) {
         super();
-        this.ofJsonConverter = ShoppingListResourceConverter.ofJson;
+        this.itemResourceConverter = itemResourceConverter;
+        this.ofJsonConverter = this.ofJson;
         this.toJsonConverter = ShoppingListResourceConverter.toJson;
     }
 
@@ -26,9 +27,14 @@ export default class ShoppingListResourceConverter extends ResourceConverter {
      * @param items {Array} An array of {Item} that are contained in this {ShoppingList}.
      * @return {ShoppingList}
      */
-    static ofJson({_links, entityId, name, owners, items}) {
+    ofJson({_links, entityId, name, owners, items}) {
 
-        return new ShoppingList({links:_links, entityId: entityId, name: name, owners: owners, items: items});
+        return new ShoppingList({
+            links:_links,
+            entityId: entityId,
+            name: name,
+            owners: owners,
+            items: this.itemResourceConverter.toEntities(items)});
     }
 
     /**

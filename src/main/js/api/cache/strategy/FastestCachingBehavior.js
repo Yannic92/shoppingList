@@ -1,13 +1,13 @@
 import CachingBehavior from '../CachingBehavior';
 import toolbox from 'sw-toolbox';
-import ArticleResourceConverter from '../../api/article/ArticleResourceConverter';
-import ShoppingListResourceConverter from '../../api/list/ShoppingListResourceConverter';
-import ItemResourceConverter from '../../api/item/ItemResourceConverter';
-import UserResourceConverter from '../../api/user/UserResourceConverter';
-import HALResource from '../../services/HALResource';
+import ArticleResourceConverter from '../../article/ArticleResourceConverter';
+import ShoppingListResourceConverter from '../../list/ShoppingListResourceConverter';
+import ItemResourceConverter from '../../item/ItemResourceConverter';
+import UserResourceConverter from '../../user/UserResourceConverter';
+import HALResource from '../../HALResource';
 import EntityUpdatedEvent from '../event/EntityUpdatedEvent';
 import EventTypes from '../event/EventTypes';
-import Endpoints from '../../api/Endpoints';
+import Endpoints from '../../Endpoints';
 
 /* global BroadcastChannel */
 
@@ -15,10 +15,10 @@ export default class FastestCachingBehavior extends CachingBehavior{
 
     constructor(cacheName) {
         super(cacheName);
-        this.shoppingListResourceConverter = new ShoppingListResourceConverter();
-        this.itemResourceConverter = new ItemResourceConverter();
-        this.articleResourceConverter = new ArticleResourceConverter();
         this.userResourceConverter = new UserResourceConverter();
+        this.articleResourceConverter = new ArticleResourceConverter();
+        this.itemResourceConverter = new ItemResourceConverter(this.articleResourceConverter);
+        this.shoppingListResourceConverter = new ShoppingListResourceConverter(this.itemResourceConverter);
     }
 
     strategy(request) {

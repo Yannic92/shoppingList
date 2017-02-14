@@ -1,12 +1,11 @@
-import StaticResourceCache from '../cache/StaticResourceCache';
+import StaticResourceCache from '../api/cache/StaticResourceCache';
 import toolbox from 'sw-toolbox';
-import CachingStrategies from '../cache/strategy/CachingStrategies';
+import CachingStrategies from '../api/cache/strategy/CachingStrategies';
 
-const CACHE_VERSION = 22;
+const CACHE_VERSION = 23;
 const STATIC_RESOURCES_TO_CACHE = [
     '/',
     '/index.html',
-    '/sw.js',
     '/manifest.json',
     '/style/fonts/roboto_100_italic_latin-ext.woff2',
     '/style/fonts/roboto_300_italic_latin-ext.woff2',
