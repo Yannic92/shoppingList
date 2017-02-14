@@ -53,9 +53,6 @@ export default class FastestCachingBehavior extends CachingBehavior{
 
             this.cacheOnly(request)
                 .then((result) => {
-                    if(!result) {
-                        return maybeReject('Cache result was undefined');
-                    }
                     const entityType = EntityTypes.ofUrl(request.url);
                     return this._handleSuccessfulResponse(result.clone(), resultContainer, 'cacheResult', entityType)
                         .then(() => {

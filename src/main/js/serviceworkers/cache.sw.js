@@ -90,10 +90,27 @@ const staticResourceCache = new StaticResourceCache(self, CACHE_VERSION, STATIC_
 staticResourceCache.initListeners();
 toolbox.options.cache.name = 'shopping-list-dynamic-data-cache';
 toolbox.options.networkTimeoutSeconds = 5;
+const cachingStrategies = new CachingStrategies();
 
-toolbox.router.get('/api/(.*)', handleDataCache);
+const handleReadDataRequests = (request) => {
+    return cachingStrategies.fastest(request);
+};
 
-function handleDataCache(request) {
+const handleUpdateDataRequests = (request) => {
+    return cachingStrategies.backgroundSync(request);
+};
 
-    return CachingStrategies.fastest(request);
-}
+const handleCreateDataRequests = (request) => {
+    return cachingStrategies.backgroundSync(request);
+};
+
+const handleDeleteDataRequests = (request) => {
+    return cachingStrategies.backgroundSync(request);
+};
+
+toolbox.router.get('/api/(.*)', handleReadDataRequests);
+toolbox.router.put('/api/(.*)', handleUpdateDataRequests);
+toolbox.router.post('/api/(.*)', handleCreateDataRequests);
+toolbox.router.delete('/api/(.*)', handleDeleteDataRequests);
+
+
