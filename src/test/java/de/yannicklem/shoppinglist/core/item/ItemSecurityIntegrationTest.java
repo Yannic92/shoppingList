@@ -59,7 +59,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = WebShoppingListApplication.class)
 public class ItemSecurityIntegrationTest {
 
-    private final String itemsEndpoint = "/items";
+    private final String itemsEndpoint = "/api/items";
     @Autowired
     private WebApplicationContext applicationContext;
 

@@ -55,7 +55,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = WebShoppingListApplication.class)
 public class SLUserSecurityIntegrationTest {
 
-    private final String sLUsersEndpoint = "/sLUsers";
+    private final String sLUsersEndpoint = "/api/sLUsers";
     @Autowired
     private WebApplicationContext applicationContext;
 
@@ -653,7 +653,8 @@ public class SLUserSecurityIntegrationTest {
 
         byte[] sLUserTest2JsonBytes = getJsonBytes(new SLUserTestEntity(slUserTest));
         mockMvc.perform(delete(sLUsersEndpoint + "/" + slUserTest.getUsername()).contentType(
-                        MediaType.APPLICATION_JSON).with(csrf()))
+                        MediaType.APPLICATION_JSON)
+                .with(csrf()))
             .andExpect(status().isUnauthorized());
 
         assertThat(slUserService.exists(slUserTest.getUsername()), is(true));
@@ -664,7 +665,9 @@ public class SLUserSecurityIntegrationTest {
     public void deleteUserAsAnotherUserReturnsForbidden() throws Exception {
 
         mockMvc.perform(delete(sLUsersEndpoint + "/" + slUserTest.getUsername()).contentType(
-                        MediaType.APPLICATION_JSON).with(csrf()).with(user(slUserTest2)))
+                        MediaType.APPLICATION_JSON)
+                .with(csrf())
+                .with(user(slUserTest2)))
             .andExpect(status().isForbidden());
 
         assertThat(slUserService.exists(slUserTest.getUsername()), is(true));
@@ -675,7 +678,9 @@ public class SLUserSecurityIntegrationTest {
     public void deleteUserAsAdminDeletesUser() throws Exception {
 
         mockMvc.perform(delete(sLUsersEndpoint + "/" + slUserTest.getUsername()).contentType(
-                        MediaType.APPLICATION_JSON).with(csrf()).with(user(slUserAdmin)))
+                        MediaType.APPLICATION_JSON)
+                .with(csrf())
+                .with(user(slUserAdmin)))
             .andExpect(status().isNoContent());
 
         assertThat(slUserService.exists(slUserTest.getUsername()), is(false));
@@ -695,12 +700,12 @@ public class SLUserSecurityIntegrationTest {
 
 
     @Test
-    public void deleteNonExistingUserAsUserReturnsForbidden() throws Exception {
+    public void deleteNonExistingUserAsUserReturnsNotFound() throws Exception {
 
         mockMvc.perform(delete(sLUsersEndpoint + "/nonExistent").contentType(MediaType.APPLICATION_JSON)
                 .with(csrf())
                 .with(user(slUserTest)))
-            .andExpect(status().isForbidden());
+            .andExpect(status().isNotFound());
 
         assertThat(slUserService.exists("nonExistent"), is(false));
     }
