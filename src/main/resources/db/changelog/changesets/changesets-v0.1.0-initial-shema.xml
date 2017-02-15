@@ -1,0 +1,278 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <changeSet author="Yannic Klem (generated)" id="1487196720993-1">
+        <createTable tableName="article">
+            <column name="entity_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="price_in_euro" type="DOUBLE">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Yannic Klem (generated)" id="1487196720993-2">
+        <createTable tableName="article_owners">
+            <column name="article_entity_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="owners_username" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Yannic Klem (generated)" id="1487196720993-3">
+        <createTable tableName="authorities">
+            <column name="authority" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Yannic Klem (generated)" id="1487196720993-4">
+        <createTable tableName="confirmation">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="code" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Yannic Klem (generated)" id="1487196720993-5">
+        <createTable tableName="item">
+            <column name="entity_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="count" type="VARCHAR(255)"/>
+            <column name="created_at" type="datetime(6)"/>
+            <column name="done" type="BIT(1)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="article_entity_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Yannic Klem (generated)" id="1487196720993-6">
+        <createTable tableName="item_owners">
+            <column name="item_entity_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="owners_username" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Yannic Klem (generated)" id="1487196720993-7">
+        <createTable tableName="shopping_list">
+            <column name="entity_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Yannic Klem (generated)" id="1487196720993-8">
+        <createTable tableName="shopping_list_items">
+            <column name="shopping_list_entity_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="items_entity_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Yannic Klem (generated)" id="1487196720993-9">
+        <createTable tableName="shopping_list_owners">
+            <column name="shopping_list_entity_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="owners_username" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Yannic Klem (generated)" id="1487196720993-10">
+        <createTable tableName="users">
+            <column name="username" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="account_non_expired" type="BIT(1)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="account_non_locked" type="BIT(1)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="datetime(6)"/>
+            <column name="credentials_non_expired" type="BIT(1)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="enabled" type="BIT(1)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="first_name" type="VARCHAR(255)"/>
+            <column name="last_name" type="VARCHAR(255)"/>
+            <column name="password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="confirmation_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Yannic Klem (generated)" id="1487196720993-11">
+        <createTable tableName="users_authorities">
+            <column name="sluser_username" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="authorities_authority" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Yannic Klem (generated)" id="1487196720993-12">
+        <addPrimaryKey columnNames="entity_id" constraintName="PRIMARY" tableName="article"/>
+    </changeSet>
+    <changeSet author="Yannic Klem (generated)" id="1487196720993-13">
+        <addPrimaryKey columnNames="article_entity_id, owners_username" constraintName="PRIMARY"
+                       tableName="article_owners"/>
+    </changeSet>
+    <changeSet author="Yannic Klem (generated)" id="1487196720993-14">
+        <addPrimaryKey columnNames="authority" constraintName="PRIMARY" tableName="authorities"/>
+    </changeSet>
+    <changeSet author="Yannic Klem (generated)" id="1487196720993-15">
+        <addPrimaryKey columnNames="entity_id" constraintName="PRIMARY" tableName="item"/>
+    </changeSet>
+    <changeSet author="Yannic Klem (generated)" id="1487196720993-16">
+        <addPrimaryKey columnNames="item_entity_id, owners_username" constraintName="PRIMARY" tableName="item_owners"/>
+    </changeSet>
+    <changeSet author="Yannic Klem (generated)" id="1487196720993-17">
+        <addPrimaryKey columnNames="entity_id" constraintName="PRIMARY" tableName="shopping_list"/>
+    </changeSet>
+    <changeSet author="Yannic Klem (generated)" id="1487196720993-18">
+        <addPrimaryKey columnNames="shopping_list_entity_id, items_entity_id" constraintName="PRIMARY"
+                       tableName="shopping_list_items"/>
+    </changeSet>
+    <changeSet author="Yannic Klem (generated)" id="1487196720993-19">
+        <addPrimaryKey columnNames="shopping_list_entity_id, owners_username" constraintName="PRIMARY"
+                       tableName="shopping_list_owners"/>
+    </changeSet>
+    <changeSet author="Yannic Klem (generated)" id="1487196720993-20">
+        <addPrimaryKey columnNames="username" constraintName="PRIMARY" tableName="users"/>
+    </changeSet>
+    <changeSet author="Yannic Klem (generated)" id="1487196720993-21">
+        <addPrimaryKey columnNames="sluser_username, authorities_authority" constraintName="PRIMARY"
+                       tableName="users_authorities"/>
+    </changeSet>
+    <changeSet author="Yannic Klem (generated)" id="1487196720993-22">
+        <addUniqueConstraint columnNames="email" constraintName="UK_6dotkott2kjsp8vw4d0m25fb7" tableName="users"/>
+    </changeSet>
+    <changeSet author="Yannic Klem (generated)" id="1487196720993-23">
+        <addUniqueConstraint columnNames="items_entity_id" constraintName="UK_8xpd5c6uci29thc6f0357jfr6"
+                             tableName="shopping_list_items"/>
+    </changeSet>
+    <changeSet author="Yannic Klem (generated)" id="1487196720993-24">
+        <addUniqueConstraint columnNames="confirmation_id" constraintName="UK_ovikf2hrhbarn71yaq4la22s"
+                             tableName="users"/>
+    </changeSet>
+    <changeSet author="Yannic Klem (generated)" id="1487196720993-25">
+        <createIndex indexName="FK4mtbcacbthwruwbhc80td90oe" tableName="users_authorities">
+            <column name="authorities_authority"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Yannic Klem (generated)" id="1487196720993-26">
+        <createIndex indexName="FK5apf26naysb9gkr800dr0wg89" tableName="item_owners">
+            <column name="owners_username"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Yannic Klem (generated)" id="1487196720993-27">
+        <createIndex indexName="FK80qd1cra4eyukj3ypdjhfh551" tableName="item">
+            <column name="article_entity_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Yannic Klem (generated)" id="1487196720993-28">
+        <createIndex indexName="FKccwbj1skq52hycp8uedr6seck" tableName="article_owners">
+            <column name="owners_username"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Yannic Klem (generated)" id="1487196720993-29">
+        <createIndex indexName="FKqo19v6rhqwssyh0rymosh5296" tableName="shopping_list_owners">
+            <column name="owners_username"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Yannic Klem (generated)" id="1487196720993-30">
+        <addForeignKeyConstraint baseColumnNames="shopping_list_entity_id" baseTableName="shopping_list_items"
+                                 constraintName="FK2e2mqkpi8xx4vhyoksdix9shq" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="entity_id" referencedTableName="shopping_list"/>
+    </changeSet>
+    <changeSet author="Yannic Klem (generated)" id="1487196720993-31">
+        <addForeignKeyConstraint baseColumnNames="confirmation_id" baseTableName="users"
+                                 constraintName="FK40f9de65g963p3yuymmadwc61" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="confirmation"/>
+    </changeSet>
+    <changeSet author="Yannic Klem (generated)" id="1487196720993-32">
+        <addForeignKeyConstraint baseColumnNames="authorities_authority" baseTableName="users_authorities"
+                                 constraintName="FK4mtbcacbthwruwbhc80td90oe" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="authority" referencedTableName="authorities"/>
+    </changeSet>
+    <changeSet author="Yannic Klem (generated)" id="1487196720993-33">
+        <addForeignKeyConstraint baseColumnNames="owners_username" baseTableName="item_owners"
+                                 constraintName="FK5apf26naysb9gkr800dr0wg89" deferrable="false"
+                                 initiallyDeferred="false"
+                                 onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="username"
+                                 referencedTableName="users"/>
+    </changeSet>
+    <changeSet author="Yannic Klem (generated)" id="1487196720993-34">
+        <addForeignKeyConstraint baseColumnNames="item_entity_id" baseTableName="item_owners"
+                                 constraintName="FK5xq2vvip792xpvrepq3cukhbs" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="entity_id" referencedTableName="item"/>
+    </changeSet>
+    <changeSet author="Yannic Klem (generated)" id="1487196720993-35">
+        <addForeignKeyConstraint baseColumnNames="article_entity_id" baseTableName="item"
+                                 constraintName="FK80qd1cra4eyukj3ypdjhfh551" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="entity_id" referencedTableName="article"/>
+    </changeSet>
+    <changeSet author="Yannic Klem (generated)" id="1487196720993-36">
+        <addForeignKeyConstraint baseColumnNames="owners_username" baseTableName="article_owners"
+                                 constraintName="FKccwbj1skq52hycp8uedr6seck" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="username" referencedTableName="users"/>
+    </changeSet>
+    <changeSet author="Yannic Klem (generated)" id="1487196720993-37">
+        <addForeignKeyConstraint baseColumnNames="article_entity_id" baseTableName="article_owners"
+                                 constraintName="FKgoynrwycu8f7ra22wgqeiwotj" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="entity_id" referencedTableName="article"/>
+    </changeSet>
+    <changeSet author="Yannic Klem (generated)" id="1487196720993-38">
+        <addForeignKeyConstraint baseColumnNames="sluser_username" baseTableName="users_authorities"
+                                 constraintName="FKhw6eyoqmhe0dex8sjbuy7yvbg" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="username" referencedTableName="users"/>
+    </changeSet>
+    <changeSet author="Yannic Klem (generated)" id="1487196720993-39">
+        <addForeignKeyConstraint baseColumnNames="owners_username" baseTableName="shopping_list_owners"
+                                 constraintName="FKqo19v6rhqwssyh0rymosh5296" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="username" referencedTableName="users"/>
+    </changeSet>
+    <changeSet author="Yannic Klem (generated)" id="1487196720993-40">
+        <addForeignKeyConstraint baseColumnNames="items_entity_id" baseTableName="shopping_list_items"
+                                 constraintName="FKr1fy3xsy8smw9jpdjoxsbhwcj" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="entity_id" referencedTableName="item"/>
+    </changeSet>
+    <changeSet author="Yannic Klem (generated)" id="1487196720993-41">
+        <addForeignKeyConstraint baseColumnNames="shopping_list_entity_id" baseTableName="shopping_list_owners"
+                                 constraintName="FKslp46quwg8d3v0uunllk24cvh" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="entity_id" referencedTableName="shopping_list"/>
+    </changeSet>
+</databaseChangeLog>

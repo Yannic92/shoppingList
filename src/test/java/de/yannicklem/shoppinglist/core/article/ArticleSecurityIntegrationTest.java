@@ -55,7 +55,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = WebShoppingListApplication.class)
 public class ArticleSecurityIntegrationTest {
 
-    private final String articlesEndpoint = "/articles";
+    private final String articlesEndpoint = "/api/articles";
     @Autowired
     private WebApplicationContext applicationContext;
 
@@ -319,8 +319,10 @@ public class ArticleSecurityIntegrationTest {
 
         Article newArticle = new Article("newArticle", 213.32, new HashSet<>());
 
-        mockMvc.perform(post(articlesEndpoint).content(getJsonBytes(newArticle)).contentType(
-                        MediaType.APPLICATION_JSON).with(csrf()).with(user(userOne)))
+        mockMvc.perform(post(articlesEndpoint).content(getJsonBytes(newArticle))
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(csrf())
+                .with(user(userOne)))
             .andExpect(status().isCreated())
             .andExpect(jsonPath("name", is(newArticle.getName())));
     }
@@ -331,8 +333,10 @@ public class ArticleSecurityIntegrationTest {
 
         Article newArticle = new Article("newArticle", 213.32, new HashSet<>());
 
-        mockMvc.perform(post(articlesEndpoint).content(getJsonBytes(newArticle)).contentType(
-                        MediaType.APPLICATION_JSON).with(csrf()).with(user(admin)))
+        mockMvc.perform(post(articlesEndpoint).content(getJsonBytes(newArticle))
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(csrf())
+                .with(user(admin)))
             .andExpect(status().isCreated())
             .andExpect(jsonPath("name", is(newArticle.getName())));
     }
@@ -343,8 +347,9 @@ public class ArticleSecurityIntegrationTest {
 
         Article newArticle = new Article("newArticle", 213.32, new HashSet<>());
 
-        mockMvc.perform(post(articlesEndpoint).content(getJsonBytes(newArticle)).contentType(
-                        MediaType.APPLICATION_JSON).with(csrf()))
+        mockMvc.perform(post(articlesEndpoint).content(getJsonBytes(newArticle))
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(csrf()))
             .andExpect(status().isUnauthorized());
     }
 

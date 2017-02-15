@@ -45,6 +45,10 @@
             <artifactId>h2</artifactId>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+        </dependency>
 
         <!-- serialization -->
         <dependency>
