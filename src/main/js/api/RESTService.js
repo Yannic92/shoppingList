@@ -86,10 +86,9 @@ export default class RESTService {
 
         newEntity.entityId = uuid.v4();
         return this.resource.save(this.resourceConverter.toResource(newEntity)).$promise
-            .then((response) => {
-                const responseEntity = this.resourceConverter.toEntity(response);
-                this.container.push(responseEntity);
-                return responseEntity;
+            .then(() => {
+                this.container.push(newEntity);
+                return newEntity;
             });
     }
 
@@ -128,10 +127,8 @@ export default class RESTService {
 
         const resourceToUpdate = this.resourceConverter.toResource(entityToUpdate);
         return this.resource.update(this._getPathVariablePattern(entityToUpdate), resourceToUpdate).$promise
-            .then((response) => {
-                const responseEntity = this.resourceConverter.toEntity(response);
-                CollectionUtils.replaceExisting(this.filter, responseEntity, this.container, this._getPathVariablePattern(entityToUpdate));
-                return responseEntity;
+            .then(() => {
+                return entityToUpdate;
             });
     }
 

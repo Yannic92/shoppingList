@@ -8,9 +8,18 @@ export default class CachingBehavior {
         return caches.open(this.cacheName);
     }
 
+    networkOnly(request) {
+        return fetch(request);
+    }
+
     cacheOnly(request) {
         return this.openCache().then((cache) => {
             return cache.match(request);
+        }).then(result => {
+            if(!result) {
+                return Promise.reject('Cache result was undefinied');
+            }
+            return result;
         });
     }
 

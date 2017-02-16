@@ -21,6 +21,7 @@ export default class StaticResourceCache {
 
     _initInstallListener() {
         this.self.addEventListener('install', (event) => {
+            this.self.skipWaiting();
             return event.waitUntil(
                 this._registerCache()
             );
@@ -28,10 +29,7 @@ export default class StaticResourceCache {
     }
 
     _registerCache() {
-        return caches.open(this.cacheName).then(cache => cache.addAll(this.urlsToCache))
-            .then(() => {
-                this.self.skipWaiting();
-            });
+        return caches.open(this.cacheName).then(cache => cache.addAll(this.urlsToCache));
     }
 
     _initActivateListener() {
