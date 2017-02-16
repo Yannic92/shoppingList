@@ -6,9 +6,10 @@ import ShoppingList from '../ShoppingList';
 export default class ListViewController {
 
     /*@ngInject*/
-    constructor($scope, $rootScope, listService, itemService, $routeParams, articleService, $mdDialog, $q, navigationService, $timeout) {
+    constructor($scope, $rootScope, listService, itemService, $routeParams, articleService, $mdDialog, $q, navigationService, $timeout, $filter) {
 
         this.$q = $q;
+        this.$filter = $filter;
         this.listService = listService;
         this.$rootScope = $rootScope;
         this.$mdDialog = $mdDialog;
@@ -212,6 +213,14 @@ export default class ListViewController {
     _init($routeParams) {
 
         this._initList($routeParams.listId).then(() => {
+
+            this.listService.onListsUpdate((updatedLists) => {
+                this.list = this.$filter('filter')(updatedLists, {entityId: this.list.entityId})[0];
+                if(!this.list) {
+                    this._gotoAllLists();
+                }
+            });
+
             this.listService.onListUpdate(this.list, (updatedList) => {
                 this.list = updatedList;
             });

@@ -1,6 +1,7 @@
 import CachingBehavior from '../CachingBehavior';
 import localforage from 'localforage';
 import RequestSerializingService from '../RequestSerializingService';
+import UpdateNotificationService from '../UpdateNotificationService';
 
 export default class BackgroundSyncBehavior extends CachingBehavior {
 
@@ -44,6 +45,11 @@ export default class BackgroundSyncBehavior extends CachingBehavior {
         return this.db.iterate((request, timeStamp) => {
             queue.push({request: request, timeStamp: parseInt(timeStamp)});
         }).then(() => {
+
+            if( queue.length <= 0 ) {
+                return Promise.resolve('No requests to handle');
+            }
+
             queue.sort((valueA, valueB) => {
                 return valueA.timeStamp - valueB.timeStamp;
             });
@@ -55,6 +61,7 @@ export default class BackgroundSyncBehavior extends CachingBehavior {
     workOffQueue(queue, index) {
 
         if(index >= queue.length) {
+            UpdateNotificationService.sendCacheOutdatedNotification();
             return Promise.resolve('finished');
         }
 

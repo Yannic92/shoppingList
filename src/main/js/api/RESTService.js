@@ -25,6 +25,7 @@ export default class RESTService {
         this.entitiesUpdatedCallbacks = [];
         this._initCacheEventsToHandle(endpoint);
         this._initCacheUpdateEventListener();
+        this._initCacheOutdatedEventListener();
     }
 
     _initCacheEventsToHandle(endpoint) {
@@ -57,6 +58,17 @@ export default class RESTService {
         });
     }
 
+    _initCacheOutdatedEventListener() {
+        this.broadcastChannel = new BroadcastChannel('cache-outdated');
+
+        this.broadcastChannel.addEventListener('message', (message) => {
+            const event = message.data;
+            if(event && event.eventType) {
+                this.timeout(() => {this._handleCacheEvent(event);}, 0);
+            }
+        });
+    }
+
     _handleCacheEvent(event) {
 
         switch (event.eventType.value) {
@@ -65,6 +77,9 @@ export default class RESTService {
             break;
         case this.entityUpdatedEvent.value:
             this._handleEntityUpdatedEvent(event);
+            break;
+        case EventTypes.CACHE_OUTDATED.value:
+            this.fetch();
             break;
         }
     }

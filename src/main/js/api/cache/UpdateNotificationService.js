@@ -18,6 +18,10 @@ export default class UpdateNotificationService {
         this.shoppingListResourceConverter = new ShoppingListResourceConverter(this.itemResourceConverter);
     }
 
+    static sendCacheOutdatedNotification() {
+        new BroadcastChannel('cache-outdated').postMessage(new EntityUpdatedEvent(EventTypes.CACHE_OUTDATED));
+    }
+
     sendCacheUpdateNotification(entityType, newBody) {
         switch (entityType.value) {
         case EntityTypes.LISTS.value:

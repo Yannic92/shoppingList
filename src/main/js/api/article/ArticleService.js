@@ -27,7 +27,7 @@ export default class ArticleService {
     }
 
     findArticleByName(articleName) {
-        const persistedArticlesWithSameName = this.filter(this.articles, {name: articleName}, true);
+        const persistedArticlesWithSameName = this.filter(this.articles, {name: articleName});
 
         if(persistedArticlesWithSameName) {
             return persistedArticlesWithSameName[0];
