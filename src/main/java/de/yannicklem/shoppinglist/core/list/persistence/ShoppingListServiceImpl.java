@@ -17,7 +17,7 @@ import java.util.List;
 
 
 @Service
-public class ShoppingListServiceImpl extends AbstractOwnedEntityService<ShoppingList, Long>
+public class ShoppingListServiceImpl extends AbstractOwnedEntityService<ShoppingList, String>
     implements ShoppingListService {
 
     private final ShoppingListRepository shoppingListRepository;
@@ -26,8 +26,8 @@ public class ShoppingListServiceImpl extends AbstractOwnedEntityService<Shopping
     private final ShoppingListReadOnlyService shoppingListReadOnlyService;
 
     @Autowired
-    public ShoppingListServiceImpl(ShoppingListRepository shoppingListRepository, CurrentUserService currentUserService,
-        ShoppingListPersistenceHandler shoppingListPersistenceHandler,
+    public ShoppingListServiceImpl(ShoppingListRepository shoppingListRepository,
+        CurrentUserService currentUserService, ShoppingListPersistenceHandler shoppingListPersistenceHandler,
         @Qualifier("readOnlyShoppingListService") ShoppingListReadOnlyService shoppingListReadOnlyService) {
 
         super(shoppingListRepository, shoppingListPersistenceHandler, currentUserService);

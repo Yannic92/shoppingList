@@ -11,7 +11,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 
 
-public interface ArticleRepository extends OwnedRestEntityRepository<Article, Long> {
+public interface ArticleRepository extends OwnedRestEntityRepository<Article, String> {
 
     Optional<Article> findByName(String name);
 

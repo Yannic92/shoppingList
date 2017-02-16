@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 
-public interface ItemRepository extends OwnedRestEntityRepository<Item, Long> {
+public interface ItemRepository extends OwnedRestEntityRepository<Item, String> {
 
     List<Item> findByArticle(Article article);
 

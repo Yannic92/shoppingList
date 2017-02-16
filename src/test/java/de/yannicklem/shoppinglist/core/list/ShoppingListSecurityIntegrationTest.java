@@ -27,6 +27,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.HashSet;
+import java.util.UUID;
 
 import javax.servlet.Filter;
 
@@ -87,15 +88,20 @@ public class ShoppingListSecurityIntegrationTest {
 
         articleOfUserOne = new Article("UserOneArticle", 9.99, new HashSet<>());
         articleOfUserOne.getOwners().add(userOne);
+        articleOfUserOne.setEntityId(UUID.randomUUID().toString());
+
         articleOfUserTwo = new Article("UserTwoArticle", 9.98, new HashSet<>());
         articleOfUserTwo.getOwners().add(userTwo);
+        articleOfUserTwo.setEntityId(UUID.randomUUID().toString());
 
         articleService.deleteAll();
 
         itemOfUserOne = new Item(articleOfUserOne, "2", new HashSet<>());
+        itemOfUserOne.setEntityId(UUID.randomUUID().toString());
         itemOfUserOne.getOwners().add(userOne);
 
         itemOfUserTwo = new Item(articleOfUserTwo, "3", new HashSet<>());
+        itemOfUserTwo.setEntityId(UUID.randomUUID().toString());
         itemOfUserTwo.getOwners().add(userTwo);
 
         itemService.deleteAll();
@@ -103,10 +109,12 @@ public class ShoppingListSecurityIntegrationTest {
         itemService.create(itemOfUserTwo);
 
         shoppingListOfUserOne = new ShoppingList();
+        shoppingListOfUserOne.setEntityId(UUID.randomUUID().toString());
         shoppingListOfUserOne.getOwners().add(userOne);
         shoppingListOfUserOne.getItems().add(itemOfUserOne);
 
         shoppingListOfUserTwo = new ShoppingList();
+        shoppingListOfUserTwo.setEntityId(UUID.randomUUID().toString());
         shoppingListOfUserTwo.getOwners().add(userTwo);
         shoppingListOfUserTwo.getItems().add(itemOfUserTwo);
     }

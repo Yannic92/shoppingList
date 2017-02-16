@@ -12,7 +12,7 @@ import java.util.Optional;
 /**
  * @author  Yannic Klem - yann.klem@gmail.com
  */
-public interface ArticleService extends OwnedEntityService<Article, Long> {
+public interface ArticleService extends OwnedEntityService<Article, String> {
 
     @Override
     void delete(Article article);

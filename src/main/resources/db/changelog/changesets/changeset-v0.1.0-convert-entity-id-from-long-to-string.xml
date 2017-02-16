@@ -1,0 +1,70 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <changeSet id="v0.1.0-convert-entity-id-from-long-to-string" author="Yannic Klem"
+               logicalFilePath="v0.1.0-convert-entity-id-from-long-to-string.xml" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <comment>
+            Changes the type of the entityType
+        </comment>
+        <dropForeignKeyConstraint baseTableName="shopping_list_items" constraintName="FK2e2mqkpi8xx4vhyoksdix9shq"/>
+        <dropForeignKeyConstraint baseTableName="item_owners" constraintName="FK5apf26naysb9gkr800dr0wg89"/>
+        <dropForeignKeyConstraint baseTableName="item_owners" constraintName="FK5xq2vvip792xpvrepq3cukhbs"/>
+        <dropForeignKeyConstraint baseTableName="item" constraintName="FK80qd1cra4eyukj3ypdjhfh551"/>
+        <dropForeignKeyConstraint baseTableName="article_owners" constraintName="FKccwbj1skq52hycp8uedr6seck"/>
+        <dropForeignKeyConstraint baseTableName="article_owners" constraintName="FKgoynrwycu8f7ra22wgqeiwotj"/>
+        <dropForeignKeyConstraint baseTableName="shopping_list_owners" constraintName="FKqo19v6rhqwssyh0rymosh5296"/>
+        <dropForeignKeyConstraint baseTableName="shopping_list_items" constraintName="FKr1fy3xsy8smw9jpdjoxsbhwcj"/>
+        <dropForeignKeyConstraint baseTableName="shopping_list_owners" constraintName="FKslp46quwg8d3v0uunllk24cvh"/>
+
+        <modifyDataType tableName="article" columnName="entity_id" newDataType="VARCHAR(36)"/>
+        <modifyDataType tableName="article_owners" columnName="article_entity_id" newDataType="VARCHAR(36)"/>
+
+        <modifyDataType tableName="item" columnName="entity_id" newDataType="VARCHAR(36)"/>
+        <modifyDataType tableName="item" columnName="article_entity_id" newDataType="VARCHAR(36)"/>
+        <modifyDataType tableName="item_owners" columnName="item_entity_id" newDataType="VARCHAR(36)"/>
+
+        <modifyDataType tableName="shopping_list" columnName="entity_id" newDataType="VARCHAR(36)"/>
+        <modifyDataType tableName="shopping_list_items" columnName="shopping_list_entity_id" newDataType="VARCHAR(36)"/>
+        <modifyDataType tableName="shopping_list_items" columnName="items_entity_id" newDataType="VARCHAR(36)"/>
+        <modifyDataType tableName="shopping_list_owners" columnName="shopping_list_entity_id" newDataType="VARCHAR(36)"/>
+
+        <addForeignKeyConstraint baseColumnNames="shopping_list_entity_id" baseTableName="shopping_list_items"
+                                 constraintName="FK2e2mqkpi8xx4vhyoksdix9shq" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="entity_id" referencedTableName="shopping_list"/>
+        <addForeignKeyConstraint baseColumnNames="owners_username" baseTableName="item_owners"
+                                 constraintName="FK5apf26naysb9gkr800dr0wg89" deferrable="false"
+                                 initiallyDeferred="false"
+                                 onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="username"
+                                 referencedTableName="users"/>
+        <addForeignKeyConstraint baseColumnNames="item_entity_id" baseTableName="item_owners"
+                                 constraintName="FK5xq2vvip792xpvrepq3cukhbs" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="entity_id" referencedTableName="item"/>
+        <addForeignKeyConstraint baseColumnNames="article_entity_id" baseTableName="item"
+                                 constraintName="FK80qd1cra4eyukj3ypdjhfh551" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="entity_id" referencedTableName="article"/>
+        <addForeignKeyConstraint baseColumnNames="owners_username" baseTableName="article_owners"
+                                 constraintName="FKccwbj1skq52hycp8uedr6seck" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="username" referencedTableName="users"/>
+        <addForeignKeyConstraint baseColumnNames="article_entity_id" baseTableName="article_owners"
+                                 constraintName="FKgoynrwycu8f7ra22wgqeiwotj" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="entity_id" referencedTableName="article"/>
+        <addForeignKeyConstraint baseColumnNames="owners_username" baseTableName="shopping_list_owners"
+                                 constraintName="FKqo19v6rhqwssyh0rymosh5296" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="username" referencedTableName="users"/>
+        <addForeignKeyConstraint baseColumnNames="items_entity_id" baseTableName="shopping_list_items"
+                                 constraintName="FKr1fy3xsy8smw9jpdjoxsbhwcj" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="entity_id" referencedTableName="item"/>
+        <addForeignKeyConstraint baseColumnNames="shopping_list_entity_id" baseTableName="shopping_list_owners"
+                                 constraintName="FKslp46quwg8d3v0uunllk24cvh" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="entity_id" referencedTableName="shopping_list"/>
+    </changeSet>
+</databaseChangeLog>

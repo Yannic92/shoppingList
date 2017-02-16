@@ -31,6 +31,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.servlet.Filter;
 
@@ -102,16 +103,20 @@ public class ItemSecurityIntegrationTest {
 
         articleOfUserOne = new Article("UserOneArticle", 9.99, new HashSet<>());
         articleOfUserOne.getOwners().add(userOne);
+        articleOfUserOne.setEntityId(UUID.randomUUID().toString());
         articleOfUserTwo = new Article("UserTwoArticle", 9.98, new HashSet<>());
         articleOfUserTwo.getOwners().add(userTwo);
+        articleOfUserTwo.setEntityId(UUID.randomUUID().toString());
 
         articleService.deleteAll();
 
         itemOfUserOne = new Item(articleOfUserOne, "2 x", new HashSet<>());
         itemOfUserOne.getOwners().add(userOne);
+        itemOfUserOne.setEntityId(UUID.randomUUID().toString());
 
         itemOfUserTwo = new Item(articleOfUserTwo, "2 x", new HashSet<>());
         itemOfUserTwo.getOwners().add(userTwo);
+        itemOfUserTwo.setEntityId(UUID.randomUUID().toString());
 
         itemService.deleteAll();
         itemService.create(itemOfUserOne);
@@ -242,6 +247,7 @@ public class ItemSecurityIntegrationTest {
     public void createItemWithArticleOfUserOneViaPutAsUserOneCreatesAndReturnsItem() throws Exception {
 
         Item newItem = new Item(articleOfUserOne, "23 x", new HashSet<>());
+        newItem.setEntityId(UUID.randomUUID().toString());
         newItem.getOwners().add(userOne);
 
         mockMvc.perform(put(itemsEndpoint + "/1337").content(getJsonBytes(newItem))
@@ -251,8 +257,8 @@ public class ItemSecurityIntegrationTest {
             .andExpect(status().isCreated())
             .andExpect(jsonPath("count", is(newItem.getCount())));
 
-        assertThat(itemService.exists(1337L), is(true));
-        assertThat(itemService.findById(1337L).get().getArticle().getOwners(), is(newItem.getOwners()));
+        assertThat(itemService.exists("1337"), is(true));
+        assertThat(itemService.findById("1337").get().getArticle().getOwners(), is(newItem.getOwners()));
     }
 
 
@@ -260,6 +266,7 @@ public class ItemSecurityIntegrationTest {
     public void createItemWithArticleOfUserOneViaPutAsUserTwoReturnsForbidden() throws Exception {
 
         Item newItem = new Item(articleOfUserOne, "23 x", new HashSet<>());
+        newItem.setEntityId(UUID.randomUUID().toString());
 
         mockMvc.perform(put(itemsEndpoint + "/1337").content(getJsonBytes(newItem))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -273,6 +280,7 @@ public class ItemSecurityIntegrationTest {
     public void createItemWithArticleOfUserOneViaPutAsAdminCreatesAndReturnsItem() throws Exception {
 
         Item newItem = new Item(articleOfUserOne, "23 x", new HashSet<>());
+        newItem.setEntityId(UUID.randomUUID().toString());
         newItem.getOwners().add(userOne);
 
         mockMvc.perform(put(itemsEndpoint + "/1337").content(getJsonBytes(newItem))
@@ -286,8 +294,8 @@ public class ItemSecurityIntegrationTest {
         newOwners.addAll(newItem.getOwners());
         newOwners.add(admin);
 
-        assertThat(itemService.exists(1337L), is(true));
-        assertThat(itemService.findById(1337L).get().getArticle().getOwners(), is(newOwners));
+        assertThat(itemService.exists("1337"), is(true));
+        assertThat(itemService.findById("1337").get().getArticle().getOwners(), is(newOwners));
     }
 
 
@@ -382,6 +390,7 @@ public class ItemSecurityIntegrationTest {
     public void createItemViaPostAsUserOneCreatesAndReturnsItem() throws Exception {
 
         Item newItem = new Item(articleOfUserOne, "23", new HashSet<>());
+        newItem.setEntityId(UUID.randomUUID().toString());
 
         mockMvc.perform(post(itemsEndpoint).content(getJsonBytes(newItem))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -396,6 +405,7 @@ public class ItemSecurityIntegrationTest {
     public void createArticleViaPostAsAdminCreatesAndReturnsArticle() throws Exception {
 
         Item newItem = new Item(articleOfUserOne, "23", new HashSet<>());
+        newItem.setEntityId(UUID.randomUUID().toString());
 
         mockMvc.perform(post(itemsEndpoint).content(getJsonBytes(newItem))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -410,6 +420,7 @@ public class ItemSecurityIntegrationTest {
     public void createArticleViaPostAsAnonymousUserReturnsUnauthorized() throws Exception {
 
         Item newItem = new Item(articleOfUserOne, "23", new HashSet<>());
+        newItem.setEntityId(UUID.randomUUID().toString());
 
         mockMvc.perform(post(itemsEndpoint).content(getJsonBytes(newItem))
                 .contentType(MediaType.APPLICATION_JSON)
