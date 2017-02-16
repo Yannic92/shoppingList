@@ -1,5 +1,6 @@
 import RESTService from '../RESTService';
 import Endpoints from '../Endpoints';
+import ShoppingList from '../../lists/ShoppingList';
 
 export default class ListService {
 
@@ -38,7 +39,7 @@ export default class ListService {
         const existingList = this._findExistingList(listId);
 
         if(!existingList) {
-            return this.getUpdatedShoppingList({entityId:listId});
+            return this.getUpdatedShoppingList(new ShoppingList({entityId: listId}));
         }
 
         if(!existingList.updated || refetch) {

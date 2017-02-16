@@ -6,7 +6,7 @@ import ShoppingList from '../ShoppingList';
 export default class ListViewController {
 
     /*@ngInject*/
-    constructor($scope, $rootScope, listService, itemService, $routeParams, $filter, articleService, $mdDialog, $q, navigationService, $timeout) {
+    constructor($scope, $rootScope, listService, itemService, $routeParams, articleService, $mdDialog, $q, navigationService, $timeout) {
 
         this.$q = $q;
         this.listService = listService;
@@ -19,10 +19,9 @@ export default class ListViewController {
         this.list = new ShoppingList({name: ''});
         this.$rootScope.loading = true;
         this.creating = false;
-        this._initNewItem();
-        this._initLists($routeParams, $filter);
+        this._init($routeParams);
         this._initDestroyListener($scope);
-        this._setFocusToNewItemInput();
+
     }
 
     update() {
@@ -139,7 +138,9 @@ export default class ListViewController {
     _setFocusToNewItemInput() {
         this.$timeout(() => {
             const itemInputElement = document.querySelector('#new-item-input');
-            itemInputElement.focus();
+            if(itemInputElement) {
+                itemInputElement.focus();
+            }
         });
     }
 
@@ -204,29 +205,36 @@ export default class ListViewController {
         this.newItem = new Item();
     }
 
-    _initLists($routeParams, $filter) {
-        this.lists = this.listService.getAllShoppingLists();
+    _gotoAllLists() {
+        this.navigationService.goto('/lists', true);
+    }
 
-        this.lists.promise
-            .then(() => {
-                if ($routeParams.listId) {
-                    this.list = $filter('filter')(this.lists, {entityId: $routeParams.listId})[0];
+    _init($routeParams) {
 
-                    if (!this.list) {
-                        this.navigationService.goto('/lists', true);
-                        return;
-                    }
+        this._initList($routeParams.listId).then(() => {
+            this.listService.onListUpdate(this.list, (updatedList) => {
+                this.list = updatedList;
+            });
 
-                    this._init();
-                }
-            }).finally(() => {
-                this.$rootScope.loading = false;
+            this._initNewItem();
+            this._setFocusToNewItemInput();
+            this._initRootScope();
+        });
+    }
+
+    _initList(listId) {
+        return this.listService.findShoppingListById(listId)
+            .then((shoppingList) => {
+                this.list = shoppingList;
+            }, () => {
+                this._gotoAllLists();
+            }).catch(() => {
+                this._gotoAllLists();
             });
     }
 
-    _init() {
-
-        this.listService.onListUpdate(this.list, (updatedList) => {this.list = updatedList;});
+    _initRootScope() {
+        this.$rootScope.loading = false;
         this.$rootScope.title = this.list.name;
         this.$rootScope.options = [
             {
