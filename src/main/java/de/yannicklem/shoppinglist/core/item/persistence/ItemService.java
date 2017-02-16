@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * @author  Yannic Klem - yann.klem@gmail.com
  */
-public interface ItemService extends ItemReadOnlyService, OwnedEntityService<Item, Long> {
+public interface ItemService extends ItemReadOnlyService, OwnedEntityService<Item, String> {
 
     @Override
     void delete(Item entity);

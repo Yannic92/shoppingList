@@ -63,7 +63,7 @@ public class ItemPersistenceHandler implements EntityPersistenceHandler<Item> {
     public void handleAfterCreate(Item createdItem) {
 
         String articleName = createdItem.getArticle() == null ? null : createdItem.getArticle().getName();
-        LOGGER.info(String.format("Created item: %d (%s)", createdItem.getEntityId(), articleName));
+        LOGGER.info(String.format("Created item: %s (%s)", createdItem.getEntityId(), articleName));
     }
 
 
@@ -86,7 +86,7 @@ public class ItemPersistenceHandler implements EntityPersistenceHandler<Item> {
     public void handleAfterUpdate(Item updatedItem) {
 
         String articleName = updatedItem.getArticle() == null ? null : updatedItem.getArticle().getName();
-        LOGGER.info(String.format("Updated item: %d (%s)", updatedItem.getEntityId(), articleName));
+        LOGGER.info(String.format("Updated item: %s (%s)", updatedItem.getEntityId(), articleName));
     }
 
 
@@ -125,6 +125,6 @@ public class ItemPersistenceHandler implements EntityPersistenceHandler<Item> {
     public void handleAfterDelete(Item entity) {
 
         String articleName = entity.getArticle() == null ? null : entity.getArticle().getName();
-        LOGGER.info(String.format("Deleted item: %d (%s)", entity.getEntityId(), articleName));
+        LOGGER.info(String.format("Deleted item: %s (%s)", entity.getEntityId(), articleName));
     }
 }

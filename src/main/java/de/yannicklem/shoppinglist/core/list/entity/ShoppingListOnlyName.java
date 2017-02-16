@@ -12,7 +12,7 @@ public class ShoppingListOnlyName extends ShoppingList {
 
     private String name;
 
-    private Long entityId;
+    private String entityId;
 
     public ShoppingListOnlyName(ShoppingList entity) {
 
@@ -21,7 +21,7 @@ public class ShoppingListOnlyName extends ShoppingList {
     }
 
 
-    public ShoppingListOnlyName(Long entityId, String name) {
+    public ShoppingListOnlyName(String entityId, String name) {
 
         this.entityId = entityId;
         this.name = name;

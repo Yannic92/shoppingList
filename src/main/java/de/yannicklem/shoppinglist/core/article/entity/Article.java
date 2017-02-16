@@ -11,8 +11,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import org.hibernate.annotations.GenericGenerator;
-
 import org.springframework.hateoas.core.Relation;
 
 import java.util.HashSet;
@@ -20,7 +18,6 @@ import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
@@ -31,15 +28,10 @@ import javax.persistence.ManyToMany;
 @EqualsAndHashCode(of = "entityId", callSuper = false)
 @ToString
 @Relation(collectionRelation = "articles")
-public class Article extends OwnedRestEntity<Long> {
+public class Article extends OwnedRestEntity<String> {
 
     @Id
-    @GeneratedValue(generator = "useExistingOrGenerate")
-    @GenericGenerator(
-        name = "useExistingOrGenerate",
-        strategy = "de.yannicklem.shoppinglist.core.user.persistence.UseExistingOrGenerateIdGenerator"
-    )
-    private Long entityId;
+    private String entityId;
 
     private String name;
     private double priceInEuro;

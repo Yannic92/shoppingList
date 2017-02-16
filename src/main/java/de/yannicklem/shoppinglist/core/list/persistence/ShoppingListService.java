@@ -8,7 +8,7 @@ import de.yannicklem.shoppinglist.core.list.entity.ShoppingList;
 /**
  * @author  Yannic Klem - yann.klem@gmail.com
  */
-public interface ShoppingListService extends ShoppingListReadOnlyService, OwnedEntityService<ShoppingList, Long> {
+public interface ShoppingListService extends ShoppingListReadOnlyService, OwnedEntityService<ShoppingList, String> {
 
     @Override
     void delete(ShoppingList entity);

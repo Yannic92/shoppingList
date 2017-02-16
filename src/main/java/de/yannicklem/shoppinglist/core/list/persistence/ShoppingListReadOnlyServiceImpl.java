@@ -18,7 +18,7 @@ import java.util.List;
  * @author  Yannic Klem - yann.klem@gmail.com
  */
 @Service("readOnlyShoppingListService")
-public class ShoppingListReadOnlyServiceImpl extends AbstractEntityReadOnlyService<ShoppingList, Long>
+public class ShoppingListReadOnlyServiceImpl extends AbstractEntityReadOnlyService<ShoppingList, String>
     implements ShoppingListReadOnlyService {
 
     private final ShoppingListRepository shoppingListRepository;

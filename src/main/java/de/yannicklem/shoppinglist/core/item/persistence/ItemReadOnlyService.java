@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * @author  Yannic Klem - yann.klem@gmail.com
  */
-public interface ItemReadOnlyService extends EntityReadOnlyService<Item, Long> {
+public interface ItemReadOnlyService extends EntityReadOnlyService<Item, String> {
 
     List<Item> findItemsOwnedBy(SLUser slUser);
 

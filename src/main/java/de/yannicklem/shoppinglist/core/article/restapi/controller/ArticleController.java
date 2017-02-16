@@ -1,11 +1,11 @@
 package de.yannicklem.shoppinglist.core.article.restapi.controller;
 
 import de.yannicklem.restutils.controller.RestEntityController;
-import de.yannicklem.restutils.entity.service.EntityService;
-import de.yannicklem.restutils.service.MyResourceProcessor;
-import de.yannicklem.restutils.service.RequestHandler;
 
 import de.yannicklem.shoppinglist.core.article.entity.Article;
+import de.yannicklem.shoppinglist.core.article.persistence.ArticleService;
+import de.yannicklem.shoppinglist.core.article.restapi.service.ArticleRequestHandler;
+import de.yannicklem.shoppinglist.core.article.restapi.service.ArticleResourceProcessor;
 import de.yannicklem.shoppinglist.core.exception.BadRequestException;
 import de.yannicklem.shoppinglist.core.exception.NotFoundException;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
@@ -48,22 +48,21 @@ import static java.lang.invoke.MethodHandles.lookup;
     }
 )
 @ExposesResourceFor(Article.class)
-public class ArticleController extends RestEntityController<Article, Long> {
+public class ArticleController extends RestEntityController<Article, String> {
 
     private static final Logger LOGGER = getLogger(lookup().lookupClass());
 
     @Autowired
-    public ArticleController(SLUserService slUserService, EntityService<Article, Long> entityService,
-        RequestHandler<Article> requestHandler, MyResourceProcessor<Article> resourceProcessor,
-        EntityLinks entityLinks) {
+    public ArticleController(SLUserService slUserService, ArticleService articleService,
+        ArticleRequestHandler requestHandler, ArticleResourceProcessor resourceProcessor, EntityLinks entityLinks) {
 
-        super(slUserService, entityService, requestHandler, resourceProcessor, entityLinks);
+        super(slUserService, articleService, requestHandler, resourceProcessor, entityLinks);
     }
 
     @Override
     @RequestMapping(method = RequestMethod.PUT, value = ArticleEndpoints.ARTICLE_SPECIFIC_ENDPOINT)
     public HttpEntity<? extends Article> putEntity(@RequestBody Article entity,
-        @PathVariable("id") Long id, Principal principal) {
+        @PathVariable("id") String id, Principal principal) {
 
         return new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
     }
