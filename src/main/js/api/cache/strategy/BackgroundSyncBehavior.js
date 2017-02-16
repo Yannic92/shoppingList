@@ -18,37 +18,57 @@ export default class BackgroundSyncBehavior extends CachingBehavior {
 
     strategy(request) {
 
-        return this.networkOnly(request.clone())
-            .then((result) => {
-                self.registration.sync.register('background-sync-request');
-                return result;
-            }).catch(() => {
-                return this.queueForBackgroundSync(request);
-            });
+        return this.queueForBackgroundSync(request).then(() => {
+            return this.handleBackgroundSync();
+        }).then(() => {
+            return new Response(['Queued for background sync'], {status: 200});
+        }).catch(() => {
+            return new Response(['No background sync available'], {status: 502});
+        });
     }
 
     queueForBackgroundSync(request) {
 
         if(self.registration) {
             const serializedRequest = RequestSerializingService.serialize(request);
-            this.db.setItem(request.url, serializedRequest);
+            const timeStamp = Date.now();
+            return this.db.setItem(timeStamp.toString(), serializedRequest);
         }
-
-        return new Response(['Queued for background sync'], {status: 200});
     }
 
     handleBackgroundSync() {
 
-        const promises = [];
-        this.db.iterate((request, url) => {
-            promises.push(this.networkOnly(RequestSerializingService.deserialize(request))
-                .then((response) => {
-                    if(response.ok) {
-                        this.db.removeItem(url);
-                    }
-                }));
-        });
+        const queue = [];
+        return this.db.iterate((request, timeStamp) => {
+            queue.push({request: request, timeStamp: parseInt(timeStamp)});
+        }).then(() => {
+            queue.sort((valueA, valueB) => {
+                return valueA.timeStamp - valueB.timeStamp;
+            });
 
-        return Promise.all(promises);
+            return this.workOffQueue(queue, 0);
+        });
     }
+
+    workOffQueue(queue, index) {
+
+        if(index >= queue.length) {
+            return Promise.resolve('finished');
+        }
+
+        const request = queue[index].request;
+        const timeStamp = queue[index].timeStamp;
+        return this.networkOnly(RequestSerializingService.deserialize(request))
+            .then((response) => {
+                if (response.ok) {
+                    return this.db.removeItem(timeStamp.toString());
+                }
+            }).then(() => {
+                return this.workOffQueue(queue, index + 1);
+            }).catch(() => {
+                //Still no network
+            });
+
+    }
+
 }

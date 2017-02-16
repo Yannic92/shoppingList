@@ -217,12 +217,7 @@ export default class ListViewController {
                         return;
                     }
 
-                    if (!this.list.updated) {
-                        return this.update().then(() => this._init());
-                    } else {
-                        this._init();
-                    }
-
+                    this._init();
                 }
             }).finally(() => {
                 this.$rootScope.loading = false;
