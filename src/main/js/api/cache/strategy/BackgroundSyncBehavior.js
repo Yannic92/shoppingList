@@ -6,10 +6,12 @@ export default class BackgroundSyncBehavior extends CachingBehavior {
 
     constructor(cacheName) {
         super(cacheName);
-
+        this.backgroundSyncPromise = Promise.resolve('initialResolve');
         self.addEventListener('sync', (event) => {
-            if(event.tag === 'background-sync-request') {
-                return this.handleBackgroundSync();
+            if(event.tag === 'network-connection-established') {
+                return this.backgroundSyncPromise.then(() => {
+                    this.backgroundSyncPromise = this.handleBackgroundSync();
+                });
             }
         });
 

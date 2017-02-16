@@ -9,7 +9,12 @@ export default class CachingBehavior {
     }
 
     networkOnly(request) {
-        return fetch(request);
+        return fetch(request).then((response) => {
+            if( 'sync' in self.registration) {
+                self.registration.sync.register('network-connection-established');
+            }
+            return response;
+        });
     }
 
     cacheOnly(request) {
@@ -25,7 +30,7 @@ export default class CachingBehavior {
 
     fetchAndCache(request) {
 
-        return fetch(request.clone()).then((response) => {
+        return this.networkOnly(request.clone()).then((response) => {
             if (request.method === 'GET' && this.isSuccessful(response)) {
                 this.cache(request, response);
             }
