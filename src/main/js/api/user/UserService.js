@@ -31,7 +31,7 @@ export default class UserService {
     /**
      * Returns all {User}s.
      *
-     * @param {Boolean} refetch If true a request to the backend will be performed. If false the last fetched lists are
+     * @param {Boolean} refetch If true a request to the backend will be performed. If false the last fetched users are
      *                  returned.
      * @returns {Array} All fetched {User}s.
      */
@@ -39,7 +39,7 @@ export default class UserService {
         if (refetch || this.usersAlreadyFetched()) {
             this.restService.fetch();
         }
-        return this.lists;
+        return this.users;
     }
 
     findByUsername(username) {
