@@ -18,7 +18,7 @@ import java.util.Optional;
 
 
 @Service
-public class ArticleServiceImpl extends AbstractOwnedEntityService<Article, Long> implements ArticleService {
+public class ArticleServiceImpl extends AbstractOwnedEntityService<Article, String> implements ArticleService {
 
     private final ArticleRepository articleRepository;
     private final ArticlePersistenceHandler articlePersistenceHandler;

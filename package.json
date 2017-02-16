@@ -25,6 +25,7 @@
     "sw-routing": "0.0.8",
     "sw-runtime-caching": "0.0.8",
     "sw-toolbox": "3.4.0",
+    "uuid": "^3.0.1",
     "webpack": "^1.13.2",
     "webpack-uglify-js-plugin": "^1.1.9"
   },

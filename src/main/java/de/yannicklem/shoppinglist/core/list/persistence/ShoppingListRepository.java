@@ -12,7 +12,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 
-public interface ShoppingListRepository extends OwnedRestEntityRepository<ShoppingList, Long> {
+public interface ShoppingListRepository extends OwnedRestEntityRepository<ShoppingList, String> {
 
     @Query(
         "SELECT shoppingList FROM ShoppingList shoppingList INNER JOIN shoppingList.items listItem WHERE :item = listItem"

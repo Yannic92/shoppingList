@@ -1,6 +1,7 @@
 import HALResource from './HALResource';
 import CollectionUtils from './CollectionUtils';
 import EventTypes from './cache/event/EventTypes';
+import uuid from 'uuid';
 
 /* global BroadcastChannel */
 
@@ -83,6 +84,7 @@ export default class RESTService {
 
     create(newEntity) {
 
+        newEntity.entityId = uuid.v4();
         return this.resource.save(this.resourceConverter.toResource(newEntity)).$promise
             .then((response) => {
                 const responseEntity = this.resourceConverter.toEntity(response);

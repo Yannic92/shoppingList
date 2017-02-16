@@ -1,12 +1,11 @@
 package de.yannicklem.shoppinglist.core.list.restapi.controller;
 
 import de.yannicklem.restutils.controller.RestEntityController;
-import de.yannicklem.restutils.entity.service.EntityService;
-import de.yannicklem.restutils.service.MyResourceProcessor;
-import de.yannicklem.restutils.service.RequestHandler;
 
 import de.yannicklem.shoppinglist.core.exception.NotFoundException;
 import de.yannicklem.shoppinglist.core.list.entity.ShoppingList;
+import de.yannicklem.shoppinglist.core.list.persistence.ShoppingListService;
+import de.yannicklem.shoppinglist.core.list.restapi.service.ShoppingListRequestHandler;
 import de.yannicklem.shoppinglist.core.list.restapi.service.ShoppingListResourceProcessor;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.core.user.persistence.SLUserService;
@@ -48,16 +47,16 @@ import static java.lang.invoke.MethodHandles.lookup;
         MediaTypes.HAL_JSON_VALUE, MediaType.APPLICATION_JSON_VALUE
     }
 )
-public class ShoppingListRestController extends RestEntityController<ShoppingList, Long> {
+public class ShoppingListRestController extends RestEntityController<ShoppingList, String> {
 
     private static Logger LOGGER = getLogger(lookup().lookupClass());
 
     @Autowired
-    public ShoppingListRestController(SLUserService slUserService, EntityService<ShoppingList, Long> entityService,
-        RequestHandler<ShoppingList> requestHandler, MyResourceProcessor<ShoppingList> resourceProcessor,
+    public ShoppingListRestController(SLUserService slUserService, ShoppingListService shoppingListService,
+        ShoppingListRequestHandler requestHandler, ShoppingListResourceProcessor resourceProcessor,
         EntityLinks entityLinks) {
 
-        super(slUserService, entityService, requestHandler, resourceProcessor, entityLinks);
+        super(slUserService, shoppingListService, requestHandler, resourceProcessor, entityLinks);
     }
 
     @RequestMapping(method = RequestMethod.DELETE)

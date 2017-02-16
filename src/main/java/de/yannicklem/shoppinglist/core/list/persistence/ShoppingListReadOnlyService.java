@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * @author  Yannic Klem - yann.klem@gmail.com
  */
-public interface ShoppingListReadOnlyService extends EntityReadOnlyService<ShoppingList, Long> {
+public interface ShoppingListReadOnlyService extends EntityReadOnlyService<ShoppingList, String> {
 
     List<ShoppingList> findListsOwnedBy(SLUser slUser);
 

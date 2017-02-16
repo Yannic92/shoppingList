@@ -18,10 +18,9 @@ import java.util.List;
 
 
 @Service
-public class ItemServiceImpl extends AbstractOwnedEntityService<Item, Long> implements ItemService {
+public class ItemServiceImpl extends AbstractOwnedEntityService<Item, String> implements ItemService {
 
     private final ItemRepository itemRepository;
-    private final CurrentUserService currentUserService;
     private final ItemPersistenceHandler itemPersistenceHandler;
     private final ItemReadOnlyService itemReadOnlyService;
 
@@ -32,7 +31,6 @@ public class ItemServiceImpl extends AbstractOwnedEntityService<Item, Long> impl
 
         super(itemRepository, itemPersistenceHandler, currentUserService);
         this.itemRepository = itemRepository;
-        this.currentUserService = currentUserService;
         this.itemPersistenceHandler = itemPersistenceHandler;
         this.itemReadOnlyService = itemReadOnlyService;
     }

@@ -1,26 +1,29 @@
 package de.yannicklem.shoppinglist.core.item.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import de.yannicklem.restutils.entity.owned.OwnedRestEntity;
+
 import de.yannicklem.shoppinglist.core.article.entity.Article;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
+
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.GenericGenerator;
+
 import org.springframework.hateoas.core.Relation;
+
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 
 @Entity
@@ -29,15 +32,10 @@ import java.util.Set;
 @ToString
 @EqualsAndHashCode(of = "entityId", callSuper = false)
 @Relation(collectionRelation = "items")
-public class Item extends OwnedRestEntity<Long> {
+public class Item extends OwnedRestEntity<String> {
 
     @Id
-    @GeneratedValue(generator = "useExistingOrGenerate")
-    @GenericGenerator(
-        name = "useExistingOrGenerate",
-        strategy = "de.yannicklem.shoppinglist.core.user.persistence.UseExistingOrGenerateIdGenerator"
-    )
-    private Long entityId;
+    private String entityId;
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
