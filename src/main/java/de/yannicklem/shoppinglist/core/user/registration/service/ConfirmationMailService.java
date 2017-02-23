@@ -6,9 +6,12 @@ import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+
 import org.springframework.stereotype.Service;
 
 
+@EnableConfigurationProperties(ShoppingListConfigurationProperties.class)
 @Service
 public class ConfirmationMailService {
 
