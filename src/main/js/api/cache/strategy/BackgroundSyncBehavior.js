@@ -41,9 +41,10 @@ export default class BackgroundSyncBehavior extends CachingBehavior {
     }
 
     triggerBackgroundSync() {
-        return this.backgroundSyncPromise.then(() => {
-            this.backgroundSyncPromise = this.handleBackgroundSync();
-        });
+        this.backgroundSyncPromise =  this.backgroundSyncPromise
+            .then(() => this.handleBackgroundSync());
+
+        return this.backgroundSyncPromise;
     }
 
     handleBackgroundSync() {

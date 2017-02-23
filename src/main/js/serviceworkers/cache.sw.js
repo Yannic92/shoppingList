@@ -2,7 +2,7 @@ import StaticResourceCache from '../api/cache/StaticResourceCache';
 import toolbox from 'sw-toolbox';
 import CachingStrategies from '../api/cache/strategy/CachingStrategies';
 
-const CACHE_VERSION = 33;
+const CACHE_VERSION = 34;
 const STATIC_RESOURCES_TO_CACHE = [
     '/',
     '/index.html',
