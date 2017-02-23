@@ -82,9 +82,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .deleteCookies("JSESSIONID", "XSRF-TOKEN")
             .and()
             .csrf()
-            .csrfTokenRepository(csrfTokenRepository())
-            .and()
-            .addFilterAfter(new SlCsrfHeaderFilter(), CsrfFilter.class);
+            .disable();
     }
 
 
@@ -118,14 +116,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 null, authorities);
 
         slUserService.create(slUser);
-    }
-
-
-    private CsrfTokenRepository csrfTokenRepository() {
-
-        HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository();
-        repository.setHeaderName("X-XSRF-TOKEN");
-
-        return repository;
     }
 }
