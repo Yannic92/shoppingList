@@ -6,4 +6,4 @@ jdk:
   - oraclejdk8
 
 node_js:
-  - "node"
+  - "6"
