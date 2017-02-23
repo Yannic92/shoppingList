@@ -10,9 +10,7 @@ export default class BackgroundSyncBehavior extends CachingBehavior {
         this.backgroundSyncPromise = Promise.resolve('initialResolve');
         self.addEventListener('sync', (event) => {
             if(event.tag === 'network-connection-established') {
-                return this.backgroundSyncPromise.then(() => {
-                    this.backgroundSyncPromise = this.handleBackgroundSync();
-                });
+                this.triggerBackgroundSync();
             }
         });
 
@@ -21,13 +19,16 @@ export default class BackgroundSyncBehavior extends CachingBehavior {
 
     strategy(request) {
 
-        return this.queueForBackgroundSync(request).then(() => {
-            return this.handleBackgroundSync();
-        }).then(() => {
-            return new Response(['Queued for background sync'], {status: 200});
-        }).catch(() => {
-            return new Response(['No background sync available'], {status: 502});
-        });
+        return this.queueForBackgroundSync(request)
+            .then(() => {
+                return this.triggerBackgroundSync();
+            })
+            .then(() => {
+                return new Response(['Queued for background sync'], {status: 200});
+            })
+            .catch(() => {
+                return new Response(['No background sync available'], {status: 502});
+            });
     }
 
     queueForBackgroundSync(request) {
@@ -37,6 +38,12 @@ export default class BackgroundSyncBehavior extends CachingBehavior {
             const timeStamp = Date.now();
             return this.db.setItem(timeStamp.toString(), serializedRequest);
         }
+    }
+
+    triggerBackgroundSync() {
+        return this.backgroundSyncPromise.then(() => {
+            this.backgroundSyncPromise = this.handleBackgroundSync();
+        });
     }
 
     handleBackgroundSync() {
@@ -79,7 +86,5 @@ export default class BackgroundSyncBehavior extends CachingBehavior {
             }).catch(() => {
                 //Still no network
             });
-
     }
-
 }
