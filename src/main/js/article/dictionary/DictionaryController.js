@@ -49,7 +49,7 @@ export default class DictionaryController {
                             .hideDelay(3000)
                     );
                 }
-            }).finally(() => {
+            }).catch(() => {
                 this.$rootScope.loading = false;
             });
     }

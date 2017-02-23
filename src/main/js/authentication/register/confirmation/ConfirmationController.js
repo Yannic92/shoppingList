@@ -16,9 +16,11 @@ export default class ConfirmationController {
         this.userService.confirmRegistrationFor(this.username, this.confirmation)
             .then(() => {
                 this.success = true;
+                this.$rootScope.loading = false;
             }, () => {
                 this.success = false;
-            }).finally(() => {
+                this.$rootScope.loading = false;
+            }).catch(() => {
                 this.$rootScope.loading = false;
             });
     }

@@ -66,14 +66,14 @@ export default class NavigationController {
     redirectToLoginIfAuthenticationRequired(newUrl) {
         this.$rootScope.routeIsLoading = true;
         this.authService.isAuthenticated()
-            .then((user) => {
-                this.$rootScope.user = user;
+            .then(() => {
                 this.$route.reload();
-
+                this.$rootScope.routeIsLoading = false;
             }, () => {
                 this.redirectToLoginIfNotFreeRotue(newUrl);
+                this.$rootScope.routeIsLoading = false;
             })
-            .finally(() => {
+            .catch(() => {
                 this.$rootScope.routeIsLoading = false;
             });
     }

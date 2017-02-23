@@ -1,17 +1,15 @@
 export default class LoginController {
 
     /*@ngInject*/
-    constructor($rootScope, $scope, authService, $mdToast, $mdMedia, userService, $routeParams, navigationService) {
+    constructor($rootScope, $scope, authService, $mdToast, $mdMedia, $routeParams, navigationService) {
 
         this.$rootScope = $rootScope;
         this.$routeParams = $routeParams;
         this.authService = authService;
-        this.userService = userService;
         this.navigationService = navigationService;
         this.$mdToast = $mdToast;
         this.$mdMedia = $mdMedia;
 
-        this.credentials = this.userService.getCredentials();
         this.loggingIn = false;
         this.$rootScope.loading = true;
         this.$rootScope.title = 'Login';
@@ -28,18 +26,17 @@ export default class LoginController {
         this._loggingIn();
         this.authService.authenticate(this.credentials)
             .then(() => {
-                if (this.credentials.rememberMe) {
-                    this.userService.storeCredentials(this.credentials);
-                }
                 this._showWelcomeToast();
                 this.navigationService.goto('/lists', true);
+                this._loggingInFinished();
             }, (error) => {
                 if (error.status == 401) {
                     this.$rootScope.error = true;
                     this.$rootScope.errorMessage = 'Zugangsdaten nicht korrekt';
                     this.navigationService.goToTopOfThePage();
                 }
-            }).finally(() => {
+                this._loggingInFinished();
+            }).catch(() => {
                 this._loggingInFinished();
             });
     }
@@ -70,7 +67,8 @@ export default class LoginController {
             .then((user) => {
                 this.$rootScope.user = user;
                 this.navigationService.goto('/lists', true);
-            }).finally(() => {
+                this._loggingInFinished();
+            }).catch(() => {
                 this._loggingInFinished();
             });
     }

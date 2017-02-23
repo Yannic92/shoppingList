@@ -117,7 +117,8 @@ export default class ListOverviewController {
         return allItems.promise
             .then(() => {
                 this.list.items = angular.copy(allItems);
-            }).finally(() => {
+                this.$rootScope.loading = false;
+            }).catch(() => {
                 this.$rootScope.loading = false;
             });
     }

@@ -41,6 +41,7 @@ import ItemResourceConverter from './api/item/ItemResourceConverter';
 import ArticleResourceConverter from './api/article/ArticleResourceConverter';
 import ShoppingListResourceConverter from './api/list/ShoppingListResourceConverter';
 import UserResourceConverter from './api/user/UserResourceConverter';
+import CredentialService from './authentication/CredentialService';
 
 angular.module('shoppingList', [ngRoute, ngResource, ngMaterial, ngAnimate, ngAria, ngMessages, ngTouch])
     .config(/*@ngInject*/($routeProvider, $httpProvider) => {
@@ -65,6 +66,7 @@ angular.module('shoppingList', [ngRoute, ngResource, ngMaterial, ngAnimate, ngAr
     .directive('loadingCycle', LoadingCycle)
     .directive('focusMe', FocusMeDirective)
     .directive('compareTo', CompareToDirective)
+    .service('credentialService', CredentialService)
     .service('navigationService', NavigationService)
     .service('authenticationInterceptor', HttpInterceptor)
     .service('userService', UserService)

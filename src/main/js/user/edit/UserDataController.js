@@ -15,8 +15,11 @@ export default class UserDataController {
     updateUserData() {
         this.$rootScope.loading = true;
         this.userService.updateUser(this.user)
-            .then(() => this._signInWIthNewCredentials())
-            .finally(() => this._finishUpdating());
+            .then(() => {
+                this._signInWIthNewCredentials();
+                this._finishUpdating();
+            })
+            .catch(() => this._finishUpdating());
     }
 
     formIsReadyToUpdate() {

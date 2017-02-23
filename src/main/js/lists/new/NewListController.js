@@ -35,8 +35,9 @@ export default class NewListController {
             .then((createdList) => {
                 this._showListCreatedToast();
                 this.navigationService.goto('/lists/' + createdList.entityId, true);
+                this.$rootScope.loading = false;
             })
-            .finally(() => {
+            .catch(() => {
                 this.$rootScope.loading = false;
             });
     }

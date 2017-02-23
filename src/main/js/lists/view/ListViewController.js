@@ -30,7 +30,8 @@ export default class ListViewController {
         return this.listService.getUpdatedShoppingList(this.list)
             .then((updatedList) => {
                 this.list = updatedList;
-            }).finally(() => {
+                this.$rootScope.loading = false;
+            }).catch(() => {
                 this.$rootScope.loading = false;
             });
     }
@@ -54,8 +55,11 @@ export default class ListViewController {
             this._showNewItemDialog(ev)
                 .then((item) => this._createItem(item))
                 .then((createdItem) => this._addItemToList(createdItem))
-                .then(() => this._initNewItem())
-                .finally(() => this._finishCreating());
+                .then(() => {
+                    this._initNewItem();
+                    this._finishCreating();
+                })
+                .catch(() => this._finishCreating());
         }
     }
 

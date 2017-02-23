@@ -34,9 +34,13 @@ export default class ListsController {
     _initLists($rootScope) {
         this.lists = this.listService.getAllShoppingLists();
 
-        this.lists.promise.finally(() => {
-            $rootScope.loading = false;
-        });
+        this.lists.promise
+            .then(() => {
+                $rootScope.loading = false;
+            })
+            .catch(() => {
+                $rootScope.loading = false;
+            });
     }
 
     _initOptions($rootScope) {

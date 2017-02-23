@@ -20,14 +20,6 @@ export default class UserService {
             this.users, $filter('filter'), $timeout, 'user-cache-updated', Endpoints.user);
     }
 
-    _getRejectedPromise(message) {
-        const deferred = this.$q.defer();
-        const rejectedPromise = deferred.promise;
-        deferred.reject(message);
-
-        return rejectedPromise;
-    }
-
     /**
      * Returns all {User}s.
      *
@@ -42,6 +34,11 @@ export default class UserService {
         return this.users;
     }
 
+    getCurrentUser() {
+
+        return this.findByUsername('current');
+    }
+
     findByUsername(username) {
 
         return this.restService.fetchOne(new User({username: username}));
@@ -50,20 +47,6 @@ export default class UserService {
     usersAlreadyFetched() {
         return !this.users.fetching && !this.users.fetched;
     }
-
-    storeCredentials(credentials) {
-        localStorage.setItem('credentials', JSON.stringify(credentials));
-
-    }
-
-    getCredentials() {
-        return JSON.parse(localStorage.getItem('credentials') || '{}');
-    }
-
-    clearCredentials() {
-        localStorage.setItem('credentials', JSON.stringify({}));
-    }
-
 
     createUser(user) {
 

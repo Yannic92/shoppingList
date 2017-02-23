@@ -1,20 +1,36 @@
-import angular from 'angular';
 import HttpInterceptor from './HttpInterceptor';
+import BasicAuthUtils from './BasicAuthUtils';
+
 export default class AuthenticationInterceptor extends HttpInterceptor{
 
     /*@ngInject*/
-    constructor($q, $injector, $rootScope, navigationService) {
+    constructor($q, $injector, $rootScope, navigationService, credentialService) {
 
 
         super();
         this.$rootScope = $rootScope;
         this.$injector = $injector;
         this.navigationService = navigationService;
+        this.credentialService = credentialService;
         this.$q = $q;
-        this.sessionTimeOutCheck = false;
         this.connectionLossNotification = false;
+    }
 
-        this.sessionTimeoutCheckPromise = {};
+    request(config) {
+        return this.credentialService.getCredentials()
+            .then(
+                credentials => {
+                    return this._addAuthorizationHeader(config, credentials);
+                },
+                () => {
+                    return config;
+                }
+            );
+    }
+
+    _addAuthorizationHeader(config, credentials) {
+        config.headers['Authorization'] = BasicAuthUtils.buildAuthorizationHeader(credentials.username, credentials.password);
+        return config;
     }
 
     responseError(rejection) {
@@ -40,28 +56,8 @@ export default class AuthenticationInterceptor extends HttpInterceptor{
                     return this.$q.reject(rejection);
                 });
         }
-        else if (rejection.status == 401 || (rejection.status == 403 && rejection.data.message.indexOf('CSRF') > -1)) {
-
-            if (this.sessionTimeOutCheck && !(rejection.config.url == 'sLUsers/current')) {
-                return this.sessionTimeoutCheckPromise
-                    .then(() => {
-                        var $http = this.$injector.get('$http');
-                        return $http(rejection.config);
-                    }, () => {
-                        return this._handleSessionTimeout(rejection);
-                    });
-            } else if (this.$rootScope.authenticated && !this.sessionTimeOutCheck) {
-                this.sessionTimeoutCheckPromise = this._checkForSessionTimeout(rejection);
-                return this.sessionTimeoutCheckPromise
-                    .then(() => {
-                        var $http = this.$injector.get('$http');
-                        return $http(rejection.config);
-                    }, () => {
-                        return this._handleSessionTimeout(rejection);
-                    });
-            } else if (!this.$injector.get('authService').loggingIn) {
-                this.navigationService.goto('/login', true);
-            }
+        else if (rejection.status == 401) {
+            // Do nothing
         } else if (rejection.status == 400 || rejection.status == 404) {
             this.$rootScope.error = true;
             this.$rootScope.errorMessage = rejection.data.message;
@@ -72,29 +68,6 @@ export default class AuthenticationInterceptor extends HttpInterceptor{
             this.navigationService.goToTopOfThePage();
         }
         return this.$q.reject(rejection);
-    }
-
-    _handleSessionTimeout(rejection) {
-        this.$rootScope.authenticated = true;
-        var $mdDialog = this.$injector.get('$mdDialog');
-        return $mdDialog.show(
-            $mdDialog.alert()
-                .parent(angular.element(document.querySelector('#popupContainer')))
-                .clickOutsideToClose(true)
-                .title('Sitzung abgelaufen')
-                .content('Ihre Sitzung ist abgelaufen. Bitte melden Sie sich erneut an.')
-                .ariaLabel('Sitzung abgelaufen')
-                .ok('OK')
-        ).then(() => {
-            this.$injector.get('authService').logout();
-        }).then(() => {
-            this.navigationService.goto('/login');
-        }).finally(() => {
-            this.$rootScope.error = true;
-            this.$rootScope.errorMessage = 'Verbindung fehlgeschlagen';
-            this.navigationService.goToTopOfThePage();
-            return this.$q.reject(rejection);
-        });
     }
 
     _handleOfflineRequest() {
@@ -108,10 +81,5 @@ export default class AuthenticationInterceptor extends HttpInterceptor{
         ).then(() => {
             this.connectionLossNotification = false;
         });
-    }
-
-    _checkForSessionTimeout() {
-        this.sessionTimeOutCheck = true;
-        return this.$injector.get('authService').isAuthenticated();
     }
 }

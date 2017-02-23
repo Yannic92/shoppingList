@@ -14,7 +14,7 @@ export default class ItemController extends ResponsiveListItemController{
         this.item.deleting = true;
         this.itemService.deleteItem(this.item)
             .then(() => this._removeItemFromList())
-            .finally(() => {
+            .catch(() => {
                 this.item.deleting = false;
             });
     }

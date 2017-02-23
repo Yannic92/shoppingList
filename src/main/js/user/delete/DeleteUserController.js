@@ -18,6 +18,7 @@ export default class DeleteUserController {
 
     _logout() {
         this.authService.logout()
-            .finally(() => this.navigationService.goto('/login'));
+            .then(() => this.navigationService.goto('/login'))
+            .catch(() => this.navigationService.goto('/login'));
     }
 }

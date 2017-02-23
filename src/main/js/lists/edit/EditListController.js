@@ -43,8 +43,11 @@ export default class EditListController {
     updateList() {
         this.$rootScope.loading = true;
         return this.listService.updateShoppingList(this.list)
-            .then(() => this._showListUpdatedToast())
-            .finally(() => this._resetForm());
+            .then(() => {
+                this._showListUpdatedToast();
+                this._resetForm();
+            })
+            .catch(() => this._resetForm());
     }
 
     _showListUpdatedToast() {

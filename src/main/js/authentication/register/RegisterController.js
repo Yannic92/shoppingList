@@ -23,7 +23,7 @@ export default class RegisterController {
             .then(() => {
                 this.navigationService.goto('/register/confirmation');
             })
-            .finally(() => {
+            .catch(() => {
                 this.$rootScope.loading = false;
             });
     }
