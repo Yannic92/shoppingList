@@ -72,6 +72,8 @@ export default class BackgroundSyncBehavior extends CachingBehavior {
                 if (response.ok) {
                     return this.db.removeItem(timeStamp.toString());
                 }
+                // TODO: handle error request
+                return this.db.removeItem(timeStamp.toString());
             }).then(() => {
                 return this.workOffQueue(queue, index + 1);
             }).catch(() => {
