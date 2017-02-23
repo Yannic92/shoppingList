@@ -1,9 +1,9 @@
 language: java
 
-script: mvn verify
+before_install:
+  - nvm install node
 
 jdk:
   - oraclejdk8
 
-node_js:
-  - "6"
+script: mvn verify
