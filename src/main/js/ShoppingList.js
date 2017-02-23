@@ -42,6 +42,9 @@ import ArticleResourceConverter from './api/article/ArticleResourceConverter';
 import ShoppingListResourceConverter from './api/list/ShoppingListResourceConverter';
 import UserResourceConverter from './api/user/UserResourceConverter';
 import CredentialService from './authentication/CredentialService';
+import Polyfills from './polyfill/Polyfills';
+
+Polyfills.initPolyfills();
 
 angular.module('shoppingList', [ngRoute, ngResource, ngMaterial, ngAnimate, ngAria, ngMessages, ngTouch])
     .config(/*@ngInject*/($routeProvider, $httpProvider) => {
