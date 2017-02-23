@@ -1,4 +1,7 @@
 # shoppingList
+
+[![Build Status](https://travis-ci.org/Yannic92/shoppingList.svg?branch=master)](https://travis-ci.org/Yannic92/shoppingList)
+
 A shopping list with a RESTful API and an Angular 1 Frontend supported by Angular-Material.
 This application allows you to manage your shopping lists and share them with your friends, roommates, ..
 
