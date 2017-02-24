@@ -7,18 +7,16 @@ import uuid from 'uuid';
 
 export default class RESTService {
 
-    constructor(rootScope, q, resource, resourceConverter, container, filter, timeout, cacheUpdateChannelName, endpoint) {
+    constructor(rootScope, resource, resourceConverter, container, timeout, cacheUpdateChannelName, endpoint) {
 
         const methods = {
             'update': {method: 'PUT'},
             'delete': {method: 'DELETE'}
         };
         this.rootScope = rootScope;
-        this.q = q;
         this.resource = resource(endpoint + '/:entityId', null, methods);
         this.resourceConverter = resourceConverter;
         this.container = container;
-        this.filter = filter;
         this.timeout = timeout;
         this.cacheUpdateChannelName = cacheUpdateChannelName;
         this.entityUpdatedCallbacks = {};
@@ -92,7 +90,7 @@ export default class RESTService {
 
     _handleEntityUpdatedEvent(event) {
         const updatedEntity = event.updatedEntity;
-        CollectionUtils.replaceExisting(this.filter, updatedEntity, this.container, this._getPathVariablePattern(updatedEntity));
+        CollectionUtils.replaceExisting(updatedEntity, this.container);
         const entityUpdatedCallbacks = this.entityUpdatedCallbacks[updatedEntity[updatedEntity.key]] || [];
         entityUpdatedCallbacks.forEach(callback => callback(updatedEntity));
     }
@@ -111,7 +109,7 @@ export default class RESTService {
         return this.resource.get(this._getPathVariablePattern(entity)).$promise
             .then((response) => {
                 const responseEntity = this.resourceConverter.toEntity(response);
-                CollectionUtils.replaceExisting(this.filter, responseEntity, this.container, this._getPathVariablePattern(entity));
+                CollectionUtils.replaceExisting(responseEntity, this.container);
                 return responseEntity;
             });
     }
@@ -120,7 +118,7 @@ export default class RESTService {
 
         if(!this.rootScope.authenticated) {
 
-            this.container.promise = this._getRejectedPromise('Not authenticated');
+            this.container.promise = Promise.reject('Not authenticated');
         }else if (!this.container.fetching) {
 
             this.container.fetching = true;
@@ -151,21 +149,13 @@ export default class RESTService {
 
         return this.resource.delete(this._getPathVariablePattern(entity)).$promise
             .then(() => {
-                return CollectionUtils.remove(this.filter, this.container, this._getPathVariablePattern(entity));
+                return CollectionUtils.remove(this.container, entity);
             });
     }
 
     deleteAll() {
         return this.resource.delete().$promise
             .then(() => this.fetch());
-    }
-
-    _getRejectedPromise(message) {
-        const deferred = this.q.defer();
-        const rejectedPromise = deferred.promise;
-        deferred.reject(message);
-
-        return rejectedPromise;
     }
 
     _getPathVariablePattern(entity) {

@@ -1,3 +1,5 @@
+import AttributeEuqalsFilter from './AttributeEqualsFilter';
+
 export default class CollectionUtils {
 
     static collectToContainer(newContent, container) {
@@ -5,27 +7,27 @@ export default class CollectionUtils {
         container.push.apply(container, newContent);
     }
 
-    static replaceExisting(filter, element, container, filterParameters) {
-
-        const existingElement = filter(container, filterParameters)[0];
-        const index = container.indexOf(existingElement);
-        if(index >= 0) {
+    static replaceExisting(element, container) {
+        try {
+            const index = CollectionUtils.getIndexOfElementIn(element, container);
             container.splice(index, 1, element);
-        }else {
-            container.push(element);
+        }catch (notFoundError) {
+            return container.push(element);
         }
-
-        return index;
     }
 
-    static remove(filter, container, filterParameters) {
+    static remove(container, element) {
 
-        const existingElement = filter(container, filterParameters)[0];
-        const index = container.indexOf(existingElement);
-        if(index >= 0) {
+        try {
+            const index = CollectionUtils.getIndexOfElementIn(element, container);
             container.splice(index, 1);
+            return index;
+        }catch (notFoundError) {
+            return -1;
         }
+    }
 
-        return index;
+    static getIndexOfElementIn(element, container) {
+        return AttributeEuqalsFilter.findFirstByMatchingAttribute(container, element.key, element[element.key]).indexInArray;
     }
 }

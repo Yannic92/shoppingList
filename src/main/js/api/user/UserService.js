@@ -5,7 +5,7 @@ import User from '../../user/User';
 export default class UserService {
 
     /*@ngInject*/
-    constructor($resource, $q, $rootScope, userResourceConverter, $filter, $timeout) {
+    constructor($resource, $rootScope, userResourceConverter, $timeout) {
 
         const userEndpoint = Endpoints.user + '/:username';
         const methods = {
@@ -16,8 +16,8 @@ export default class UserService {
 
         this.users = [];
 
-        this.restService = new RESTService($rootScope,$q, $resource, userResourceConverter,
-            this.users, $filter('filter'), $timeout, 'user-cache-updated', Endpoints.user);
+        this.restService = new RESTService($rootScope, $resource, userResourceConverter,
+            this.users, $timeout, 'user-cache-updated', Endpoints.user);
     }
 
     /**

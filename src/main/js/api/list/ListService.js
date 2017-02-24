@@ -5,14 +5,12 @@ import ShoppingList from '../../lists/ShoppingList';
 export default class ListService {
 
     /*@ngInject*/
-    constructor($resource, $filter, $q, $rootScope, shoppingListResourceConverter, $timeout) {
+    constructor($resource, $rootScope, shoppingListResourceConverter, $timeout) {
 
-        this.$q = $q;
-        this.filter = $filter('filter');
         this.lists = [];
 
-        this.restService = new RESTService($rootScope,$q, $resource, shoppingListResourceConverter,
-            this.lists, this.filter, $timeout, 'list-cache-updated', Endpoints.list);
+        this.restService = new RESTService($rootScope, $resource, shoppingListResourceConverter,
+            this.lists, $timeout, 'list-cache-updated', Endpoints.list);
         this.timeout = $timeout;
     }
 
@@ -36,17 +34,18 @@ export default class ListService {
 
     findShoppingListById(listId, refetch = false) {
 
-        const existingList = this._findExistingList(listId);
+        try {
+            const existingList = this._findExistingList(listId);
 
-        if(!existingList) {
+            if(!existingList.updated || refetch) {
+                return this.getUpdatedShoppingList(existingList);
+            }
+
+            return Promise.resolve(existingList);
+        } catch(listNotFoundError) {
+
             return this.getUpdatedShoppingList(new ShoppingList({entityId: listId}));
         }
-
-        if(!existingList.updated || refetch) {
-            return this.getUpdatedShoppingList(existingList);
-        }
-
-        return this._getResolvedPromise(existingList);
 
     }
 
@@ -93,16 +92,13 @@ export default class ListService {
         }
     }
 
-    _getResolvedPromise(resolvedData) {
-
-        const deferred = this.$q.defer();
-        const resolvedPromise = deferred.promise;
-        deferred.resolve(resolvedData);
-
-        return resolvedPromise;
-    }
-
     _findExistingList(listId) {
-        return this.filter(this.lists, {entityId: listId})[0];
+        this.lists.forEach(list => {
+            if(list.entityId === listId) {
+                return list;
+            }
+        });
+
+        throw new Error('List with id \'' + listId + '\' could not be found');
     }
 }

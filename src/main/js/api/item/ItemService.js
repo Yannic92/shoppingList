@@ -3,16 +3,14 @@ import Endpoints from '../Endpoints';
 export default class ItemService {
 
     /*@ngInject*/
-    constructor($q, $rootScope, $resource, $filter, articleService, itemResourceConverter, $timeout) {
+    constructor($rootScope, $resource, articleService, itemResourceConverter, $timeout) {
 
-        this.$q = $q;
         this.$rootScope = $rootScope;
         this.articleService = articleService;
 
         this.items = [];
 
-        this.restService = new RESTService($rootScope,$q, $resource, itemResourceConverter, this.items,
-            $filter('filter'), $timeout, 'item-cache-updated', Endpoints.item);
+        this.restService = new RESTService($rootScope, $resource, itemResourceConverter, this.items, $timeout, 'item-cache-updated', Endpoints.item);
     }
 
     /**
@@ -51,20 +49,11 @@ export default class ItemService {
 
     _fetch() {
         if(!this.$rootScope.authenticated) {
-            this.items.promise = this._getRejectedPromise('Not authenticated');
+            this.items.promise = Promise.reject('Not authenticated');
         }else if (!this.items.fetching) {
             this.restService.fetch();
         }
 
         return this.items.promise;
-    }
-
-
-    _getRejectedPromise(message) {
-        const deferred = this.$q.defer();
-        const rejectedPromise = deferred.promise;
-        deferred.reject(message);
-
-        return rejectedPromise;
     }
 }

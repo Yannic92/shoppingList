@@ -1,18 +1,16 @@
 import RESTService from '../RESTService';
 import Endpoints from '../Endpoints';
+import AttributeEqualsFilter from '../AttributeEqualsFilter';
 
 export default class ArticleService {
 
     /*@ngInject*/
-    constructor($resource, $filter, $q, $rootScope, articleResourceConverter, $timeout) {
-
-        this.$q = $q;
-        this.filter = $filter('filter');
+    constructor($resource, $rootScope, articleResourceConverter, $timeout) {
 
         this.articles = [];
 
-        this.restService = new RESTService($rootScope,$q, $resource, articleResourceConverter, this.articles,
-            this.filter, $timeout, 'article-cache-updated', Endpoints.article);
+        this.restService = new RESTService($rootScope, $resource, articleResourceConverter, this.articles, $timeout,
+            'article-cache-updated', Endpoints.article);
     }
 
     getAllArticles(refetch = false) {
@@ -27,26 +25,19 @@ export default class ArticleService {
     }
 
     findArticleByName(articleName) {
-        const persistedArticlesWithSameName = this.filter(this.articles, {name: articleName});
-
-        if(persistedArticlesWithSameName) {
-            return persistedArticlesWithSameName[0];
-        }
-
-        return undefined;
+        return AttributeEqualsFilter.findFirstByMatchingAttribute(this.articles, 'name', articleName).element;
     }
 
     createArticle(article) {
 
-        let persistedArticleWithSameName = this.findArticleByName(article.name);
-
-        if (persistedArticleWithSameName) {
+        try {
+            const persistedArticleWithSameName = this.findArticleByName(article.name);
             article.entityId = persistedArticleWithSameName.entityId;
             article._links = persistedArticleWithSameName._links;
-            return this.$q((resolve) => resolve(article));
+            return Promise.resolve(article);
+        } catch (notFoundError) {
+            return this.restService.create(article);
         }
-
-        return this.restService.create(article);
     }
 
     deleteArticle(article) {
