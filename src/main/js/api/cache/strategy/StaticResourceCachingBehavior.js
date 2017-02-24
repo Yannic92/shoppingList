@@ -1,10 +1,13 @@
-export default class StaticResourceCache {
+import CachingBehavior from '../CachingBehavior';
+export default class StaticResourceCachingBehavior extends CachingBehavior{
 
-    constructor(self, cacheVersion, urlsToCache) {
+    constructor(self, cacheNamePrefix, cacheVersion, urlsToCache) {
 
+        super(cacheNamePrefix + '-v' + cacheVersion);
         this.self = self;
-        this.cacheName = 'shopping-list-cache-v' + cacheVersion;
+        this.cacheNamePrefix = cacheNamePrefix;
         this.urlsToCache = urlsToCache;
+        this.initListeners();
     }
 
     static updateFound() {
@@ -29,12 +32,18 @@ export default class StaticResourceCache {
     }
 
     _registerCache() {
-        return caches.open(this.cacheName).then(cache => cache.addAll(this.urlsToCache));
+        caches.keys().then(cacheNames => {
+            if(!cacheNames.includes(this.cacheName)) {
+                this.openCache().then(cache => {
+                    cache.addAll(this.urlsToCache);
+                });
+            }
+        });
     }
 
     _initActivateListener() {
         this.self.addEventListener('activate', (event) => {
-            event.waitUntil(
+            return event.waitUntil(
                 caches.keys().then(cacheNames => this._deleteOldCaches(cacheNames))
             );
         });
@@ -43,15 +52,19 @@ export default class StaticResourceCache {
     _deleteOldCaches(cacheNames) {
         let updateFound = false;
 
+        const existingCaches = cacheNames.filter((cacheName) => {
+            return cacheName.startsWith(this.cacheNamePrefix);
+        });
+
         return Promise.all(
-            cacheNames.map(cacheName => {
+            existingCaches.map(cacheName => {
                 if(cacheName !== this.cacheName) {
                     updateFound = true;
                     return caches.delete(cacheName);
                 }
             })).then(() => {
                 if (updateFound) {
-                    StaticResourceCache.updateFound();
+                    StaticResourceCachingBehavior.updateFound();
                 }
             }
         );

@@ -1,11 +1,13 @@
 import FastestCachingBehavior from './FastestCachingBehavior';
 import BackgroundSyncBehavior from './BackgroundSyncBehavior';
+import StaticResourceCachingBehavior from './StaticResourceCachingStrategy';
 
 class CachingStrategies {
 
-    constructor() {
+    constructor(staticResourceCaches) {
         this.fastestCachingBehavior = new FastestCachingBehavior(CachingStrategies.options.cache.name);
         this.backgroundSyncBehavior = new BackgroundSyncBehavior(CachingStrategies.options.cache.name);
+        this.staticResourceCachingBehavior = new StaticResourceCachingBehavior(staticResourceCaches);
     }
 
     fastest(request) {
@@ -14,6 +16,10 @@ class CachingStrategies {
 
     backgroundSync(request) {
         return this.backgroundSyncBehavior.strategy(request);
+    }
+
+    staticResource(request) {
+        return this.staticResourceCachingBehavior.strategy(request);
     }
 }
 
