@@ -32,7 +32,7 @@ const handleStaticResourceRequest = (request) => {
     return cachingStrategies.staticResource(request);
 };
 
-toolbox.router.get('/(?!/api/(.*))(.*)', handleStaticResourceRequest);
+toolbox.router.get(/^(?!\/?api).+$/, handleStaticResourceRequest);
 toolbox.router.get('/api/(.*)', handleReadDataRequests);
 toolbox.router.put('/api/(.*)', handleUpdateDataRequests);
 toolbox.router.post('/api/(.*)', handleCreateDataRequests);

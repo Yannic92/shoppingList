@@ -11,10 +11,9 @@ export default class StaticResourceCachingStrategy {
             let rejectCounter = 0;
 
             const maybeReject = () => {
-                if(rejectCounter < this.staticResourceCaches.length) {
-                    rejectCounter++;
-                } else {
-                    return fetch(event.request);
+                rejectCounter++;
+                if(rejectCounter >= this.staticResourceCaches.length) {
+                    resolve(fetch(request));
                 }
             };
 
