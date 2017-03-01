@@ -23,9 +23,4 @@ EventTypes.ARTICLE_UPDATED = new EventTypes('article-updated');
 EventTypes.USERS_UPDATED = new EventTypes('users-updated');
 EventTypes.USER_UPDATED = new EventTypes('user-updated');
 
-EventTypes.LISTS_OUTDATED = new EventTypes('lists-outdated');
-EventTypes.ITEMS_OUTDATED = new EventTypes('items-outdated');
-EventTypes.ARTICLES_OUTDATED = new EventTypes('articles-outdated');
-EventTypes.USERS_OUTDATED = new EventTypes('users-outdated');
-
 EventTypes.CACHE_OUTDATED = new EventTypes('cache-outdated');

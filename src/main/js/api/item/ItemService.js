@@ -1,16 +1,13 @@
-import RESTService from '../RESTService';
-import Endpoints from '../Endpoints';
 export default class ItemService {
 
     /*@ngInject*/
-    constructor($rootScope, $resource, articleService, itemResourceConverter, $timeout) {
+    constructor(articleService, itemRestService) {
 
-        this.$rootScope = $rootScope;
         this.articleService = articleService;
 
-        this.items = [];
+        this.restService = itemRestService;
+        this.items = this.restService.container;
 
-        this.restService = new RESTService($rootScope, $resource, itemResourceConverter, this.items, $timeout, 'item-cache-updated', Endpoints.item);
     }
 
     /**
@@ -45,15 +42,5 @@ export default class ItemService {
 
     deleteItem(item) {
         return this.restService.delete(item);
-    }
-
-    _fetch() {
-        if(!this.$rootScope.authenticated) {
-            this.items.promise = Promise.reject('Not authenticated');
-        }else if (!this.items.fetching) {
-            this.restService.fetch();
-        }
-
-        return this.items.promise;
     }
 }

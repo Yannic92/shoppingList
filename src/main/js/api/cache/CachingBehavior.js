@@ -31,7 +31,7 @@ export default class CachingBehavior {
     fetchAndCache(request) {
 
         return this.networkOnly(request.clone()).then((response) => {
-            if (request.method === 'GET' && this.isSuccessful(response)) {
+            if (request.method === 'GET' && response.ok) {
                 this.cache(request, response);
             }
             return response.clone();
@@ -46,9 +46,5 @@ export default class CachingBehavior {
 
     strategy(request){
         throw 'Unsupported Operation: Could not handle request: ' + request.url;
-    }
-
-    isSuccessful(response) {
-        return response.status >= 200 && response.status < 300;
     }
 }

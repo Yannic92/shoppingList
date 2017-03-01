@@ -41,8 +41,7 @@ export default class UserDataController {
         };
 
         this.authService.authenticate(credentials)
-            .then((user) => {
-                this.$rootScope.user = user;
+            .then(() => {
                 this._showUpdateFinishedToast();
             });
     }

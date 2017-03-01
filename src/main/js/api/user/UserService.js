@@ -1,11 +1,10 @@
-import RESTService from '../RESTService';
 import Endpoints from '../Endpoints';
 import User from '../../user/User';
 
 export default class UserService {
 
     /*@ngInject*/
-    constructor($resource, $rootScope, userResourceConverter, $timeout) {
+    constructor($resource, userRestService) {
 
         const userEndpoint = Endpoints.user + '/:username';
         const methods = {
@@ -14,10 +13,9 @@ export default class UserService {
         };
         this.usersConfirmationResource = $resource(userEndpoint + '/confirmation', null, methods);
 
-        this.users = [];
 
-        this.restService = new RESTService($rootScope, $resource, userResourceConverter,
-            this.users, $timeout, 'user-cache-updated', Endpoints.user);
+        this.restService = userRestService;
+        this.users = this.restService.container;
     }
 
     /**

@@ -43,6 +43,10 @@ import ShoppingListResourceConverter from './api/list/ShoppingListResourceConver
 import UserResourceConverter from './api/user/UserResourceConverter';
 import CredentialService from './authentication/CredentialService';
 import Polyfills from './polyfill/Polyfills';
+import ArticleRestService from './api/article/ArticleRestService';
+import ItemRestService from './api/item/ItemRestService';
+import ShoppingListRestService from './api/list/ShoppingListRestService';
+import UserRestService from './api/user/UserRestService';
 
 Polyfills.initPolyfills();
 
@@ -54,7 +58,7 @@ angular.module('shoppingList', [ngRoute, ngResource, ngMaterial, ngAnimate, ngAr
     })
     .run(/*@ngInject*/($rootScope) => {
         $rootScope.authenticated = false;
-        $rootScope.user = '';
+        $rootScope.user = null;
         $rootScope.authenticationAlreadyChecked = false;
         $rootScope.reset = () => {
             $rootScope.options = [];
@@ -72,13 +76,17 @@ angular.module('shoppingList', [ngRoute, ngResource, ngMaterial, ngAnimate, ngAr
     .service('credentialService', CredentialService)
     .service('navigationService', NavigationService)
     .service('authenticationInterceptor', HttpInterceptor)
+    .service('userRestService', UserRestService)
     .service('userService', UserService)
     .service('shoppingListResourceConverter', ShoppingListResourceConverter)
+    .service('shoppingListRestService', ShoppingListRestService)
     .service('listService', ListService)
     .service('itemResourceConverter', ItemResourceConverter)
+    .service('itemRestService', ItemRestService)
     .service('itemService', ItemService)
     .service('authService', AuthService)
     .service('articleResourceConverter', ArticleResourceConverter)
+    .service('articleRestService', ArticleRestService)
     .service('articleService', ArticleService)
     .service('userResourceConverter', UserResourceConverter)
     .controller('navigationController', NavigationController)

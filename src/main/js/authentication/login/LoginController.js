@@ -64,8 +64,7 @@ export default class LoginController {
     _redirectIfLoggedIn() {
         this._loggingIn();
         this.authService.isAuthenticated()
-            .then((user) => {
-                this.$rootScope.user = user;
+            .then(() => {
                 this.navigationService.goto('/lists', true);
                 this._loggingInFinished();
             }).catch(() => {

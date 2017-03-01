@@ -7,7 +7,7 @@ import uuid from 'uuid';
 
 export default class RESTService {
 
-    constructor(rootScope, resource, resourceConverter, container, timeout, cacheUpdateChannelName, endpoint) {
+    constructor(rootScope, resource, timeout, resourceConverter, cacheUpdateChannelName, endpoint) {
 
         const methods = {
             'update': {method: 'PUT'},
@@ -16,7 +16,7 @@ export default class RESTService {
         this.rootScope = rootScope;
         this.resource = resource(endpoint + '/:entityId', null, methods);
         this.resourceConverter = resourceConverter;
-        this.container = container;
+        this.container = [];
         this.timeout = timeout;
         this.cacheUpdateChannelName = cacheUpdateChannelName;
         this.entityUpdatedCallbacks = {};

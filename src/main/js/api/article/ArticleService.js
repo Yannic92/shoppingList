@@ -1,16 +1,12 @@
-import RESTService from '../RESTService';
-import Endpoints from '../Endpoints';
 import AttributeEqualsFilter from '../AttributeEqualsFilter';
 
 export default class ArticleService {
 
     /*@ngInject*/
-    constructor($resource, $rootScope, articleResourceConverter, $timeout) {
+    constructor(articleRestService) {
 
-        this.articles = [];
-
-        this.restService = new RESTService($rootScope, $resource, articleResourceConverter, this.articles, $timeout,
-            'article-cache-updated', Endpoints.article);
+        this.restService = articleRestService;
+        this.articles = this.restService.container;
     }
 
     getAllArticles(refetch = false) {

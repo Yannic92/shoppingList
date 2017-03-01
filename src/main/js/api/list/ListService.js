@@ -1,17 +1,13 @@
-import RESTService from '../RESTService';
-import Endpoints from '../Endpoints';
 import ShoppingList from '../../lists/ShoppingList';
 
 export default class ListService {
 
     /*@ngInject*/
-    constructor($resource, $rootScope, shoppingListResourceConverter, $timeout) {
+    constructor(shoppingListRestService) {
 
-        this.lists = [];
 
-        this.restService = new RESTService($rootScope, $resource, shoppingListResourceConverter,
-            this.lists, $timeout, 'list-cache-updated', Endpoints.list);
-        this.timeout = $timeout;
+        this.restService = shoppingListRestService;
+        this.lists = this.restService.container;
     }
 
     /**
