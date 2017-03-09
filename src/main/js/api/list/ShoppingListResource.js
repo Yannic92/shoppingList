@@ -7,6 +7,7 @@ export default class ShoppingListResource {
     constructor(shoppingList) {
         this.entityId = shoppingList.entityId;
         this.name = shoppingList.name;
+        this.lastModified = shoppingList.lastModified;
         this._initItems(shoppingList.items);
         this._initOwners(shoppingList.owners);
     }

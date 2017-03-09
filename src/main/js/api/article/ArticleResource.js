@@ -4,5 +4,6 @@ export default class ArticleResource {
         this.entityId = article.entityId;
         this.name = article.name;
         this.priceInEuro = article.priceInEuro;
+        this.lastModified = article.lastModified;
     }
 }

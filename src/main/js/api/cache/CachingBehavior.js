@@ -9,12 +9,17 @@ export default class CachingBehavior {
     }
 
     networkOnly(request) {
-        return fetch(request).then((response) => {
-            if( 'sync' in self.registration) {
-                self.registration.sync.register('network-connection-established');
-            }
-            return response;
-        });
+        return fetch(request)
+            .then((response) => {
+                this._notifyAbobutSuccessfulRequest();
+                return response;
+            });
+    }
+
+    _notifyAbobutSuccessfulRequest() {
+        if( 'sync' in self.registration) {
+            self.registration.sync.register('network-connection-established');
+        }
     }
 
     cacheOnly(request) {

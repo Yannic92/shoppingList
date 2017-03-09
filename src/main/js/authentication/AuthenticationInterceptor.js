@@ -34,6 +34,10 @@ export default class AuthenticationInterceptor extends HttpInterceptor{
     }
 
     responseError(rejection) {
+        if (rejection.status <= 0 || rejection.status == 502 && rejection.config.method === 'GET') {
+            this._notifyAboutOfflineState();
+            return this.$q.reject(rejection);
+        }
         if ((rejection.status <= 0 || rejection.status == 502) && !this.connectionLossNotification) {
             this.connectionLossNotification = true;
             this.connectionLossPromise = this._handleOfflineRequest(rejection);
@@ -68,6 +72,14 @@ export default class AuthenticationInterceptor extends HttpInterceptor{
             this.navigationService.goToTopOfThePage();
         }
         return this.$q.reject(rejection);
+    }
+
+    _notifyAboutOfflineState() {
+        var $mdToast = this.$injector.get('$mdToast');
+        $mdToast.show ($mdToast.simple()
+            .content('Keine aktive Verbindung')
+            .position('bottom right')
+            .hideDelay(3000));
     }
 
     _handleOfflineRequest() {

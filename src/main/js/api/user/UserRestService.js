@@ -4,8 +4,8 @@ import EntityTypes from '../EntityTypes';
 export default class UserRestService extends RESTService {
 
     /*@ngInject*/
-    constructor($rootScope, $resource, $timeout, userResourceConverter) {
+    constructor($rootScope, $resource, $timeout, $q, userResourceConverter) {
 
-        super($rootScope, $resource, $timeout, userResourceConverter, 'user-cache-updated', EntityTypes.USER.endpoint);
+        super($rootScope, $resource, $timeout, $q, userResourceConverter, 'user-cache-updated', EntityTypes.USER);
     }
 }

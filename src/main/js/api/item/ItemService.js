@@ -1,11 +1,13 @@
 export default class ItemService {
 
     /*@ngInject*/
-    constructor(articleService, itemRestService) {
+    constructor(articleService, itemRestService, listItemRestService, shoppingListRestService) {
 
         this.articleService = articleService;
 
         this.restService = itemRestService;
+        this.listItemRestService = listItemRestService;
+        this.shoppingListRestService = shoppingListRestService;
         this.items = this.restService.container;
 
     }
@@ -24,23 +26,30 @@ export default class ItemService {
         return this.items;
     }
 
+    getItemsOfList(list) {
+        return this.listItemRestService.fetch({listId: list.entityId});
+    }
+
     itemsAlreadyFetched() {
         return !this.items.fetching && !this.items.fetched;
     }
 
-    createItem(item) {
+    addItemToList(item, list) {
+        list.lastModified = Date.now();
+        list.items.push(item);
+        this.shoppingListRestService.storeInDB(list);
         return this.articleService.createArticle(item.article)
             .then((createdArticle) => {
                 item.article.entityId = createdArticle.entityId;
-                return this.restService.create(item);
+                return this.listItemRestService.create(item, {listId: list.entityId});
             });
     }
 
-    updateItem(item) {
-        return this.restService.update(item);
+    updateItemOfList(item, list) {
+        return this.listItemRestService.update(item, {listId: list.entityId});
     }
 
-    deleteItem(item) {
-        return this.restService.delete(item);
+    deleteItemOfList(item, list) {
+        return this.listItemRestService.delete(item, {listId: list.entityId});
     }
 }

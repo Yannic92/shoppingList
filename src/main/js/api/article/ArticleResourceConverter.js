@@ -26,9 +26,9 @@ export default class ArticleResourceConverter extends ResourceConverter {
      *
      * @returns {Article} An {Item} created out of the given JSON Object.
      */
-    static ofJson({name, priceInEuro, entityId, _links}) {
+    static ofJson({name, priceInEuro, entityId, _links, lastModified}) {
 
-        return new Article({name, priceInEuro, entityId, links: _links});
+        return new Article({name, priceInEuro, entityId, links: _links, lastModified});
     }
 
     /**

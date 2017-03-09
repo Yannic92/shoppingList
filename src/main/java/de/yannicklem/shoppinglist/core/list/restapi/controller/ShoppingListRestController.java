@@ -3,6 +3,10 @@ package de.yannicklem.shoppinglist.core.list.restapi.controller;
 import de.yannicklem.restutils.controller.RestEntityController;
 
 import de.yannicklem.shoppinglist.core.exception.NotFoundException;
+import de.yannicklem.shoppinglist.core.item.entity.Item;
+import de.yannicklem.shoppinglist.core.item.persistence.ItemService;
+import de.yannicklem.shoppinglist.core.item.restapi.controller.ItemRestController;
+import de.yannicklem.shoppinglist.core.item.restapi.service.ItemResourceProcessor;
 import de.yannicklem.shoppinglist.core.list.entity.ShoppingList;
 import de.yannicklem.shoppinglist.core.list.persistence.ShoppingListService;
 import de.yannicklem.shoppinglist.core.list.restapi.service.ShoppingListRequestHandler;
@@ -23,21 +27,19 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import java.security.Principal;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.time.Instant;
+import java.util.*;
 
+import static java.util.stream.Collectors.*;
 import static org.apache.log4j.Logger.getLogger;
 
 import static java.lang.invoke.MethodHandles.lookup;
+import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 
 @RestController
@@ -49,17 +51,16 @@ import static java.lang.invoke.MethodHandles.lookup;
 )
 public class ShoppingListRestController extends RestEntityController<ShoppingList, String> {
 
-    private static Logger LOGGER = getLogger(lookup().lookupClass());
 
     @Autowired
     public ShoppingListRestController(SLUserService slUserService, ShoppingListService shoppingListService,
-        ShoppingListRequestHandler requestHandler, ShoppingListResourceProcessor resourceProcessor,
-        EntityLinks entityLinks) {
+                                      ShoppingListRequestHandler requestHandler, ShoppingListResourceProcessor resourceProcessor,
+                                      EntityLinks entityLinks) {
 
         super(slUserService, shoppingListService, requestHandler, resourceProcessor, entityLinks);
     }
 
-    @RequestMapping(method = RequestMethod.DELETE)
+    @RequestMapping(method = DELETE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteAll(Principal principal) {
 

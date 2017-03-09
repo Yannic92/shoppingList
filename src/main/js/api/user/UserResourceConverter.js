@@ -29,9 +29,18 @@ export default class UserResourceConverter extends ResourceConverter {
      *
      * @return {User}
      */
-    static ofJson({_links, username, firstName, lastName, email, authorities, password}) {
+    static ofJson({_links, username, firstName, lastName, email, authorities, password, lastModified}) {
 
-        return new User({links:_links, username: username, firstName: firstName, lastName: lastName, email: email, authorities: authorities, password: password});
+        return new User({
+            links:_links,
+            username: username,
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            authorities: authorities,
+            password: password,
+            lastModified: lastModified
+        });
     }
 
     /**

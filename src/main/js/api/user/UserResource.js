@@ -11,5 +11,6 @@ export default class UserResource {
         this.email = user.email;
         this.password = user.password;
         this.authorities = user.authorities;
+        this.lastModified = user.lastModified;
     }
 }

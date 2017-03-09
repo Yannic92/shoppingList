@@ -47,6 +47,7 @@ import ArticleRestService from './api/article/ArticleRestService';
 import ItemRestService from './api/item/ItemRestService';
 import ShoppingListRestService from './api/list/ShoppingListRestService';
 import UserRestService from './api/user/UserRestService';
+import ListItemRestService from './api/item/ListItemRestService';
 
 Polyfills.initPolyfills();
 
@@ -83,6 +84,7 @@ angular.module('shoppingList', [ngRoute, ngResource, ngMaterial, ngAnimate, ngAr
     .service('listService', ListService)
     .service('itemResourceConverter', ItemResourceConverter)
     .service('itemRestService', ItemRestService)
+    .service('listItemRestService', ListItemRestService)
     .service('itemService', ItemService)
     .service('authService', AuthService)
     .service('articleResourceConverter', ArticleResourceConverter)

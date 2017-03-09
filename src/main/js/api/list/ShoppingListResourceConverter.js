@@ -25,16 +25,19 @@ export default class ShoppingListResourceConverter extends ResourceConverter {
      * @param name {String} the name of the {ShoppingList}.
      * @param owners {Array} An array of {User} who owns this {ShoppingList}.
      * @param items {Array} An array of {Item} that are contained in this {ShoppingList}.
+     * @param lastModified {Number} Timestamp of last modification.
      * @return {ShoppingList}
      */
-    ofJson({_links, entityId, name, owners, items}) {
+    ofJson({_links, entityId, name, owners, items, lastModified}) {
 
         return new ShoppingList({
             links:_links,
             entityId: entityId,
             name: name,
             owners: owners,
-            items: this.itemResourceConverter.toEntities(items)});
+            items: this.itemResourceConverter.toEntities(items),
+            lastModified: lastModified
+        });
     }
 
     /**

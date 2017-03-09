@@ -3,10 +3,11 @@ import AttributeEqualsFilter from '../AttributeEqualsFilter';
 export default class ArticleService {
 
     /*@ngInject*/
-    constructor(articleRestService) {
+    constructor(articleRestService, $q) {
 
         this.restService = articleRestService;
         this.articles = this.restService.container;
+        this.Promise = $q;
     }
 
     getAllArticles(refetch = false) {
@@ -30,7 +31,7 @@ export default class ArticleService {
             const persistedArticleWithSameName = this.findArticleByName(article.name);
             article.entityId = persistedArticleWithSameName.entityId;
             article._links = persistedArticleWithSameName._links;
-            return Promise.resolve(article);
+            return this.Promise.resolve(article);
         } catch (notFoundError) {
             return this.restService.create(article);
         }

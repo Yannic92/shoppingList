@@ -6,5 +6,6 @@ export default class ItemResource {
         this.count = item.count;
         this.article = {entityId: item.article.entityId};
         this.done = item.done;
+        this.lastModified = item.lastModified;
     }
 }

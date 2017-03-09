@@ -54,7 +54,6 @@ export default class ListViewController {
 
             this._showNewItemDialog(ev)
                 .then((item) => this._createItem(item))
-                .then((createdItem) => this._addItemToList(createdItem))
                 .then(() => {
                     this._initNewItem();
                     this._finishCreating();
@@ -97,7 +96,7 @@ export default class ListViewController {
         for (let i = 0; i < this.list.items.length; i++) {
             if (this.list.items[i].done) {
                 this.list.items[i].done = false;
-                this.itemService.updateItem(this.list.items[i]);
+                this.itemService.updateItemOfList(this.list.items[i], this.list);
             }
         }
     }
@@ -106,14 +105,14 @@ export default class ListViewController {
         for (let i = 0; i < this.list.items.length; i++) {
             if (!this.list.items[i].done) {
                 this.list.items[i].done = true;
-                this.itemService.updateItem(this.list.items[i]);
+                this.itemService.updateItemOfList(this.list.items[i], this.list);
             }
         }
     }
 
     _createItem(item) {
         this.creating = true;
-        return this.itemService.createItem(item);
+        return this.itemService.addItemToList(item, this.list);
     }
 
     _deleteDoneItems() {
@@ -122,7 +121,7 @@ export default class ListViewController {
 
         for (let i = 0; i < this.list.items.length; i++) {
             if (this.list.items[i].done) {
-                promises.push(this.itemService.deleteItem(this.list.items[i]));
+                promises.push(this.itemService.deleteItemOfList(this.list.items[i], this.list));
             } else {
                 notDoneItems.push(this.list.items[i]);
             }
@@ -163,11 +162,6 @@ export default class ListViewController {
         } else {
             this.navigationService.goto('/lists', true);
         }
-    }
-
-    _addItemToList(item) {
-        this.list.items.push(item);
-        return this.listService.updateShoppingList(this.list);
     }
 
     _showNewItemDialog(ev) {
@@ -218,10 +212,9 @@ export default class ListViewController {
 
         this._initList($routeParams.listId).then(() => {
 
-            this.listService.onListsUpdate((updatedLists) => {
-                this.list = this.$filter('filter')(updatedLists, {entityId: this.list.entityId})[0];
-                if(!this.list) {
-                    this._gotoAllLists();
+            this.listService.onAnyListUpdate((updatedList) => {
+                if(updatedList.entityId === this.list.entityId) {
+                    this.list = updatedList;
                 }
             });
 

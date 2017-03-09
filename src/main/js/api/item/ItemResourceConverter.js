@@ -25,16 +25,19 @@ export default class ItemResourceConverter extends ResourceConverter {
      * @param article {Article} The Article this item refers to.
      * @param count {Number} The number of articles that should be bought.
      * @param done {Boolean} Indicates if the item is already bought or not.
+     * @param lastModified {Number} Timestamp of last modification.
      *
      * @returns {Item} An {Item} created out of the given JSON Object.
      */
-    ofJson({_links, entityId, article, count, done}) {
+    ofJson({_links, entityId, article, count, done, lastModified}) {
 
         return new Item({links:_links,
             entityId: entityId,
             article: this.articleResourceConverter.toEntity(article),
             count: count,
-            done: done});
+            done: done,
+            lastModified: lastModified
+        });
     }
 
     /**

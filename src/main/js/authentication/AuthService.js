@@ -1,10 +1,11 @@
 export default class AuthService {
 
     /*@ngInject*/
-    constructor($http, $rootScope, userService, credentialService) {
+    constructor($http, $rootScope, userService, credentialService, $q) {
 
         this.$http = $http;
         this.$rootScope = $rootScope;
+        this.Promise = $q;
         this.userService = userService;
         this.credentialService = credentialService;
 
@@ -30,13 +31,11 @@ export default class AuthService {
     isAuthenticated() {
         this.loggingIn = true;
         this.$rootScope.authenticationAlreadyChecked = true;
-        return this.credentialService.getCredentials()
-            .then(credentials => {
-                return this.authenticate(credentials);
-            })
+        return this.credentialService.getCurrentUser()
+            .then(currentUser => this._handleSuccessfulLogin(currentUser))
             .catch((error) => {
                 this.loggingIn = false;
-                return Promise.reject(error);
+                return this.Promise.reject(error);
             });
     }
 
@@ -58,19 +57,20 @@ export default class AuthService {
 
         this.$rootScope.authenticated = true;
         this.$rootScope.user = currentUser;
+        this.credentialService.setCurrentUser(currentUser);
         this.loggingIn = false;
 
-        return Promise.resolve(currentUser);
+        return this.Promise.resolve(currentUser);
     }
 
     _handleErrorLogin(error) {
 
         return this.credentialService.clearCredentials()
             .then(() => {
-                return Promise.reject(error);
+                return this.Promise.reject(error);
             })
             .catch(() => {
-                return Promise.reject(error);
+                return this.Promise.reject(error);
             });
     }
 }

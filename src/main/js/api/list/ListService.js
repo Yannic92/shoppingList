@@ -3,11 +3,12 @@ import ShoppingList from '../../lists/ShoppingList';
 export default class ListService {
 
     /*@ngInject*/
-    constructor(shoppingListRestService) {
+    constructor(shoppingListRestService, $q) {
 
 
         this.restService = shoppingListRestService;
         this.lists = this.restService.container;
+        this.Promise = $q;
     }
 
     /**
@@ -30,18 +31,21 @@ export default class ListService {
 
     findShoppingListById(listId, refetch = false) {
 
+        let promise;
         try {
             const existingList = this._findExistingList(listId);
 
             if(!existingList.updated || refetch) {
-                return this.getUpdatedShoppingList(existingList);
+                promise = this.getUpdatedShoppingList(existingList);
+            }else {
+                promise = existingList;
             }
-
-            return Promise.resolve(existingList);
         } catch(listNotFoundError) {
 
-            return this.getUpdatedShoppingList(new ShoppingList({entityId: listId}));
+            promise = this.getUpdatedShoppingList(new ShoppingList({entityId: listId}));
         }
+
+        return promise;
 
     }
 
@@ -75,7 +79,7 @@ export default class ListService {
         this.restService.onEntityUpdate(list, callback);
     }
 
-    onListsUpdate(callback) {
+    onAnyListUpdate(callback) {
         this.restService.onEntitiesUpdate(callback);
     }
 

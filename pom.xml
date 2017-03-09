@@ -24,6 +24,13 @@
         <lombok.version>1.16.10</lombok.version>
     </properties>
 
+    <scm>
+        <url>https://github.com/Yannic92/ShoppingList</url>
+        <connection>scm:git:ssh://git@github.com/Yannic92/shoppingList.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/Yannic92/shoppingList.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
+
     <dependencies>
         <!-- security -->
         <dependency>

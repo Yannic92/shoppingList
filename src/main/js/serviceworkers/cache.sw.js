@@ -12,10 +12,6 @@ toolbox.options.cache.name = 'shopping-list-dynamic-data-cache';
 toolbox.options.networkTimeoutSeconds = 5;
 const cachingStrategies = new CachingStrategies([FontCache, ApplicationSourcesCache, ImageCache, TemplateCache]);
 
-const handleReadDataRequests = (request) => {
-    return cachingStrategies.fastest(request);
-};
-
 const handleUpdateDataRequests = (request) => {
     return cachingStrategies.backgroundSync(request);
 };
@@ -28,12 +24,16 @@ const handleDeleteDataRequests = (request) => {
     return cachingStrategies.backgroundSync(request);
 };
 
+const handleApiGetRequests = (request) => {
+    return cachingStrategies.networkOnly(request);
+};
+
 const handleStaticResourceRequest = (request) => {
     return cachingStrategies.staticResource(request);
 };
 
 toolbox.router.get(/^(?!\/?api).+$/, handleStaticResourceRequest);
-toolbox.router.get('/api/(.*)', handleReadDataRequests);
+toolbox.router.get('/api/(.*)', handleApiGetRequests);
 toolbox.router.put('/api/(.*)', handleUpdateDataRequests);
 toolbox.router.post('/api/(.*)', handleCreateDataRequests);
 toolbox.router.delete('/api/(.*)', handleDeleteDataRequests);

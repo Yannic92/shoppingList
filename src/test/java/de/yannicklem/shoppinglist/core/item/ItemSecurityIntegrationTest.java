@@ -2,58 +2,41 @@ package de.yannicklem.shoppinglist.core.item;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import de.yannicklem.shoppinglist.TestUtils;
 import de.yannicklem.shoppinglist.WebShoppingListApplication;
 import de.yannicklem.shoppinglist.core.article.entity.Article;
 import de.yannicklem.shoppinglist.core.article.persistence.ArticleService;
 import de.yannicklem.shoppinglist.core.item.entity.Item;
 import de.yannicklem.shoppinglist.core.item.persistence.ItemService;
+import de.yannicklem.shoppinglist.core.list.entity.ShoppingList;
+import de.yannicklem.shoppinglist.core.list.persistence.ShoppingListService;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.core.user.persistence.SLUserService;
-
 import org.junit.Before;
 import org.junit.Test;
-
 import org.junit.runner.RunWith;
-
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.boot.test.context.SpringBootTest;
-
 import org.springframework.http.MediaType;
-
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
 import org.springframework.web.context.WebApplicationContext;
 
+import javax.servlet.Filter;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-import javax.servlet.Filter;
-
 import static de.yannicklem.restutils.entity.SlMediaTypes.HAL_JSON_UTF8;
-
+import static java.util.Collections.singleton;
 import static org.hamcrest.MatcherAssert.assertThat;
-
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
 @RunWith(SpringRunner.class)
@@ -61,6 +44,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ItemSecurityIntegrationTest {
 
     private final String itemsEndpoint = "/api/items";
+    private final String listsEndpoint = "/api/shoppingLists";
+
     @Autowired
     private WebApplicationContext applicationContext;
 
@@ -76,6 +61,9 @@ public class ItemSecurityIntegrationTest {
     @Autowired
     private ItemService itemService;
 
+    @Autowired
+    private ShoppingListService shoppingListService;
+
     private MockMvc mockMvc;
 
     private SLUser userOne;
@@ -87,6 +75,9 @@ public class ItemSecurityIntegrationTest {
 
     private Item itemOfUserOne;
     private Item itemOfUserTwo;
+
+    private ShoppingList listOfUserOne;
+    private ShoppingList listOfUserTwo;
 
     @Before
     public void setup() {
@@ -121,6 +112,21 @@ public class ItemSecurityIntegrationTest {
         itemService.deleteAll();
         itemService.create(itemOfUserOne);
         itemService.create(itemOfUserTwo);
+
+        listOfUserOne = new ShoppingList();
+        listOfUserOne.setEntityId(UUID.randomUUID().toString());
+        listOfUserOne.setName("userOneList");
+        listOfUserOne.setItems(singleton(itemOfUserOne));
+        listOfUserOne.setOwners(singleton(userOne));
+
+        listOfUserTwo = new ShoppingList();
+        listOfUserTwo.setEntityId(UUID.randomUUID().toString());
+        listOfUserTwo.setName("userTwoList");
+        listOfUserTwo.setItems(singleton(itemOfUserTwo));
+        listOfUserTwo.setOwners(singleton(userTwo));
+
+        shoppingListService.create(listOfUserOne);
+        shoppingListService.create(listOfUserTwo);
     }
 
 
@@ -170,30 +176,32 @@ public class ItemSecurityIntegrationTest {
 
 
     @Test
-    public void getItemOfUserOneAsUserTwoReturnsForbidden() throws Exception {
+    public void getItemOfListOfUserOneAsUserTwoReturnsForbidden() throws Exception {
 
-        mockMvc.perform(get(itemsEndpoint + "/" + itemOfUserOne.getEntityId()).with(user(userTwo)))
+        mockMvc.perform(get(listsEndpoint + "/" + listOfUserOne.getEntityId() + "/items").with(user(userTwo)))
             .andExpect(status().isForbidden());
     }
 
 
     @Test
-    public void getItemOfUserOneAsUserOneReturnsItem() throws Exception {
+    public void getItemsOfListOfUserOneAsUserOneReturnsItem() throws Exception {
 
-        mockMvc.perform(get(itemsEndpoint + "/" + itemOfUserOne.getEntityId()).with(user(userOne)))
+        mockMvc.perform(get(listsEndpoint + "/" + listOfUserOne.getEntityId() + "/items").with(user(userOne)))
             .andExpect(status().isOk())
             .andExpect(content().contentType(HAL_JSON_UTF8))
-            .andExpect(jsonPath("count", is(itemOfUserOne.getCount())));
+            .andExpect(jsonPath("_embedded.items", hasSize(1)))
+            .andExpect(jsonPath("_embedded.items[0].count", is(itemOfUserOne.getCount())));
     }
 
 
     @Test
-    public void getItemOfUserOneAsAdminReturnsItem() throws Exception {
+    public void getItemsOfListOfUserOneAsAdminReturnsItem() throws Exception {
 
-        mockMvc.perform(get(itemsEndpoint + "/" + itemOfUserOne.getEntityId()).with(user(admin)))
+        mockMvc.perform(get(listsEndpoint + "/" + listOfUserOne.getEntityId() + "/items").with(user(admin)))
             .andExpect(status().isOk())
             .andExpect(content().contentType(HAL_JSON_UTF8))
-            .andExpect(jsonPath("count", is(itemOfUserOne.getCount())));
+            .andExpect(jsonPath("_embedded.items", hasSize(1)))
+            .andExpect(jsonPath("_embedded.items[0].count", is(itemOfUserOne.getCount())));
     }
 
 
@@ -202,7 +210,7 @@ public class ItemSecurityIntegrationTest {
     @Test
     public void deleteItemOfUserOneAsUserTwoReturnsForbidden() throws Exception {
 
-        mockMvc.perform(delete(itemsEndpoint + "/" + itemOfUserOne.getEntityId()).with(csrf()).with(user(userTwo)))
+        mockMvc.perform(delete(listsEndpoint + "/" + listOfUserOne.getEntityId() + "/items/" + itemOfUserOne.getEntityId()).with(csrf()).with(user(userTwo)))
             .andExpect(status().isForbidden());
 
         assertThat(itemService.exists(itemOfUserOne.getEntityId()), is(true));
@@ -222,7 +230,7 @@ public class ItemSecurityIntegrationTest {
     @Test
     public void deleteItemOfUserOneAsUserOneReturnsNoContent() throws Exception {
 
-        mockMvc.perform(delete(itemsEndpoint + "/" + itemOfUserOne.getEntityId()).with(csrf()).with(user(userOne)))
+        mockMvc.perform(delete(listsEndpoint + "/" + listOfUserOne.getEntityId() + "/items/" + itemOfUserOne.getEntityId()).with(csrf()).with(user(userOne)))
             .andExpect(status().isNoContent());
 
         assertThat(itemService.exists(itemOfUserOne.getEntityId()), is(false));
@@ -233,7 +241,7 @@ public class ItemSecurityIntegrationTest {
     @Test
     public void deleteItemOfUserOneAsAdminReturnsNoContent() throws Exception {
 
-        mockMvc.perform(delete(itemsEndpoint + "/" + itemOfUserOne.getEntityId()).with(csrf()).with(user(admin)))
+        mockMvc.perform(delete(listsEndpoint + "/" + listOfUserOne.getEntityId() + "/items/" + itemOfUserOne.getEntityId()).with(csrf()).with(user(admin)))
             .andExpect(status().isNoContent());
 
         assertThat(itemService.exists(itemOfUserOne.getEntityId()), is(false));
@@ -250,12 +258,11 @@ public class ItemSecurityIntegrationTest {
         newItem.setEntityId(UUID.randomUUID().toString());
         newItem.getOwners().add(userOne);
 
-        mockMvc.perform(put(itemsEndpoint + "/1337").content(getJsonBytes(newItem))
+        mockMvc.perform(put(listsEndpoint + "/" + listOfUserOne.getEntityId() + "/items/1337").content(getJsonBytes(newItem))
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(csrf())
                 .with(user(userOne)))
-            .andExpect(status().isCreated())
-            .andExpect(jsonPath("count", is(newItem.getCount())));
+            .andExpect(status().isCreated());
 
         assertThat(itemService.exists("1337"), is(true));
         assertThat(itemService.findById("1337").get().getArticle().getOwners(), is(newItem.getOwners()));
@@ -268,7 +275,7 @@ public class ItemSecurityIntegrationTest {
         Item newItem = new Item(articleOfUserOne, "23 x", new HashSet<>());
         newItem.setEntityId(UUID.randomUUID().toString());
 
-        mockMvc.perform(put(itemsEndpoint + "/1337").content(getJsonBytes(newItem))
+        mockMvc.perform(put(listsEndpoint + "/" + listOfUserTwo.getEntityId() + "/items/1337").content(getJsonBytes(newItem))
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(csrf())
                 .with(user(userTwo)))
@@ -281,18 +288,16 @@ public class ItemSecurityIntegrationTest {
 
         Item newItem = new Item(articleOfUserOne, "23 x", new HashSet<>());
         newItem.setEntityId(UUID.randomUUID().toString());
-        newItem.getOwners().add(userOne);
+        newItem.setOwners(singleton(userOne));
 
-        mockMvc.perform(put(itemsEndpoint + "/1337").content(getJsonBytes(newItem))
+        mockMvc.perform(put(listsEndpoint + "/" + listOfUserOne.getEntityId() + "/items/1337").content(getJsonBytes(newItem))
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(csrf())
                 .with(user(admin)))
-            .andExpect(status().isCreated())
-            .andExpect(jsonPath("count", is(newItem.getCount())));
+            .andExpect(status().isCreated());
 
         HashSet<SLUser> newOwners = new HashSet<>();
         newOwners.addAll(newItem.getOwners());
-        newOwners.add(admin);
 
         assertThat(itemService.exists("1337"), is(true));
         assertThat(itemService.findById("1337").get().getArticle().getOwners(), is(newOwners));
@@ -300,36 +305,33 @@ public class ItemSecurityIntegrationTest {
 
 
     @Test
-    public void updateItemCountOfUserOneAsUserOneUpdatesAndReturnsItem() throws Exception {
+    public void updateItemCountOfUserOneAsUserOneUpdates() throws Exception {
 
         Item updatedItem = new Item(itemOfUserOne);
         updatedItem.setEntityId(itemOfUserOne.getEntityId());
         updatedItem.setCount(itemOfUserOne.getCount() + "1");
 
-        mockMvc.perform(put(itemsEndpoint + "/" + updatedItem.getEntityId()).content(getJsonBytes(updatedItem))
+        mockMvc.perform(put(listsEndpoint + "/" + listOfUserOne.getEntityId() + "/items/" + updatedItem.getEntityId()).content(getJsonBytes(updatedItem))
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(csrf())
                 .with(user(userOne)))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("count", is(updatedItem.getCount())))
-            .andExpect(jsonPath("count", is(not(itemOfUserOne.getCount()))));
+            .andExpect(status().isOk());
     }
 
 
     @Test
-    public void updateItemOwnersOfUserOneAsUserOneHasNoEffectAndReturnsItem() throws Exception {
+    public void updateItemOwnersOfUserOneAsUserOneHasNoEffect() throws Exception {
 
         Item updatedItem = new Item(itemOfUserOne);
         updatedItem.setEntityId(itemOfUserOne.getEntityId());
         updatedItem.getOwners().remove(userOne);
         updatedItem.getOwners().add(userTwo);
 
-        mockMvc.perform(put(itemsEndpoint + "/" + updatedItem.getEntityId()).content(getJsonBytes(updatedItem))
+        mockMvc.perform(put(listsEndpoint + "/" + listOfUserOne.getEntityId() + "/items/" + updatedItem.getEntityId()).content(getJsonBytes(updatedItem))
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(csrf())
                 .with(user(userOne)))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("count", is(updatedItem.getCount())));
+            .andExpect(status().isOk());
 
         Set<SLUser> updatedOwners = itemService.findById(updatedItem.getEntityId()).get().getOwners();
 
@@ -345,13 +347,11 @@ public class ItemSecurityIntegrationTest {
         updatedItem.setEntityId(itemOfUserOne.getEntityId());
         updatedItem.setCount(itemOfUserOne.getCount() + "1");
 
-        mockMvc.perform(put(itemsEndpoint + "/" + updatedItem.getEntityId()).content(getJsonBytes(updatedItem))
+        mockMvc.perform(put(listsEndpoint + "/" + listOfUserOne.getEntityId() + "/items/" + updatedItem.getEntityId()).content(getJsonBytes(updatedItem))
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(csrf())
                 .with(user(admin)))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("count", is(updatedItem.getCount())))
-            .andExpect(jsonPath("count", is(not(itemOfUserOne.getCount()))));
+            .andExpect(status().isOk());
     }
 
 
@@ -376,7 +376,7 @@ public class ItemSecurityIntegrationTest {
         updatedItem.setEntityId(itemOfUserOne.getEntityId());
         updatedItem.setCount(itemOfUserOne.getCount() + "1");
 
-        mockMvc.perform(put(itemsEndpoint + "/" + updatedItem.getEntityId()).content(getJsonBytes(updatedItem))
+        mockMvc.perform(put(listsEndpoint + "/" + listOfUserOne.getEntityId() + "/items/" + updatedItem.getEntityId()).content(getJsonBytes(updatedItem))
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(csrf())
                 .with(user(userTwo)))
@@ -392,27 +392,38 @@ public class ItemSecurityIntegrationTest {
         Item newItem = new Item(articleOfUserOne, "23", new HashSet<>());
         newItem.setEntityId(UUID.randomUUID().toString());
 
-        mockMvc.perform(post(itemsEndpoint).content(getJsonBytes(newItem))
+        mockMvc.perform(post(listsEndpoint + "/" + listOfUserOne.getEntityId() + "/items").content(getJsonBytes(newItem))
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(csrf())
                 .with(user(userOne)))
-            .andExpect(status().isCreated())
-            .andExpect(jsonPath("count", is(newItem.getCount())));
+                .andExpect(status().isCreated());
     }
 
-
     @Test
-    public void createArticleViaPostAsAdminCreatesAndReturnsArticle() throws Exception {
+    public void createItemInListOfUserTwoViaPostAsUserOneReturnsForbidden() throws Exception {
 
         Item newItem = new Item(articleOfUserOne, "23", new HashSet<>());
         newItem.setEntityId(UUID.randomUUID().toString());
 
-        mockMvc.perform(post(itemsEndpoint).content(getJsonBytes(newItem))
+        mockMvc.perform(post(listsEndpoint + "/" + listOfUserTwo.getEntityId() + "/items").content(getJsonBytes(newItem))
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(csrf())
+                .with(user(userOne)))
+                .andExpect(status().isForbidden());
+    }
+
+
+    @Test
+    public void createArticleViaPostAsAdminCreates() throws Exception {
+
+        Item newItem = new Item(articleOfUserOne, "23", new HashSet<>());
+        newItem.setEntityId(UUID.randomUUID().toString());
+
+        mockMvc.perform(post(listsEndpoint + "/" + listOfUserOne.getEntityId() + "/items/").content(getJsonBytes(newItem))
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(csrf())
                 .with(user(admin)))
-            .andExpect(status().isCreated())
-            .andExpect(jsonPath("count", is(newItem.getCount())));
+            .andExpect(status().isCreated());
     }
 
 

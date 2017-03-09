@@ -1,4 +1,5 @@
 import localforage from 'localforage';
+import User from '../user/User';
 
 export default class CredentialService {
 
@@ -6,6 +7,25 @@ export default class CredentialService {
     constructor() {
 
         this.db = localforage.createInstance({name: 'user-db'});
+    }
+
+    setCurrentUser(user) {
+        return this.db.setItem('details', user);
+    }
+
+    getCurrentUser() {
+        return this.db.getItem('details')
+            .then(details => {
+                if(details) {
+                    return new User(details);
+                } else {
+                    throw new Error('No details for current user registered');
+                }
+            });
+    }
+
+    clearCurrentUser() {
+        return this.db.removeItem('details');
     }
 
     storeCredentials(credentials) {

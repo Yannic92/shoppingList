@@ -1,6 +1,6 @@
 export default class User {
 
-    constructor({links = [], username = '', firstName = '', lastName = '', email = '', authorities = [], password= ''} = {}) {
+    constructor({links = [], username = '', firstName = '', lastName = '', email = '', authorities = [], password= '', lastModified = Date.now()} = {}) {
 
         this.key = 'username';
         this.links = links;
@@ -10,6 +10,7 @@ export default class User {
         this.email = email;
         this.authorities = authorities;
         this.password = password;
+        this.lastModified = lastModified;
     }
 
     copy() {
@@ -20,6 +21,8 @@ export default class User {
             lastName: this.lastName,
             email: this.email,
             authorities: this.authorities,
-            password: this.password});
+            password: this.password,
+            lastModified: this.lastModified
+        });
     }
 }
