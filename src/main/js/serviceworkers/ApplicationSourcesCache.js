@@ -1,6 +1,6 @@
 import StaticResourceCachingBehavior from '../api/cache/strategy/StaticResourceCachingBehavior';
 
-const APPLICATION_SOURCE_CACHE_VERSION = '2';
+const APPLICATION_SOURCE_CACHE_VERSION = '3';
 const SOURCES_TO_CACHE = [
     '/js/ShoppingList.min.js'
 ];

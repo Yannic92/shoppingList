@@ -27,6 +27,7 @@ export default class RESTService {
         this.entitiesUpdatedCallbacks = [];
         this._initCacheUpdateEventListener();
         this._initCacheOutdatedEventListener();
+        this._initContainer();
     }
 
     _initCacheUpdateEventListener() {
@@ -59,6 +60,12 @@ export default class RESTService {
             //this.fetch();
             break;
         }
+    }
+
+    _initContainer(){
+        return this.db.iterate(entity => {
+            this.container.push(entity);
+        });
     }
 
     notifyAboutEntityUpdate(updatedEntity) {
@@ -195,6 +202,8 @@ export default class RESTService {
                     return this._checkForUpdates(entities);
                 }).then((entities) => {
                     CollectionUtils.collectToContainer(entities, this.container);
+                    return this.container;
+                }, () => {
                     return this.container;
                 });
         }
