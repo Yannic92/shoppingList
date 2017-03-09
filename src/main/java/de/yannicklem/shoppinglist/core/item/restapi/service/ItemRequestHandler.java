@@ -28,19 +28,19 @@ public class ItemRequestHandler implements RequestHandler<Item> {
     private final ItemService itemService;
 
     @Override
-    public void handleBeforeCreate(Item entity, SLUser currentUser) {
+    public void handleBeforeCreate(Item entityDto, SLUser currentUser) {
 
-        if (entity != null && currentUser != null) {
-            entity.getOwners().add(currentUser);
+        if (entityDto != null && currentUser != null) {
+            entityDto.getOwners().add(currentUser);
         }
 
-        if (!itemPermissionEvaluator.isAllowedToCreate(entity, currentUser)) {
+        if (!itemPermissionEvaluator.isAllowedToCreate(entityDto, currentUser)) {
             throw new PermissionDeniedException();
         }
 
-        assert entity != null;
+        assert entityDto != null;
 
-        for (SLUser owner : entity.getOwners()) {
+        for (SLUser owner : entityDto.getOwners()) {
             Long numberOfItems = itemService.countItemsOfOwner(owner);
 
             if (numberOfItems > MAX_ITEMS_PER_USER) {
@@ -52,15 +52,15 @@ public class ItemRequestHandler implements RequestHandler<Item> {
 
 
     @Override
-    public void handleBeforeUpdate(Item oldEntity, Item newEntity, SLUser currentUser) {
+    public void handleBeforeUpdate(Item oldEntityDto, Item newEntityDto, SLUser currentUser) {
 
-        if (!itemPermissionEvaluator.isAllowedToUpdate(oldEntity, newEntity, currentUser)) {
+        if (!itemPermissionEvaluator.isAllowedToUpdate(oldEntityDto, newEntityDto, currentUser)) {
             throw new PermissionDeniedException();
         }
 
-        assert newEntity != null;
+        assert newEntityDto != null;
 
-        for (SLUser owner : newEntity.getOwners()) {
+        for (SLUser owner : newEntityDto.getOwners()) {
             Long numberOfItems = itemService.countItemsOfOwner(owner);
 
             if (numberOfItems > MAX_ITEMS_PER_USER) {
@@ -72,34 +72,34 @@ public class ItemRequestHandler implements RequestHandler<Item> {
 
 
     @Override
-    public void handleRead(Item entity, SLUser currentUser) {
+    public void handleRead(Item entityDto, SLUser currentUser) {
 
-        if (!itemPermissionEvaluator.isAllowedToRead(entity, currentUser)) {
+        if (!itemPermissionEvaluator.isAllowedToRead(entityDto, currentUser)) {
             throw new PermissionDeniedException();
         }
     }
 
 
     @Override
-    public void handleBeforeDelete(Item entity, SLUser currentUser) {
+    public void handleBeforeDelete(Item entityDto, SLUser currentUser) {
 
-        if (!itemPermissionEvaluator.isAllowedToDelete(entity, currentUser)) {
+        if (!itemPermissionEvaluator.isAllowedToDelete(entityDto, currentUser)) {
             throw new PermissionDeniedException();
         }
     }
 
 
     @Override
-    public void handleAfterCreate(Item entity, SLUser currentUser) {
+    public void handleAfterCreate(Item entityDto, SLUser currentUser) {
     }
 
 
     @Override
-    public void handleAfterUpdate(Item oldEntity, Item newEntity, SLUser currentUser) {
+    public void handleAfterUpdate(Item oldEntityDto, Item newEntityDto, SLUser currentUser) {
     }
 
 
     @Override
-    public void handleAfterDelete(Item entity, SLUser currentUser) {
+    public void handleAfterDelete(Item entityDto, SLUser currentUser) {
     }
 }

@@ -5,6 +5,7 @@ import de.yannicklem.restutils.entity.service.EntityService;
 import de.yannicklem.restutils.service.MyResourceProcessor;
 import de.yannicklem.restutils.service.RequestHandler;
 
+import de.yannicklem.shoppinglist.core.user.dto.SLUserDto;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.core.user.persistence.SLUserService;
 import de.yannicklem.shoppinglist.core.user.registration.entity.Confirmation;
@@ -33,7 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 )
 @RestController
 @ExposesResourceFor(SLUser.class)
-public class SLUserRestController extends RestEntityController<SLUser, String> {
+public class SLUserRestController extends RestEntityController<SLUserDto, SLUser, String> {
 
     private final CurrentUserService currentUserService;
 
@@ -69,9 +70,9 @@ public class SLUserRestController extends RestEntityController<SLUser, String> {
 
 
     @Override
-    protected HttpEntity<? extends SLUser> createEntity(SLUser entity, SLUser currentUser) {
+    protected HttpEntity<? extends SLUser> createEntity(SLUser entityDto, SLUser currentUser) {
 
-        HttpEntity<? extends SLUser> resp = super.createEntity(entity, currentUser);
+        HttpEntity<? extends SLUser> resp = super.createEntity(entityDto, currentUser);
 
         if (currentUser == null) {
             return new ResponseEntity<>(resourceProcessor.process(resp.getBody(), resp.getBody()), HttpStatus.CREATED);

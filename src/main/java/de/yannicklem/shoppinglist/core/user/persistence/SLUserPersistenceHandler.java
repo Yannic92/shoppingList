@@ -4,7 +4,7 @@ import de.yannicklem.restutils.entity.owned.OwnedRestEntity;
 import de.yannicklem.restutils.entity.service.EntityPersistenceHandler;
 import de.yannicklem.restutils.entity.service.EntityService;
 
-import de.yannicklem.shoppinglist.core.article.entity.Article;
+import de.yannicklem.shoppinglist.core.article.Article;
 import de.yannicklem.shoppinglist.core.article.persistence.ArticleService;
 import de.yannicklem.shoppinglist.core.exception.AlreadyExistsException;
 import de.yannicklem.shoppinglist.core.exception.NotFoundException;

@@ -2,7 +2,7 @@ package de.yannicklem.shoppinglist.core.article.persistence;
 
 import de.yannicklem.restutils.entity.owned.service.OwnedEntityService;
 
-import de.yannicklem.shoppinglist.core.article.entity.Article;
+import de.yannicklem.shoppinglist.core.article.Article;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 
 import java.util.List;

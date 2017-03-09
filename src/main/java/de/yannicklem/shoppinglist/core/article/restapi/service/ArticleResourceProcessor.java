@@ -2,7 +2,8 @@ package de.yannicklem.shoppinglist.core.article.restapi.service;
 
 import de.yannicklem.restutils.service.MyResourceProcessor;
 
-import de.yannicklem.shoppinglist.core.article.entity.Article;
+import de.yannicklem.shoppinglist.core.article.Article;
+import de.yannicklem.shoppinglist.core.article.dto.ArticleDto;
 import de.yannicklem.shoppinglist.core.article.persistence.ArticleService;
 import de.yannicklem.shoppinglist.core.exception.NotFoundException;
 import de.yannicklem.shoppinglist.core.user.persistence.SLUserService;
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-public class ArticleResourceProcessor extends MyResourceProcessor<Article> {
+public class ArticleResourceProcessor extends MyResourceProcessor<ArticleDto> {
 
     private final SLUserService slUserService;
     private final ArticleService articleService;
@@ -30,15 +31,15 @@ public class ArticleResourceProcessor extends MyResourceProcessor<Article> {
     }
 
     @Override
-    public Article initializeNestedEntities(Article entity) {
+    public ArticleDto initializeNestedEntities(ArticleDto articleDto) {
 
-        if (entity != null && articleService.exists(entity.getEntityId())) {
-            Article existingArticle = articleService.findById(entity.getEntityId()).orElseThrow(() ->
+        if (articleDto != null && articleService.exists(articleDto.getEntityId())) {
+            Article existingArticle = articleService.findById(articleDto.getEntityId()).orElseThrow(() ->
                         new NotFoundException("Article not found"));
 
-            entity.setOwners(existingArticle.getOwners());
+            articleDto.setOwners(existingArticle.getOwners());
         }
 
-        return entity;
+        return articleDto;
     }
 }

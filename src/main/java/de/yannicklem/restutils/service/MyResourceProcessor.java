@@ -1,30 +1,26 @@
 package de.yannicklem.restutils.service;
 
-import de.yannicklem.restutils.entity.RestEntity;
-
+import de.yannicklem.restutils.entity.dto.RestEntityDto;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.hateoas.EntityLinks;
 
 
 @RequiredArgsConstructor(onConstructor = @__(@Autowired ))
-public abstract class MyResourceProcessor<Type extends RestEntity> {
+public abstract class MyResourceProcessor<DtoType extends RestEntityDto> {
 
     protected final EntityLinks entityLinks;
 
-    public Type process(Type entity, SLUser currentUser) {
+    public DtoType process(DtoType entityDto, SLUser currentUser) {
 
-        if (entity.getId() == null) {
-            entity.add(entityLinks.linkToSingleResource(entity.getClass(), entity.getEntityId()).withSelfRel());
+        if (entityDto.getId() == null) {
+            entityDto.add(entityLinks.linkToSingleResource(entityDto.getClass(), entityDto.getEntityId()).withSelfRel());
         }
 
-        return entity;
+        return entityDto;
     }
 
 
-    public abstract Type initializeNestedEntities(Type entity);
+    public abstract DtoType initializeNestedEntities(DtoType entityDto);
 }

@@ -3,7 +3,7 @@ package de.yannicklem.shoppinglist.core.item.restapi.service;
 import de.yannicklem.restutils.entity.owned.service.OwnedRestEntityPermissionEvaluator;
 import de.yannicklem.restutils.entity.service.PermissionEvaluator;
 
-import de.yannicklem.shoppinglist.core.article.entity.Article;
+import de.yannicklem.shoppinglist.core.article.Article;
 import de.yannicklem.shoppinglist.core.item.entity.Item;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 

@@ -2,7 +2,7 @@ package de.yannicklem.shoppinglist.core.article.persistence;
 
 import de.yannicklem.restutils.entity.service.EntityPersistenceHandler;
 
-import de.yannicklem.shoppinglist.core.article.entity.Article;
+import de.yannicklem.shoppinglist.core.article.Article;
 import de.yannicklem.shoppinglist.core.article.validation.ArticleValidationService;
 import de.yannicklem.shoppinglist.core.item.entity.Item;
 import de.yannicklem.shoppinglist.core.item.persistence.ItemService;

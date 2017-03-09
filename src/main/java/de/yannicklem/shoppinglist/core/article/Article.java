@@ -1,44 +1,27 @@
-package de.yannicklem.shoppinglist.core.article.entity;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+package de.yannicklem.shoppinglist.core.article;
 
 import de.yannicklem.restutils.entity.owned.OwnedRestEntity;
-
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-
 import org.springframework.hateoas.core.Relation;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import java.util.Set;
 
 
 @Entity
 @Getter
 @Setter
-@EqualsAndHashCode(of = "entityId", callSuper = false)
+@EqualsAndHashCode(of = "name", callSuper = false)
 @ToString
 @Relation(collectionRelation = "articles")
 public class Article extends OwnedRestEntity<String> {
 
-    @Id
-    private String entityId;
-
     private String name;
     private double priceInEuro;
-
-    @JsonIgnore
-    @ManyToMany(fetch = FetchType.EAGER)
-    private final Set<SLUser> owners;
 
     public Article(String name, double priceInEuro, Set<SLUser> owners) {
 
@@ -62,16 +45,5 @@ public class Article extends OwnedRestEntity<String> {
 
         this.name = "";
         this.priceInEuro = 0;
-        this.owners = new HashSet<>();
-    }
-
-    @Override
-    public void setOwners(Set<SLUser> owners) {
-
-        this.owners.clear();
-
-        if (owners != null) {
-            this.owners.addAll(owners);
-        }
     }
 }

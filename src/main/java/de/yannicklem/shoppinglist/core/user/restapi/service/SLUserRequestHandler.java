@@ -19,64 +19,64 @@ public class SLUserRequestHandler implements RequestHandler<SLUser> {
     private final SLUserPermissionEvaluator slUserPermissionEvaluator;
 
     @Override
-    public void handleBeforeCreate(SLUser userToCreate, SLUser currentUser) {
+    public void handleBeforeCreate(SLUser entityDto, SLUser currentUser) {
 
-        if (!slUserPermissionEvaluator.isAllowedToCreate(userToCreate, currentUser)) {
+        if (!slUserPermissionEvaluator.isAllowedToCreate(entityDto, currentUser)) {
             throw new PermissionDeniedException();
         }
 
-        if (userToCreate != null && userToCreate.getEmail() != null) {
-            userToCreate.setEmail(userToCreate.getEmail().toLowerCase());
+        if (entityDto != null && entityDto.getEmail() != null) {
+            entityDto.setEmail(entityDto.getEmail().toLowerCase());
         }
     }
 
 
     @Override
-    public void handleBeforeUpdate(SLUser oldUser, SLUser newUser, SLUser currentUser) {
+    public void handleBeforeUpdate(SLUser oldEntityDto, SLUser newEntityDto, SLUser currentUser) {
 
-        if (!slUserPermissionEvaluator.isAllowedToUpdate(oldUser, newUser, currentUser)) {
+        if (!slUserPermissionEvaluator.isAllowedToUpdate(oldEntityDto, newEntityDto, currentUser)) {
             throw new PermissionDeniedException();
         }
 
-        if (newUser != null && newUser.getEmail() != null) {
-            newUser.setEmail(newUser.getEmail().toLowerCase());
+        if (newEntityDto != null && newEntityDto.getEmail() != null) {
+            newEntityDto.setEmail(newEntityDto.getEmail().toLowerCase());
         }
     }
 
 
     @Override
-    public void handleRead(SLUser userToRead, SLUser currentUser) {
+    public void handleRead(SLUser entityDto, SLUser currentUser) {
 
-        if (userToRead.isAdmin() && !currentUser.isAdmin()) {
+        if (entityDto.isAdmin() && !currentUser.isAdmin()) {
             throw new PermissionDeniedException();
         }
 
-        if (!userToRead.isEnabled()) {
-            throw new PermissionDeniedException();
-        }
-    }
-
-
-    @Override
-    public void handleBeforeDelete(SLUser userToDelete, SLUser currentUser) {
-
-        if (!slUserPermissionEvaluator.isAllowedToDelete(userToDelete, currentUser)) {
+        if (!entityDto.isEnabled()) {
             throw new PermissionDeniedException();
         }
     }
 
 
     @Override
-    public void handleAfterCreate(SLUser entity, SLUser currentUser) {
+    public void handleBeforeDelete(SLUser entityDto, SLUser currentUser) {
+
+        if (!slUserPermissionEvaluator.isAllowedToDelete(entityDto, currentUser)) {
+            throw new PermissionDeniedException();
+        }
     }
 
 
     @Override
-    public void handleAfterUpdate(SLUser oldEntity, SLUser newEntity, SLUser currentUser) {
+    public void handleAfterCreate(SLUser entityDto, SLUser currentUser) {
     }
 
 
     @Override
-    public void handleAfterDelete(SLUser entity, SLUser currentUser) {
+    public void handleAfterUpdate(SLUser oldEntityDto, SLUser newEntityDto, SLUser currentUser) {
+    }
+
+
+    @Override
+    public void handleAfterDelete(SLUser entityDto, SLUser currentUser) {
     }
 }

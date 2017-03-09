@@ -2,7 +2,9 @@ package de.yannicklem.shoppinglist.core.article.restapi.controller;
 
 import de.yannicklem.restutils.controller.RestEntityController;
 
-import de.yannicklem.shoppinglist.core.article.entity.Article;
+import de.yannicklem.shoppinglist.core.article.Article;
+import de.yannicklem.shoppinglist.core.article.dto.ArticleDto;
+import de.yannicklem.shoppinglist.core.article.dto.ArticleMapper;
 import de.yannicklem.shoppinglist.core.article.persistence.ArticleService;
 import de.yannicklem.shoppinglist.core.article.restapi.service.ArticleRequestHandler;
 import de.yannicklem.shoppinglist.core.article.restapi.service.ArticleResourceProcessor;
@@ -48,21 +50,22 @@ import static java.lang.invoke.MethodHandles.lookup;
     }
 )
 @ExposesResourceFor(Article.class)
-public class ArticleController extends RestEntityController<Article, String> {
+public class ArticleController extends RestEntityController<ArticleDto, Article, String> {
 
     private static final Logger LOGGER = getLogger(lookup().lookupClass());
 
     @Autowired
     public ArticleController(SLUserService slUserService, ArticleService articleService,
-        ArticleRequestHandler requestHandler, ArticleResourceProcessor resourceProcessor, EntityLinks entityLinks) {
+                             ArticleRequestHandler requestHandler, ArticleResourceProcessor resourceProcessor,
+                             ArticleMapper articleMapper, EntityLinks entityLinks) {
 
-        super(slUserService, articleService, requestHandler, resourceProcessor, entityLinks);
+        super(slUserService, articleService, requestHandler, articleMapper, resourceProcessor, entityLinks);
     }
 
     @Override
     @RequestMapping(method = RequestMethod.PUT, value = ArticleEndpoints.ARTICLE_SPECIFIC_ENDPOINT)
-    public HttpEntity<? extends Article> putEntity(@RequestBody Article entity,
-        @PathVariable("id") String id, Principal principal) {
+    public HttpEntity<? extends ArticleDto> putEntity(@RequestBody ArticleDto entityDto, @PathVariable("id") String id,
+                                                      Principal principal) {
 
         return new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
     }
@@ -72,17 +75,18 @@ public class ArticleController extends RestEntityController<Article, String> {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUnused(Principal principal) {
 
-        HttpEntity<? extends Resources<? extends Article>> allEntities = this.getAllEntities(principal);
-        Collection<? extends Article> content = allEntities.getBody().getContent();
+        HttpEntity<? extends Resources<? extends ArticleDto>> allEntities = this.getAllEntities(principal);
+        Collection<? extends ArticleDto> content = allEntities.getBody().getContent();
         SLUser currentUser = principal == null ? null : slUserService.findById(principal.getName()).orElseThrow(() ->
                     new NotFoundException("User not found"));
 
         LOGGER.info("{} removes all unused articles", currentUser == null ? "anonymous" : currentUser.getUsername());
 
-        for (Article article : content) {
+        for (ArticleDto article : content) {
+
             try {
                 requestHandler.handleBeforeDelete(article, currentUser);
-                entityService.delete(article);
+                entityService.delete(entityMapper.toEntity(article));
             } catch (BadRequestException e) {
                 LOGGER.info("Article '{}' not deleted because: {}", article.getName(), e.getMessage());
             }

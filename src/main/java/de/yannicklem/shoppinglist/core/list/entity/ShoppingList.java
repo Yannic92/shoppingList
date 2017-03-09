@@ -1,28 +1,20 @@
 package de.yannicklem.shoppinglist.core.list.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-
 import de.yannicklem.restutils.entity.owned.OwnedRestEntity;
-
 import de.yannicklem.shoppinglist.core.item.entity.Item;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-
 import org.springframework.hateoas.core.Relation;
-
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Entity
@@ -34,12 +26,6 @@ import javax.persistence.OneToMany;
 @Relation(collectionRelation = "shoppingLists")
 public class ShoppingList extends OwnedRestEntity<String> {
 
-    @Id
-    private String entityId;
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    private final Set<SLUser> owners;
-
     private String name;
 
     @OneToMany(cascade = CascadeType.ALL)
@@ -47,20 +33,8 @@ public class ShoppingList extends OwnedRestEntity<String> {
 
     public ShoppingList() {
 
-        this.owners = new HashSet<>();
         this.items = new HashSet<>();
     }
-
-    @Override
-    public void setOwners(Set<SLUser> owners) {
-
-        this.owners.clear();
-
-        if (owners != null) {
-            this.owners.addAll(owners);
-        }
-    }
-
 
     public void setItems(Set<Item> items) {
 
@@ -69,5 +43,15 @@ public class ShoppingList extends OwnedRestEntity<String> {
         if (items != null) {
             this.items.addAll(items);
         }
+    }
+
+    @Override
+    public Set<SLUser> getOwners() {
+        return super.getOwners();
+    }
+
+    @Override
+    public void setOwners(Set<SLUser> owners) {
+        super.setOwners(owners);
     }
 }

@@ -56,9 +56,9 @@ public class ShoppingListResourceProcessor extends MyResourceProcessor<ShoppingL
 
 
     @Override
-    public ShoppingList initializeNestedEntities(ShoppingList shoppingList) {
+    public ShoppingList initializeNestedEntities(ShoppingList entityDto) {
 
-        Set<SLUser> owners = shoppingList.getOwners();
+        Set<SLUser> owners = entityDto.getOwners();
         Set<SLUser> persistedOwners = new HashSet<>();
 
         for (SLUser owner : owners) {
@@ -70,9 +70,9 @@ public class ShoppingListResourceProcessor extends MyResourceProcessor<ShoppingL
             }
         }
 
-        shoppingList.setOwners(persistedOwners);
+        entityDto.setOwners(persistedOwners);
 
-        Set<Item> items = shoppingList.getItems();
+        Set<Item> items = entityDto.getItems();
         Set<Item> persistedItems = new HashSet<>();
 
         for (Item item : items) {
@@ -84,8 +84,8 @@ public class ShoppingListResourceProcessor extends MyResourceProcessor<ShoppingL
             }
         }
 
-        shoppingList.setItems(persistedItems);
+        entityDto.setItems(persistedItems);
 
-        return shoppingList;
+        return entityDto;
     }
 }

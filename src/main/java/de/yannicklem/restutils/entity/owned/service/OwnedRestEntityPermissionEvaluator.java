@@ -1,18 +1,16 @@
 package de.yannicklem.restutils.entity.owned.service;
 
-import de.yannicklem.restutils.entity.owned.OwnedRestEntity;
+import de.yannicklem.restutils.entity.owned.dto.OwnedRestEntityDto;
 import de.yannicklem.restutils.entity.service.PermissionEvaluator;
-
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
-
 import org.springframework.stereotype.Service;
 
 
 @Service
-public class OwnedRestEntityPermissionEvaluator implements PermissionEvaluator<OwnedRestEntity> {
+public class OwnedRestEntityPermissionEvaluator implements PermissionEvaluator<OwnedRestEntityDto> {
 
     @Override
-    public boolean isAllowedToUpdate(OwnedRestEntity oldObject, OwnedRestEntity newObject, SLUser currentUser) {
+    public boolean isAllowedToUpdate(OwnedRestEntityDto oldObject, OwnedRestEntityDto newObject, SLUser currentUser) {
 
         if (currentUser == null) {
             return false;
@@ -35,7 +33,7 @@ public class OwnedRestEntityPermissionEvaluator implements PermissionEvaluator<O
 
 
     @Override
-    public boolean isAllowedToCreate(OwnedRestEntity object, SLUser currentUser) {
+    public boolean isAllowedToCreate(OwnedRestEntityDto object, SLUser currentUser) {
 
         if (currentUser == null) {
             return false;
@@ -50,7 +48,7 @@ public class OwnedRestEntityPermissionEvaluator implements PermissionEvaluator<O
 
 
     @Override
-    public boolean isAllowedToDelete(OwnedRestEntity object, SLUser currentUser) {
+    public boolean isAllowedToDelete(OwnedRestEntityDto object, SLUser currentUser) {
 
         if (currentUser == null) {
             return false;
@@ -65,7 +63,7 @@ public class OwnedRestEntityPermissionEvaluator implements PermissionEvaluator<O
 
 
     @Override
-    public boolean isAllowedToRead(OwnedRestEntity object, SLUser currentUser) {
+    public boolean isAllowedToRead(OwnedRestEntityDto object, SLUser currentUser) {
 
         if (currentUser == null) {
             return false;

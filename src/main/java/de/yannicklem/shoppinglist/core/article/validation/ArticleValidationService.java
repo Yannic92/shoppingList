@@ -1,6 +1,6 @@
 package de.yannicklem.shoppinglist.core.article.validation;
 
-import de.yannicklem.shoppinglist.core.article.entity.Article;
+import de.yannicklem.shoppinglist.core.article.Article;
 import de.yannicklem.shoppinglist.core.exception.EntityInvalidException;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.core.user.validation.SLUserValidationService;

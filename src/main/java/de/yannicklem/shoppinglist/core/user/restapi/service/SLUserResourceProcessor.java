@@ -61,13 +61,13 @@ public class SLUserResourceProcessor extends MyResourceProcessor<SLUser> {
 
 
     @Override
-    public SLUser initializeNestedEntities(SLUser entity) {
+    public SLUser initializeNestedEntities(SLUser entityDto) {
 
-        Optional<SLUser> persistedUserOptional = slUserService.findById(entity.getEntityId());
+        Optional<SLUser> persistedUserOptional = slUserService.findById(entityDto.getEntityId());
 
-        persistedUserOptional.ifPresent(slUser -> initAttributesWithValuesOfPersistedUser(slUser, entity));
+        persistedUserOptional.ifPresent(slUser -> initAttributesWithValuesOfPersistedUser(slUser, entityDto));
 
-        return entity;
+        return entityDto;
     }
 
 

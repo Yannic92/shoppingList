@@ -1,29 +1,28 @@
 package de.yannicklem.restutils.service;
 
-import de.yannicklem.restutils.entity.RestEntity;
-
+import de.yannicklem.restutils.entity.dto.RestEntityDto;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 
 
-public interface RequestHandler<Type extends RestEntity> {
+public interface RequestHandler<DtoType extends RestEntityDto> {
 
-    void handleBeforeCreate(Type entity, SLUser currentUser);
-
-
-    void handleBeforeUpdate(Type oldEntity, Type newEntity, SLUser currentUser);
+    void handleBeforeCreate(DtoType entityDto, SLUser currentUser);
 
 
-    void handleRead(Type entity, SLUser currentUser);
+    void handleBeforeUpdate(DtoType oldEntityDto, DtoType newEntityDto, SLUser currentUser);
 
 
-    void handleBeforeDelete(Type entity, SLUser currentUser);
+    void handleRead(DtoType entityDto, SLUser currentUser);
 
 
-    void handleAfterCreate(Type entity, SLUser currentUser);
+    void handleBeforeDelete(DtoType entityDto, SLUser currentUser);
 
 
-    void handleAfterUpdate(Type oldEntity, Type newEntity, SLUser currentUser);
+    void handleAfterCreate(DtoType entityDto, SLUser currentUser);
 
 
-    void handleAfterDelete(Type entity, SLUser currentUser);
+    void handleAfterUpdate(DtoType oldEntityDto, DtoType newEntityDto, SLUser currentUser);
+
+
+    void handleAfterDelete(DtoType entityDto, SLUser currentUser);
 }

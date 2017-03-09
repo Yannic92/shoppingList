@@ -2,7 +2,7 @@ package de.yannicklem.shoppinglist.core.item.restapi.service;
 
 import de.yannicklem.restutils.service.MyResourceProcessor;
 
-import de.yannicklem.shoppinglist.core.article.entity.Article;
+import de.yannicklem.shoppinglist.core.article.Article;
 import de.yannicklem.shoppinglist.core.article.persistence.ArticleService;
 import de.yannicklem.shoppinglist.core.exception.NotFoundException;
 import de.yannicklem.shoppinglist.core.item.entity.Item;
@@ -30,27 +30,27 @@ public class ItemResourceProcessor extends MyResourceProcessor<Item> {
     }
 
     @Override
-    public Item initializeNestedEntities(Item entity) {
+    public Item initializeNestedEntities(Item entityDto) {
 
-        if (entity != null) {
-            Article article = entity.getArticle();
+        if (entityDto != null) {
+            Article article = entityDto.getArticle();
 
             if (article != null && article.getEntityId() != null) {
                 Article existingArticle = articleService.findById(article.getEntityId()).orElseThrow(() ->
                             new NotFoundException("Article not found"));
 
-                entity.setArticle(existingArticle);
+                entityDto.setArticle(existingArticle);
             }
         }
 
-        if (entity != null && itemService.exists(entity.getEntityId())) {
-            Item existingItem = itemService.findById(entity.getEntityId()).orElseThrow(() ->
+        if (entityDto != null && itemService.exists(entityDto.getEntityId())) {
+            Item existingItem = itemService.findById(entityDto.getEntityId()).orElseThrow(() ->
                         new NotFoundException("Item not found"));
 
-            entity.setOwners(existingItem.getOwners());
-            entity.setCreatedAt(existingItem.getCreatedAt());
+            entityDto.setOwners(existingItem.getOwners());
+            entityDto.setCreatedAt(existingItem.getCreatedAt());
         }
 
-        return entity;
+        return entityDto;
     }
 }

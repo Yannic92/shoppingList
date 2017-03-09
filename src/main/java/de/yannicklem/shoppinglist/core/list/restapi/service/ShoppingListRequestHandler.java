@@ -24,17 +24,17 @@ public class ShoppingListRequestHandler implements RequestHandler<ShoppingList> 
     private final ShoppingListService shoppingListService;
 
     @Override
-    public void handleBeforeCreate(ShoppingList entity, SLUser currentUser) {
+    public void handleBeforeCreate(ShoppingList entityDto, SLUser currentUser) {
 
         if (currentUser != null && !currentUser.isAdmin()) {
-            entity.getOwners().add(currentUser);
+            entityDto.getOwners().add(currentUser);
         }
 
-        if (!shoppingListPermissionEvaluator.isAllowedToCreate(entity, currentUser)) {
+        if (!shoppingListPermissionEvaluator.isAllowedToCreate(entityDto, currentUser)) {
             throw new PermissionDeniedException("Access denied");
         }
 
-        for (SLUser owner : entity.getOwners()) {
+        for (SLUser owner : entityDto.getOwners()) {
             Long numberOfListsOwnedByThisUser = shoppingListService.countListsOf(owner);
 
             if (numberOfListsOwnedByThisUser >= MAX_LISTS_PER_USER) {
@@ -46,13 +46,13 @@ public class ShoppingListRequestHandler implements RequestHandler<ShoppingList> 
 
 
     @Override
-    public void handleBeforeUpdate(ShoppingList oldEntity, ShoppingList newEntity, SLUser currentUser) {
+    public void handleBeforeUpdate(ShoppingList oldEntityDto, ShoppingList newEntityDto, SLUser currentUser) {
 
-        if (!shoppingListPermissionEvaluator.isAllowedToUpdate(oldEntity, newEntity, currentUser)) {
+        if (!shoppingListPermissionEvaluator.isAllowedToUpdate(oldEntityDto, newEntityDto, currentUser)) {
             throw new PermissionDeniedException("Access denied");
         }
 
-        for (SLUser owner : newEntity.getOwners()) {
+        for (SLUser owner : newEntityDto.getOwners()) {
             Long numberOfListsOwnedByThisUser = shoppingListService.countListsOf(owner);
 
             if (numberOfListsOwnedByThisUser >= MAX_LISTS_PER_USER) {
@@ -64,39 +64,39 @@ public class ShoppingListRequestHandler implements RequestHandler<ShoppingList> 
 
 
     @Override
-    public void handleRead(ShoppingList entity, SLUser currentUser) {
+    public void handleRead(ShoppingList entityDto, SLUser currentUser) {
 
-        if (!shoppingListPermissionEvaluator.isAllowedToRead(entity, currentUser)) {
+        if (!shoppingListPermissionEvaluator.isAllowedToRead(entityDto, currentUser)) {
             throw new PermissionDeniedException("Access denied");
         }
     }
 
 
     @Override
-    public void handleBeforeDelete(ShoppingList entity, SLUser currentUser) {
+    public void handleBeforeDelete(ShoppingList entityDto, SLUser currentUser) {
 
-        if (!shoppingListPermissionEvaluator.isAllowedToDelete(entity, currentUser)) {
+        if (!shoppingListPermissionEvaluator.isAllowedToDelete(entityDto, currentUser)) {
             throw new PermissionDeniedException("Access denied");
         }
     }
 
 
     @Override
-    public void handleAfterCreate(ShoppingList entity, SLUser currentUser) {
+    public void handleAfterCreate(ShoppingList entityDto, SLUser currentUser) {
 
         // TODO: Send email notification to all owners
     }
 
 
     @Override
-    public void handleAfterUpdate(ShoppingList oldEntity, ShoppingList newEntity, SLUser currentUser) {
+    public void handleAfterUpdate(ShoppingList oldEntityDto, ShoppingList newEntityDto, SLUser currentUser) {
 
         // TODO: Send email notification about changes to all previous owners (previous to have notification about yourself to be removed)
     }
 
 
     @Override
-    public void handleAfterDelete(ShoppingList entity, SLUser currentUser) {
+    public void handleAfterDelete(ShoppingList entityDto, SLUser currentUser) {
 
         // TODO: Send email notification to all owners
     }

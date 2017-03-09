@@ -1,6 +1,8 @@
 package de.yannicklem.restutils.controller;
 
 import de.yannicklem.restutils.entity.RestEntity;
+import de.yannicklem.restutils.entity.dto.RestEntityDto;
+import de.yannicklem.restutils.entity.dto.RestEntityMapper;
 import de.yannicklem.restutils.entity.service.EntityService;
 import de.yannicklem.restutils.service.MyResourceProcessor;
 import de.yannicklem.restutils.service.RequestHandler;
@@ -21,13 +23,15 @@ import java.io.Serializable;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import static java.lang.String.*;
 import static java.lang.invoke.MethodHandles.lookup;
 import static org.apache.log4j.Logger.getLogger;
 
 
 @RequiredArgsConstructor(onConstructor = @__(@Autowired ))
-public abstract class RestEntityController<Type extends RestEntity<ID>, ID extends Serializable> {
+public abstract class RestEntityController<DtoType extends RestEntityDto<ID>, Type extends RestEntity<ID>, ID extends Serializable> {
 
     private static final Logger LOGGER = getLogger(lookup().lookupClass());
 
@@ -35,44 +39,47 @@ public abstract class RestEntityController<Type extends RestEntity<ID>, ID exten
 
     protected final EntityService<Type, ID> entityService;
 
-    protected final RequestHandler<Type> requestHandler;
+    protected final RequestHandler<DtoType> requestHandler;
 
-    protected final MyResourceProcessor<Type> resourceProcessor;
+    protected final RestEntityMapper<DtoType, Type> entityMapper;
+
+    protected final MyResourceProcessor<DtoType> resourceProcessor;
 
     protected final EntityLinks entityLinks;
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public HttpEntity<? extends Type> getSpecificEntity(@PathVariable("id") ID id, Principal principal) {
+    public HttpEntity<? extends DtoType> getSpecificEntity(@PathVariable("id") ID id, Principal principal) {
 
         Type specificEntity = entityService.findById(id).orElseThrow(() -> new NotFoundException("Entity not found"));
+        DtoType specfifcEntityDto = entityMapper.toDto(specificEntity);
 
         SLUser currentUser = principal == null ? null : slUserService.findById(principal.getName()).orElse(null);
 
-        requestHandler.handleRead(specificEntity, currentUser);
+        requestHandler.handleRead(specfifcEntityDto, currentUser);
 
-        return new HttpEntity<>(resourceProcessor.process(specificEntity, currentUser));
+        return new HttpEntity<>(resourceProcessor.process(specfifcEntityDto, currentUser));
     }
 
 
     @RequestMapping(method = RequestMethod.GET)
-    public HttpEntity<? extends Resources<? extends Type>> getAllEntities(Principal principal) {
+    public HttpEntity<? extends Resources<? extends DtoType>> getAllEntities(Principal principal) {
 
         SLUser currentUser = principal == null ? null : slUserService.findById(principal.getName()).orElse(null);
 
-        List<Type> all = entityService.findAll();
-        List<Type> resourcesList = new ArrayList<>();
+        List<DtoType> all = entityService.findAll().stream().map(entityMapper::toDto).collect(Collectors.toList());
+        List<DtoType> resourcesList = new ArrayList<>();
 
-        for (Type entity : all) {
+        for (DtoType entityDto : all) {
             try {
-                requestHandler.handleRead(entity, currentUser);
-                resourcesList.add(resourceProcessor.process(entity, currentUser));
+                requestHandler.handleRead(entityDto, currentUser);
+                resourcesList.add(resourceProcessor.process(entityDto, currentUser));
             } catch (Exception e) {
-                LOGGER.debug(String.format("Filtered %s with id '%s'", entity.getClass().getTypeName(),
-                        entity.getEntityId().toString()));
+                LOGGER.debug(format("Filtered %s with id '%s'", entityDto.getClass().getTypeName(),
+                        entityDto.getEntityId().toString()));
             }
         }
 
-        Resources<? extends Type> entityResources = new Resources<>(resourcesList);
+        Resources<? extends DtoType> entityResources = new Resources<>(resourcesList);
 
         if (!all.isEmpty()) {
             entityResources.add(entityLinks.linkToCollectionResource(all.get(0).getClass()));
@@ -83,24 +90,24 @@ public abstract class RestEntityController<Type extends RestEntity<ID>, ID exten
 
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public HttpEntity<? extends Type> putEntity(@RequestBody Type entity, @PathVariable ID id, Principal principal) {
+    public HttpEntity<? extends DtoType> putEntity(@RequestBody DtoType entityDto, @PathVariable ID id, Principal principal) {
 
-        entity.setEntityId(id);
+        entityDto.setEntityId(id);
 
-        resourceProcessor.initializeNestedEntities(entity);
+        resourceProcessor.initializeNestedEntities(entityDto);
 
         SLUser currentUser = principal == null ? null : slUserService.findById(principal.getName()).orElse(null);
 
         if (!entityService.exists(id)) {
-            return createEntity(entity, currentUser);
+            return createEntity(entityDto, currentUser);
         } else {
-            return updateEntity(entity, currentUser);
+            return updateEntity(entityDto, currentUser);
         }
     }
 
 
     @RequestMapping(method = RequestMethod.POST)
-    public HttpEntity<? extends Type> postEntity(@RequestBody Type entity, Principal principal) {
+    public HttpEntity<? extends DtoType> postEntity(@RequestBody DtoType entity, Principal principal) {
 
         resourceProcessor.initializeNestedEntities(entity);
 
@@ -110,33 +117,36 @@ public abstract class RestEntityController<Type extends RestEntity<ID>, ID exten
     }
 
 
-    protected HttpEntity<? extends Type> createEntity(Type entity, SLUser currentUser) {
+    protected HttpEntity<? extends DtoType> createEntity(DtoType entityDto, SLUser currentUser) {
 
-        requestHandler.handleBeforeCreate(entity, currentUser);
+        requestHandler.handleBeforeCreate(entityDto, currentUser);
 
-        Type createdEntity = entityService.create(entity);
+        Type createdEntity = entityService.create(entityMapper.toEntity(entityDto));
+        DtoType createdEntityDto = entityMapper.toDto(createdEntity);
 
-        Type createdEntityResource = resourceProcessor.process(createdEntity, currentUser);
+        DtoType createdEntityResource = resourceProcessor.process(createdEntityDto, currentUser);
 
-        requestHandler.handleAfterCreate(createdEntity, currentUser);
+        requestHandler.handleAfterCreate(createdEntityDto, currentUser);
 
         return new ResponseEntity<>(createdEntityResource, HttpStatus.CREATED);
     }
 
 
-    protected HttpEntity<? extends Type> updateEntity(Type entity, SLUser currentUser) {
+    protected HttpEntity<? extends DtoType> updateEntity(DtoType entityDto, SLUser currentUser) {
 
-        Type currentEntity = entityService.findById(entity.getEntityId()).orElseThrow(
+        Type currentEntity = entityService.findById(entityDto.getEntityId()).orElseThrow(
                 () -> new NotFoundException("Entity Not Found")
         );
+        DtoType currentEntityDto = entityMapper.toDto(currentEntity);
 
-        requestHandler.handleBeforeUpdate(currentEntity, entity, currentUser);
+        requestHandler.handleBeforeUpdate(currentEntityDto, entityDto, currentUser);
 
-        Type updatedEntity = entityService.update(entity);
+        Type updatedEntity = entityService.update(entityMapper.toEntity(entityDto));
+        DtoType updatedEntityDto = entityMapper.toDto(updatedEntity);
 
-        Type updatedEntityResource = resourceProcessor.process(updatedEntity, currentUser);
+        DtoType updatedEntityResource = resourceProcessor.process(updatedEntityDto, currentUser);
 
-        requestHandler.handleAfterUpdate(currentEntity, updatedEntity, currentUser);
+        requestHandler.handleAfterUpdate(currentEntityDto, updatedEntityDto, currentUser);
 
         return new ResponseEntity<>(updatedEntityResource, HttpStatus.OK);
     }
@@ -149,11 +159,12 @@ public abstract class RestEntityController<Type extends RestEntity<ID>, ID exten
         SLUser currentUser = principal == null ? null : slUserService.findById(principal.getName()).orElse(null);
 
         Type toDelete = entityService.findById(id).orElseThrow(() -> new NotFoundException("Entity Not Found"));
+        DtoType toDeleteDto = entityMapper.toDto(toDelete);
 
-        requestHandler.handleBeforeDelete(toDelete, currentUser);
+        requestHandler.handleBeforeDelete(toDeleteDto, currentUser);
 
         entityService.delete(toDelete);
 
-        requestHandler.handleAfterDelete(toDelete, currentUser);
+        requestHandler.handleAfterDelete(toDeleteDto, currentUser);
     }
 }

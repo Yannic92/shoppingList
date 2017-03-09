@@ -2,7 +2,7 @@ package de.yannicklem.shoppinglist.core.list;
 
 import de.yannicklem.shoppinglist.TestUtils;
 import de.yannicklem.shoppinglist.WebShoppingListApplication;
-import de.yannicklem.shoppinglist.core.article.entity.Article;
+import de.yannicklem.shoppinglist.core.article.Article;
 import de.yannicklem.shoppinglist.core.article.persistence.ArticleService;
 import de.yannicklem.shoppinglist.core.item.entity.Item;
 import de.yannicklem.shoppinglist.core.item.persistence.ItemService;
