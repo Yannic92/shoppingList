@@ -6,4 +6,5 @@
 
     <include file="db/changelog/changesets/changesets-v0.1.0-initial-shema.xml"/>
     <include file="db/changelog/changesets/changeset-v0.1.0-convert-entity-id-from-long-to-string.xml"/>
+    <include file="db/changelog/changesets/changeset-v0.1.1-adds-last-modified-columns.xml"/>
 </databaseChangeLog>

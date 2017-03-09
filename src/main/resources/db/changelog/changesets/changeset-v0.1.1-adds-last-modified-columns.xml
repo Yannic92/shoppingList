@@ -1,0 +1,23 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <changeSet id="v0.1.1-adds-last-modified-columns" author="Yannic Klem"
+               logicalFilePath="v0.1.1-adds-last-modified-columns.xml" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <comment>
+            Addds last_modified columns to article, item, shopping_list and users
+        </comment>
+        <addColumn tableName="article">
+            <column name="last_modified" type="BIGINT"/>
+        </addColumn>
+        <addColumn tableName="item">
+            <column name="last_modified" type="BIGINT"/>
+        </addColumn>
+        <addColumn tableName="shopping_list">
+            <column name="last_modified" type="BIGINT"/>
+        </addColumn>
+        <addColumn tableName="users">
+            <column name="last_modified" type="BIGINT"/>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>
