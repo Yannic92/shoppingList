@@ -1,7 +1,8 @@
 import StaticResourceCachingBehavior from '../api/cache/strategy/StaticResourceCachingBehavior';
 
-const IMAGE_CACHE_VERSION = '1';
+const IMAGE_CACHE_VERSION = '2';
 const IMAGES_TO_CACHE = [
+    '/img/fav.ico',
     '/img/icons/platform/github.svg',
     '/img/icons/action/ic_add_shopping_cart_24px.svg',
     '/img/icons/action/ic_lock_outline_24px.svg',
