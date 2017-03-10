@@ -49,7 +49,11 @@ export default class ItemService {
     }
 
     updateItemOfList(item, list) {
-        return this.listItemRestService.update(item, {listId: list.entityId});
+        return this.listItemRestService.update(item, {listId: list.entityId})
+            .then(() => {
+                list.lastModified = Date.now();
+                this.shoppingListRestService.storeInDB(list);
+            });
     }
 
     deleteItemOfList(item, list) {
