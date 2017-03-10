@@ -81,19 +81,34 @@ export default class ListViewController {
         return this.list && (!this.list.items || !this.list.items.length || !this.list.items.length > 0);
     }
 
-    listDoesntContainsUndoneItems() {
+    listContainsDoneItems() {
 
         if (this.listIsEmpty()) {
-            return true;
+            return false;
+        }
+
+        for (let i = 0; i < this.list.items.length; i++) {
+            if (this.list.items[i].done) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    listContainsNotDoneItems() {
+
+        if (this.listIsEmpty()) {
+            return false;
         }
 
         for (let i = 0; i < this.list.items.length; i++) {
             if (!this.list.items[i].done) {
-                return false;
+                return true;
             }
         }
 
-        return true;
+        return false;
     }
 
     setAllUndone() {
@@ -251,17 +266,17 @@ export default class ListViewController {
                 icon: '/img/icons/Toggle/ic_check_box_24px.svg',
                 text: 'Alles erledigt',
                 action: () => this.setAllDone(),
-                disabled: () => this.listDoesntContainsUndoneItems()
+                disabled: () => !this.listContainsNotDoneItems()
             }, {
                 icon: '/img/icons/Toggle/ic_check_box_outline_blank_24px.svg',
                 text: 'Nichts erledigt',
                 action: () => this.setAllUndone(),
-                disabled: () => this.listIsEmpty() || !this.listDoesntContainsUndoneItems()
+                disabled: () => !this.listContainsDoneItems()
             }, {
                 icon: '/img/icons/communication/ic_clear_all_24px.svg',
                 text: 'Liste leeren',
                 action: () => this.clearList(),
-                disabled: () => this.listIsEmpty() || !this.listDoesntContainsUndoneItems()
+                disabled: () => !this.listContainsDoneItems()
             }, {
                 icon: '/img/icons/action/ic_settings_24px.svg',
                 text: 'Liste bearbeiten',
