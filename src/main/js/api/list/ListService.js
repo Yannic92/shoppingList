@@ -72,7 +72,13 @@ export default class ListService {
 
     deleteAllShoppingLists() {
 
-        return this.restService.deleteAll();
+        const promises = [];
+
+        this.lists.forEach(list => {
+            promises.push(this.deleteShoppingList(list));
+        });
+
+        return this.Promise.all(promises);
     }
 
     onListUpdate(list, callback) {

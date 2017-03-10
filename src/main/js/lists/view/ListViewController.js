@@ -16,7 +16,8 @@ export default class ListViewController {
         this.$timeout = $timeout;
         this.itemService = itemService;
         this.navigationService = navigationService;
-        this.articles = articleService.getAllArticles();
+        this.articleService = articleService;
+        this.articles = this.articleService.getAllArticles();
         this.list = new ShoppingList({name: ''});
         this.$rootScope.loading = true;
         this.creating = false;
@@ -53,6 +54,9 @@ export default class ListViewController {
         if (this.newItem.article.name != '') {
 
             this._showNewItemDialog(ev)
+                .then(item => {
+                    return this.articleService.createArticle(item.article).then(() => item);
+                })
                 .then((item) => this._createItem(item))
                 .then(() => {
                     this._initNewItem();

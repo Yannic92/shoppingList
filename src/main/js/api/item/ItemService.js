@@ -2,9 +2,7 @@ import CollectionUtils from '../CollectionUtils';
 export default class ItemService {
 
     /*@ngInject*/
-    constructor(articleService, itemRestService, listItemRestService, shoppingListRestService) {
-
-        this.articleService = articleService;
+    constructor(itemRestService, listItemRestService, shoppingListRestService) {
 
         this.restService = itemRestService;
         this.listItemRestService = listItemRestService;
@@ -36,11 +34,8 @@ export default class ItemService {
     }
 
     addItemToList(item, list) {
-        return this.articleService.createArticle(item.article)
-            .then((createdArticle) => {
-                item.article.entityId = createdArticle.entityId;
-                return this.listItemRestService.create(item, {listId: list.entityId});
-            }).then((createdItem) => {
+        return this.listItemRestService.create(item, {listId: list.entityId})
+            .then((createdItem) => {
                 list.lastModified = Date.now();
                 list.items.push(item);
                 this.shoppingListRestService.storeInDB(list);

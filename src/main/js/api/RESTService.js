@@ -250,11 +250,6 @@ export default class RESTService {
             });
     }
 
-    deleteAll() {
-        return this.resource.delete().$promise
-            .then(() => this.fetch());
-    }
-
     _getPathVariablePattern(entity, additionalParameters = {}) {
 
         additionalParameters.entityId = entity[entity.key];

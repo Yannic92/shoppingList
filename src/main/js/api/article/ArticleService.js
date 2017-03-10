@@ -3,9 +3,10 @@ import AttributeEqualsFilter from '../AttributeEqualsFilter';
 export default class ArticleService {
 
     /*@ngInject*/
-    constructor(articleRestService, $q) {
+    constructor(articleRestService, itemService, $q) {
 
         this.restService = articleRestService;
+        this.itemService = itemService;
         this.articles = this.restService.container;
         this.Promise = $q;
     }
@@ -38,12 +39,35 @@ export default class ArticleService {
     }
 
     deleteArticle(article) {
+        const items  = this.itemService.getAllItems();
+        return items.promise.then(() => {
+            if(this._isArticleInUseInItems(article, items)) {
+                return this.Promise.reject('Article is in use');
+            }else {
+                return this.restService.delete(article);
+            }
+        });
+    }
 
-        return this.restService.delete(article);
+    _isArticleInUseInItems(article, items) {
+        for(let index = 0 ; index < items.length; index++) {
+            if(items[index].article.entityId === article.entityId) {
+                return true;
+            }
+        }
+        return false;
     }
 
     deleteUnusedArticles() {
 
-        return this.restService.deleteAll();
+        const promises = [];
+        const items  = this.itemService.getAllItems();
+        return items.promise.then(() => {
+            this.articles.forEach(article => {
+                if (!this._isArticleInUseInItems(article, items)) {
+                    promises.push(this.deleteArticle(article));
+                }
+            });
+        }).then(() => this.Promise.all(promises));
     }
 }

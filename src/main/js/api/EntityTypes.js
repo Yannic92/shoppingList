@@ -15,7 +15,7 @@ class EntityType {
 
 const EntityTypes = {
     LIST: new EntityType('list', Endpoints.list, ShoppingList),
-    LIST_ITEM: new EntityType('list', Endpoints.listItem, Item),
+    LIST_ITEM: new EntityType('item', Endpoints.listItem, Item),
     ITEM: new EntityType('item', Endpoints.item, Item),
     ARTICLE: new EntityType('article', Endpoints.article, Article),
     USER: new EntityType('user', Endpoints.user, User),
