@@ -1,3 +1,4 @@
+import CollectionUtils from '../CollectionUtils';
 export default class ItemService {
 
     /*@ngInject*/
@@ -35,13 +36,15 @@ export default class ItemService {
     }
 
     addItemToList(item, list) {
-        list.lastModified = Date.now();
-        list.items.push(item);
-        this.shoppingListRestService.storeInDB(list);
         return this.articleService.createArticle(item.article)
             .then((createdArticle) => {
                 item.article.entityId = createdArticle.entityId;
                 return this.listItemRestService.create(item, {listId: list.entityId});
+            }).then((createdItem) => {
+                list.lastModified = Date.now();
+                list.items.push(item);
+                this.shoppingListRestService.storeInDB(list);
+                return createdItem;
             });
     }
 
@@ -50,6 +53,11 @@ export default class ItemService {
     }
 
     deleteItemOfList(item, list) {
-        return this.listItemRestService.delete(item, {listId: list.entityId});
+        return this.listItemRestService.delete(item, {listId: list.entityId})
+            .then(() => {
+                CollectionUtils.remove(list.items, item);
+                list.lastModified = Date.now();
+                this.shoppingListRestService.storeInDB(list);
+            });
     }
 }
