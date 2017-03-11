@@ -157,6 +157,13 @@ export default class NavigationController {
                 }
             });
         }
+
+        if (window.applicationCache) {
+            window.applicationCache.addEventListener('updateready', function() {
+                $scope.newVersionAvailable = true;
+                $scope.$apply()
+            });
+        }
     }
 
     closeError() {
