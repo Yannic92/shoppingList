@@ -16,21 +16,18 @@ import org.springframework.hateoas.EntityLinks;
 import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.hateoas.MediaTypes;
 
+import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 
-@RequestMapping(
-    value = SLUserEndpoints.SLUSER_ENDPOINT, produces = { MediaTypes.HAL_JSON_VALUE, MediaType.APPLICATION_JSON_VALUE }
-)
+@RequestMapping(produces = { MediaTypes.HAL_JSON_VALUE, MediaType.APPLICATION_JSON_VALUE })
 @RestController
 @ExposesResourceFor(SLUser.class)
 public class SLUserRestController extends RestEntityController<SLUser, String> {
@@ -78,5 +75,36 @@ public class SLUserRestController extends RestEntityController<SLUser, String> {
         } else {
             return resp;
         }
+    }
+
+    @Override
+    @RequestMapping(method = RequestMethod.GET, value = SLUserEndpoints.SLUSER_ENDPOINT + "/{id}")
+    public HttpEntity<? extends SLUser> getSpecificEntity(@PathVariable("id") String s, Principal principal) {
+        return super.getSpecificEntity(s, principal);
+    }
+
+    @Override
+    @RequestMapping(method = RequestMethod.GET, value = SLUserEndpoints.SLUSER_ENDPOINT)
+    public HttpEntity<? extends Resources<? extends SLUser>> getAllEntities(Principal principal) {
+        return super.getAllEntities(principal);
+    }
+
+    @Override
+    @RequestMapping(method = RequestMethod.PUT, value = SLUserEndpoints.SLUSER_ENDPOINT + "/{id}")
+    public HttpEntity<? extends SLUser> putEntity(@RequestBody SLUser entity, @PathVariable("id") String s, Principal principal) {
+        return super.putEntity(entity, s, principal);
+    }
+
+    @Override
+    @RequestMapping(method = RequestMethod.POST, value = SLUserEndpoints.SLUSER_ENDPOINT)
+    public HttpEntity<? extends SLUser> postEntity(@RequestBody SLUser entity, Principal principal) {
+        return super.postEntity(entity, principal);
+    }
+
+    @Override
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @RequestMapping(method = RequestMethod.DELETE, value = SLUserEndpoints.SLUSER_ENDPOINT + "/{id}")
+    public void deleteEntity(@PathVariable("id") String s, Principal principal) {
+        super.deleteEntity(s, principal);
     }
 }
