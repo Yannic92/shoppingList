@@ -161,7 +161,7 @@ export default class NavigationController {
         if (window.applicationCache) {
             window.applicationCache.addEventListener('updateready', function() {
                 this.newVersionAvailable = true;
-                this.$scope.$apply()
+                this.$scope.$apply();
             });
         }
     }
