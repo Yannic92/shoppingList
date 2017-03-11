@@ -1,4 +1,5 @@
 import Item from '../item/Item';
+import User from '../user/User';
 
 export default class ShoppingList {
 
@@ -8,7 +9,7 @@ export default class ShoppingList {
         this.links = links;
         this.entityId = entityId;
         this.name = name;
-        this.owners = owners;
+        this.owners = this.getOwners(owners);
         this.items = this.getItems(items);
         this.lastModified = lastModified;
     }
@@ -25,5 +26,19 @@ export default class ShoppingList {
         });
 
         return entityItems;
+    }
+
+    getOwners(owners) {
+        const entityOwners = [];
+
+        owners.forEach(user => {
+            if(user instanceof  User) {
+                entityOwners.push(user);
+            }else {
+                entityOwners.push(new User(user));
+            }
+        });
+
+        return entityOwners;
     }
 }

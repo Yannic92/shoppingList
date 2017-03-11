@@ -26,7 +26,7 @@ public class ShoppingListRequestHandler implements RequestHandler<ShoppingList> 
     @Override
     public void handleBeforeCreate(ShoppingList entity, SLUser currentUser) {
 
-        if (currentUser != null && !currentUser.isAdmin()) {
+        if (currentUser != null) {
             entity.getOwners().add(currentUser);
         }
 

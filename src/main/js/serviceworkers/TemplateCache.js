@@ -1,6 +1,6 @@
 import StaticResourceCachingBehavior from '../api/cache/strategy/StaticResourceCachingBehavior';
 
-const TEMPLATE_CACHE_VERSION = '2';
+const TEMPLATE_CACHE_VERSION = '3';
 const TEMPLATES_TO_CACHE = [
     '/',
     '/index.html',

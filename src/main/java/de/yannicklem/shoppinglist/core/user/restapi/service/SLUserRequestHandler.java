@@ -3,6 +3,8 @@ package de.yannicklem.shoppinglist.core.user.restapi.service;
 import de.yannicklem.restutils.service.RequestHandler;
 
 import de.yannicklem.shoppinglist.core.exception.PermissionDeniedException;
+import de.yannicklem.shoppinglist.core.list.entity.ShoppingList;
+import de.yannicklem.shoppinglist.core.list.persistence.ShoppingListService;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 
 import lombok.RequiredArgsConstructor;
@@ -11,12 +13,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired ))
 public class SLUserRequestHandler implements RequestHandler<SLUser> {
 
     private final SLUserPermissionEvaluator slUserPermissionEvaluator;
+    private final ShoppingListService shoppingListService;
 
     @Override
     public void handleBeforeCreate(SLUser userToCreate, SLUser currentUser) {
@@ -73,6 +78,12 @@ public class SLUserRequestHandler implements RequestHandler<SLUser> {
 
     @Override
     public void handleAfterUpdate(SLUser oldEntity, SLUser newEntity, SLUser currentUser) {
+        List<ShoppingList> listsOwnedBy = shoppingListService.findListsOwnedBy(newEntity);
+
+        listsOwnedBy.forEach(list -> {
+            list.setLastModified(System.currentTimeMillis());
+            shoppingListService.update(list);
+        });
     }
 
 

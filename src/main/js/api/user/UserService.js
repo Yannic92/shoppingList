@@ -1,10 +1,11 @@
 import Endpoints from '../Endpoints';
 import User from '../../user/User';
+import CollectionUtils from '../CollectionUtils';
 
 export default class UserService {
 
     /*@ngInject*/
-    constructor($resource, userRestService) {
+    constructor($resource, userRestService, listOwnersRestService, shoppingListRestService) {
 
         const userEndpoint = Endpoints.user + '/:username';
         const methods = {
@@ -15,6 +16,8 @@ export default class UserService {
 
 
         this.restService = userRestService;
+        this.listOwnersRestService = listOwnersRestService;
+        this.shoppingListRestService = shoppingListRestService;
         this.users = this.restService.container;
     }
 
@@ -57,6 +60,25 @@ export default class UserService {
 
     deleteUser(user) {
         return this.restService.delete(user);
+    }
+
+    addUserToOwnersOfList(user, list) {
+        return this.listOwnersRestService.create(user, {listId: list.entityId})
+            .then((createdUser) => {
+                list.lastModified = Date.now();
+                list.owners.push(user);
+                this.shoppingListRestService.storeInDB(list);
+                return createdUser;
+            });
+    }
+
+    removeUserFromOwnersOfList(user, list) {
+        return this.listOwnersRestService.delete(user, {listId: list.entityId})
+            .then(() => {
+                CollectionUtils.remove(list.owners, user);
+                list.lastModified = Date.now();
+                this.shoppingListRestService.storeInDB(list);
+            });
     }
 
     confirmRegistrationFor(username, confirmation) {

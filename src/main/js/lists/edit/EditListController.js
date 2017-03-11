@@ -10,6 +10,7 @@ export default class EditListController {
         this.$mdToast = $mdToast;
         this.$mdDialog = $mdDialog;
         this.$timeout = $timeout;
+        this.userService = userService;
 
         this.$rootScope.title = 'Einkaufsliste bearbeiten';
         this.$rootScope.loading = true;
@@ -17,7 +18,7 @@ export default class EditListController {
         this.saveIsVisible = true;
         this.hideSave(0);
         this._initLists($filter, $routeParams);
-        this._initUsers(userService);
+        this._initUsers();
         this._initDestroyListener($scope);
     }
 
@@ -31,9 +32,9 @@ export default class EditListController {
             });
     }
 
-    _initUsers(userService) {
+    _initUsers() {
         this._initUserTextField();
-        this.users = userService.getAllUsers();
+        this.users = this.userService.getAllUsers();
     }
 
     _initUserTextField() {
@@ -68,9 +69,8 @@ export default class EditListController {
 
     addUserToOwners(selectedUser) {
         if (selectedUser) {
-            this.list.owners.push(selectedUser);
-            this.updateList()
-                .then(() => this._initUserTextField);
+            this.userService.addUserToOwnersOfList(selectedUser, this.list)
+                .then(() => this._initUserTextField());
         }
     }
 
@@ -110,8 +110,7 @@ export default class EditListController {
     }
 
     _removeUserAtIndexFromOwnersList(index) {
-        this.list.owners.splice(index, 1);
-        this.updateList();
+        this.userService.removeUserFromOwnersOfList(this.list.owners[index], this.list);
     }
 
     nameChanged() {

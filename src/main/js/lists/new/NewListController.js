@@ -2,7 +2,7 @@ import ShoppingList from '../ShoppingList';
 export default class NewListController {
 
     /*@ngInject*/
-    constructor($scope, $rootScope, listService, $mdToast, userService, navigationService) {
+    constructor($scope, $rootScope, listService, $mdToast, navigationService) {
 
         this.listService = listService;
         this.navigationService = navigationService;
@@ -10,10 +10,8 @@ export default class NewListController {
         this.$mdToast = $mdToast;
         this.$rootScope.title = 'Neue Einkaufsliste';
         this.$rootScope.loading = false;
-        this.userSearchText = '';
-        this.list = new ShoppingList({name: '', owners: [$rootScope.user]});
+        this.list = new ShoppingList({name: ''});
 
-        this._initUsers(userService);
 
         this.listCreatedToast = this.$mdToast.simple()
             .content('Neue Liste erstellt')
@@ -21,11 +19,6 @@ export default class NewListController {
             .hideDelay(3000);
 
         this._initDestroyListener($scope);
-    }
-
-    firstNameOrLastNameIsDefined(user) {
-
-        return user.firstName || user.lastName;
     }
 
     createList() {
@@ -42,33 +35,10 @@ export default class NewListController {
             });
     }
 
-    addUserToOwners(selectedUser) {
-        if (selectedUser) {
-            this.list.owners.push(selectedUser);
-            this._initUserTextField();
-        }
-    }
-
-    removeUserFromOwners(index) {
-        this.list.owners.splice(index, 1);
-    }
-
-    isLoggedInUser(user) {
-        return user && user.username === this.$rootScope.user.username;
-    }
-
     _showListCreatedToast() {
         return this.$mdToast.show(this.listCreatedToast);
     }
 
-    _initUsers(userService) {
-        this._initUserTextField();
-        this.users = userService.getAllUsers();
-    }
-
-    _initUserTextField() {
-        this.userSearchText = '';
-    }
     _initDestroyListener($scope) {
         $scope.$on('$destroy', () => {
             this.$rootScope.reset();

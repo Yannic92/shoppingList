@@ -10,9 +10,10 @@ import ShoppingListResource from './ShoppingListResource';
 export default class ShoppingListResourceConverter extends ResourceConverter {
 
     /*@ngInject*/
-    constructor(itemResourceConverter) {
+    constructor(itemResourceConverter, userResourceConverter) {
         super();
         this.itemResourceConverter = itemResourceConverter;
+        this.userResourceConverter = userResourceConverter;
         this.ofJsonConverter = this.ofJson;
         this.toJsonConverter = ShoppingListResourceConverter.toJson;
     }
@@ -34,7 +35,7 @@ export default class ShoppingListResourceConverter extends ResourceConverter {
             links:_links,
             entityId: entityId,
             name: name,
-            owners: owners,
+            owners: this.userResourceConverter.toEntities(owners),
             items: this.itemResourceConverter.toEntities(items),
             lastModified: lastModified
         });

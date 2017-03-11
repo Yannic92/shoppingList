@@ -1,6 +1,8 @@
 package de.yannicklem.shoppinglist.core.list.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import de.yannicklem.restutils.entity.owned.OwnedRestEntity;
 import de.yannicklem.shoppinglist.core.item.entity.Item;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
@@ -28,11 +30,13 @@ public class ShoppingList extends OwnedRestEntity<String> {
     private String entityId;
 
     @ManyToMany(fetch = FetchType.EAGER)
+    @JsonIgnore
     private final Set<SLUser> owners;
 
     private String name;
 
     @OneToMany(cascade = CascadeType.ALL)
+    @JsonIgnore
     private final Set<Item> items;
 
     public ShoppingList() {
@@ -41,7 +45,14 @@ public class ShoppingList extends OwnedRestEntity<String> {
         this.items = new HashSet<>();
     }
 
+    @JsonProperty
+    public Set<SLUser> getOwners() {
+
+        return this.owners;
+    }
+
     @Override
+    @JsonIgnore
     public void setOwners(Set<SLUser> owners) {
 
         this.owners.clear();
@@ -51,7 +62,13 @@ public class ShoppingList extends OwnedRestEntity<String> {
         }
     }
 
+    @JsonProperty
+    public Set<Item> getItems() {
 
+        return this.items;
+    }
+
+    @JsonIgnore
     public void setItems(Set<Item> items) {
 
         this.items.clear();

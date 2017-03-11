@@ -5,6 +5,9 @@ import de.yannicklem.restutils.entity.service.EntityService;
 import de.yannicklem.restutils.service.MyResourceProcessor;
 import de.yannicklem.restutils.service.RequestHandler;
 
+import de.yannicklem.shoppinglist.core.list.entity.ShoppingList;
+import de.yannicklem.shoppinglist.core.list.restapi.controller.ShoppingListEndpoints;
+import de.yannicklem.shoppinglist.core.list.restapi.controller.ShoppingListRestController;
 import de.yannicklem.shoppinglist.core.user.entity.SLUser;
 import de.yannicklem.shoppinglist.core.user.persistence.SLUserService;
 import de.yannicklem.shoppinglist.core.user.registration.entity.Confirmation;
@@ -26,6 +29,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
+import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+
 
 @RequestMapping(produces = { MediaTypes.HAL_JSON_VALUE, MediaType.APPLICATION_JSON_VALUE })
 @RestController
@@ -33,14 +39,16 @@ import java.security.Principal;
 public class SLUserRestController extends RestEntityController<SLUser, String> {
 
     private final CurrentUserService currentUserService;
+    private final ShoppingListRestController shoppingListRestController;
 
     @Autowired
     public SLUserRestController(SLUserService slUserService, EntityService<SLUser, String> entityService,
-        RequestHandler<SLUser> requestHandler, MyResourceProcessor<SLUser> resourceProcessor, EntityLinks entityLinks,
-        CurrentUserService currentUserService) {
+                                RequestHandler<SLUser> requestHandler, MyResourceProcessor<SLUser> resourceProcessor, EntityLinks entityLinks,
+                                CurrentUserService currentUserService, ShoppingListRestController shoppingListRestController) {
 
         super(slUserService, entityService, requestHandler, resourceProcessor, entityLinks);
         this.currentUserService = currentUserService;
+        this.shoppingListRestController = shoppingListRestController;
     }
 
     @RequestMapping(method = RequestMethod.GET, value = SLUserEndpoints.SLUSER_CURRENT_ENDPOINT)
@@ -96,7 +104,7 @@ public class SLUserRestController extends RestEntityController<SLUser, String> {
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.POST, value = SLUserEndpoints.SLUSER_ENDPOINT)
+    @RequestMapping(method = POST, value = SLUserEndpoints.SLUSER_ENDPOINT)
     public HttpEntity<? extends SLUser> postEntity(@RequestBody SLUser entity, Principal principal) {
         return super.postEntity(entity, principal);
     }
@@ -106,5 +114,27 @@ public class SLUserRestController extends RestEntityController<SLUser, String> {
     @RequestMapping(method = RequestMethod.DELETE, value = SLUserEndpoints.SLUSER_ENDPOINT + "/{id}")
     public void deleteEntity(@PathVariable("id") String s, Principal principal) {
         super.deleteEntity(s, principal);
+    }
+
+    @RequestMapping(method = POST, value = ShoppingListEndpoints.SHOPPING_LISTS_SPECIFIC_ENDPOINT + "/owners")
+    public void addOwnerToList(@PathVariable("id") String listId, @RequestBody SLUser slUser, Principal principal) {
+        ShoppingList shoppingList = shoppingListRestController.getSpecificEntity(listId, principal).getBody();
+
+        SLUser existingUser = getSpecificEntity(slUser.getUsername(), principal).getBody();
+
+        shoppingList.getOwners().add(existingUser);
+        shoppingList.setLastModified(System.currentTimeMillis());
+        shoppingListRestController.putEntity(shoppingList, listId, principal);
+    }
+
+    @RequestMapping(method = DELETE, value = ShoppingListEndpoints.SHOPPING_LISTS_SPECIFIC_ENDPOINT + "/owners/{username}")
+    public void removeOwnerOfList(@PathVariable("id") String listId, @PathVariable("username") String username, Principal principal) {
+        ShoppingList shoppingList = shoppingListRestController.getSpecificEntity(listId, principal).getBody();
+
+        SLUser existingUser = getSpecificEntity(username, principal).getBody();
+
+        shoppingList.getOwners().remove(existingUser);
+        shoppingList.setLastModified(System.currentTimeMillis());
+        shoppingListRestController.putEntity(shoppingList, listId, principal);
     }
 }

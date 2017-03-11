@@ -36,6 +36,7 @@ import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
@@ -419,10 +420,11 @@ public class ItemSecurityIntegrationTest {
         Item newItem = new Item(articleOfUserOne, "23", new HashSet<>());
         newItem.setEntityId(UUID.randomUUID().toString());
 
-        mockMvc.perform(post(listsEndpoint + "/" + listOfUserOne.getEntityId() + "/items/").content(getJsonBytes(newItem))
+        mockMvc.perform(post(listsEndpoint + "/" + listOfUserOne.getEntityId() + "/items").content(getJsonBytes(newItem))
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(csrf())
                 .with(user(admin)))
+                .andDo(print())
             .andExpect(status().isCreated());
     }
 
