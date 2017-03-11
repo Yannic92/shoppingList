@@ -50,6 +50,7 @@ export default class AuthService {
         this.$rootScope.headers = {};
         this.$rootScope.user = null;
         this.credentialService.clearCredentials();
+        this.credentialService.clearCurrentUser();
         this.loggedOut = true;
     }
 
