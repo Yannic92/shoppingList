@@ -1,3 +1,4 @@
+/* global BroadcastChannel */
 export default class NavigationController {
 
     /*@ngInject*/
@@ -20,6 +21,7 @@ export default class NavigationController {
         this._initRouteChangeSuccessListener();
         this._initErrorListener();
         this._initUpdateReadyListener();
+        this._initNetworkStateListener();
     }
 
     toggleNav() {
@@ -27,6 +29,10 @@ export default class NavigationController {
         this.$mdComponentRegistry.when('leftNav').then(function (it) {
             it.toggle();
         });
+    }
+
+    networkIsOffline() {
+        return this.$rootScope.networkState === 'offline';
     }
 
     static _urlIsDefined(url) {
@@ -194,5 +200,13 @@ export default class NavigationController {
 
     moreThanOneOptionAvailable() {
         return this.$rootScope.options && this.$rootScope.options.length && this.$rootScope.options.length > 1;
+    }
+
+    _initNetworkStateListener() {
+        this.networkStateChannel = new BroadcastChannel('network-state');
+
+        this.networkStateChannel.addEventListener('message', (message) => {
+            this.$rootScope.networkState = message.data;
+        });
     }
 }

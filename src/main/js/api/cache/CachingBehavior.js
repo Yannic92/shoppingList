@@ -1,7 +1,9 @@
+/* global BroadcastChannel */
 export default class CachingBehavior {
 
     constructor(cacheName) {
         this.cacheName = cacheName;
+        this.networkStateChannel = new BroadcastChannel('network-state');
     }
 
     openCache() {
@@ -13,6 +15,8 @@ export default class CachingBehavior {
             .then((response) => {
                 this._notifyAbobutSuccessfulRequest();
                 return response;
+            }, () => {
+                this.networkStateChannel.postMessage('offline');
             });
     }
 
@@ -20,6 +24,7 @@ export default class CachingBehavior {
         if( 'sync' in self.registration) {
             self.registration.sync.register('network-connection-established');
         }
+        this.networkStateChannel.postMessage('online');
     }
 
     cacheOnly(request) {

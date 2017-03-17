@@ -7,6 +7,7 @@
             <md-icon md-svg-src="img/icons/navigation/ic_arrow_back_24px.svg"></md-icon>
         </md-button>
         <div layout="row" class="fill-height title-with-tools" flex>
+            <md-icon ng-if="ctrl.networkIsOffline()" md-svg-src="/img/icons/notification/ic_sync_disabled_24px.svg"></md-icon>
             <h1 class="md-toolbar-item md-breadcrumb md-headline">
                 {{title}}
             </h1>

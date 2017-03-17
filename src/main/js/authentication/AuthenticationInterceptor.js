@@ -12,6 +12,7 @@ export default class AuthenticationInterceptor extends HttpInterceptor{
         this.$injector = $injector;
         this.navigationService = navigationService;
         this.credentialService = credentialService;
+        this.noConnectionNotificationActive = false;
         this.$q = $q;
         this.connectionLossNotification = false;
     }
@@ -75,11 +76,21 @@ export default class AuthenticationInterceptor extends HttpInterceptor{
     }
 
     _notifyAboutOfflineState() {
-        var $mdToast = this.$injector.get('$mdToast');
-        $mdToast.show ($mdToast.simple()
-            .content('Keine aktive Verbindung')
-            .position('bottom right')
-            .hideDelay(3000));
+        if(this.$rootScope.networkState !== 'offline') {
+            this._showNoConnectionNotification();
+        }
+    }
+
+    _showNoConnectionNotification() {
+        if(!this.noConnectionNotificationActive) {
+            this.noConnectionNotificationActive = true;
+            const $mdToast = this.$injector.get('$mdToast');
+            return $mdToast.show($mdToast.simple()
+                .content('Keine aktive Verbindung')
+                .position('bottom right')
+                .hideDelay(3000))
+                .then(() => this.noConnectionNotificationActive = false);
+        }
     }
 
     _handleOfflineRequest() {
