@@ -25,7 +25,6 @@ export default class NavigationController {
     }
 
     toggleNav() {
-
         this.$mdComponentRegistry.when('leftNav').then(function (it) {
             it.toggle();
         });
@@ -207,6 +206,7 @@ export default class NavigationController {
 
         this.networkStateChannel.addEventListener('message', (message) => {
             this.$rootScope.networkState = message.data;
+            this.$scope.$apply();
         });
     }
 }
