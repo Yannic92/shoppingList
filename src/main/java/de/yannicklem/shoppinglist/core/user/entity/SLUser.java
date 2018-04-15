@@ -1,5 +1,6 @@
 package de.yannicklem.shoppinglist.core.user.entity;
 
+import coffee.synyx.autoconfigure.security.service.CoffeeNetUserDetails;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -20,10 +21,7 @@ import org.springframework.hateoas.core.Relation;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -40,7 +38,7 @@ import javax.persistence.Table;
 @Setter
 @Table(name = "USERS")
 @ToString(exclude = "password")
-@EqualsAndHashCode(of = { "username" }, callSuper = false)
+@EqualsAndHashCode(of = {"username"}, callSuper = false)
 @Relation(collectionRelation = "sLUsers")
 public class SLUser extends RestEntity<String> implements UserDetails {
 
@@ -57,7 +55,7 @@ public class SLUser extends RestEntity<String> implements UserDetails {
     private String password;
 
     @ManyToMany(
-        fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.MERGE }, targetEntity = SLAuthority.class
+            fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, targetEntity = SLAuthority.class
     )
     private final Set<GrantedAuthority> authorities;
 
@@ -97,7 +95,7 @@ public class SLUser extends RestEntity<String> implements UserDetails {
 
 
     public SLUser(String username, String firstName, String lastName, String password, String email, boolean enabled,
-        Confirmation confirmation, Collection<? extends GrantedAuthority> authorities) {
+                  Confirmation confirmation, Collection<? extends GrantedAuthority> authorities) {
 
         this();
         this.username = username;
@@ -108,6 +106,19 @@ public class SLUser extends RestEntity<String> implements UserDetails {
         this.enabled = enabled;
         this.confirmation = confirmation;
         setAuthorities(authorities);
+    }
+
+    public static SLUser fromCoffeeNetUserDetails(CoffeeNetUserDetails coffeeNetUserDetails) {
+        return new SLUser(
+                "CoffeeNet" + coffeeNetUserDetails.getUsername(),
+                "",
+                "",
+                UUID.randomUUID().toString(),
+                coffeeNetUserDetails.getEmail(),
+                true,
+                null,
+                new ArrayList<>(Collections.singletonList(new SLAuthority(SLAuthority.USER)))
+                );
     }
 
     @Override

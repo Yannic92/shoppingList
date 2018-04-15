@@ -11,10 +11,10 @@
     <description>Shopping List as responsive webapp that allows to create and share shopping lists</description>
 
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.5.4.RELEASE</version>
-        <relativePath /> <!-- lookup parent from repository -->
+        <groupId>coffee.synyx</groupId>
+        <artifactId>coffeenet-starter-parent</artifactId>
+        <version>0.29.0</version>
+        <relativePath />
     </parent>
 
     <properties>
@@ -22,6 +22,13 @@
         <java.version>1.8</java.version>
         <lombok.version>1.16.10</lombok.version>
     </properties>
+
+    <repositories>
+        <repository>
+            <id>releases.public.nexus.synyx.de</id>
+            <url>http://nexus.synyx.de/content/repositories/public-releases</url>
+        </repository>
+    </repositories>
 
     <scm>
         <url>https://github.com/Yannic92/ShoppingList</url>
@@ -33,8 +40,8 @@
     <dependencies>
         <!-- security -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
+            <groupId>coffee.synyx</groupId>
+            <artifactId>starter-security</artifactId>
         </dependency>
 
         <!-- persistence -->
